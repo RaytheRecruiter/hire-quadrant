@@ -1,0 +1,34 @@
+# .github/workflows/migrate-jobs.yml
+
+name: Migrate Jobs Daily
+
+on:
+  # Schedule to run once a day at 00:00 UTC (midnight)
+  schedule:
+    - cron: '0 0 * * *' # You can adjust this cron expression to your preferred time
+  # Allow manual trigger from the GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use Node.js version 20, as indicated in your logs
+
+      - name: Install dependencies
+        run: npm ci # 'npm ci' is preferred for CI/CD environments for consistent installs
+
+      - name: Run job migration script
+        run: npm run migrate-jobs
+        env:
+          # These will be set as GitHub Secrets
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.VITE_SUPABASE_SERVICE_ROLE_KEY }}
