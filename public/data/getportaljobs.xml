@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs>
+  <job>
+    <id>xml-job-1</id>
+    <title>Senior Software Engineer</title>
+    <company>TechCorp Solutions</company>
+    <location>San Francisco, CA</location>
+    <type>full-time</type>
+    <salary>$140,000 - $180,000</salary>
+    <description>We are seeking a Senior Software Engineer to join our innovative team. You will be responsible for designing and developing scalable software solutions using cutting-edge technologies. This role offers excellent opportunities for growth and the chance to work on challenging projects that impact millions of users.</description>
+    <requirements>
+      <item>5+ years of experience in software development</item>
+      <item>Proficiency in JavaScript, React, and Node.js</item>
+      <item>Experience with cloud platforms (AWS, Azure, or GCP)</item>
+      <item>Strong problem-solving and analytical skills</item>
+      <item>Bachelor's degree in Computer Science or related field</item>
+    </requirements>
+    <benefits>
+      <item>Comprehensive health, dental, and vision insurance</item>
+      <item>Flexible work arrangements and remote options</item>
+      <item>Professional development budget of $3,000 annually</item>
+      <item>Stock options and equity participation</item>
+      <item>Unlimited PTO and sabbatical opportunities</item>
+    </benefits>
+    <postedDate>2024-01-15</postedDate>
+    <applicationDeadline>2024-02-15</applicationDeadline>
+    <views>156</views>
+    <applications>23</applications>
+  </job>
+  
+  <job>
+    <id>xml-job-2</id>
+    <title>Product Marketing Manager</title>
+    <company>Digital Innovations LLC</company>
+    <location>New York, NY</location>
+    <type>full-time</type>
+    <salary>$95,000 - $125,000</salary>
+    <description>Join our dynamic marketing team as a Product Marketing Manager. You'll develop go-to-market strategies, create compelling product messaging, and drive customer acquisition through innovative marketing campaigns. This role is perfect for a strategic thinker who loves bringing products to market.</description>
+    <requirements>
+      <item>4+ years of product marketing experience</item>
+      <item>Experience with B2B and B2C marketing strategies</item>
+      <item>Strong analytical skills and data-driven mindset</item>
+      <item>Excellent written and verbal communication skills</item>
+      <item>MBA or relevant marketing degree preferred</item>
+    </requirements>
+    <benefits>
+      <item>Competitive salary with performance bonuses</item>
+      <item>Comprehensive health and wellness programs</item>
+      <item>Hybrid work model with flexible hours</item>
+      <item>Career advancement and leadership opportunities</item>
+      <item>Company-sponsored events and team building activities</item>
+    </benefits>
+    <postedDate>2024-01-18</postedDate>
+    <applicationDeadline>2024-02-18</applicationDeadline>
+    <views>89</views>
+    <applications>15</applications>
+  </job>
+  
+  <job>
+    <id>xml-job-3</id>
+    <title>UX/UI Designer</title>
+    <company>Creative Design Studio</company>
+    <location>Austin, TX</location>
+    <type>full-time</type>
+    <salary>$75,000 - $100,000</salary>
+    <description>We're looking for a talented UX/UI Designer to create exceptional user experiences across web and mobile platforms. You'll collaborate with product managers and developers to design intuitive interfaces that delight our users. Join our creative team and help shape the future of digital experiences.</description>
+    <requirements>
+      <item>3+ years of UX/UI design experience</item>
+      <item>Proficiency in Figma, Sketch, and Adobe Creative Suite</item>
+      <item>Strong understanding of user-centered design principles</item>
+      <item>Experience with prototyping and user testing</item>
+      <item>Portfolio showcasing diverse design projects</item>
+    </requirements>
+    <benefits>
+      <item>Creative and collaborative work environment</item>
+      <item>Latest design tools and high-end equipment</item>
+      <item>Flexible working hours and creative time</item>
+      <item>Health insurance and wellness stipend</item>
+      <item>Conference attendance and learning opportunities</item>
+    </benefits>
+    <postedDate>2024-01-20</postedDate>
+    <applicationDeadline>2024-02-20</applicationDeadline>
+    <views>134</views>
+    <applications>28</applications>
+  </job>
+  
+  <job>
+    <id>xml-job-4</id>
+    <title>Data Scientist</title>
+    <company>Analytics Pro Inc</company>
+    <location>Seattle, WA</location>
+    <type>full-time</type>
+    <salary>$110,000 - $150,000</salary>
+    <description>Join our data science team to analyze complex datasets and extract actionable insights that drive business decisions. You'll work with machine learning algorithms, statistical models, and big data technologies to solve challenging problems and create predictive models.</description>
+    <requirements>
+      <item>Master's degree in Data Science, Statistics, or related field</item>
+      <item>Experience with Python, R, and SQL</item>
+      <item>Knowledge of machine learning frameworks (TensorFlow, PyTorch)</item>
+      <item>Strong statistical analysis and modeling skills</item>
+      <item>Experience with data visualization tools (Tableau, Power BI)</item>
+    </requirements>
+    <benefits>
+      <item>Competitive salary with equity options</item>
+      <item>Learning and development budget for courses</item>
+      <item>Top-tier health benefits and 401k matching</item>
+      <item>Flexible PTO and work-from-home options</item>
+      <item>Modern office with premium snacks and amenities</item>
+    </benefits>
+    <postedDate>2024-01-22</postedDate>
+    <applicationDeadline>2024-02-22</applicationDeadline>
+    <views>201</views>
+    <applications>45</applications>
+  </job>
+  
+  <job>
+    <id>xml-job-5</id>
+    <title>Frontend Developer Intern</title>
+    <company>StartupXYZ</company>
+    <location>Remote</location>
+    <type>internship</type>
+    <salary>$22 - $28/hour</salary>
+    <description>Join our fast-growing startup as a Frontend Developer Intern and gain hands-on experience building modern web applications. You'll work alongside senior developers on real projects, learn industry best practices, and contribute to products used by thousands of users.</description>
+    <requirements>
+      <item>Currently pursuing Computer Science or related degree</item>
+      <item>Basic knowledge of HTML, CSS, and JavaScript</item>
+      <item>Familiarity with React or Vue.js preferred</item>
+      <item>Strong willingness to learn and adapt quickly</item>
+      <item>Good communication and teamwork skills</item>
+    </requirements>
+    <benefits>
+      <item>Mentorship from experienced senior developers</item>
+      <item>Real-world project experience and portfolio building</item>
+      <item>Flexible remote work with flexible hours</item>
+      <item>Potential for full-time offer upon graduation</item>
+      <item>Learning stipend for online courses and resources</item>
+    </benefits>
+    <postedDate>2024-01-25</postedDate>
+    <applicationDeadline>2024-02-25</applicationDeadline>
+    <views>312</views>
+    <applications>67</applications>
+  </job>
+  
+  <job>
+    <id>xml-job-6</id>
+    <title>DevOps Engineer</title>
+    <company>CloudTech Solutions</company>
+    <location>Denver, CO</location>
+    <type>full-time</type>
+    <salary>$105,000 - $140,000</salary>
+    <description>We're seeking a DevOps Engineer to help build and maintain our cloud infrastructure. You'll work with containerization, CI/CD pipelines, and monitoring systems to ensure our applications run smoothly and scale efficiently. Join our team and help shape our technical infrastructure.</description>
+    <requirements>
+      <item>3+ years of DevOps or infrastructure experience</item>
+      <item>Experience with Docker, Kubernetes, and cloud platforms</item>
+      <item>Knowledge of CI/CD tools (Jenkins, GitLab CI, GitHub Actions)</item>
+      <item>Proficiency in scripting languages (Python, Bash)</item>
+      <item>Understanding of monitoring and logging tools</item>
+    </requirements>
+    <benefits>
+      <item>Competitive salary with annual bonuses</item>
+      <item>Remote work options with quarterly team meetups</item>
+      <item>Professional certification reimbursement</item>
+      <item>Health, dental, and vision insurance</item>
+      <item>Home office setup allowance</item>
+    </benefits>
+    <postedDate>2024-01-28</postedDate>
+    <applicationDeadline>2024-02-28</applicationDeadline>
+    <views>178</views>
+    <applications>31</applications>
+  </job>
+</jobs>
