@@ -1,0 +1,23 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "Node.js & TypeScript Project",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20", // Node.js 20
+
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install",
+  "portsAttributes": {
+    "3000": {
+      "label": "Application",
+      "onAutoForward": "notify"
+    }
+  },
+  "remoteUser": "node"
+}
