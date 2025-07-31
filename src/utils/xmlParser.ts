@@ -1,4 +1,5 @@
 import { Job } from '../contexts/JobContext';
+import { JSDOM } from 'jsdom';
 
 export interface XmlSource {
   path: string;
@@ -14,7 +15,8 @@ export interface XmlSource {
  */
 export const parseJobsXml = (xmlContent: string, sourceCompany?: string, sourceXmlFile?: string): Job[] => {
   try {
-    const parser = new DOMParser();
+     const dom = new JSDOM(xmlContent, { contentType: 'application/xml' });
+     const parser = new dom.window.DOMParser();
     const xmlDoc = parser.parseFromString(xmlContent, 'text/xml');
     
     // Check for parsing errors
