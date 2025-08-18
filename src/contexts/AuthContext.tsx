@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const { data: profile, error } = await supabase
         .from('user_profiles')
         .select('name, role, company_id, created_at')
-        .eq('user_id', supabaseUser.id) // Corrected query here
+        .eq('user_id', supabaseUser.id)
         .single();
 
       if (error) {
@@ -153,110 +153,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   ): Promise<boolean> => {
     try {
       // 1. Sign up the user in Supabase Auth
+      // The profile creation is handled by a database trigger.
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            name,
+            role
+          }
+        }
       });
 
       if (authError) {
         console.error('Registration error:', authError.message);
         return false;
       }
-
-      const user = authData?.user;
-
-      if (!user) {
-        // If user is null, it means email confirmation is required.
-        // We'll let the user know and not create a profile yet.
-        return true; 
-      }
       
-      // 2. Insert the user's profile into the 'user_profiles' table.
-      const { error: profileError } = await supabase
-        .from('user_profiles')
-        .insert([
-          {
-            user_id: user.id,
-            name: name,
-            role: role,
-            company_id: null,
-          }
-        ]);
-
-      if (profileError) {
-        console.error('Profile creation error:', profileError.message);
-        return false;
+      const user = authData?.user;
+      
+      if (!user) {
+        console.log('Success! Please check your email to confirm your account.');
+        return true;
       }
 
       // If successful, update the context state
       const userProfile = await fetchUserProfile(user);
       if (userProfile) {
         setUser(userProfile);
-        setSession(authData.session);
-      }
-
-      return true;
-    } catch (error) {
-      console.error('Registration error:', error);
-      return false;
-    }
-  };
-
-  const logout = async (): Promise<void> => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('Logout error:', error.message);
-      }
-      
-      setUser(null);
-      setSession(null);
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
-
-  const updateProfile = async (updates: Partial<Pick<User, 'name' | 'role' | 'companyId'>>): Promise<boolean> => {
-    if (!user) {
-      return false;
-    }
-
-    try {
-      const updateData: any = {};
-      if (updates.name !== undefined) updateData.name = updates.name;
-      if (updates.role !== undefined) updateData.role = updates.role;
-      if (updates.companyId !== undefined) updateData.company_id = updates.companyId;
-
-      const { error } = await supabase
-        .from('user_profiles')
-        .update(updateData)
-        .eq('user_id', user.id); // Corrected query here
-
-      if (error) {
-        console.error('Profile update error:', error.message);
-        return false;
-      }
-
-      // Update local user state
-      setUser(prev => prev ? { ...prev, ...updates } : null);
-      return true;
-    } catch (error) {
-      console.error('Profile update error:', error);
-      return false;
-    }
-  };
-
-  const value: AuthContextType = {
-    user,
-    session,
-    login,
-    register,
-    logout,
-    isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin',
-    loading,
-    updateProfile
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+        setSession
