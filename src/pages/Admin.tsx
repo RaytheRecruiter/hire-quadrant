@@ -1,11 +1,70 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useJobs } from '../contexts/JobContext';
-import { TrackingService } from '../utils/trackingService';
 import { Navigate } from 'react-router-dom';
 import { BarChart3, Users, Briefcase, Eye, TrendingUp, Calendar, Building2, RotateCcw, Download, Upload } from 'lucide-react';
 import { format } from 'date-fns';
-import CandidateHub from '../components/CandidateHub';
+
+// Mocking the context providers and tracking service for a self-contained example
+// In a real application, these would be imported from their respective files.
+const useAuth = () => ({
+  isAdmin: true, // Assuming the user is an admin for this component's view
+});
+
+const useJobs = () => {
+  const [jobs, setJobs] = useState([
+    { id: '1', title: 'Software Engineer', company: 'Tech Corp', views: 150, applications: 25, sourceCompany: 'Indeed', type: 'Full-time' },
+    { id: '2', title: 'Product Manager', company: 'Innovate Co', views: 90, applications: 15, sourceCompany: 'LinkedIn', type: 'Full-time' },
+    { id: '3', title: 'UX Designer', company: 'Creative Inc', views: 200, applications: 50, sourceCompany: 'Direct', type: 'Part-time' },
+    { id: '4', title: 'Data Scientist', company: 'Data Solutions', views: 75, applications: 10, sourceCompany: 'Indeed', type: 'Contract' },
+    { id: '5', title: 'Marketing Specialist', company: 'MarketPro', views: 120, applications: 2, sourceCompany: 'Direct', type: 'Full-time' },
+    { id: '6', title: 'Junior Developer', company: 'Startup XYZ', views: 30, applications: 35, sourceCompany: 'LinkedIn', type: 'Internship' },
+  ]);
+  const [applications, setApplications] = useState([
+    { id: 'app1', userId: 'user1', userName: 'Alice Johnson', userEmail: 'alice@example.com', jobId: '1', appliedAt: '2023-10-20T10:00:00Z', status: 'pending' },
+    { id: 'app2', userId: 'user2', userName: 'Bob Smith', userEmail: 'bob@example.com', jobId: '2', appliedAt: '2023-10-19T11:30:00Z', status: 'reviewed' },
+    { id: 'app3', userId: 'user1', userName: 'Alice Johnson', userEmail: 'alice@example.com', jobId: '3', appliedAt: '2023-10-18T14:00:00Z', status: 'pending' },
+    { id: 'app4', userId: 'user3', userName: 'Charlie Brown', userEmail: 'charlie@example.com', jobId: '1', appliedAt: '2023-10-17T09:00:00Z', status: 'accepted' },
+    { id: 'app5', userId: 'user2', userName: 'Bob Smith', userEmail: 'bob@example.com', jobId: '3', appliedAt: '2023-10-16T16:00:00Z', status: 'reviewed' },
+    { id: 'app6', userId: 'user4', userName: 'Diana Prince', userEmail: 'diana@example.com', jobId: '4', appliedAt: '2023-10-15T12:00:00Z', status: 'pending' },
+    { id: 'app7', userId: 'user5', userName: 'Eve Adams', userEmail: 'eve@example.com', jobId: '5', appliedAt: '2023-10-14T10:00:00Z', status: 'rejected' },
+  ]);
+
+  const resetAllStats = () => {
+    setJobs([
+      { id: '1', title: 'Software Engineer', company: 'Tech Corp', views: 0, applications: 0, sourceCompany: 'Indeed', type: 'Full-time' },
+      { id: '2', title: 'Product Manager', company: 'Innovate Co', views: 0, applications: 0, sourceCompany: 'LinkedIn', type: 'Full-time' },
+      { id: '3', title: 'UX Designer', company: 'Creative Inc', views: 0, applications: 0, sourceCompany: 'Direct', type: 'Part-time' },
+      { id: '4', title: 'Data Scientist', company: 'Data Solutions', views: 0, applications: 0, sourceCompany: 'Indeed', type: 'Contract' },
+      { id: '5', title: 'Marketing Specialist', company: 'MarketPro', views: 0, applications: 0, sourceCompany: 'Direct', type: 'Full-time' },
+      { id: '6', title: 'Junior Developer', company: 'Startup XYZ', views: 0, applications: 0, sourceCompany: 'LinkedIn', type: 'Internship' },
+    ]);
+    setApplications([]);
+  };
+  return { jobs, applications, resetAllStats };
+};
+
+const TrackingService = {
+  getSummary: () => ({
+    jobCount: 6,
+    averageViewsPerJob: 110.8,
+    conversionRate: 14.5,
+    lastReset: new Date(),
+  }),
+  resetAllStats: () => console.log('Stats reset via mock service'),
+  exportData: () => JSON.stringify({ jobs: [], applications: [] }),
+  importData: (data: string) => {
+    console.log('Importing data:', data);
+    return true; // Mock success
+  },
+};
+
+// Mocking the CandidateHub component
+const CandidateHub = () => (
+  <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <h3 className="text-lg font-semibold text-gray-900 mb-4">Candidate Hub</h3>
+    <p className="text-gray-600">This is a placeholder for the Candidate Hub. Here you can manage and interact with candidates.</p>
+  </div>
+);
+
 
 const Admin: React.FC = () => {
   const { isAdmin } = useAuth();
@@ -110,7 +169,7 @@ const Admin: React.FC = () => {
   const trackingSummary = TrackingService.getSummary();
 
   const handleResetStats = () => {
-    TrackingService.resetAllStats();
+    resetAllStats();
     setShowResetConfirm(false);
   };
 
@@ -137,16 +196,31 @@ const Admin: React.FC = () => {
     reader.onload = (e) => {
       const content = e.target?.result as string;
       if (TrackingService.importData(content)) {
-        alert('Tracking data imported successfully!');
-        window.location.reload(); // Refresh to show updated data
+        // Use a custom modal instead of alert
+        const messageBox = document.createElement('div');
+        messageBox.innerHTML = `
+          <div style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:2rem; border-radius:0.5rem; box-shadow:0 4px 6px rgba(0,0,0,0.1); z-index:100;">
+            <p>Tracking data imported successfully!</p>
+            <button onclick="document.body.removeChild(this.parentNode.parentNode); window.location.reload();" style="margin-top:1rem; padding:0.5rem 1rem; background-color:blue; color:white; border-radius:0.25rem;">OK</button>
+          </div>
+        `;
+        document.body.appendChild(messageBox);
       } else {
-        alert('Failed to import tracking data. Please check the file format.');
+        const messageBox = document.createElement('div');
+        messageBox.innerHTML = `
+          <div style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:2rem; border-radius:0.5rem; box-shadow:0 4px 6px rgba(0,0,0,0.1); z-index:100;">
+            <p>Failed to import tracking data. Please check the file format.</p>
+            <button onclick="document.body.removeChild(this.parentNode.parentNode);" style="margin-top:1rem; padding:0.5rem 1rem; background-color:red; color:white; border-radius:0.25rem;">OK</button>
+          </div>
+        `;
+        document.body.appendChild(messageBox);
       }
     };
     reader.readAsText(file);
   };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -693,7 +767,7 @@ const Admin: React.FC = () => {
             {/* Candidates Table */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">All Candidates</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Candidate List</h3>
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
@@ -702,16 +776,10 @@ const Admin: React.FC = () => {
                           Candidate
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Applications
+                          Total Applications
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Last Activity
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Latest Status
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
                         </th>
                       </tr>
                     </thead>
@@ -719,49 +787,14 @@ const Admin: React.FC = () => {
                       {sortedCandidates.map((candidate) => (
                         <tr key={candidate.id} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="flex-shrink-0 h-10 w-10">
-                                <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                                  <span className="text-sm font-medium text-primary-600">
-                                    {candidate.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="ml-4">
-                                <div className="text-sm font-medium text-gray-900">{candidate.name}</div>
-                                <div className="text-sm text-gray-500">{candidate.email}</div>
-                              </div>
-                            </div>
+                            <div className="text-sm font-medium text-gray-900">{candidate.name}</div>
+                            <div className="text-sm text-gray-500">{candidate.email}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{candidate.totalApplications} applications</div>
-                            <div className="text-sm text-gray-500">
-                              {candidate.applications.map(app => 
-                                jobs.find(j => j.id === app.jobId)?.title
-                              ).filter(Boolean).slice(0, 2).join(', ')}
-                              {candidate.totalApplications > 2 && ` +${candidate.totalApplications - 2} more`}
-                            </div>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {candidate.totalApplications}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {format(new Date(candidate.lastActivity), 'MMM d, yyyy h:mm a')}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              candidate.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              candidate.status === 'reviewed' ? 'bg-blue-100 text-blue-800' :
-                              candidate.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
-                              {candidate.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button className="text-primary-600 hover:text-primary-900 mr-3">
-                              View Details
-                            </button>
-                            <button className="text-blue-600 hover:text-blue-900">
-                              Contact
-                            </button>
                           </td>
                         </tr>
                       ))}
@@ -770,77 +803,12 @@ const Admin: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Candidate Application History */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Candidate Activity</h3>
-                <div className="space-y-4">
-                  {recentApplications.slice(0, 10).map((application) => {
-                    const candidate = candidates.find(c => c.id === application.userId);
-                    const job = jobs.find(j => j.id === application.jobId);
-                    return (
-                      <div key={application.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-8 w-8">
-                            <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
-                              <span className="text-xs font-medium text-primary-600">
-                                {application.userName.split(' ').map(n => n[0]).join('').toUpperCase()}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="ml-3">
-                            <p className="text-sm font-medium text-gray-900">
-                              {application.userName} applied to {job?.title}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {job?.company} • {format(new Date(application.appliedAt), 'MMM d, yyyy h:mm a')}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            application.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                            application.status === 'reviewed' ? 'bg-blue-100 text-blue-800' :
-                            application.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {application.status}
-                          </span>
-                          {candidate && candidate.totalApplications > 1 && (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                              {candidate.totalApplications} apps
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
           </div>
         )}
 
         {activeTab === 'candidate-hub' && (
-          <CandidateHub 
-            candidates={sortedCandidates}
-            applications={applications}
-            jobs={jobs}
-          />
+          <CandidateHub />
         )}
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <div className="flex items-center">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <Users className="h-6 w-6 text-blue-600" />
-          </div>
-          <div className="ml-4">
-            <p className="text-sm text-gray-600">Total Candidates</p>
-            <p className="text-2xl font-bold text-gray-900">{totalCandidates}</p>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -2,18 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { 
   Users, 
   Search, 
-  Filter, 
   Mail, 
   Phone, 
   MapPin, 
   Calendar, 
   Briefcase, 
-  Star,
   Eye,
   MessageSquare,
-  Download,
   UserCheck,
-  UserX,
   Clock,
   TrendingUp,
   Award,
@@ -51,7 +47,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
   const filteredAndSortedCandidates = useMemo(() => {
     let filtered = candidates.filter(candidate => {
       const matchesSearch = candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           candidate.email.toLowerCase().includes(searchTerm.toLowerCase());
+                          candidate.email.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = !statusFilter || candidate.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
@@ -121,13 +117,13 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
     }
   };
 
-  const getJobTitle = (jobId: string) => {
-    const job = jobs.find(j => j.id === jobId);
+  const getJobTitle = (job_id: string) => {
+    const job = jobs.find(j => j.id === job_id);
     return job ? job.title : 'Unknown Job';
   };
 
-  const getJobCompany = (jobId: string) => {
-    const job = jobs.find(j => j.id === jobId);
+  const getJobCompany = (job_id: string) => {
+    const job = jobs.find(j => j.id === job_id);
     return job ? job.company : 'Unknown Company';
   };
 
@@ -289,7 +285,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                   <ul className="mt-1 space-y-1">
                     {candidate.applications.slice(0, 2).map((app) => (
                       <li key={app.id} className="text-xs">
-                        • {getJobTitle(app.jobId)} at {getJobCompany(app.jobId)}
+                        • {getJobTitle(app.job_id)} at {getJobCompany(app.job_id)}
                       </li>
                     ))}
                     {candidate.applications.length > 2 && (
@@ -417,7 +413,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Application History</h3>
                   <div className="space-y-4">
                     {selectedCandidate.applications.map((application) => {
-                      const job = jobs.find(j => j.id === application.jobId);
+                      const job = jobs.find(j => j.id === application.job_id);
                       return (
                         <div key={application.id} className="bg-gray-50 p-4 rounded-lg">
                           <div className="flex items-start justify-between">
@@ -429,16 +425,16 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                                 {job ? job.company : 'Unknown Company'}
                               </p>
                               <p className="text-xs text-gray-500 mt-1">
-                                Applied {format(new Date(application.appliedAt), 'MMM d, yyyy h:mm a')}
+                                Applied {format(new Date(application.applied_at), 'MMM d, yyyy h:mm a')}
                               </p>
                             </div>
                             <div className="flex flex-col items-end">
                               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(application.status)}`}>
                                 {application.status}
                               </span>
-                              {application.sourceCompany && (
+                              {application.source_company && (
                                 <p className="text-xs text-gray-500 mt-1">
-                                  via {application.sourceCompany}
+                                  via {application.source_company}
                                 </p>
                               )}
                             </div>
