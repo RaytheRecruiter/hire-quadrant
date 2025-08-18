@@ -3,7 +3,7 @@
  * Uses Supabase database for persistent storage and BroadcastChannel for real-time updates
  */
 
-import { getSupabaseClient } from './supabaseClient';
+import { supabase } from './supabaseClient'; // <-- UPDATED IMPORT
 
 interface LocalJobStats {
   views: number;
