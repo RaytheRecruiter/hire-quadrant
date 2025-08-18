@@ -152,8 +152,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     role: 'candidate' | 'company' = 'candidate'
   ): Promise<boolean> => {
     try {
-      // 1. Sign up the user in Supabase Auth
-      // The profile creation is handled by a database trigger.
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -177,7 +175,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return true;
       }
 
-      // If successful, update the context state
       const userProfile = await fetchUserProfile(user);
       if (userProfile) {
         setUser(userProfile);
