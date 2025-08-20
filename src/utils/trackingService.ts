@@ -3,7 +3,7 @@
  * Uses Supabase database for persistent storage and BroadcastChannel for real-time updates
  */
 
-import { supabase } from './supabaseClient'; // <-- UPDATED IMPORT
+import { supabase } from './supabaseClient';
 
 interface LocalJobStats {
   views: number;
@@ -59,7 +59,7 @@ export class TrackingService {
   }
 
   /**
-   * Generate unique session ID
+   * Generates a unique session ID
    */
   private static generateSessionId(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -90,7 +90,6 @@ export class TrackingService {
       return;
     }
     
-    const supabase = getSupabaseClient();
     if (!supabase) {
       console.warn('Supabase client not available, falling back to local storage');
       this.loadDataFromLocalStorage();
@@ -132,7 +131,7 @@ export class TrackingService {
           globalStats: {
             totalViews,
             totalApplications,
-            lastReset: new Date() // We don't track reset date in DB, use current date
+            lastReset: new Date()
           },
           lastSync: new Date()
         };
@@ -162,7 +161,6 @@ export class TrackingService {
       if (stored) {
         const parsedData = JSON.parse(stored);
         
-        // Convert date strings back to Date objects
         if (parsedData.globalStats) {
           parsedData.globalStats.lastReset = new Date(parsedData.globalStats.lastReset);
         }
@@ -170,7 +168,6 @@ export class TrackingService {
           parsedData.lastSync = new Date(parsedData.lastSync);
         }
         
-        // Convert job lastUpdated strings back to Date objects
         Object.keys(parsedData.jobs || {}).forEach(jobId => {
           if (parsedData.jobs[jobId].lastUpdated) {
             parsedData.jobs[jobId].lastUpdated = new Date(parsedData.jobs[jobId].lastUpdated);
@@ -259,11 +256,9 @@ export class TrackingService {
    * Sync with Supabase database
    */
   private static async syncWithSupabase(): Promise<void> {
-    const supabase = getSupabaseClient();
     if (!supabase || !this.data) return;
 
     try {
-      // Only sync if we have data that might be newer
       const { data: latestData, error } = await supabase
         .from('job_tracking')
         .select('job_id, views, applications, last_updated')
@@ -321,7 +316,6 @@ export class TrackingService {
    * Save tracking data to Supabase and broadcast update
    */
   private static async saveDataToSupabase(jobId: string, views: number, applications: number): Promise<void> {
-    const supabase = getSupabaseClient();
     if (!supabase || !this.data) {
       console.warn('Supabase not available, falling back to localStorage');
       this.saveDataToLocalStorage();
@@ -414,19 +408,16 @@ export class TrackingService {
    */
   static async incrementJobViews(jobId: string): Promise<void> {
     try {
-      // Prevent multiple increments for the same job within the same session
       if (this.viewedJobIds.has(jobId)) {
         console.log(`Job ${jobId} already viewed in this session. Skipping increment.`);
         return;
       }
-      this.viewedJobIds.add(jobId); // Mark as viewed for this session
+      this.viewedJobIds.add(jobId);
       console.log(`Incrementing views for job ${jobId}`);
       
-      // Fetch current count directly from Supabase for this specific job
       let currentViews = 0;
       let currentApplications = 0;
       
-      const supabase = getSupabaseClient();
       if (supabase) {
         try {
           const { data: jobData, error } = await supabase
@@ -435,7 +426,7 @@ export class TrackingService {
             .eq('job_id', jobId)
             .single();
 
-          if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
+          if (error && error.code !== 'PGRST116') {
             console.error('Error fetching current job stats:', error);
           } else if (jobData) {
             currentViews = jobData.views || 0;
@@ -445,7 +436,6 @@ export class TrackingService {
           console.error('Error fetching job stats from Supabase:', error);
         }
       } else {
-        // Fallback to local data if Supabase is not available
         const localStats = this.getJobStats(jobId);
         currentViews = localStats.views;
         currentApplications = localStats.applications;
@@ -453,23 +443,20 @@ export class TrackingService {
       
       const newViews = currentViews + 1;
 
-      // Update local data
       this.data!.jobs[jobId] = {
         views: newViews,
         applications: currentApplications,
         lastUpdated: new Date()
       };
       
-      // Update global stats
       this.data!.globalStats.totalViews += 1;
 
       console.log(`Updated views for job ${jobId} from ${currentViews} to ${newViews}`);
 
-      // Save to Supabase
       await this.saveDataToSupabase(jobId, newViews, currentApplications);
     } catch (error) {
       console.error('Error incrementing job views:', error);
-      this.viewedJobIds.delete(jobId); // If an error occurs, remove from viewedJobIds so it can be retried
+      this.viewedJobIds.delete(jobId);
     }
   }
 
@@ -480,11 +467,9 @@ export class TrackingService {
     try {
       console.log(`Incrementing applications for job ${jobId}`);
       
-      // Fetch current count directly from Supabase for this specific job
       let currentViews = 0;
       let currentApplications = 0;
       
-      const supabase = getSupabaseClient();
       if (supabase) {
         try {
           const { data: jobData, error } = await supabase
@@ -493,7 +478,7 @@ export class TrackingService {
             .eq('job_id', jobId)
             .single();
 
-          if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
+          if (error && error.code !== 'PGRST116') {
             console.error('Error fetching current job stats:', error);
           } else if (jobData) {
             currentViews = jobData.views || 0;
@@ -503,7 +488,6 @@ export class TrackingService {
           console.error('Error fetching job stats from Supabase:', error);
         }
       } else {
-        // Fallback to local data if Supabase is not available
         const localStats = this.getJobStats(jobId);
         currentViews = localStats.views;
         currentApplications = localStats.applications;
@@ -511,19 +495,16 @@ export class TrackingService {
       
       const newApplications = currentApplications + 1;
 
-      // Update local data
       this.data!.jobs[jobId] = {
         views: currentViews,
         applications: newApplications,
         lastUpdated: new Date()
       };
       
-      // Update global stats
       this.data!.globalStats.totalApplications += 1;
 
       console.log(`Updated applications for job ${jobId} from ${currentApplications} to ${newApplications}`);
 
-      // Save to Supabase
       await this.saveDataToSupabase(jobId, currentViews, newApplications);
     } catch (error) {
       console.error('Error incrementing job applications:', error);
@@ -561,13 +542,11 @@ export class TrackingService {
         this.sessionId = this.generateSessionId();
       }
 
-      const supabase = getSupabaseClient();
       if (supabase) {
-        // Delete all tracking data from Supabase
         const { error } = await supabase
           .from('job_tracking')
           .delete()
-          .neq('job_id', ''); // Delete all records
+          .neq('job_id', '');
 
         if (error) {
           console.error('Error resetting stats in Supabase:', error);
@@ -576,8 +555,7 @@ export class TrackingService {
         }
       }
 
-      this.viewedJobIds.clear(); // Clear viewed jobs on reset
-      // Reset local data
+      this.viewedJobIds.clear();
       this.data = {
         jobs: {},
         globalStats: {
@@ -589,10 +567,8 @@ export class TrackingService {
         lastSync: new Date()
       };
 
-      // Also clear localStorage as fallback
       localStorage.removeItem('job_tracking_data');
       
-      // Broadcast reset message
       if (this.broadcastChannel) {
         this.broadcastChannel.postMessage({
           type: 'stats_reset',
@@ -636,9 +612,7 @@ export class TrackingService {
     try {
       const imported = JSON.parse(jsonData);
       
-      // Validate structure
       if (imported.jobs && imported.globalStats) {
-        // Convert date strings back to Date objects
         if (imported.globalStats.lastReset) {
           imported.globalStats.lastReset = new Date(imported.globalStats.lastReset);
         }
@@ -658,7 +632,6 @@ export class TrackingService {
           lastSync: new Date()
         };
         
-        // Save to both Supabase and localStorage
         this.saveDataToLocalStorage();
         return true;
       }
@@ -723,14 +696,15 @@ export class TrackingService {
    * Get active session info
    */
   static getSessionInfo() {
-    const supabase = getSupabaseClient();
+    const supabaseConnected = !!supabase;
+
     if (!this.data) {
       return {
         sessionId: this.sessionId || 'not-initialized',
         lastSync: new Date(),
         broadcastSupported: !!this.broadcastChannel,
         initialized: this.initialized,
-        supabaseConnected: !!supabase
+        supabaseConnected,
       };
     }
     
@@ -739,7 +713,7 @@ export class TrackingService {
       lastSync: this.data.lastSync,
       broadcastSupported: !!this.broadcastChannel,
       initialized: this.initialized,
-      supabaseConnected: !!supabase
+      supabaseConnected,
     };
   }
 
@@ -757,8 +731,11 @@ export class TrackingService {
       this.syncInterval = null;
     }
     
-    this.viewedJobIds.clear(); // Clear viewed jobs on cleanup
+    this.viewedJobIds.clear();
     this.updateCallbacks = [];
     this.initialized = false;
   }
 }
+
+// Ensure the service initializes
+TrackingService.initialize();
