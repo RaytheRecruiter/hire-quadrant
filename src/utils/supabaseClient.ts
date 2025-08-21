@@ -14,8 +14,12 @@ if (!supabaseAnonKey) {
     throw new Error('Missing VITE_SUPABASE_ANON_KEY. Please set it in your .env file in the project root.');
 }
 
-// Create and export the Supabase client instance directly
-// This instance will be universally available to your frontend components
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Create and export the Supabase client instance with real-time functionality disabled
+// Disabling real-time can prevent "pending" WebSocket issues that may cause loading delays.
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    realtime: {
+        enabled: false,
+    },
+});
 
 console.log('Frontend Supabase client initialized and exported.'); // Optional: You can keep this one log for confirmation

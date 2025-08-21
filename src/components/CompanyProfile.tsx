@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useCompanies } from '../contexts/CompanyContext';
 import { useJobs } from '../contexts/JobContext';
 import { ArrowLeft, MapPin, Users, Calendar, Globe, Mail, Building2, Award, Heart, Briefcase } from 'lucide-react';
-import JobCard from '../components/JobCard';
+import JobCard from './JobCard';
 
 const CompanyProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();

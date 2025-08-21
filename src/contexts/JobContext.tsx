@@ -1,7 +1,20 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
-import { supabase } from '../utils/supabaseClient'; // Corrected import path
+import { supabase } from '../utils/supabaseClient';
 import { useAuth } from './AuthContext';
 import { Job, JobApplication } from '../types';
+
+// Utility for debouncing function calls to prevent excessive API calls
+const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(() => {
+            func(...args);
+        }, delay);
+    };
+};
 
 // --- Job and Application Interfaces ---
 export interface Job {
@@ -73,17 +86,37 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
     const [locationFilter, setLocationFilter] = useState('');
     const [typeFilter, setTypeFilter] = useState('');
     const [jobsDisplayLimit, setJobsDisplayLimit] = useState(10);
+    const [totalJobsCount, setTotalJobsCount] = useState<number>(0);
 
     const { user } = useAuth();
 
+    // Debounce the search term to avoid excessive API calls on every keystroke
+    const debouncedSetSearchTerm = useMemo(() => debounce(setSearchTerm, 500), []);
+
+    // Main effect to fetch jobs with server-side filtering and pagination
     useEffect(() => {
         const fetchJobs = async () => {
             setLoading(true);
             setError(null);
+
             try {
-                const { data, error } = await supabase
+                let query = supabase
                     .from('jobs')
-                    .select('*');
+                    .select('*', { count: 'exact' });
+
+                // Add filters to the query for server-side processing
+                if (searchTerm) {
+                    query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,company.ilike.%${searchTerm}%`);
+                }
+                if (locationFilter) {
+                    query = query.ilike('location', `%${locationFilter}%`);
+                }
+                if (typeFilter) {
+                    query = query.eq('type', typeFilter);
+                }
+
+                // Add pagination
+                const { data, error, count } = await query.range(0, jobsDisplayLimit - 1);
 
                 if (error) {
                     throw error;
@@ -91,8 +124,9 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
 
                 if (data) {
                     setJobs(data as Job[]);
+                    setTotalJobsCount(count as number);
                 }
-            } catch (err: any) {
+            } catch (err) {
                 console.error('Error fetching jobs:', err.message);
                 setError('Failed to fetch jobs. Please try again later.');
             } finally {
@@ -100,8 +134,16 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
             }
         };
 
+        fetchJobs();
+    }, [searchTerm, locationFilter, typeFilter, jobsDisplayLimit]); // Rerun when filters or display limit change
+
+    // Fetch applications whenever the user state changes
+    useEffect(() => {
         const fetchApplications = async () => {
-            if (!user) return;
+            if (!user) {
+                setApplications([]);
+                return;
+            }
             try {
                 const { data, error } = await supabase
                     .from('job_applications')
@@ -113,33 +155,22 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                 if (data) {
                     setApplications(data as JobApplication[]);
                 }
-            } catch (err: any) {
+            } catch (err) {
                 console.error('Error fetching applications:', err.message);
             }
         };
 
-        fetchJobs();
         fetchApplications();
     }, [user]);
 
-    const allFilteredJobs = useMemo(() => {
-        return jobs.filter(job => {
-            const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (job.company?.toLowerCase() || '').includes(searchTerm.toLowerCase());
-            const matchesLocation = locationFilter === '' || (job.location?.toLowerCase() || '').includes(locationFilter.toLowerCase());
-            const matchesType = typeFilter === '' || job.type === typeFilter;
-            return matchesSearch && matchesLocation && matchesType;
-        });
-    }, [jobs, searchTerm, locationFilter, typeFilter]);
+    // This is now redundant since filtering is done on the server, but kept for compatibility
+    const allFilteredJobs = useMemo(() => jobs, [jobs]);
+    const filteredJobs = useMemo(() => jobs, [jobs]);
 
-    const filteredJobs = useMemo(() => {
-        return allFilteredJobs.slice(0, jobsDisplayLimit);
-    }, [allFilteredJobs, jobsDisplayLimit]);
+    // Check if there are more jobs to load based on the total count from Supabase
+    const hasMoreJobs = jobs.length < totalJobsCount;
 
-    const hasMoreJobs = jobsDisplayLimit < allFilteredJobs.length;
-
-    const loadMoreJobs = () => {
+    const loadMoreJobs = async () => {
         setJobsDisplayLimit(prevLimit => prevLimit + 10);
     };
 
@@ -150,42 +181,41 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         }
 
         try {
+            const newApplication: JobApplication = {
+                id: '', // Supabase will generate this
+                job_id: jobId,
+                user_id: user.id,
+                status: 'Applied',
+                applied_at: new Date().toISOString()
+            };
+
             const { data, error } = await supabase
                 .from('job_applications')
-                .insert([{
-                    job_id: jobId,
-                    user_id: user.id,
-                    status: 'Applied'
-                }]);
+                .insert([newApplication])
+                .select()
+                .single();
 
             if (error) {
                 throw error;
             }
-
-            const { data: updatedData, error: updatedError } = await supabase
-                .from('job_applications')
-                .select('*')
-                .eq('user_id', user.id);
-
-            if (updatedError) {
-                throw updatedError;
+            
+            if (data) {
+                // Update local state directly for immediate UI feedback
+                setApplications(prevApplications => [...prevApplications, data as JobApplication]);
+                return true;
             }
 
-            if (updatedData) {
-                setApplications(updatedData as JobApplication[]);
-            }
-
-            return true;
-        } catch (error: any) {
+            return false;
+        } catch (error) {
             console.error('Error applying to job:', error.message);
-            const newApplication: JobApplication = {
+            const fallbackApplication: JobApplication = {
                 id: `app-${Date.now()}`,
                 job_id: jobId,
                 user_id: user.id,
                 status: 'Applied',
                 applied_at: new Date().toISOString()
             };
-            const updatedApplications = [...applications, newApplication];
+            const updatedApplications = [...applications, fallbackApplication];
             setApplications(updatedApplications);
             localStorage.setItem('applications', JSON.stringify(updatedApplications));
             return false;
@@ -208,7 +238,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         searchTerm,
         locationFilter,
         typeFilter,
-        setSearchTerm,
+        setSearchTerm: debouncedSetSearchTerm,
         setLocationFilter,
         setTypeFilter,
         filteredJobs,

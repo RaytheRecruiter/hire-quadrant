@@ -6,12 +6,13 @@ import { JobProvider } from './contexts/JobContext';
 import Header from './components/Header';
 import Home from './pages/Home';
 import JobDetails from './pages/JobDetails';
-import CompanyProfile from './pages/CompanyProfile';
+import CompanyProfile from './components/CompanyProfile'; // <-- Corrected path
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Admin from './pages/Admin';
 import XMLFeederAdmin from './components/XMLFeederAdmin';
 import CompanySourceManager from './components/CompanySourceManager';
+import ProfilePage from './pages/ProfilePage'; // <-- Corrected path
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />
                 <Route path="/company-sources" element={<CompanySourceManager />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Routes>
             </div>
           </Router>

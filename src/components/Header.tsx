@@ -29,6 +29,14 @@ const Header: React.FC = () => {
             {isAuthenticated ? (
               <>
                 <span className="text-secondary-800 font-medium">Welcome, <span className="font-bold">{user?.name}</span>!</span>
+                {/* Conditionally render the Profile link when authenticated */}
+                <Link
+                  to="/profile"
+                  className="flex items-center text-secondary-700 hover:text-primary-500 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 hover:bg-primary-50"
+                >
+                  <User className="h-4 w-4 mr-1" />
+                  Profile
+                </Link>
                 {isAdmin && (
                   <Link
                     to="/admin"
