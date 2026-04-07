@@ -164,7 +164,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           data: {
             name,
             role
-          }
+          },
+          emailRedirectTo: window.location.origin + '/login'
         }
       });
 

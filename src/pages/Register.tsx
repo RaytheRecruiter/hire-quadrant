@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { User, Lock, Mail, Eye, EyeOff } from 'lucide-react';
+import { User, Lock, Mail, Eye, EyeOff, CheckCircle } from 'lucide-react';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -13,8 +13,8 @@ const Register: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [registered, setRegistered] = useState(false);
   const { register } = useAuth();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +35,7 @@ const Register: React.FC = () => {
     try {
       const success = await register(email, password, name, userType);
       if (success) {
-        navigate('/');
+        setRegistered(true);
       } else {
         setError('Email already exists. Please use a different email.');
       }
@@ -45,6 +45,36 @@ const Register: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // Show confirmation page after successful registration
+  if (registered) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full">
+          <div className="bg-white/90 backdrop-blur-sm p-10 rounded-3xl shadow-2xl border border-white/20 text-center">
+            <div className="flex justify-center mb-6">
+              <CheckCircle className="h-16 w-16 text-primary-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-secondary-900 mb-4">
+              Check Your Email
+            </h2>
+            <p className="text-gray-600 mb-6">
+              We've sent a confirmation link to <strong>{email}</strong>. Please check your inbox and click the link to verify your account.
+            </p>
+            <p className="text-sm text-gray-500 mb-8">
+              Didn't receive the email? Check your spam folder or try registering again.
+            </p>
+            <Link
+              to="/login"
+              className="inline-block bg-gradient-to-r from-primary-400 to-primary-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary-500 hover:to-primary-600 transition-all duration-300 shadow-lg"
+            >
+              Go to Login
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
