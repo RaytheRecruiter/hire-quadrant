@@ -97,18 +97,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initializeAuth();
 
     // Listen for auth changes
+    // IMPORTANT: Do not make async Supabase calls inside this callback
+    // as it can cause deadlocks with the auth token refresh cycle.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         if (session?.user) {
-          const userProfile = await fetchUserProfile(session.user);
-          setUser(userProfile);
           setSession(session);
+          // Defer the profile fetch to avoid blocking the auth state change
+          setTimeout(async () => {
+            const userProfile = await fetchUserProfile(session.user);
+            setUser(userProfile);
+            setLoading(false);
+          }, 0);
         } else {
           setUser(null);
           setSession(null);
+          setLoading(false);
         }
-        
-        setLoading(false);
       }
     );
 
