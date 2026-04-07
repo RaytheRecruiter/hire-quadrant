@@ -106,6 +106,9 @@ const ProfilePage = () => {
         setUploading(false);
     };
 
+    const [resumeViewUrl, setResumeViewUrl] = useState<string | null>(null);
+    const [showResumeViewer, setShowResumeViewer] = useState(false);
+
     // Generate a signed URL to view the resume
     const handleViewResume = async () => {
         if (!profile?.resume_url) return;
@@ -121,7 +124,15 @@ const ProfilePage = () => {
         }
 
         if (data?.signedUrl) {
-            window.open(data.signedUrl, '_blank');
+            const fileName = profile.resume_url.toLowerCase();
+            if (fileName.endsWith('.pdf')) {
+                // PDFs can be displayed natively in the browser
+                window.open(data.signedUrl, '_blank');
+            } else {
+                // DOCX/DOC files — use Google Docs Viewer to render in-browser
+                setResumeViewUrl(data.signedUrl);
+                setShowResumeViewer(true);
+            }
         }
     };
 
@@ -205,6 +216,36 @@ const ProfilePage = () => {
                         />
                         {uploading && <p className="text-sm text-gray-500 mt-2">Uploading...</p>}
                     </div>
+
+                    {showResumeViewer && resumeViewUrl && (
+                        <div className="mt-6">
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="text-lg font-semibold text-gray-800">Resume Preview</h3>
+                                <div className="flex gap-2">
+                                    <a
+                                        href={resumeViewUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                                    >
+                                        Download
+                                    </a>
+                                    <button
+                                        onClick={() => setShowResumeViewer(false)}
+                                        className="text-sm text-gray-500 hover:text-gray-700 font-medium"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                            <iframe
+                                src={`https://docs.google.com/gview?url=${encodeURIComponent(resumeViewUrl)}&embedded=true`}
+                                className="w-full border border-gray-200 rounded-lg"
+                                style={{ height: '600px' }}
+                                title="Resume Preview"
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
