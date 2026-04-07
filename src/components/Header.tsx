@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Grid3X3, User, LogOut, BarChart3, FileText, Building2 } from 'lucide-react';
 
 const Header: React.FC = () => {
-  const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  const { user, logout, isAuthenticated, isAdmin, isCompany } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -62,6 +62,15 @@ const Header: React.FC = () => {
                   >
                     <Building2 className="h-4 w-4 mr-1" />
                     Sources
+                  </Link>
+                )}
+                {isCompany && (
+                  <Link
+                    to="/company-dashboard"
+                    className="flex items-center text-secondary-700 hover:text-primary-500 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 hover:bg-primary-50"
+                  >
+                    <Building2 className="h-4 w-4 mr-1" />
+                    Company Dashboard
                   </Link>
                 )}
                 <button

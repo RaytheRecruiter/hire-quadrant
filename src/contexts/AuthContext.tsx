@@ -8,17 +8,20 @@ interface User {
   name: string;
   role: 'candidate' | 'admin' | 'company';
   companyId?: string;
+  isApproved: boolean;
   createdAt: Date;
 }
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{ success: boolean; role?: string }>;
   register: (email: string, password: string, name: string, role?: 'candidate' | 'company') => Promise<boolean>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isApproved: boolean;
+  isCompany: boolean;
   loading: boolean;
   updateProfile: (updates: Partial<Pick<User, 'name' | 'role' | 'companyId'>>) => Promise<boolean>;
 }
@@ -47,7 +50,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const { data: profile, error } = await supabase
         .from('user_profiles')
-        .select('name, role, company_id, created_at')
+        .select('name, role, company_id, is_approved, created_at')
         .eq('user_id', supabaseUser.id)
         .single();
 
@@ -62,6 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         name: profile.name,
         role: profile.role,
         companyId: profile.company_id,
+        isApproved: profile.is_approved ?? true,
         createdAt: new Date(profile.created_at)
       };
     } catch (error) {
@@ -122,7 +126,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<{ success: boolean; role?: string }> => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -131,7 +135,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (error) {
         console.error('Login error:', error.message);
-        return false;
+        return { success: false };
       }
 
       if (data.user) {
@@ -139,14 +143,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (userProfile) {
           setUser(userProfile);
           setSession(data.session);
-          return true;
+          return { success: true, role: userProfile.role };
         }
       }
 
-      return false;
+      return { success: false };
     } catch (error) {
       console.error('Login error:', error);
-      return false;
+      return { success: false };
     }
   };
 
@@ -245,6 +249,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin',
+    isApproved: user?.isApproved ?? true,
+    isCompany: user?.role === 'company',
     loading,
     updateProfile
   };

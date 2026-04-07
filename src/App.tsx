@@ -13,6 +13,8 @@ import Admin from './pages/Admin';
 import XMLFeederAdmin from './components/XMLFeederAdmin';
 import CompanySourceManager from './components/CompanySourceManager';
 import ProfilePage from './pages/ProfilePage'; // <-- Corrected path
+import CompanyDashboard from './pages/CompanyDashboard';
+import Pricing from './pages/Pricing';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />
                 <Route path="/company-sources" element={<CompanySourceManager />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/company-dashboard" element={<CompanyDashboard />} />
+                <Route path="/pricing" element={<Pricing />} />
               </Routes>
             </div>
           </Router>

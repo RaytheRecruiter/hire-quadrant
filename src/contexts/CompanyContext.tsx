@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '../utils/supabaseClient';
 
 export interface CompanyProfile {
   id: string;
@@ -27,9 +28,9 @@ interface CompanyContextType {
   error: string | null;
   getCompanyByName: (name: string) => CompanyProfile | undefined;
   getCompanyById: (id: string) => CompanyProfile | undefined;
-  addCompany: (company: Omit<CompanyProfile, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateCompany: (id: string, updates: Partial<CompanyProfile>) => void;
-  deleteCompany: (id: string) => void;
+  addCompany: (company: Omit<CompanyProfile, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  updateCompany: (id: string, updates: Partial<CompanyProfile>) => Promise<void>;
+  deleteCompany: (id: string) => Promise<void>;
 }
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined);
@@ -46,89 +47,92 @@ interface CompanyProviderProps {
   children: ReactNode;
 }
 
+// Helper: Map Supabase snake_case row to camelCase CompanyProfile
+const mapRowToCompany = (row: any): CompanyProfile => ({
+  id: row.id,
+  name: row.name,
+  displayName: row.display_name ?? row.name,
+  description: row.description ?? '',
+  website: row.website,
+  logo: row.logo,
+  industry: row.industry ?? '',
+  size: row.size ?? '',
+  location: row.location ?? '',
+  founded: row.founded,
+  specialties: row.specialties ?? [],
+  benefits: row.benefits ?? [],
+  culture: row.culture ?? '',
+  xmlFeedPath: row.xml_feed_path ?? '',
+  contactEmail: row.contact_email,
+  isActive: row.is_active ?? true,
+  createdAt: new Date(row.created_at),
+  updatedAt: new Date(row.updated_at),
+});
+
+// Helper: Map camelCase fields to snake_case for Supabase
+const mapCompanyToRow = (data: Partial<CompanyProfile>): Record<string, any> => {
+  const mapping: Record<string, string> = {
+    name: 'name',
+    displayName: 'display_name',
+    description: 'description',
+    website: 'website',
+    logo: 'logo',
+    industry: 'industry',
+    size: 'size',
+    location: 'location',
+    founded: 'founded',
+    specialties: 'specialties',
+    benefits: 'benefits',
+    culture: 'culture',
+    xmlFeedPath: 'xml_feed_path',
+    contactEmail: 'contact_email',
+    isActive: 'is_active',
+  };
+
+  const row: Record<string, any> = {};
+  for (const [camelKey, value] of Object.entries(data)) {
+    const snakeKey = mapping[camelKey];
+    if (snakeKey) {
+      row[snakeKey] = value;
+    }
+  }
+  return row;
+};
+
 export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) => {
   const [companies, setCompanies] = useState<CompanyProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadCompanies = () => {
-      try {
-        // Load companies from localStorage or initialize with defaults
-        const storedCompanies = localStorage.getItem('company_profiles');
-        
-        if (storedCompanies) {
-          const parsed = JSON.parse(storedCompanies);
-          // Convert date strings back to Date objects
-          const companiesWithDates = parsed.map((company: any) => ({
-            ...company,
-            createdAt: new Date(company.createdAt),
-            updatedAt: new Date(company.updatedAt)
-          }));
-          setCompanies(companiesWithDates);
-        } else {
-          // Initialize with default company profiles for existing XML feeds
-          const defaultCompanies: CompanyProfile[] = [
-            {
-              id: 'hire-quadrant',
-              name: 'Hire Quadrant',
-              displayName: 'Hire Quadrant',
-              description: 'Hire Quadrant is a leading staffing and recruitment company specializing in connecting top talent with innovative companies across various industries. We focus on building long-term partnerships and providing personalized recruitment solutions.',
-              website: 'https://hirequadrant.com',
-              logo: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400',
-              industry: 'Staffing & Recruiting',
-              size: '50-200 employees',
-              location: 'Washington, DC Metro Area',
-              founded: '2015',
-              specialties: [
-                'Healthcare Staffing',
-                'Technology Recruitment',
-                'Project Management',
-                'Clinical Services',
-                'IT Consulting'
-              ],
-              benefits: [
-                'Competitive compensation packages',
-                'Comprehensive health benefits',
-                'Professional development opportunities',
-                'Flexible work arrangements',
-                'Career advancement support'
-              ],
-              culture: 'We foster a collaborative environment where innovation thrives and every team member is valued. Our culture emphasizes work-life balance, continuous learning, and making a positive impact in the communities we serve.',
-              xmlFeedPath: '/data/listofportaljobs.xml',
-              contactEmail: 'careers@hirequadrant.com',
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date()
-            }
-          ];
-          
-          setCompanies(defaultCompanies);
-          localStorage.setItem('company_profiles', JSON.stringify(defaultCompanies));
-        }
-      } catch (err) {
-        console.error('Error loading company profiles:', err);
-        setError('Failed to load company profiles');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadCompanies();
-  }, []);
-
-  const saveCompanies = (updatedCompanies: CompanyProfile[]) => {
+  const fetchCompanies = async () => {
     try {
-      localStorage.setItem('company_profiles', JSON.stringify(updatedCompanies));
-      setCompanies(updatedCompanies);
+      setLoading(true);
+      const { data, error: fetchError } = await supabase
+        .from('companies')
+        .select('*');
+
+      if (fetchError) {
+        console.error('Error fetching companies:', fetchError);
+        setError('Failed to load company profiles');
+        return;
+      }
+
+      setCompanies((data || []).map(mapRowToCompany));
+      setError(null);
     } catch (err) {
-      console.error('Error saving company profiles:', err);
-      setError('Failed to save company profiles');
+      console.error('Error loading company profiles:', err);
+      setError('Failed to load company profiles');
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
+
   const getCompanyByName = (name: string) => {
-    return companies.find(company => 
+    return companies.find(company =>
       company.name.toLowerCase() === name.toLowerCase() ||
       company.displayName.toLowerCase() === name.toLowerCase()
     );
@@ -138,30 +142,80 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
     return companies.find(company => company.id === id);
   };
 
-  const addCompany = (companyData: Omit<CompanyProfile, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newCompany: CompanyProfile = {
-      ...companyData,
-      id: `company-${Date.now()}`,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+  const addCompany = async (companyData: Omit<CompanyProfile, 'id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      const row = mapCompanyToRow(companyData);
+      const { data, error: insertError } = await supabase
+        .from('companies')
+        .insert(row)
+        .select()
+        .single();
 
-    const updatedCompanies = [...companies, newCompany];
-    saveCompanies(updatedCompanies);
+      if (insertError) {
+        console.error('Error adding company:', insertError);
+        setError('Failed to add company');
+        return;
+      }
+
+      const newCompany = mapRowToCompany(data);
+      setCompanies(prev => [...prev, newCompany]);
+    } catch (err) {
+      console.error('Error adding company:', err);
+      setError('Failed to add company');
+    }
   };
 
-  const updateCompany = (id: string, updates: Partial<CompanyProfile>) => {
-    const updatedCompanies = companies.map(company =>
-      company.id === id
-        ? { ...company, ...updates, updatedAt: new Date() }
-        : company
-    );
-    saveCompanies(updatedCompanies);
+  const updateCompany = async (id: string, updates: Partial<CompanyProfile>) => {
+    try {
+      const row = mapCompanyToRow(updates);
+      const { error: updateError } = await supabase
+        .from('companies')
+        .update(row)
+        .eq('id', id);
+
+      if (updateError) {
+        console.error('Error updating company:', updateError);
+        setError('Failed to update company');
+        return;
+      }
+
+      setCompanies(prev =>
+        prev.map(company =>
+          company.id === id
+            ? { ...company, ...updates, updatedAt: new Date() }
+            : company
+        )
+      );
+    } catch (err) {
+      console.error('Error updating company:', err);
+      setError('Failed to update company');
+    }
   };
 
-  const deleteCompany = (id: string) => {
-    const updatedCompanies = companies.filter(company => company.id !== id);
-    saveCompanies(updatedCompanies);
+  const deleteCompany = async (id: string) => {
+    try {
+      const { error: deleteError } = await supabase
+        .from('companies')
+        .update({ is_active: false })
+        .eq('id', id);
+
+      if (deleteError) {
+        console.error('Error deleting company:', deleteError);
+        setError('Failed to delete company');
+        return;
+      }
+
+      setCompanies(prev =>
+        prev.map(company =>
+          company.id === id
+            ? { ...company, isActive: false, updatedAt: new Date() }
+            : company
+        )
+      );
+    } catch (err) {
+      console.error('Error deleting company:', err);
+      setError('Failed to delete company');
+    }
   };
 
   const value: CompanyContextType = {
