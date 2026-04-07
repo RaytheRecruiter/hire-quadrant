@@ -1,74 +1,15 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { BarChart3, Users, Briefcase, Eye, TrendingUp, Calendar, Building2, RotateCcw, Download, Upload } from 'lucide-react';
+import { BarChart3, Users, Briefcase, Eye, TrendingUp, Calendar, Building2, RotateCcw, Download, Upload, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
-
-// Mocking the context providers and tracking service for a self-contained example
-// In a real application, these would be imported from their respective files.
-const useAuth = () => ({
-  isAdmin: true, // Assuming the user is an admin for this component's view
-});
-
-const useJobs = () => {
-  const [jobs, setJobs] = useState([
-    { id: '1', title: 'Software Engineer', company: 'Tech Corp', views: 150, applications: 25, sourceCompany: 'Indeed', type: 'Full-time' },
-    { id: '2', title: 'Product Manager', company: 'Innovate Co', views: 90, applications: 15, sourceCompany: 'LinkedIn', type: 'Full-time' },
-    { id: '3', title: 'UX Designer', company: 'Creative Inc', views: 200, applications: 50, sourceCompany: 'Direct', type: 'Part-time' },
-    { id: '4', title: 'Data Scientist', company: 'Data Solutions', views: 75, applications: 10, sourceCompany: 'Indeed', type: 'Contract' },
-    { id: '5', title: 'Marketing Specialist', company: 'MarketPro', views: 120, applications: 2, sourceCompany: 'Direct', type: 'Full-time' },
-    { id: '6', title: 'Junior Developer', company: 'Startup XYZ', views: 30, applications: 35, sourceCompany: 'LinkedIn', type: 'Internship' },
-  ]);
-  const [applications, setApplications] = useState([
-    { id: 'app1', userId: 'user1', userName: 'Alice Johnson', userEmail: 'alice@example.com', jobId: '1', appliedAt: '2023-10-20T10:00:00Z', status: 'pending' },
-    { id: 'app2', userId: 'user2', userName: 'Bob Smith', userEmail: 'bob@example.com', jobId: '2', appliedAt: '2023-10-19T11:30:00Z', status: 'reviewed' },
-    { id: 'app3', userId: 'user1', userName: 'Alice Johnson', userEmail: 'alice@example.com', jobId: '3', appliedAt: '2023-10-18T14:00:00Z', status: 'pending' },
-    { id: 'app4', userId: 'user3', userName: 'Charlie Brown', userEmail: 'charlie@example.com', jobId: '1', appliedAt: '2023-10-17T09:00:00Z', status: 'accepted' },
-    { id: 'app5', userId: 'user2', userName: 'Bob Smith', userEmail: 'bob@example.com', jobId: '3', appliedAt: '2023-10-16T16:00:00Z', status: 'reviewed' },
-    { id: 'app6', userId: 'user4', userName: 'Diana Prince', userEmail: 'diana@example.com', jobId: '4', appliedAt: '2023-10-15T12:00:00Z', status: 'pending' },
-    { id: 'app7', userId: 'user5', userName: 'Eve Adams', userEmail: 'eve@example.com', jobId: '5', appliedAt: '2023-10-14T10:00:00Z', status: 'rejected' },
-  ]);
-
-  const resetAllStats = () => {
-    setJobs([
-      { id: '1', title: 'Software Engineer', company: 'Tech Corp', views: 0, applications: 0, sourceCompany: 'Indeed', type: 'Full-time' },
-      { id: '2', title: 'Product Manager', company: 'Innovate Co', views: 0, applications: 0, sourceCompany: 'LinkedIn', type: 'Full-time' },
-      { id: '3', title: 'UX Designer', company: 'Creative Inc', views: 0, applications: 0, sourceCompany: 'Direct', type: 'Part-time' },
-      { id: '4', title: 'Data Scientist', company: 'Data Solutions', views: 0, applications: 0, sourceCompany: 'Indeed', type: 'Contract' },
-      { id: '5', title: 'Marketing Specialist', company: 'MarketPro', views: 0, applications: 0, sourceCompany: 'Direct', type: 'Full-time' },
-      { id: '6', title: 'Junior Developer', company: 'Startup XYZ', views: 0, applications: 0, sourceCompany: 'LinkedIn', type: 'Internship' },
-    ]);
-    setApplications([]);
-  };
-  return { jobs, applications, resetAllStats };
-};
-
-const TrackingService = {
-  getSummary: () => ({
-    jobCount: 6,
-    averageViewsPerJob: 110.8,
-    conversionRate: 14.5,
-    lastReset: new Date(),
-  }),
-  resetAllStats: () => console.log('Stats reset via mock service'),
-  exportData: () => JSON.stringify({ jobs: [], applications: [] }),
-  importData: (data: string) => {
-    console.log('Importing data:', data);
-    return true; // Mock success
-  },
-};
-
-// Mocking the CandidateHub component
-const CandidateHub = () => (
-  <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-    <h3 className="text-lg font-semibold text-gray-900 mb-4">Candidate Hub</h3>
-    <p className="text-gray-600">This is a placeholder for the Candidate Hub. Here you can manage and interact with candidates.</p>
-  </div>
-);
-
+import { useAuth } from '../contexts/AuthContext';
+import { useAdminData } from '../hooks/useAdminData';
+import CandidateHub from '../components/CandidateHub';
+import { TrackingService } from '../utils/trackingService';
 
 const Admin: React.FC = () => {
   const { isAdmin } = useAuth();
-  const { jobs, applications, resetAllStats } = useJobs();
+  const { jobs, applications, userProfiles, loading, error, updateApplicationStatus, refreshData } = useAdminData();
   const [activeTab, setActiveTab] = useState('overview');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
@@ -76,45 +17,90 @@ const Admin: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 text-primary-300 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 text-lg">Loading admin dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="bg-red-100 text-red-700 p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-2">Error Loading Dashboard</h2>
+            <p className="mb-4">{error}</p>
+            <button
+              onClick={refreshData}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Calculate statistics
   const totalJobs = jobs.length;
   const totalApplications = applications.length;
-  const totalViews = jobs.reduce((sum, job) => sum + job.views, 0);
+  const totalViews = jobs.reduce((sum, job) => sum + (job.views || 0), 0);
   const averageApplicationsPerJob = totalJobs > 0 ? (totalApplications / totalJobs).toFixed(1) : 0;
 
-  // Get top performing jobs (by applications)
+  // Get top performing jobs (by applications count)
   const topJobs = [...jobs]
-    .sort((a, b) => b.applications - a.applications)
+    .sort((a, b) => (b.applications || 0) - (a.applications || 0))
     .slice(0, 5);
 
   // Get jobs with highest conversion rates (applications/views)
   const topConversionJobs = [...jobs]
-    .filter(job => job.views > 0)
-    .sort((a, b) => (b.applications / b.views) - (a.applications / a.views))
+    .filter(job => (job.views || 0) > 0)
+    .sort((a, b) => ((b.applications || 0) / (b.views || 1)) - ((a.applications || 0) / (a.views || 1)))
     .slice(0, 5);
 
-  // Get recent applications
-  const recentApplications = [...applications]
-    .sort((a, b) => new Date(b.appliedAt).getTime() - new Date(a.appliedAt).getTime())
-    .slice(0, 10);
+  // Get recent applications (already ordered by applied_at desc from the hook)
+  const recentApplications = applications.slice(0, 10);
+
+  // Build a lookup of user profiles by user_id for enriching applications
+  const profilesByUserId: Record<string, { name: string; email: string }> = {};
+  userProfiles.forEach(p => {
+    profilesByUserId[p.user_id] = { name: p.name, email: p.email || '' };
+  });
+
+  // Helper to get user name for an application
+  const getUserName = (app: typeof applications[0]) => {
+    return app.user_name || profilesByUserId[app.user_id]?.name || 'Unknown';
+  };
+
+  // Helper to get user email for an application
+  const getUserEmail = (app: typeof applications[0]) => {
+    return app.user_email || profilesByUserId[app.user_id]?.email || '';
+  };
 
   // Get unique candidates from applications
-  const candidates = applications.reduce((acc, app) => {
-    const existingCandidate = acc.find(c => c.email === app.userEmail);
+  const candidatesFromApps = applications.reduce((acc, app) => {
+    const email = getUserEmail(app);
+    const existingCandidate = acc.find(c => c.email === email);
     if (existingCandidate) {
       existingCandidate.applications.push(app);
       existingCandidate.totalApplications++;
-      if (new Date(app.appliedAt) > new Date(existingCandidate.lastActivity)) {
-        existingCandidate.lastActivity = app.appliedAt;
+      if (new Date(app.applied_at) > new Date(existingCandidate.lastActivity)) {
+        existingCandidate.lastActivity = app.applied_at;
       }
     } else {
       acc.push({
-        id: app.userId,
-        name: app.userName,
-        email: app.userEmail,
+        id: app.user_id,
+        name: getUserName(app),
+        email: email,
         applications: [app],
         totalApplications: 1,
-        lastActivity: app.appliedAt,
+        lastActivity: app.applied_at,
         status: app.status
       });
     }
@@ -125,21 +111,21 @@ const Admin: React.FC = () => {
     email: string;
     applications: typeof applications;
     totalApplications: number;
-    lastActivity: Date;
+    lastActivity: string;
     status: string;
   }>);
 
   // Sort candidates by last activity
-  const sortedCandidates = candidates.sort((a, b) => 
+  const sortedCandidates = candidatesFromApps.sort((a, b) =>
     new Date(b.lastActivity).getTime() - new Date(a.lastActivity).getTime()
   );
 
   // Candidate statistics
-  const totalCandidates = candidates.length;
-  const activeCandidates = candidates.filter(c => 
+  const totalCandidates = candidatesFromApps.length;
+  const activeCandidates = candidatesFromApps.filter(c =>
     new Date(c.lastActivity) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   ).length;
-  const candidatesWithMultipleApps = candidates.filter(c => c.totalApplications > 1).length;
+  const candidatesWithMultipleApps = candidatesFromApps.filter(c => c.totalApplications > 1).length;
 
   // Application status distribution
   const statusCounts = applications.reduce((acc, app) => {
@@ -149,19 +135,20 @@ const Admin: React.FC = () => {
 
   // Source company statistics
   const sourceStats = jobs.reduce((acc, job) => {
-    const source = job.sourceCompany || 'Direct';
+    const source = job.source_company || 'Direct';
     if (!acc[source]) {
       acc[source] = { jobs: 0, views: 0, applications: 0 };
     }
     acc[source].jobs += 1;
-    acc[source].views += job.views;
-    acc[source].applications += job.applications;
+    acc[source].views += (job.views || 0);
+    acc[source].applications += (job.applications || 0);
     return acc;
   }, {} as Record<string, { jobs: number; views: number; applications: number }>);
 
   // Job type distribution
   const jobTypeStats = jobs.reduce((acc, job) => {
-    acc[job.type] = (acc[job.type] || 0) + 1;
+    const type = job.type || 'Unknown';
+    acc[type] = (acc[type] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
@@ -169,7 +156,7 @@ const Admin: React.FC = () => {
   const trackingSummary = TrackingService.getSummary();
 
   const handleResetStats = () => {
-    resetAllStats();
+    TrackingService.resetAllStats();
     setShowResetConfirm(false);
   };
 
@@ -177,14 +164,14 @@ const Admin: React.FC = () => {
     const data = TrackingService.exportData();
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
+
     const link = document.createElement('a');
     link.href = url;
     link.download = `job-tracking-data-${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     URL.revokeObjectURL(url);
   };
 
@@ -196,7 +183,6 @@ const Admin: React.FC = () => {
     reader.onload = (e) => {
       const content = e.target?.result as string;
       if (TrackingService.importData(content)) {
-        // Use a custom modal instead of alert
         const messageBox = document.createElement('div');
         messageBox.innerHTML = `
           <div style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:2rem; border-radius:0.5rem; box-shadow:0 4px 6px rgba(0,0,0,0.1); z-index:100;">
@@ -218,6 +204,48 @@ const Admin: React.FC = () => {
     };
     reader.readAsText(file);
   };
+
+  const handleStatusChange = async (applicationId: string, newStatus: string) => {
+    try {
+      await updateApplicationStatus(applicationId, newStatus);
+    } catch (err) {
+      console.error('Failed to update application status:', err);
+    }
+  };
+
+  // Build candidates data for CandidateHub component
+  // CandidateHub expects: candidates, applications, jobs
+  // candidates shape: { id, name, email, applications: JobApplication[], totalApplications, lastActivity: Date, status }
+  const candidateHubCandidates = candidatesFromApps.map(c => ({
+    ...c,
+    lastActivity: new Date(c.lastActivity),
+  }));
+
+  // Map applications to the shape CandidateHub expects (JobApplication from JobContext)
+  const candidateHubApplications = applications.map(app => ({
+    id: app.id,
+    job_id: app.job_id,
+    user_id: app.user_id,
+    status: app.status as 'Applied' | 'Screening' | 'Interview' | 'Offer' | 'Rejected',
+    applied_at: app.applied_at,
+    source_company: app.source_company,
+  }));
+
+  // Map jobs to the shape CandidateHub expects (Job from JobContext)
+  const candidateHubJobs = jobs.map(j => ({
+    id: j.id,
+    title: j.title,
+    description: j.description || '',
+    externalJobId: j.external_job_id || '',
+    externalUrl: j.external_url,
+    postedDate: j.posted_date || '',
+    sourceCompany: j.source_company || '',
+    sourceXmlFile: j.source_xml_file,
+    company: j.company,
+    location: j.location,
+    type: j.type,
+    salary: j.salary,
+  }));
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
@@ -471,19 +499,20 @@ const Admin: React.FC = () => {
                 {recentApplications.slice(0, 5).map((application) => (
                   <div key={application.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{application.userName}</p>
+                      <p className="text-sm font-medium text-gray-900">{getUserName(application)}</p>
                       <p className="text-xs text-gray-500">
-                        Applied to {jobs.find(j => j.id === application.jobId)?.title}
+                        Applied to {jobs.find(j => j.id === application.job_id)?.title}
                       </p>
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-gray-500">
-                        {format(new Date(application.appliedAt), 'MMM d, yyyy')}
+                        {format(new Date(application.applied_at), 'MMM d, yyyy')}
                       </p>
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        application.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                        application.status === 'reviewed' ? 'bg-blue-100 text-blue-800' :
-                        application.status === 'accepted' ? 'bg-primary-100 text-primary-800' :
+                        application.status === 'pending' || application.status === 'Applied' ? 'bg-yellow-100 text-yellow-800' :
+                        application.status === 'reviewed' || application.status === 'Screening' ? 'bg-blue-100 text-blue-800' :
+                        application.status === 'accepted' || application.status === 'Offer' ? 'bg-primary-100 text-primary-800' :
+                        application.status === 'Interview' ? 'bg-indigo-100 text-indigo-800' :
                         'bg-red-100 text-red-800'
                       }`}>
                         {application.status}
@@ -502,20 +531,20 @@ const Admin: React.FC = () => {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Job Performance Analytics</h3>
               </div>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                 {/* Top Jobs by Applications */}
                 <div>
                   <h4 className="text-md font-semibold text-gray-800 mb-4">Most Applied Jobs</h4>
                   <div className="space-y-3">
-                    {topJobs.map((job, index) => (
+                    {topJobs.map((job) => (
                       <div key={job.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div className="flex-1">
                           <div className="font-medium text-gray-900 text-sm">{job.title}</div>
                           <div className="text-xs text-gray-500">{job.company}</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-primary-600">{job.applications}</div>
+                          <div className="font-bold text-primary-600">{job.applications || 0}</div>
                           <div className="text-xs text-gray-500">applications</div>
                         </div>
                       </div>
@@ -527,7 +556,7 @@ const Admin: React.FC = () => {
                 <div>
                   <h4 className="text-md font-semibold text-gray-800 mb-4">Best Conversion Rates</h4>
                   <div className="space-y-3">
-                    {topConversionJobs.map((job, index) => (
+                    {topConversionJobs.map((job) => (
                       <div key={job.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div className="flex-1">
                           <div className="font-medium text-gray-900 text-sm">{job.title}</div>
@@ -535,7 +564,7 @@ const Admin: React.FC = () => {
                         </div>
                         <div className="text-right">
                           <div className="font-bold text-secondary-600">
-                            {((job.applications / job.views) * 100).toFixed(1)}%
+                            {(((job.applications || 0) / (job.views || 1)) * 100).toFixed(1)}%
                           </div>
                           <div className="text-xs text-gray-500">conversion</div>
                         </div>
@@ -580,16 +609,16 @@ const Admin: React.FC = () => {
                           {job.company}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {job.sourceCompany || 'Direct'}
+                          {job.source_company || 'Direct'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {job.views}
+                          {job.views || 0}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {job.applications}
+                          {job.applications || 0}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {job.views > 0 ? ((job.applications / job.views) * 100).toFixed(1) : 0}%
+                          {(job.views || 0) > 0 ? (((job.applications || 0) / (job.views || 1)) * 100).toFixed(1) : 0}%
                         </td>
                       </tr>
                     ))}
@@ -689,30 +718,39 @@ const Admin: React.FC = () => {
                     {recentApplications.map((application) => (
                       <tr key={application.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{application.userName}</div>
-                          <div className="text-sm text-gray-500">{application.userEmail}</div>
+                          <div className="text-sm font-medium text-gray-900">{getUserName(application)}</div>
+                          <div className="text-sm text-gray-500">{getUserEmail(application)}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {jobs.find(j => j.id === application.jobId)?.title}
+                          {jobs.find(j => j.id === application.job_id)?.title}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {jobs.find(j => j.id === application.jobId)?.company}
+                          {jobs.find(j => j.id === application.job_id)?.company}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {jobs.find(j => j.id === application.jobId)?.sourceCompany || 'Direct'}
+                          {jobs.find(j => j.id === application.job_id)?.source_company || 'Direct'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {format(new Date(application.appliedAt), 'MMM d, yyyy h:mm a')}
+                          {format(new Date(application.applied_at), 'MMM d, yyyy h:mm a')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            application.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                            application.status === 'reviewed' ? 'bg-blue-100 text-blue-800' :
-                            application.status === 'accepted' ? 'bg-primary-100 text-primary-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {application.status}
-                          </span>
+                          <select
+                            value={application.status}
+                            onChange={(e) => handleStatusChange(application.id, e.target.value)}
+                            className={`text-xs font-medium rounded-full px-3 py-1 border-0 cursor-pointer ${
+                              application.status === 'pending' || application.status === 'Applied' ? 'bg-yellow-100 text-yellow-800' :
+                              application.status === 'reviewed' || application.status === 'Screening' ? 'bg-blue-100 text-blue-800' :
+                              application.status === 'accepted' || application.status === 'Offer' ? 'bg-green-100 text-green-800' :
+                              application.status === 'Interview' ? 'bg-indigo-100 text-indigo-800' :
+                              'bg-red-100 text-red-800'
+                            }`}
+                          >
+                            <option value="Applied">Applied</option>
+                            <option value="Screening">Screening</option>
+                            <option value="Interview">Interview</option>
+                            <option value="Offer">Offer</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
                         </td>
                       </tr>
                     ))}
@@ -807,7 +845,11 @@ const Admin: React.FC = () => {
         )}
 
         {activeTab === 'candidate-hub' && (
-          <CandidateHub />
+          <CandidateHub
+            candidates={candidateHubCandidates}
+            applications={candidateHubApplications}
+            jobs={candidateHubJobs}
+          />
         )}
       </div>
     </div>

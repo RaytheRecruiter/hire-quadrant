@@ -18,9 +18,15 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const success = await login(email, password);
-      if (success) {
-        navigate('/');
+      const result = await login(email, password);
+      if (result.success) {
+        if (result.role === 'company') {
+          navigate('/company-dashboard');
+        } else if (result.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       } else {
         setError('Invalid email or password');
       }
