@@ -1,42 +1,113 @@
 // src/pages/ProfilePage.tsx
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
+import { MapPin, Phone, FileText, Briefcase, Calendar, Building2, ExternalLink } from 'lucide-react';
 
 interface CandidateProfile {
+    user_id: string;
     location: string;
     phone_number: string;
     resume_url: string;
+    email: string;
+}
+
+interface JobApplication {
+    id: string;
+    job_id: string;
+    status: string;
+    applied_at: string;
+    source_company: string;
+}
+
+interface JobInfo {
+    id: string;
+    title: string;
+    company: string;
+    location: string;
+    type: string;
 }
 
 const ProfilePage = () => {
     const { user } = useAuth();
     const [profile, setProfile] = useState<CandidateProfile | null>(null);
+    const [applications, setApplications] = useState<(JobApplication & { job?: JobInfo })[]>([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+    const [locationValue, setLocationValue] = useState('');
+    const [phoneValue, setPhoneValue] = useState('');
+    const [resumeViewUrl, setResumeViewUrl] = useState<string | null>(null);
+    const [showResumeViewer, setShowResumeViewer] = useState(false);
 
     // Fetch the candidate's profile data
     const fetchProfile = useCallback(async () => {
-        if (!user) return;
-        setLoading(true);
-        const { data, error } = await supabase
-            .from('candidates')
-            .select('*')
-            .eq('user_id', user.id)
-            .single();
-
-        if (error && error.code !== 'PGRST116') {
-            console.error('Error fetching profile:', error);
-        } else if (data) {
-            setProfile(data);
+        if (!user) {
+            setLoading(false);
+            return;
         }
+
+        try {
+            const { data, error } = await supabase
+                .from('candidates')
+                .select('*')
+                .eq('user_id', user.id)
+                .maybeSingle();
+
+            if (error) {
+                console.error('Error fetching profile:', error);
+            } else if (data) {
+                setProfile(data);
+                setLocationValue(data.location || '');
+                setPhoneValue(data.phone_number || '');
+            }
+        } catch (err) {
+            console.error('Error in fetchProfile:', err);
+        }
+
         setLoading(false);
+    }, [user]);
+
+    // Fetch applied jobs
+    const fetchApplications = useCallback(async () => {
+        if (!user) return;
+
+        try {
+            const { data: apps, error } = await supabase
+                .from('job_applications')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('applied_at', { ascending: false });
+
+            if (error) {
+                console.error('Error fetching applications:', error);
+                return;
+            }
+
+            if (apps && apps.length > 0) {
+                // Fetch job details for each application
+                const jobIds = apps.map(a => a.job_id);
+                const { data: jobs } = await supabase
+                    .from('jobs')
+                    .select('id, title, company, location, type')
+                    .in('id', jobIds);
+
+                const jobMap = new Map((jobs || []).map(j => [j.id, j]));
+                setApplications(apps.map(app => ({
+                    ...app,
+                    job: jobMap.get(app.job_id)
+                })));
+            }
+        } catch (err) {
+            console.error('Error fetching applications:', err);
+        }
     }, [user]);
 
     useEffect(() => {
         fetchProfile();
-    }, [fetchProfile]);
+        fetchApplications();
+    }, [fetchProfile, fetchApplications]);
 
     // Handle form submission for updating the profile
     const handleSubmit = async (e: React.FormEvent) => {
@@ -44,31 +115,44 @@ const ProfilePage = () => {
         if (!user) return;
         setMessage(null);
 
-        const updates = {
-            user_id: user.id,
-            location: (e.target as any).location.value,
-            phone_number: (e.target as any).phone_number.value,
-            email: user.email,
-        };
+        try {
+            if (profile) {
+                // Update existing row
+                const { error } = await supabase
+                    .from('candidates')
+                    .update({
+                        location: locationValue,
+                        phone_number: phoneValue,
+                        email: user.email,
+                    })
+                    .eq('user_id', user.id);
 
-        const { error } = await supabase
-            .from('candidates')
-            .upsert(updates, { onConflict: 'user_id' });
+                if (error) throw error;
+            } else {
+                // Insert new row
+                const { error } = await supabase
+                    .from('candidates')
+                    .insert({
+                        user_id: user.id,
+                        location: locationValue,
+                        phone_number: phoneValue,
+                        email: user.email,
+                    });
 
-        if (error) {
-            console.error('Error updating profile:', error);
-            setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
-        } else {
+                if (error) throw error;
+            }
+
             setMessage({ type: 'success', text: 'Profile updated successfully!' });
             await fetchProfile();
+        } catch (error: any) {
+            console.error('Error updating profile:', error);
+            setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
         }
     };
 
     // Handle resume file upload
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files || e.target.files.length === 0 || !user) {
-            return;
-        }
+        if (!e.target.files || e.target.files.length === 0 || !user) return;
 
         const file = e.target.files[0];
         setUploading(true);
@@ -87,27 +171,31 @@ const ProfilePage = () => {
         }
 
         if (data) {
-            // For private buckets, store the file path and generate signed URLs on demand
             const storagePath = data.path;
 
-            // Update the candidate's profile with the storage path
-            const { error: updateError } = await supabase
-                .from('candidates')
-                .upsert({ user_id: user.id, resume_url: storagePath }, { onConflict: 'user_id' });
+            try {
+                if (profile) {
+                    const { error: updateError } = await supabase
+                        .from('candidates')
+                        .update({ resume_url: storagePath })
+                        .eq('user_id', user.id);
+                    if (updateError) throw updateError;
+                } else {
+                    const { error: insertError } = await supabase
+                        .from('candidates')
+                        .insert({ user_id: user.id, resume_url: storagePath, email: user.email });
+                    if (insertError) throw insertError;
+                }
 
-            if (updateError) {
-                console.error('Error updating resume URL:', updateError);
-                setMessage({ type: 'error', text: 'File uploaded but failed to save to profile.' });
-            } else {
                 setMessage({ type: 'success', text: 'Resume uploaded successfully!' });
                 await fetchProfile();
+            } catch (err: any) {
+                console.error('Error saving resume to profile:', err);
+                setMessage({ type: 'error', text: 'File uploaded but failed to save to profile.' });
             }
         }
         setUploading(false);
     };
-
-    const [resumeViewUrl, setResumeViewUrl] = useState<string | null>(null);
-    const [showResumeViewer, setShowResumeViewer] = useState(false);
 
     // Generate a signed URL to view the resume
     const handleViewResume = async () => {
@@ -115,7 +203,7 @@ const ProfilePage = () => {
 
         const { data, error } = await supabase.storage
             .from('resumes')
-            .createSignedUrl(profile.resume_url, 3600); // 1 hour expiry
+            .createSignedUrl(profile.resume_url, 3600);
 
         if (error) {
             console.error('Error generating resume URL:', error);
@@ -126,22 +214,75 @@ const ProfilePage = () => {
         if (data?.signedUrl) {
             const fileName = profile.resume_url.toLowerCase();
             if (fileName.endsWith('.pdf')) {
-                // PDFs can be displayed natively in the browser
                 window.open(data.signedUrl, '_blank');
             } else {
-                // DOCX/DOC files — use Google Docs Viewer to render in-browser
                 setResumeViewUrl(data.signedUrl);
                 setShowResumeViewer(true);
             }
         }
     };
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading profile...</div>;
+    const formatDate = (dateStr: string) => {
+        return new Date(dateStr).toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric'
+        });
+    };
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'Applied': return 'bg-blue-100 text-blue-800';
+            case 'Screening': return 'bg-yellow-100 text-yellow-800';
+            case 'Interview': return 'bg-purple-100 text-purple-800';
+            case 'Offer': return 'bg-green-100 text-green-800';
+            case 'Rejected': return 'bg-red-100 text-red-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
+    };
+
+    if (!user) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-gray-600 mb-4">Please log in to view your profile.</p>
+                    <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+                        Go to Login
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
+                    <p className="text-gray-500">Loading profile...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 py-12">
-            <div className="max-w-2xl mx-auto px-4">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Candidate Profile</h1>
+            <div className="max-w-3xl mx-auto px-4">
+                {/* Header */}
+                <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
+                    <div className="flex items-center gap-4">
+                        <div className="h-16 w-16 rounded-full bg-primary-100 flex items-center justify-center">
+                            <span className="text-2xl font-bold text-primary-600">
+                                {user.name?.charAt(0)?.toUpperCase() || user.email.charAt(0).toUpperCase()}
+                            </span>
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+                            <p className="text-gray-500">{user.email}</p>
+                            <span className="inline-block mt-1 px-2 py-0.5 bg-primary-50 text-primary-700 text-xs font-medium rounded-full capitalize">
+                                {user.role}
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
                 {message && (
                     <div className={`mb-6 px-4 py-3 rounded-lg ${
@@ -153,29 +294,29 @@ const ProfilePage = () => {
                     </div>
                 )}
 
+                {/* Personal Information */}
                 <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-4">Personal Information</h2>
+                    <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <MapPin className="h-5 w-5 text-gray-400" />
+                        Personal Information
+                    </h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Location
-                            </label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
                             <input
                                 type="text"
-                                name="location"
-                                defaultValue={profile?.location || ''}
+                                value={locationValue}
+                                onChange={(e) => setLocationValue(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                                 placeholder="e.g. Washington, DC"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Phone Number
-                            </label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                             <input
                                 type="tel"
-                                name="phone_number"
-                                defaultValue={profile?.phone_number || ''}
+                                value={phoneValue}
+                                onChange={(e) => setPhoneValue(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                                 placeholder="e.g. (555) 123-4567"
                             />
@@ -189,15 +330,26 @@ const ProfilePage = () => {
                     </form>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border p-6">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-4">Resume</h2>
+                {/* Resume */}
+                <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
+                    <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-gray-400" />
+                        Resume
+                    </h2>
                     {profile?.resume_url ? (
-                        <div className="mb-4">
+                        <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <FileText className="h-4 w-4 text-primary-500" />
+                                <span className="text-sm text-gray-700">
+                                    {profile.resume_url.split('/').pop()?.replace(/^\d+_/, '') || 'Resume uploaded'}
+                                </span>
+                            </div>
                             <button
                                 onClick={handleViewResume}
-                                className="text-primary-600 hover:text-primary-700 font-medium underline"
+                                className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
                             >
-                                View Current Resume
+                                <ExternalLink className="h-3 w-3" />
+                                View
                             </button>
                         </div>
                     ) : (
@@ -221,7 +373,7 @@ const ProfilePage = () => {
                         <div className="mt-6">
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="text-lg font-semibold text-gray-800">Resume Preview</h3>
-                                <div className="flex gap-2">
+                                <div className="flex gap-3">
                                     <a
                                         href={resumeViewUrl}
                                         target="_blank"
@@ -244,6 +396,65 @@ const ProfilePage = () => {
                                 style={{ height: '600px' }}
                                 title="Resume Preview"
                             />
+                        </div>
+                    )}
+                </div>
+
+                {/* Applied Jobs */}
+                <div className="bg-white rounded-xl shadow-sm border p-6">
+                    <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <Briefcase className="h-5 w-5 text-gray-400" />
+                        Applied Jobs ({applications.length})
+                    </h2>
+                    {applications.length === 0 ? (
+                        <div className="text-center py-8">
+                            <Briefcase className="h-10 w-10 text-gray-300 mx-auto mb-3" />
+                            <p className="text-gray-500 mb-2">You haven't applied to any jobs yet.</p>
+                            <Link
+                                to="/"
+                                className="text-primary-600 hover:text-primary-700 font-medium text-sm"
+                            >
+                                Browse Jobs
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="space-y-3">
+                            {applications.map((app) => (
+                                <Link
+                                    key={app.id}
+                                    to={`/jobs/${app.job_id}`}
+                                    className="block p-4 rounded-lg border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <div>
+                                            <h3 className="font-medium text-gray-900">
+                                                {app.job?.title || `Job ${app.job_id}`}
+                                            </h3>
+                                            <div className="flex items-center gap-3 mt-1 text-sm text-gray-500">
+                                                {app.job?.company && (
+                                                    <span className="flex items-center gap-1">
+                                                        <Building2 className="h-3 w-3" />
+                                                        {app.job.company}
+                                                    </span>
+                                                )}
+                                                {app.job?.location && (
+                                                    <span className="flex items-center gap-1">
+                                                        <MapPin className="h-3 w-3" />
+                                                        {app.job.location}
+                                                    </span>
+                                                )}
+                                                <span className="flex items-center gap-1">
+                                                    <Calendar className="h-3 w-3" />
+                                                    Applied {formatDate(app.applied_at)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(app.status)}`}>
+                                            {app.status}
+                                        </span>
+                                    </div>
+                                </Link>
+                            ))}
                         </div>
                     )}
                 </div>
