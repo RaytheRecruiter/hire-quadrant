@@ -13,22 +13,54 @@ const formatJobDescription = (description: string) => {
 
     return sections.map((section, sectionIndex) => {
         const lines = section.split('\n').filter(line => line.trim());
+        const elements: React.ReactElement[] = [];
+        let currentParagraph: string[] = [];
+
+        const flushParagraph = () => {
+            if (currentParagraph.length > 0) {
+                elements.push(
+                    <p key={`p-${elements.length}`} className="text-gray-600 mb-2">
+                        {currentParagraph.join(' ')}
+                    </p>
+                );
+                currentParagraph = [];
+            }
+        };
+
+        lines.forEach((line) => {
+            const trimmedLine = line.trim();
+            if (!trimmedLine) return;
+
+            const isHeader = (trimmedLine.endsWith(':') && trimmedLine.length < 100) ||
+                (trimmedLine === trimmedLine.toUpperCase() && trimmedLine.length < 80 && !trimmedLine.includes('$'));
+
+            const isBullet = /^[\u2022\u2023\u25E6\u2043\u2219•\-\*]\s/.test(trimmedLine) ||
+                /^\d+[\.\)]\s/.test(trimmedLine);
+
+            if (isHeader) {
+                flushParagraph();
+                elements.push(
+                    <p key={`h-${elements.length}`} className="font-semibold text-gray-800 mt-4 mb-1">
+                        {trimmedLine}
+                    </p>
+                );
+            } else if (isBullet) {
+                flushParagraph();
+                elements.push(
+                    <p key={`b-${elements.length}`} className="text-gray-600 ml-4 mb-1">
+                        {trimmedLine}
+                    </p>
+                );
+            } else {
+                currentParagraph.push(trimmedLine);
+            }
+        });
+
+        flushParagraph();
 
         return (
             <div key={sectionIndex} className="mb-6 last:mb-0">
-                {lines.map((line, lineIndex) => {
-                    const trimmedLine = line.trim();
-                    if (!trimmedLine) return null;
-
-                    const isHeader = (trimmedLine.endsWith(':') && trimmedLine.length < 100) ||
-                        (trimmedLine === trimmedLine.toUpperCase() && trimmedLine.length < 80 && !trimmedLine.includes('$'));
-                    
-                    return (
-                        <p key={lineIndex} className={isHeader ? 'font-semibold text-gray-800 mt-4' : 'text-gray-600'}>
-                            {trimmedLine}
-                        </p>
-                    );
-                })}
+                {elements}
             </div>
         );
     });

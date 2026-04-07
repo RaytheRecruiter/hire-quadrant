@@ -134,10 +134,6 @@ export const parseJobsXml = (xmlContent: string, sourceCompany?: string, sourceX
           description = stripHtmlTags(description);
           // Add proper line breaks and formatting
           description = formatJobDescription(description);
-          // Limit description length for better display
-          if (description.length > 500) {
-            description = description.substring(0, 500) + '...';
-          }
         }
        
         // Extract requirements array - try structured first, then parse from description
@@ -491,21 +487,36 @@ export const fetchAndParseJobsXmlWithSources = async (xmlSources: XmlSource[]): 
  * @returns Clean text without HTML tags
  */
 const stripHtmlTags = (html: string): string => {
-  if (!html) return '';
- 
-  return html
-    // Remove HTML tags
-    .replace(/<[^>]*>/g, ' ')
-    // Replace HTML entities with their actual characters
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&') // Corrected: replace &amp; with &
-    .replace(/&lt;/g, '<')   // Corrected: replace &lt; with <
-    .replace(/&gt;/g, '>')   // Corrected: replace &gt; with >
-    .replace(/&quot;/g, '"') // Corrected: replace &quot; with "
-    .replace(/&#39;/g, "'")
-    // Clean up whitespace
-    .replace(/\s+/g, ' ')
-    .trim();
+  if (!html) return '';
+
+  let text = html
+    // Convert block-level elements to double line breaks (paragraph boundaries)
+    .replace(/<\/?(p|div|h[1-6]|section|article|header|footer|blockquote|table|tr)[^>]*>/gi, '\n\n')
+    // Convert line breaks and list items to single line breaks
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/li>/gi, '\n')
+    .replace(/<li[^>]*>/gi, '\u2022 ')
+    // Remove all remaining HTML tags
+    .replace(/<[^>]*>/g, ' ')
+    // Replace HTML entities with their actual characters
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    // Clean up whitespace while preserving line breaks
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n[ \t]+/g, '\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  // Join continuation lines: if a line starts with a lowercase letter,
+  // it is a continuation of the previous line, not a new item
+  text = text.replace(/\n([a-z])/g, ' $1');
+
+  return text;
 };
 
 /**
@@ -514,31 +525,16 @@ const stripHtmlTags = (html: string): string => {
  * @returns Formatted description with proper line breaks
  */
 const formatJobDescription = (description: string): string => {
-  if (!description) return '';
- 
-  return description
-    // Preserve existing line breaks and add strategic ones
-    .replace(/\r\n/g, '\n') // Normalize line endings
-    .replace(/\r/g, '\n')   // Handle old Mac line endings
-   
-    // Add double line breaks before major sections
-    .replace(/(Requirements?:?|Qualifications?:?|Experience?:?|MUST:?|Duties:?|Responsibilities?:?|Benefits?:?)/gi, '\n\n$1')
-   
-    // Add line breaks after sentences that clearly end paragraphs
-    .replace(/([.!?])\s+([A-Z][^.!?]*[A-Z])/g, '$1\n\n$2') // After sentence before likely header
-    .replace(/([.!?])\s+(Requirements?|Qualifications?|Experience?|MUST|Duties|Responsibilities|Benefits)/gi, '$1\n\n$2')
-   
-    // Ensure bullet points are on new lines
-    .replace(/([.!?])\s*([•·▪▫◦‣⁃-]\s)/g, '$1\n$2')
-    .replace(/([a-z])\s*([•·▪▫◦‣⁃-]\s)/g, '$1\n$2')
-   
-    // Ensure numbered lists are on new lines
-    .replace(/([.!?])\s*(\d+\.?\s)/g, '$1\n$2')
-   
-    // Clean up excessive whitespace but preserve intentional breaks
-    .replace(/[ \t]+/g, ' ') // Multiple spaces to single space
-    .replace(/\n[ \t]+/g, '\n') // Remove spaces after line breaks
-    .replace(/[ \t]+\n/g, '\n') // Remove spaces before line breaks
-    .replace(/\n{4,}/g, '\n\n\n') // Max 3 line breaks
-    .trim();
+  if (!description) return '';
+
+  return description
+    // Normalize line endings
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    // Clean up excessive whitespace but preserve intentional breaks
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n[ \t]+/g, '\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{4,}/g, '\n\n\n')
+    .trim();
 };
