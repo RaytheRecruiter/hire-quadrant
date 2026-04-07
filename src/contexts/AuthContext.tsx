@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const { data: profile, error } = await supabase
         .from('user_profiles')
         .select('name, role, company_id, created_at')
-        .eq('user_id', supabaseUser.id)
+        .eq('id', supabaseUser.id)
         .single();
 
       if (error) {
@@ -216,7 +216,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const { error } = await supabase
         .from('user_profiles')
         .update(updateData)
-        .eq('user_id', user.id);
+        .eq('id', user.id);
 
       if (error) {
         console.error('Profile update error:', error.message);
