@@ -181,17 +181,23 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         }
 
         try {
+            const job = jobs.find(j => j.id === jobId);
             const newApplication: JobApplication = {
-                id: '', // Supabase will generate this
+                id: `app-${user.id}-${jobId}-${Date.now()}`,
                 job_id: jobId,
                 user_id: user.id,
                 status: 'Applied',
-                applied_at: new Date().toISOString()
+                applied_at: new Date().toISOString(),
+                source_company: job?.sourceCompany
             };
 
             const { data, error } = await supabase
                 .from('job_applications')
-                .insert([newApplication])
+                .insert([{
+                    ...newApplication,
+                    user_name: user.name,
+                    user_email: user.email
+                }])
                 .select()
                 .single();
 
