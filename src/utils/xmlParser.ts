@@ -489,7 +489,7 @@ export const fetchAndParseJobsXmlWithSources = async (xmlSources: XmlSource[]): 
 const stripHtmlTags = (html: string): string => {
   if (!html) return '';
 
-  return html
+  let text = html
     // Convert block-level elements to double line breaks (paragraph boundaries)
     .replace(/<\/?(p|div|h[1-6]|section|article|header|footer|blockquote|table|tr)[^>]*>/gi, '\n\n')
     // Convert line breaks and list items to single line breaks
@@ -511,6 +511,12 @@ const stripHtmlTags = (html: string): string => {
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+
+  // Join continuation lines: if a line starts with a lowercase letter,
+  // it is a continuation of the previous line, not a new item
+  text = text.replace(/\n([a-z])/g, ' $1');
+
+  return text;
 };
 
 /**
@@ -525,12 +531,6 @@ const formatJobDescription = (description: string): string => {
     // Normalize line endings
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n')
-    // Add double line breaks before major sections
-    .replace(/(Requirements?:?|Qualifications?:?|Experience?:?|MUST:?|Duties:?|Responsibilities?:?|Benefits?:?)/gi, '\n\n$1')
-    // Ensure bullet points are on new lines
-    .replace(/([.!?])\s*([\u2022\u2023\u25E6\u2043\u2219\u00B7-]\s)/g, '$1\n$2')
-    // Ensure numbered lists are on new lines
-    .replace(/([.!?])\s*(\d+\.?\s)/g, '$1\n$2')
     // Clean up excessive whitespace but preserve intentional breaks
     .replace(/[ \t]+/g, ' ')
     .replace(/\n[ \t]+/g, '\n')
