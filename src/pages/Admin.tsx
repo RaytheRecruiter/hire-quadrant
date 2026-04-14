@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { BarChart3, Users, Briefcase, Eye, TrendingUp, Calendar, Building2, RotateCcw, Download, Upload, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
 import { useAdminData } from '../hooks/useAdminData';
 import CandidateHub from '../components/CandidateHub';
+import { SortableTable, Column } from '../components/admin/SortableTable';
 import { TrackingService } from '../utils/trackingService';
 
 const Admin: React.FC = () => {
@@ -70,7 +71,8 @@ const Admin: React.FC = () => {
   // Build a lookup of user profiles by user_id for enriching applications
   const profilesByUserId: Record<string, { name: string; email: string }> = {};
   userProfiles.forEach(p => {
-    profilesByUserId[p.user_id] = { name: p.name, email: p.email || '' };
+    const key = (p as any).user_id || (p as any).id || p.id;
+    profilesByUserId[key] = { name: p.name, email: p.email || '' };
   });
 
   // Helper to get user name for an application
@@ -575,56 +577,56 @@ const Admin: React.FC = () => {
               </div>
 
               <h4 className="text-md font-semibold text-gray-800 mb-4">All Jobs Performance</h4>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Job Title
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Company
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Source Company
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Views
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Applications
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Conversion Rate
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {jobs.map((job) => (
-                      <tr key={job.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{job.title}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {job.company}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {job.source_company || 'Direct'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {job.views || 0}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {job.applications || 0}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {(job.views || 0) > 0 ? (((job.applications || 0) / (job.views || 1)) * 100).toFixed(1) : 0}%
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <SortableTable
+                columns={[
+                  {
+                    key: 'title', label: 'Job Title',
+                    render: (job) => (
+                      <Link to={`/jobs/${job.id}`} className="text-sm font-medium text-primary-700 hover:underline">
+                        {job.title}
+                      </Link>
+                    ),
+                    getValue: (job) => job.title,
+                  },
+                  { key: 'company', label: 'Company', getValue: (job) => job.company || '' },
+                  { key: 'source_company', label: 'Source Company', getValue: (job) => job.source_company || 'Direct', render: (job) => <>{job.source_company || 'Direct'}</> },
+                  { key: 'views', label: 'Views', getValue: (job) => job.views || 0 },
+                  {
+                    key: 'app_count', label: 'Applications',
+                    getValue: (job) => applications.filter(a => a.job_id === job.id).length,
+                    render: (job) => {
+                      const jobApps = applications.filter(a => a.job_id === job.id);
+                      return (
+                        <div>
+                          <span className="font-medium">{jobApps.length}</span>
+                          {jobApps.length > 0 && (
+                            <div className="mt-1 space-y-0.5">
+                              {jobApps.slice(0, 3).map(a => (
+                                <div key={a.id} className="text-xs text-gray-400">
+                                  {getUserName(a)} — <span className={`${
+                                    a.status === 'Applied' ? 'text-yellow-600' :
+                                    a.status === 'Interview' ? 'text-indigo-600' :
+                                    a.status === 'Offer' ? 'text-green-600' :
+                                    a.status === 'Rejected' ? 'text-red-600' : 'text-blue-600'
+                                  }`}>{a.status}</span>
+                                </div>
+                              ))}
+                              {jobApps.length > 3 && <div className="text-xs text-gray-400">+{jobApps.length - 3} more</div>}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    },
+                  },
+                  {
+                    key: 'conversion', label: 'Conversion Rate',
+                    getValue: (job) => (job.views || 0) > 0 ? ((job.applications || 0) / (job.views || 1)) * 100 : 0,
+                    render: (job) => <>{(job.views || 0) > 0 ? (((job.applications || 0) / (job.views || 1)) * 100).toFixed(1) : 0}%</>,
+                  },
+                ] as Column<typeof jobs[0]>[]}
+                data={jobs}
+                rowKey={(job) => job.id}
+              />
             </div>
           </div>
         )}
@@ -633,55 +635,32 @@ const Admin: React.FC = () => {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200">
             <div className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Source Company Performance</h3>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Source Company
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Total Jobs
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Total Views
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Total Applications
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Avg. Conversion Rate
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {Object.entries(sourceStats).map(([source, stats]) => (
-                      <tr key={source} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="p-2 bg-primary-100 rounded-lg mr-3">
-                              <Building2 className="h-4 w-4 text-primary-600" />
-                            </div>
-                            <div className="text-sm font-medium text-gray-900">{source}</div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {stats.jobs}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {stats.views}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {stats.applications}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {stats.views > 0 ? ((stats.applications / stats.views) * 100).toFixed(1) : 0}%
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <SortableTable
+                columns={[
+                  {
+                    key: 'source', label: 'Source Company',
+                    render: (row) => (
+                      <div className="flex items-center">
+                        <div className="p-2 bg-primary-100 rounded-lg mr-3">
+                          <Building2 className="h-4 w-4 text-primary-600" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">{row.source}</span>
+                      </div>
+                    ),
+                    getValue: (row) => row.source,
+                  },
+                  { key: 'jobs', label: 'Total Jobs', getValue: (row) => row.jobs },
+                  { key: 'views', label: 'Total Views', getValue: (row) => row.views },
+                  { key: 'applications', label: 'Total Applications', getValue: (row) => row.applications },
+                  {
+                    key: 'conversion', label: 'Avg. Conversion Rate',
+                    getValue: (row) => row.views > 0 ? (row.applications / row.views) * 100 : 0,
+                    render: (row) => <>{row.views > 0 ? ((row.applications / row.views) * 100).toFixed(1) : 0}%</>,
+                  },
+                ] as Column<{ source: string; jobs: number; views: number; applications: number }>[]}
+                data={Object.entries(sourceStats).map(([source, stats]) => ({ source, ...stats }))}
+                rowKey={(row) => row.source}
+              />
             </div>
           </div>
         )}
@@ -689,74 +668,70 @@ const Admin: React.FC = () => {
         {activeTab === 'applications' && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Applications</h3>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Applicant
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Job
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Company
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Source Company
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Applied Date
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {recentApplications.map((application) => (
-                      <tr key={application.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{getUserName(application)}</div>
-                          <div className="text-sm text-gray-500">{getUserEmail(application)}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {jobs.find(j => j.id === application.job_id)?.title}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {jobs.find(j => j.id === application.job_id)?.company}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {jobs.find(j => j.id === application.job_id)?.source_company || 'Direct'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {format(new Date(application.applied_at), 'MMM d, yyyy h:mm a')}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <select
-                            value={application.status}
-                            onChange={(e) => handleStatusChange(application.id, e.target.value)}
-                            className={`text-xs font-medium rounded-full px-3 py-1 border-0 cursor-pointer ${
-                              application.status === 'pending' || application.status === 'Applied' ? 'bg-yellow-100 text-yellow-800' :
-                              application.status === 'reviewed' || application.status === 'Screening' ? 'bg-blue-100 text-blue-800' :
-                              application.status === 'accepted' || application.status === 'Offer' ? 'bg-green-100 text-green-800' :
-                              application.status === 'Interview' ? 'bg-indigo-100 text-indigo-800' :
-                              'bg-red-100 text-red-800'
-                            }`}
-                          >
-                            <option value="Applied">Applied</option>
-                            <option value="Screening">Screening</option>
-                            <option value="Interview">Interview</option>
-                            <option value="Offer">Offer</option>
-                            <option value="Rejected">Rejected</option>
-                          </select>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">All Applications</h3>
+              <SortableTable
+                columns={[
+                  {
+                    key: 'applicant', label: 'Applicant',
+                    getValue: (app) => getUserName(app),
+                    render: (app) => (
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{getUserName(app)}</div>
+                        <div className="text-sm text-gray-500">{getUserEmail(app)}</div>
+                      </div>
+                    ),
+                  },
+                  {
+                    key: 'job', label: 'Job',
+                    getValue: (app) => jobs.find(j => j.id === app.job_id)?.title || '',
+                    render: (app) => {
+                      const job = jobs.find(j => j.id === app.job_id);
+                      return job ? (
+                        <Link to={`/jobs/${job.id}`} className="text-sm text-primary-700 hover:underline">{job.title}</Link>
+                      ) : <span className="text-gray-400">Unknown</span>;
+                    },
+                  },
+                  {
+                    key: 'company', label: 'Company',
+                    getValue: (app) => jobs.find(j => j.id === app.job_id)?.company || '',
+                  },
+                  {
+                    key: 'source', label: 'Source Company',
+                    getValue: (app) => jobs.find(j => j.id === app.job_id)?.source_company || 'Direct',
+                  },
+                  {
+                    key: 'date', label: 'Applied Date',
+                    getValue: (app) => new Date(app.applied_at).getTime(),
+                    render: (app) => <>{format(new Date(app.applied_at), 'MMM d, yyyy h:mm a')}</>,
+                  },
+                  {
+                    key: 'status', label: 'Status',
+                    sortable: true, filterable: true,
+                    getValue: (app) => app.status,
+                    render: (app) => (
+                      <select
+                        value={app.status}
+                        onChange={(e) => handleStatusChange(app.id, e.target.value)}
+                        className={`text-xs font-medium rounded-full px-3 py-1 border-0 cursor-pointer ${
+                          app.status === 'pending' || app.status === 'Applied' ? 'bg-yellow-100 text-yellow-800' :
+                          app.status === 'reviewed' || app.status === 'Screening' ? 'bg-blue-100 text-blue-800' :
+                          app.status === 'accepted' || app.status === 'Offer' ? 'bg-green-100 text-green-800' :
+                          app.status === 'Interview' ? 'bg-indigo-100 text-indigo-800' :
+                          'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        <option value="Applied">Applied</option>
+                        <option value="Screening">Screening</option>
+                        <option value="Interview">Interview</option>
+                        <option value="Offer">Offer</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    ),
+                  },
+                ] as Column<typeof applications[0]>[]}
+                data={applications}
+                rowKey={(app) => app.id}
+              />
             </div>
           </div>
         )}
@@ -806,39 +781,35 @@ const Admin: React.FC = () => {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Candidate List</h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Candidate
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Total Applications
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Last Activity
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {sortedCandidates.map((candidate) => (
-                        <tr key={candidate.id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">{candidate.name}</div>
-                            <div className="text-sm text-gray-500">{candidate.email}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {candidate.totalApplications}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {format(new Date(candidate.lastActivity), 'MMM d, yyyy h:mm a')}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <SortableTable
+                  columns={[
+                    {
+                      key: 'name', label: 'Candidate',
+                      getValue: (c) => c.name,
+                      render: (c) => (
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">{c.name}</div>
+                          <div className="text-sm text-gray-500">{c.email}</div>
+                        </div>
+                      ),
+                    },
+                    {
+                      key: 'email', label: 'Email',
+                      getValue: (c) => c.email,
+                    },
+                    {
+                      key: 'totalApplications', label: 'Total Applications',
+                      getValue: (c) => c.totalApplications,
+                    },
+                    {
+                      key: 'lastActivity', label: 'Last Activity',
+                      getValue: (c) => new Date(c.lastActivity).getTime(),
+                      render: (c) => <>{format(new Date(c.lastActivity), 'MMM d, yyyy h:mm a')}</>,
+                    },
+                  ] as Column<typeof sortedCandidates[0]>[]}
+                  data={sortedCandidates}
+                  rowKey={(c) => c.id}
+                />
               </div>
             </div>
           </div>
