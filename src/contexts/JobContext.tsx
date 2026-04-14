@@ -54,7 +54,10 @@ interface JobContextType {
     setTypeFilter: (type: string) => void;
     filteredJobs: Job[];
     allFilteredJobs: Job[];
-    jobsDisplayLimit: number;
+    currentPage: number;
+    totalPages: number;
+    totalJobsCount: number;
+    goToPage: (page: number) => void;
     loadMoreJobs: () => void;
     hasMoreJobs: boolean;
     applyToJob: (jobId: string) => Promise<boolean>;
@@ -85,13 +88,27 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [typeFilter, setTypeFilter] = useState('');
-    const [jobsDisplayLimit, setJobsDisplayLimit] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
     const [totalJobsCount, setTotalJobsCount] = useState<number>(0);
+    const jobsPerPage = 10;
 
     const { user } = useAuth();
 
     // Debounce the search term to avoid excessive API calls on every keystroke
-    const debouncedSetSearchTerm = useMemo(() => debounce(setSearchTerm, 500), []);
+    const debouncedSetSearchTerm = useMemo(() => debounce((term: string) => {
+        setSearchTerm(term);
+        setCurrentPage(1);
+    }, 500), []);
+
+    const handleSetLocationFilter = (location: string) => {
+        setLocationFilter(location);
+        setCurrentPage(1);
+    };
+
+    const handleSetTypeFilter = (type: string) => {
+        setTypeFilter(type);
+        setCurrentPage(1);
+    };
 
     // Main effect to fetch jobs with server-side filtering and pagination
     useEffect(() => {
@@ -116,7 +133,9 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                 }
 
                 // Add pagination
-                const { data, error, count } = await query.range(0, jobsDisplayLimit - 1);
+                const from = (currentPage - 1) * jobsPerPage;
+                const to = from + jobsPerPage - 1;
+                const { data, error, count } = await query.range(from, to);
 
                 if (error) {
                     throw error;
@@ -135,7 +154,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         };
 
         fetchJobs();
-    }, [searchTerm, locationFilter, typeFilter, jobsDisplayLimit]); // Rerun when filters or display limit change
+    }, [searchTerm, locationFilter, typeFilter, currentPage]); // Rerun when filters or page change
 
     // Fetch applications whenever the user state changes
     useEffect(() => {
@@ -167,11 +186,17 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
     const allFilteredJobs = useMemo(() => jobs, [jobs]);
     const filteredJobs = useMemo(() => jobs, [jobs]);
 
-    // Check if there are more jobs to load based on the total count from Supabase
-    const hasMoreJobs = jobs.length < totalJobsCount;
+    const totalPages = Math.max(1, Math.ceil(totalJobsCount / jobsPerPage));
+    const hasMoreJobs = currentPage < totalPages;
 
-    const loadMoreJobs = async () => {
-        setJobsDisplayLimit(prevLimit => prevLimit + 10);
+    const goToPage = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
+    const loadMoreJobs = () => {
+        goToPage(currentPage + 1);
     };
 
     const applyToJob = async (jobId: string) => {
@@ -245,11 +270,14 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         locationFilter,
         typeFilter,
         setSearchTerm: debouncedSetSearchTerm,
-        setLocationFilter,
-        setTypeFilter,
+        setLocationFilter: handleSetLocationFilter,
+        setTypeFilter: handleSetTypeFilter,
         filteredJobs,
         allFilteredJobs,
-        jobsDisplayLimit,
+        currentPage,
+        totalPages,
+        totalJobsCount,
+        goToPage,
         loadMoreJobs,
         hasMoreJobs,
         applyToJob,

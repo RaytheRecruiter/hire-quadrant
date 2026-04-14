@@ -3,7 +3,7 @@ import { supabase } from '../../utils/supabaseClient';
 import { CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
 
 interface PendingCompany {
-  user_id: string;
+  id: string;
   name: string;
   role: string;
   is_approved: boolean;
@@ -54,13 +54,13 @@ const PendingApprovals: React.FC = () => {
       const { error: updateError } = await supabase
         .from('user_profiles')
         .update({ is_approved: true })
-        .eq('user_id', userId);
+        .eq('id', userId);
 
       if (updateError) {
         throw updateError;
       }
 
-      setPendingCompanies(prev => prev.filter(c => c.user_id !== userId));
+      setPendingCompanies(prev => prev.filter(c => c.id !== userId));
       setSuccessMessage(`${name} has been approved successfully.`);
     } catch (err: any) {
       console.error('Error approving company:', err);
@@ -79,13 +79,13 @@ const PendingApprovals: React.FC = () => {
       const { error: updateError } = await supabase
         .from('user_profiles')
         .update({ is_approved: false, role: 'rejected' })
-        .eq('user_id', userId);
+        .eq('id', userId);
 
       if (updateError) {
         throw updateError;
       }
 
-      setPendingCompanies(prev => prev.filter(c => c.user_id !== userId));
+      setPendingCompanies(prev => prev.filter(c => c.id !== userId));
       setSuccessMessage(`${name} has been rejected.`);
     } catch (err: any) {
       console.error('Error rejecting company:', err);
@@ -161,7 +161,7 @@ const PendingApprovals: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {pendingCompanies.map((company) => (
-                  <tr key={company.user_id} className="hover:bg-gray-50">
+                  <tr key={company.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{company.name}</div>
                     </td>
@@ -177,16 +177,16 @@ const PendingApprovals: React.FC = () => {
                     <td className="px-4 py-3 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
-                          onClick={() => handleApprove(company.user_id, company.name)}
-                          disabled={processingId === company.user_id}
+                          onClick={() => handleApprove(company.id, company.name)}
+                          disabled={processingId === company.id}
                           className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                           <CheckCircle className="w-4 h-4" />
                           Approve
                         </button>
                         <button
-                          onClick={() => handleReject(company.user_id, company.name)}
-                          disabled={processingId === company.user_id}
+                          onClick={() => handleReject(company.id, company.name)}
+                          disabled={processingId === company.id}
                           className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                           <XCircle className="w-4 h-4" />
