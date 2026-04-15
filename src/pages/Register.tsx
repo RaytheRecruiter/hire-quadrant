@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { User, Lock, Mail, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { User, Lock, Mail, Eye, EyeOff, CheckCircle, Briefcase, Building2 } from 'lucide-react';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -103,32 +103,36 @@ const Register: React.FC = () => {
             )}
 
             <div>
-              <label className="block text-sm font-semibold text-secondary-800 mb-2">
-                Account Type
+              <label className="block text-sm font-semibold text-secondary-800 mb-3">
+                I am a...
               </label>
-              <div className="mt-1 space-y-2">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="candidate"
-                    checked={userType === 'candidate'}
-                    onChange={(e) => setUserType(e.target.value as 'candidate' | 'company')}
-                    className="mr-3 h-4 w-4 text-primary-500 focus:ring-primary-400 border-gray-300"
-                  />
-                  <span className="text-gray-700">Job Seeker / Candidate</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="company"
-                    checked={userType === 'company'}
-                    onChange={(e) => setUserType(e.target.value as 'candidate' | 'company')}
-                    className="mr-3 h-4 w-4 text-primary-500 focus:ring-primary-400 border-gray-300"
-                  />
-                  <span className="text-gray-700">Company / Employer</span>
-                </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setUserType('candidate')}
+                  className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 ${
+                    userType === 'candidate'
+                      ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md'
+                      : 'border-gray-200 bg-gray-50/50 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <Briefcase className={`h-6 w-6 ${userType === 'candidate' ? 'text-primary-500' : 'text-gray-400'}`} />
+                  <span className="text-sm font-semibold">Job Seeker</span>
+                  <span className="text-xs opacity-70">Find your next role</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setUserType('company')}
+                  className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 ${
+                    userType === 'company'
+                      ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md'
+                      : 'border-gray-200 bg-gray-50/50 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <Building2 className={`h-6 w-6 ${userType === 'company' ? 'text-primary-500' : 'text-gray-400'}`} />
+                  <span className="text-sm font-semibold">Employer</span>
+                  <span className="text-xs opacity-70">Post jobs & hire</span>
+                </button>
               </div>
             </div>
 
