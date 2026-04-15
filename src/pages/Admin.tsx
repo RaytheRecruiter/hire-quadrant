@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
 import { useAdminData } from '../hooks/useAdminData';
 import CandidateHub from '../components/CandidateHub';
+import PendingApprovals from '../components/admin/PendingApprovals';
 import { SortableTable, Column } from '../components/admin/SortableTable';
 import { TrackingService } from '../utils/trackingService';
 
@@ -399,6 +400,16 @@ const Admin: React.FC = () => {
               Overview
             </button>
             <button
+              onClick={() => setActiveTab('approvals')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'approvals'
+                  ? 'border-primary-300 text-primary-300'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Pending Approvals
+            </button>
+            <button
               onClick={() => setActiveTab('jobs')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'jobs'
@@ -452,6 +463,10 @@ const Admin: React.FC = () => {
         </div>
 
         {/* Tab Content */}
+        {activeTab === 'approvals' && (
+          <PendingApprovals />
+        )}
+
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Job Type Distribution */}
