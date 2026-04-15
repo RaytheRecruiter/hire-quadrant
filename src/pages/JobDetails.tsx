@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import { useCompanies } from '../contexts/CompanyContext';
+import { supabase } from '../utils/supabaseClient';
 import { MapPin, Calendar, DollarSign, Clock, Users, Eye, ArrowLeft, CheckCircle, Building2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+
+// Session-level deduplication so a user doesn't inflate views by refreshing
+const viewedJobIds = new Set<string>();
 
 const formatJobDescription = (description: string) => {
     if (!description) return <p>No description available</p>;
@@ -82,6 +86,16 @@ const JobDetails: React.FC = () => {
             setApplied(hasApplied(job.id, user.id));
         }
     }, [job, user, hasApplied]);
+
+    // Track job view — increments the views column on the jobs table
+    useEffect(() => {
+        if (!job || viewedJobIds.has(job.id)) return;
+        viewedJobIds.add(job.id);
+
+        supabase.rpc('increment_job_views', { row_id: job.id }).then(({ error }) => {
+            if (error) console.error('Failed to track job view:', error);
+        });
+    }, [job]);
 
     if (!job) {
         return (
