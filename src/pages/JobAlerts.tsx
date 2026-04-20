@@ -79,15 +79,15 @@ const JobAlerts: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-secondary-900 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-secondary-900 dark:text-white flex items-center gap-3">
             <Bell className="h-7 w-7 text-primary-500" />
             Job Alerts
           </h1>
-          <p className="mt-2 text-gray-600">Get emailed when new jobs match your criteria.</p>
+          <p className="mt-2 text-gray-600 dark:text-slate-400">Get emailed when new jobs match your criteria.</p>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 p-6 mb-8">
-          <h3 className="font-bold text-secondary-800 mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-slate-800 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:border-slate-700 p-6 mb-8">
+          <h3 className="font-bold text-secondary-800 dark:text-white mb-4 flex items-center gap-2">
             <Plus className="h-4 w-4" /> Create New Alert
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -96,26 +96,26 @@ const JobAlerts: React.FC = () => {
               placeholder="Alert name (e.g. Remote Senior React Jobs)"
               value={form.name || ''}
               onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              className="md:col-span-2 border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400"
+              className="md:col-span-2 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
             />
             <input
               type="text"
               placeholder="Keywords"
               value={form.search_term || ''}
               onChange={e => setForm(f => ({ ...f, search_term: e.target.value }))}
-              className="border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400"
+              className="border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
             />
             <input
               type="text"
               placeholder="Location"
               value={form.location_filter || ''}
               onChange={e => setForm(f => ({ ...f, location_filter: e.target.value }))}
-              className="border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400"
+              className="border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
             />
             <select
               value={form.type_filter || ''}
               onChange={e => setForm(f => ({ ...f, type_filter: e.target.value }))}
-              className="border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400"
+              className="border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white dark:bg-slate-900 text-gray-900 dark:text-white"
             >
               <option value="">Any type</option>
               <option value="full-time">Full Time</option>
@@ -126,7 +126,7 @@ const JobAlerts: React.FC = () => {
             <select
               value={form.email_frequency || 'daily'}
               onChange={e => setForm(f => ({ ...f, email_frequency: e.target.value as any }))}
-              className="border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400"
+              className="border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white dark:bg-slate-900 text-gray-900 dark:text-white"
             >
               <option value="daily">Daily emails</option>
               <option value="weekly">Weekly emails</option>
@@ -146,20 +146,23 @@ const JobAlerts: React.FC = () => {
         {loading ? (
           <div className="text-center"><Loader2 className="mx-auto h-8 w-8 animate-spin text-primary-500" /></div>
         ) : searches.length === 0 ? (
-          <div className="bg-white/90 rounded-3xl shadow-lg border border-white/20 p-12 text-center">
-            <Bell className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-            <p className="text-gray-500">No job alerts yet. Create your first above.</p>
+          <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-lg border border-white/20 dark:border-slate-700 p-12 text-center">
+            <div className="bg-gray-100 dark:bg-slate-700 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+              <Bell className="h-10 w-10 text-gray-400 dark:text-slate-500" />
+            </div>
+            <h3 className="text-2xl font-bold text-secondary-900 dark:text-white mb-2">No alerts yet</h3>
+            <p className="text-gray-600 dark:text-slate-400">Create your first job alert above to get notified when new opportunities match your criteria.</p>
           </div>
         ) : (
           <div className="space-y-3">
             {searches.map(s => (
-              <div key={s.id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-5 flex items-center justify-between">
+              <div key={s.id} className="bg-white dark:bg-slate-800 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 dark:border-slate-700 p-5 flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-secondary-900">{s.name}</h4>
-                  <div className="text-sm text-gray-500 mt-1">
+                  <h4 className="font-bold text-secondary-900 dark:text-white">{s.name}</h4>
+                  <div className="text-sm text-gray-600 dark:text-slate-400 mt-1">
                     {[s.search_term && `"${s.search_term}"`, s.location_filter, s.type_filter, s.min_salary && `$${s.min_salary / 1000}k+`].filter(Boolean).join(' • ') || 'All jobs'}
                   </div>
-                  <div className="text-xs text-gray-400 mt-1">
+                  <div className="text-xs text-gray-500 dark:text-slate-500 mt-1">
                     {s.email_frequency === 'never' ? 'No emails' : `Emailed ${s.email_frequency}`}
                     {s.last_sent_at && ` — last sent ${new Date(s.last_sent_at).toLocaleDateString()}`}
                   </div>

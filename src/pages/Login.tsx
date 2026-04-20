@@ -143,14 +143,6 @@ const Login: React.FC = () => {
               </button>
             </div>
           </form>
-
-          <div className="mt-8 p-6 bg-gray-50 rounded-2xl">
-            <p className="text-sm text-gray-700 mb-3 font-semibold">Demo accounts:</p>
-            <div className="text-sm text-gray-600 space-y-1">
-              <p><strong>Admin:</strong> admin@hirequadrant.com / admin123</p>
-              <p><strong>User:</strong> Sign up to create a candidate account</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

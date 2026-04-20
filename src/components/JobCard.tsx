@@ -77,9 +77,9 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     return (
         <Link
             to={`/jobs/${job.id}`}
-            className="group block bg-white dark:bg-slate-800 rounded-2xl shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all duration-200 p-5"
+            className="group block bg-white dark:bg-slate-800 rounded-2xl shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all duration-300 hover:scale-[1.01] p-4"
         >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3">
                 <CompanyLogo company={job.company} logoUrl={(job as any).company_logo_url} size="md" />
 
                 <div className="flex-1 min-w-0">
@@ -132,7 +132,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                             </span>
                         )}
                         {tags.map(t => (
-                            <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300">
+                            <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200 cursor-default">
                                 {t}
                             </span>
                         ))}

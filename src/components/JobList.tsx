@@ -105,14 +105,14 @@ const JobList: React.FC = () => {
 
       {mobileFiltersOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-900 rounded-t-3xl p-6 max-h-[85vh] overflow-y-auto pb-safe animate-slide-up">
-            <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-5" />
-            <h3 className="font-display text-xl font-bold mb-4">Filters</h3>
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setMobileFiltersOpen(false)} />
+          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-800 rounded-t-3xl p-6 max-h-[85vh] overflow-y-auto pb-safe animate-slide-up">
+            <div className="w-12 h-1.5 bg-gray-200 dark:bg-slate-700 rounded-full mx-auto mb-5" />
+            <h3 className="font-display text-xl font-bold text-secondary-900 dark:text-white mb-4">Filters</h3>
             <SearchBar />
             <button
               onClick={() => setMobileFiltersOpen(false)}
-              className="mt-4 w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl"
+              className="mt-4 w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all"
             >
               Show {totalJobsCount} jobs
             </button>
@@ -165,7 +165,7 @@ const JobList: React.FC = () => {
               onClick={() => goToPage(page)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 page === currentPage
-                  ? 'bg-primary-500 text-white shadow-soft'
+                  ? 'bg-amber-500 text-white shadow-soft'
                   : 'border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700'
               }`}
             >

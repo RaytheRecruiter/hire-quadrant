@@ -167,13 +167,13 @@ const Pricing: React.FC = () => {
           return (
             <div
               key={plan.id}
-              className={`relative bg-white rounded-xl border-2 shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col ${
-                planHighlight[plan.slug] || 'border-gray-200'
+              className={`relative bg-white dark:bg-slate-800 rounded-xl border-2 shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col ${
+                planHighlight[plan.slug] || 'border-gray-200 dark:border-slate-700'
               }`}
             >
               {isPremium && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-600 text-white">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-500 text-white shadow-soft">
                     Most Popular
                   </span>
                 </div>
@@ -184,8 +184,8 @@ const Pricing: React.FC = () => {
                 <div className="flex justify-center mb-3">
                   {planIcons[plan.slug] || <Zap className="w-8 h-8 text-gray-400" />}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{plan.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
                   {plan.job_limit === -1 ? 'Unlimited' : plan.job_limit} job posting{plan.job_limit !== 1 ? 's' : ''}
                 </p>
               </div>
@@ -194,16 +194,16 @@ const Pricing: React.FC = () => {
               <div className="text-center mb-6">
                 {plan.price_monthly === 0 ? (
                   <div>
-                    <span className="text-4xl font-bold text-gray-900">Free</span>
+                    <span className="text-4xl font-bold text-gray-900 dark:text-white">Free</span>
                   </div>
                 ) : (
                   <div>
-                    <span className="text-4xl font-bold text-gray-900">
+                    <span className="text-4xl font-bold text-gray-900 dark:text-white">
                       ${isYearly ? (plan.price_yearly / 12).toFixed(0) : plan.price_monthly}
                     </span>
-                    <span className="text-gray-500 text-sm">/month</span>
+                    <span className="text-gray-500 dark:text-slate-400 text-sm">/month</span>
                     {isYearly && (
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
                         Billed ${price}{period}
                       </p>
                     )}
@@ -216,7 +216,7 @@ const Pricing: React.FC = () => {
                 {(plan.features || []).map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">{feature}</span>
+                    <span className="text-sm text-gray-600 dark:text-slate-300">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -226,7 +226,7 @@ const Pricing: React.FC = () => {
                 {plan.slug === 'free' ? (
                   <Link
                     to="/register"
-                    className="block w-full text-center py-2.5 px-4 rounded-lg font-medium text-sm bg-green-600 text-white hover:bg-green-700 transition-colors"
+                    className="block w-full text-center py-2.5 px-4 rounded-lg font-medium text-sm bg-amber-500 hover:bg-amber-600 text-white transition-colors shadow-soft hover:shadow-card-hover"
                   >
                     Get Started
                   </Link>

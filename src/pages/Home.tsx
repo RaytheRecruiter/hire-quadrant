@@ -51,14 +51,14 @@ const Home: React.FC = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,53,148,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(61,107,175,0.18),transparent_60%)] pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="max-w-3xl mx-auto text-center">
-            <span className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-primary-200 dark:border-slate-700 text-primary-700 dark:text-primary-300 rounded-full px-4 py-1.5 text-sm font-semibold mb-6 shadow-soft">
+            <span className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-700/30 text-amber-700 dark:text-amber-300 rounded-full px-4 py-1.5 text-sm font-semibold mb-6 shadow-soft">
               <Sparkles className="h-3.5 w-3.5" />
               AI-powered job matching
             </span>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 dark:text-white leading-[1.05] tracking-tight text-balance">
-              Jobs that actually
+            <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold text-secondary-900 dark:text-white leading-[1.02] tracking-tight text-balance">
+              We work for you,
               <span className="block bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent pb-2">
-                reply to you.
+                not the algorithm.
               </span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-secondary-600 dark:text-slate-300 max-w-xl mx-auto text-balance leading-relaxed">
@@ -90,7 +90,7 @@ const Home: React.FC = () => {
                 </div>
                 <button
                   type="submit"
-                  className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all flex items-center justify-center gap-2"
+                  className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all flex items-center justify-center gap-2"
                 >
                   Search
                   <ArrowRight className="h-4 w-4" />
