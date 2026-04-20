@@ -23,6 +23,12 @@ import ResumeSearch from './pages/ResumeSearch';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Onboarding from './pages/Onboarding';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import NotFound from './pages/NotFound';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -52,7 +58,13 @@ function App() {
                 <Route path="/talent-search" element={<ResumeSearch />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
+              <Footer />
             </div>
             </Router>
           </JobProvider>
