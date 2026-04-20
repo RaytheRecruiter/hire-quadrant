@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabaseClient';
 import { Users, Download, Filter, Star, Bookmark, Eye } from 'lucide-react';
+import toast from 'react-hot-toast';
 import ApplicantDetailModal from './ApplicantDetailModal';
 
 interface CompanyApplicantsProps {
@@ -61,7 +62,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   const handleResumeDownload = async (userId: string, appId: string) => {
     const candidate = candidateInfo[userId];
     if (!candidate?.resume_url) {
-      alert('No resume available for this candidate.');
+      toast.error('No resume available for this candidate.');
       return;
     }
 
@@ -77,7 +78,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
 
       if (error) {
         console.error('Error creating signed URL:', error);
-        alert('Failed to generate resume download link.');
+        toast.error('Failed to generate resume download link.');
         return;
       }
 

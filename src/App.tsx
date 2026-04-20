@@ -4,15 +4,16 @@ import { AuthProvider } from './contexts/AuthContext';
 import { CompanyProvider } from './contexts/CompanyContext';
 import { JobProvider } from './contexts/JobContext';
 import Header from './components/Header';
+import ProfileNudge from './components/ProfileNudge';
 import Home from './pages/Home';
 import JobDetails from './pages/JobDetails';
-import CompanyProfile from './components/CompanyProfile'; // <-- Corrected path
+import CompanyProfile from './components/CompanyProfile';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Admin from './pages/Admin';
 import XMLFeederAdmin from './components/XMLFeederAdmin';
 import CompanySourceManager from './components/CompanySourceManager';
-import ProfilePage from './pages/ProfilePage'; // <-- Corrected path
+import ProfilePage from './pages/ProfilePage';
 import CompanyDashboard from './pages/CompanyDashboard';
 import Pricing from './pages/Pricing';
 import SavedJobs from './pages/SavedJobs';
@@ -20,6 +21,7 @@ import JobAlerts from './pages/JobAlerts';
 import ResumeSearch from './pages/ResumeSearch';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import Onboarding from './pages/Onboarding';
 
 function App() {
   return (
@@ -29,12 +31,14 @@ function App() {
           <Router>
             <div className="min-h-screen bg-gray-50">
               <Header />
+              <ProfileNudge />
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/jobs/:id" element={<JobDetails />} />
                 <Route path="/companies/:id" element={<CompanyProfile />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />
                 <Route path="/company-sources" element={<CompanySourceManager />} />

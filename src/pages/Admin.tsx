@@ -8,6 +8,7 @@ import CandidateHub from '../components/CandidateHub';
 import PendingApprovals from '../components/admin/PendingApprovals';
 import SubscriptionManager from '../components/admin/SubscriptionManager';
 import AtsIntegrations from '../components/admin/AtsIntegrations';
+import DashboardCharts from '../components/admin/DashboardCharts';
 import { SortableTable, Column } from '../components/admin/SortableTable';
 import { TrackingService } from '../utils/trackingService';
 
@@ -490,6 +491,8 @@ const Admin: React.FC = () => {
         )}
 
         {activeTab === 'overview' && (
+          <div className="space-y-8">
+            <DashboardCharts />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Job Type Distribution */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
@@ -561,6 +564,7 @@ const Admin: React.FC = () => {
                 ))}
               </div>
             </div>
+          </div>
           </div>
         )}
 

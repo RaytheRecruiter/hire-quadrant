@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../utils/supabaseClient';
 import { Plug, Loader2, Plus, ExternalLink } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const PROVIDERS = [
   { id: 'greenhouse', name: 'Greenhouse', docs: 'https://developers.greenhouse.io/', description: 'Sync job postings and push candidates.' },
@@ -27,7 +28,7 @@ const AtsIntegrations: React.FC = () => {
   }, []);
 
   const handleConnect = async (providerId: string) => {
-    if (!apiKey) return alert('API key required.');
+    if (!apiKey) return toast.error('API key required.');
     // NOTE: In production this should call an Edge Function that encrypts the key.
     // For now we store it plain-text — acceptable for internal testing only.
     const { error } = await supabase.from('ats_integrations').insert({
@@ -35,7 +36,8 @@ const AtsIntegrations: React.FC = () => {
       api_key_encrypted: apiKey,
       is_active: true,
     });
-    if (error) return alert(error.message);
+    if (error) return toast.error(error.message);
+    toast.success(`${providerId} connected`);
     setApiKey('');
     setAdding(null);
     fetchIntegrations();
