@@ -24,13 +24,13 @@ createRoot(document.getElementById('root')!).render(
         duration: 3500,
         style: {
           borderRadius: '12px',
-          background: '#1a3a2a',
+          background: '#041E42',
           color: '#fff',
           fontSize: '14px',
           fontWeight: 500,
         },
         success: {
-          iconTheme: { primary: '#4a9960', secondary: '#fff' },
+          iconTheme: { primary: '#003594', secondary: '#fff' },
         },
       }}
     />
