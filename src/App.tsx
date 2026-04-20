@@ -32,6 +32,8 @@ import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Support from './pages/Support';
+import AdvancedSearch from './pages/AdvancedSearch';
+import Companies from './pages/Companies';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
 
@@ -70,6 +72,8 @@ function App() {
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/saved" element={<SavedJobs />} />
                 <Route path="/alerts" element={<JobAlerts />} />
+                <Route path="/advanced-search" element={<AdvancedSearch />} />
+                <Route path="/companies" element={<Companies />} />
                 <Route path="/talent-search" element={<ResumeSearch />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
