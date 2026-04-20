@@ -5,7 +5,7 @@ import { useJobs } from '../contexts/JobContext';
 import { useCompanies } from '../contexts/CompanyContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
 import { Job } from '../contexts/JobContext';
-import { MapPin, Calendar, DollarSign, Building2, Bookmark, BookmarkCheck } from 'lucide-react';
+import { MapPin, Calendar, DollarSign, Building2, Bookmark, BookmarkCheck, Zap } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface JobCardProps {
@@ -14,10 +14,14 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
     const { user } = useAuth();
-    const { hasApplied } = useJobs();
+    const { hasApplied, applyToJob } = useJobs();
     const { getCompanyByName } = useCompanies();
     const { isSaved, toggleSaved } = useSavedJobs();
     const navigate = useNavigate();
+    const [applying, setApplying] = React.useState(false);
+
+    const screeningCount = ((job as any).screening_questions as any[] | undefined)?.length || 0;
+    const canOneClick = !!user && screeningCount === 0 && !hasApplied(job.id, user.id);
 
     const saved = isSaved(job.id);
 
@@ -29,6 +33,18 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             return;
         }
         await toggleSaved(job.id);
+    };
+
+    const handleQuickApply = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+        setApplying(true);
+        await applyToJob(job.id);
+        setApplying(false);
     };
 
     const jobTypeColors = {
@@ -110,7 +126,9 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                 <div className="flex items-center text-gray-700 mb-4">
                     <DollarSign className="h-4 w-4 mr-1" />
                     <span className="font-bold text-secondary-900">
-                        {job.salary}
+                        {(job as any).min_salary && (job as any).max_salary
+                            ? `$${((job as any).min_salary / 1000).toFixed(0)}k – $${((job as any).max_salary / 1000).toFixed(0)}k`
+                            : job.salary || 'Salary not disclosed'}
                     </span>
                 </div>
 
@@ -127,12 +145,25 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                             <span>Posted {formatDistanceToNow(new Date(job.postedDate), { addSuffix: true })}</span>
                         </div>
                     </div>
-                    <Link
-                        to={`/jobs/${job.id}`}
-                        className="text-primary-600 hover:text-primary-800 font-medium transition-colors duration-200 flex items-center"
-                    >
-                        View Details →
-                    </Link>
+                    <div className="flex items-center gap-3">
+                        {canOneClick && (
+                            <button
+                                type="button"
+                                onClick={handleQuickApply}
+                                disabled={applying}
+                                className="flex items-center gap-1 bg-gradient-to-r from-primary-400 to-primary-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:from-primary-500 hover:to-primary-600 disabled:opacity-50 transition-all"
+                            >
+                                <Zap className="h-3 w-3" />
+                                {applying ? 'Applying...' : 'Quick Apply'}
+                            </button>
+                        )}
+                        <Link
+                            to={`/jobs/${job.id}`}
+                            className="text-primary-600 hover:text-primary-800 font-medium transition-colors duration-200 flex items-center"
+                        >
+                            View Details →
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

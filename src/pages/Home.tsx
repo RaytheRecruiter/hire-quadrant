@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchBar from '../components/SearchBar';
 import JobList from '../components/JobList';
+import TrendingSection from '../components/TrendingSection';
 import { Search, Users, Briefcase, TrendingUp, ArrowRight, Sparkles } from 'lucide-react';
 
 const Home: React.FC = () => {
@@ -55,6 +56,7 @@ const Home: React.FC = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <SearchBar />
+        <TrendingSection />
         <JobList />
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useCompanies } from '../contexts/CompanyContext';
 import { useJobs } from '../contexts/JobContext';
 import { ArrowLeft, MapPin, Users, Calendar, Globe, Mail, Building2, Award, Heart, Briefcase } from 'lucide-react';
 import JobCard from './JobCard';
+import CompanyReviews from './CompanyReviews';
 
 const CompanyProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -150,6 +151,8 @@ const CompanyProfile: React.FC = () => {
               </div>
               <p className="text-gray-700 leading-relaxed">{company.culture}</p>
             </div>
+
+            <CompanyReviews companyId={company.id} companyName={company.displayName || company.name} />
 
             {/* Open Positions */}
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-8">

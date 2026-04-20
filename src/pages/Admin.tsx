@@ -7,6 +7,7 @@ import { useAdminData } from '../hooks/useAdminData';
 import CandidateHub from '../components/CandidateHub';
 import PendingApprovals from '../components/admin/PendingApprovals';
 import SubscriptionManager from '../components/admin/SubscriptionManager';
+import AtsIntegrations from '../components/admin/AtsIntegrations';
 import { SortableTable, Column } from '../components/admin/SortableTable';
 import { TrackingService } from '../utils/trackingService';
 
@@ -461,6 +462,16 @@ const Admin: React.FC = () => {
               Subscriptions
             </button>
             <button
+              onClick={() => setActiveTab('ats')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'ats'
+                  ? 'border-primary-300 text-primary-300'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              ATS
+            </button>
+            <button
               onClick={() => setActiveTab('candidate-hub')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'candidate-hub'
@@ -843,6 +854,10 @@ const Admin: React.FC = () => {
 
         {activeTab === 'subscriptions' && (
           <SubscriptionManager />
+        )}
+
+        {activeTab === 'ats' && (
+          <AtsIntegrations />
         )}
 
         {activeTab === 'candidate-hub' && (

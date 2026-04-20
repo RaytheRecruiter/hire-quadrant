@@ -49,9 +49,11 @@ interface JobContextType {
     searchTerm: string;
     locationFilter: string;
     typeFilter: string;
+    minSalary: number;
     setSearchTerm: (term: string) => void;
     setLocationFilter: (location: string) => void;
     setTypeFilter: (type: string) => void;
+    setMinSalary: (value: number) => void;
     filteredJobs: Job[];
     allFilteredJobs: Job[];
     currentPage: number;
@@ -88,6 +90,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [typeFilter, setTypeFilter] = useState('');
+    const [minSalary, setMinSalary] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalJobsCount, setTotalJobsCount] = useState<number>(0);
     const jobsPerPage = 10;
@@ -107,6 +110,11 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
 
     const handleSetTypeFilter = (type: string) => {
         setTypeFilter(type);
+        setCurrentPage(1);
+    };
+
+    const handleSetMinSalary = (value: number) => {
+        setMinSalary(value);
         setCurrentPage(1);
     };
 
@@ -131,6 +139,9 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                 if (typeFilter) {
                     query = query.eq('type', typeFilter);
                 }
+                if (minSalary > 0) {
+                    query = query.gte('min_salary', minSalary);
+                }
 
                 // Add pagination
                 const from = (currentPage - 1) * jobsPerPage;
@@ -154,7 +165,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         };
 
         fetchJobs();
-    }, [searchTerm, locationFilter, typeFilter, currentPage]); // Rerun when filters or page change
+    }, [searchTerm, locationFilter, typeFilter, minSalary, currentPage]); // Rerun when filters or page change
 
     // Fetch applications whenever the user state changes
     useEffect(() => {
@@ -270,9 +281,11 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         searchTerm,
         locationFilter,
         typeFilter,
+        minSalary,
         setSearchTerm: debouncedSetSearchTerm,
         setLocationFilter: handleSetLocationFilter,
         setTypeFilter: handleSetTypeFilter,
+        setMinSalary: handleSetMinSalary,
         filteredJobs,
         allFilteredJobs,
         currentPage,

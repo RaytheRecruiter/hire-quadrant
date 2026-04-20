@@ -6,11 +6,13 @@ import CompanyJobsList from '../components/company/CompanyJobsList';
 import CompanyApplicants from '../components/company/CompanyApplicants';
 import CompanyProfileEditor from '../components/company/CompanyProfileEditor';
 import PendingApprovalBanner from '../components/company/PendingApprovalBanner';
-import { Briefcase, Users, Building2, CreditCard, Loader2 } from 'lucide-react';
+import AIJobDescriptionGenerator from '../components/AIJobDescriptionGenerator';
+import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles } from 'lucide-react';
 
 const TABS = [
   { id: 'jobs', label: 'My Jobs', icon: Briefcase },
   { id: 'applicants', label: 'Applicants', icon: Users },
+  { id: 'ai-tools', label: 'AI Assistant', icon: Sparkles },
   { id: 'profile', label: 'Company Profile', icon: Building2 },
   { id: 'subscription', label: 'Subscription', icon: CreditCard },
 ] as const;
@@ -110,6 +112,9 @@ const CompanyDashboard: React.FC = () => {
                   jobs={jobs}
                   onStatusUpdate={updateApplicationStatus}
                 />
+              )}
+              {activeTab === 'ai-tools' && (
+                <AIJobDescriptionGenerator company={company?.displayName || company?.name} />
               )}
               {activeTab === 'profile' && (
                 <CompanyProfileEditor
