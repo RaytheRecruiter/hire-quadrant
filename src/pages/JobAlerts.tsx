@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Bell, Plus, Trash2, Loader2, Save } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -51,7 +52,7 @@ const JobAlerts: React.FC = () => {
   if (!user) return <Navigate to="/login" replace />;
 
   const handleSave = async () => {
-    if (!form.name) return alert('Alert name is required.');
+    if (!form.name) return toast.error('Alert name is required.');
     setSaving(true);
     const { error } = await supabase.from('saved_searches').insert({
       user_id: user.id,
@@ -63,7 +64,7 @@ const JobAlerts: React.FC = () => {
       email_frequency: form.email_frequency || 'daily',
     });
     setSaving(false);
-    if (error) return alert(error.message);
+    if (error) return toast.error(error.message);
     setForm({ name: '', search_term: '', location_filter: '', type_filter: '', min_salary: 0, email_frequency: 'daily' });
     fetchSearches();
   };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Star, Plus, Loader2, Save, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 import { formatDistanceToNow } from 'date-fns';
@@ -62,7 +63,7 @@ const CompanyReviews: React.FC<Props> = ({ companyId, companyName }) => {
   const handleSubmit = async () => {
     if (!user) return;
     if (form.rating === 0 || !form.title || !form.body) {
-      return alert('Rating, title, and review body are required.');
+      return toast.error('Rating, title, and review body are required.');
     }
     setSaving(true);
     const { error } = await supabase.from('company_reviews').insert({
@@ -78,7 +79,8 @@ const CompanyReviews: React.FC<Props> = ({ companyId, companyName }) => {
       is_anonymous: true,
     });
     setSaving(false);
-    if (error) return alert(error.message);
+    if (error) return toast.error(error.message);
+    toast.success('Review submitted — thanks!');
     setForm({ rating: 0, title: '', body: '', pros: '', cons: '', job_title: '', employment_status: 'current' });
     setShowForm(false);
     fetchReviews();

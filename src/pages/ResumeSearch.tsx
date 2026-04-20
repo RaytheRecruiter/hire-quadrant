@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Search, MapPin, User, FileText, Loader2, Download, Filter } from 'lucide-react';
+import { Search, MapPin, User, Loader2, Download, Filter } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -49,11 +50,11 @@ const ResumeSearch: React.FC = () => {
   }, []);
 
   const handleResumeDownload = async (candidate: Candidate) => {
-    if (!candidate.resume_url) return alert('No resume uploaded.');
+    if (!candidate.resume_url) return toast.error('No resume uploaded.');
     const { data, error } = await supabase.storage
       .from('resumes')
       .createSignedUrl(candidate.resume_url, 3600);
-    if (error) return alert('Could not generate download link.');
+    if (error) return toast.error('Could not generate download link.');
     window.open(data.signedUrl, '_blank');
   };
 

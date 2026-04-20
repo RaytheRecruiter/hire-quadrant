@@ -1,61 +1,132 @@
-import React from 'react';
-import SearchBar from '../components/SearchBar';
+import React, { useEffect, useState } from 'react';
+import { Search, MapPin, Sparkles, ArrowRight } from 'lucide-react';
+import { useJobs } from '../contexts/JobContext';
+import { supabase } from '../utils/supabaseClient';
 import JobList from '../components/JobList';
 import TrendingSection from '../components/TrendingSection';
-import { Search, Users, Briefcase, TrendingUp, ArrowRight, Sparkles } from 'lucide-react';
 
 const Home: React.FC = () => {
+  const { setSearchTerm, setLocationFilter } = useJobs();
+  const [heroSearch, setHeroSearch] = useState('');
+  const [heroLocation, setHeroLocation] = useState('');
+  const [stats, setStats] = useState<{ jobs: number; companies: number; postedThisWeek: number }>({
+    jobs: 0,
+    companies: 0,
+    postedThisWeek: 0,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const [jobsResult, companiesResult, recentResult] = await Promise.all([
+        supabase.from('jobs').select('id', { count: 'exact', head: true }),
+        supabase.from('jobs').select('company').not('company', 'is', null),
+        supabase.from('jobs').select('id', { count: 'exact', head: true }).gte('posted_date', weekAgo),
+      ]);
+      const uniqueCompanies = new Set((companiesResult.data || []).map((j: any) => j.company).filter(Boolean));
+      setStats({
+        jobs: jobsResult.count || 0,
+        companies: uniqueCompanies.size,
+        postedThisWeek: recentResult.count || 0,
+      });
+    };
+    fetchStats();
+  }, []);
+
+  const handleHeroSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchTerm(heroSearch);
+    setLocationFilter(heroLocation);
+    // Smooth scroll to job list
+    const list = document.getElementById('jobs-section');
+    if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-primary-400 via-primary-300 to-primary-500 text-white py-20 overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-20 h-20 bg-white rounded-full blur-xl"></div>
-          <div className="absolute top-32 right-20 w-32 h-32 bg-white rounded-full blur-2xl"></div>
-          <div className="absolute bottom-20 left-1/3 w-24 h-24 bg-white rounded-full blur-xl"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center relative z-10">
-            <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-white/30">
-              <Sparkles className="h-4 w-4 mr-2" />
-              <span className="text-sm font-medium">New opportunities daily</span>
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent leading-tight">
-              Find Your Dream Job
-              <span className="block text-4xl md:text-6xl mt-2">Today</span>
+    <div className="min-h-screen">
+      {/* Hero */}
+      <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50/60 pt-16 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(74,153,96,0.08),transparent_50%)] pointer-events-none" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="inline-flex items-center gap-2 bg-white border border-primary-200 text-primary-700 rounded-full px-4 py-1.5 text-sm font-semibold mb-6 shadow-soft">
+              <Sparkles className="h-3.5 w-3.5" />
+              AI-powered job matching
+            </span>
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 leading-[1.05] tracking-tight text-balance">
+              Jobs that actually
+              <span className="block bg-gradient-to-r from-primary-500 to-emerald-500 bg-clip-text text-transparent pb-2">
+                reply to you.
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl mb-10 text-white/90 max-w-2xl mx-auto leading-relaxed">
-              Connect with opportunities that match your career goals and unlock your potential
+            <p className="mt-6 text-lg md:text-xl text-secondary-600 max-w-xl mx-auto text-balance leading-relaxed">
+              Skip the black hole. Every application on HireQuadrant is screened, tracked, and acknowledged.
             </p>
-            <div className="flex flex-wrap justify-center gap-8 text-sm md:text-base">
-              <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
-                <Briefcase className="h-5 w-5 mr-2" />
-                <span>5,000+ Jobs</span>
+
+            {/* Hero search */}
+            <form onSubmit={handleHeroSearch} className="mt-10 bg-white rounded-2xl shadow-card-hover border border-gray-100 p-2 max-w-3xl mx-auto">
+              <div className="flex flex-col md:flex-row gap-2">
+                <div className="flex-1 flex items-center gap-2 px-4 py-2 md:border-r md:border-gray-100">
+                  <Search className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                  <input
+                    type="text"
+                    value={heroSearch}
+                    onChange={(e) => setHeroSearch(e.target.value)}
+                    placeholder="Role, skill, or company"
+                    className="w-full py-2 focus:outline-none text-secondary-900 placeholder-gray-400"
+                  />
+                </div>
+                <div className="flex-1 flex items-center gap-2 px-4 py-2">
+                  <MapPin className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                  <input
+                    type="text"
+                    value={heroLocation}
+                    onChange={(e) => setHeroLocation(e.target.value)}
+                    placeholder="City, state, or remote"
+                    className="w-full py-2 focus:outline-none text-secondary-900 placeholder-gray-400"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all flex items-center justify-center gap-2"
+                >
+                  Search
+                  <ArrowRight className="h-4 w-4" />
+                </button>
               </div>
-              <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
-                <Users className="h-5 w-5 mr-2" />
-                <span>1,000+ Companies</span>
+            </form>
+
+            {/* Real stats */}
+            {stats.jobs > 0 && (
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-secondary-500">
+                <span>
+                  <strong className="text-secondary-900 font-display font-bold text-xl mr-1">
+                    {stats.jobs.toLocaleString()}
+                  </strong>
+                  open jobs
+                </span>
+                <span className="hidden sm:inline text-gray-300">·</span>
+                <span>
+                  <strong className="text-secondary-900 font-display font-bold text-xl mr-1">
+                    {stats.companies.toLocaleString()}
+                  </strong>
+                  companies hiring
+                </span>
+                <span className="hidden sm:inline text-gray-300">·</span>
+                <span>
+                  <strong className="text-secondary-900 font-display font-bold text-xl mr-1">
+                    {stats.postedThisWeek.toLocaleString()}
+                  </strong>
+                  posted this week
+                </span>
               </div>
-              <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
-                <TrendingUp className="h-5 w-5 mr-2" />
-                <span>500+ Hired</span>
-              </div>
-            </div>
-            <div className="mt-10">
-              <button className="group inline-flex items-center bg-white text-primary-600 px-8 py-4 rounded-full font-semibold hover:bg-white/95 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                <span>Start Your Journey</span>
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </button>
-            </div>
+            )}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <SearchBar />
+      <div id="jobs-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <TrendingSection />
         <JobList />
       </div>

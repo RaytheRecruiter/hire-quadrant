@@ -2,11 +2,13 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
-import { useCompanies } from '../contexts/CompanyContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
 import { Job } from '../contexts/JobContext';
-import { MapPin, Calendar, DollarSign, Building2, Bookmark, BookmarkCheck, Zap } from 'lucide-react';
+import { MapPin, DollarSign, Bookmark, BookmarkCheck, Zap, CheckCircle, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import toast from 'react-hot-toast';
+import CompanyLogo from './CompanyLogo';
+import { extractTags } from '../utils/skillExtractor';
 
 interface JobCardProps {
     job: Job;
@@ -15,158 +17,156 @@ interface JobCardProps {
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
     const { user } = useAuth();
     const { hasApplied, applyToJob } = useJobs();
-    const { getCompanyByName } = useCompanies();
     const { isSaved, toggleSaved } = useSavedJobs();
     const navigate = useNavigate();
     const [applying, setApplying] = React.useState(false);
 
-    const screeningCount = ((job as any).screening_questions as any[] | undefined)?.length || 0;
-    const canOneClick = !!user && screeningCount === 0 && !hasApplied(job.id, user.id);
-
+    const applied = user ? hasApplied(job.id, user.id) : false;
     const saved = isSaved(job.id);
+    const screeningCount = ((job as any).screening_questions as any[] | undefined)?.length || 0;
+    const canOneClick = !!user && screeningCount === 0 && !applied;
+    const tags = React.useMemo(() => extractTags(job.title, job.description), [job.title, job.description]);
+    const minSalary = (job as any).min_salary;
+    const maxSalary = (job as any).max_salary;
+    const salaryDisplay = minSalary && maxSalary
+        ? `$${(minSalary / 1000).toFixed(0)}k – $${(maxSalary / 1000).toFixed(0)}k`
+        : job.salary;
 
     const handleBookmark = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         if (!user) {
+            toast.error('Sign in to save jobs');
             navigate('/login');
             return;
         }
+        const wasSaved = saved;
         await toggleSaved(job.id);
+        toast.success(wasSaved ? 'Removed from saved jobs' : 'Saved for later');
     };
 
     const handleQuickApply = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         if (!user) {
+            toast.error('Sign in to apply');
             navigate('/login');
             return;
         }
         setApplying(true);
-        await applyToJob(job.id);
-        setApplying(false);
-    };
-
-    const jobTypeColors = {
-        'full-time': 'bg-green-100 text-green-800',
-        'part-time': 'bg-blue-100 text-blue-800',
-        'contract': 'bg-orange-100 text-orange-800',
-        'contract-to-hire': 'bg-purple-100 text-purple-800',
-        'internship': 'bg-purple-100 text-purple-800'
-    };
-
-    const getJobTypeLabel = (type: string) => {
-        switch (type) {
-            case 'full-time': return 'Direct Placement';
-            case 'contract': return 'Contract';
-            case 'contract-to-hire': return 'Contract to Hire';
-            case 'part-time': return 'Part Time';
-            case 'internship': return 'Internship';
-            default: return 'Full Time';
+        try {
+            const ok = await applyToJob(job.id);
+            if (ok) toast.success(`Applied to ${job.title}`);
+            else toast.error('Could not submit application');
+        } finally {
+            setApplying(false);
         }
     };
 
-    const companyProfile = getCompanyByName(job.company);
+    const typeLabel = (() => {
+        switch (job.type) {
+            case 'full-time': return 'Full Time';
+            case 'part-time': return 'Part Time';
+            case 'contract': return 'Contract';
+            case 'contract-to-hire': return 'Contract-to-Hire';
+            case 'internship': return 'Internship';
+            default: return job.type || 'Full Time';
+        }
+    })();
 
     return (
-        <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-white/20 p-6 flex flex-col sm:flex-row justify-between items-start space-y-4 sm:space-y-0">
-            <button
-                type="button"
-                onClick={handleBookmark}
-                aria-label={saved ? 'Remove from saved jobs' : 'Save this job'}
-                title={saved ? 'Saved' : 'Save job'}
-                className={`absolute top-4 right-4 h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${
-                    saved
-                        ? 'bg-primary-50 text-primary-600 hover:bg-primary-100'
-                        : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
-                }`}
-            >
-                {saved ? (
-                    <BookmarkCheck className="h-5 w-5 fill-primary-500 text-primary-500" />
-                ) : (
-                    <Bookmark className="h-5 w-5" />
-                )}
-            </button>
+        <Link
+            to={`/jobs/${job.id}`}
+            className="group block bg-white rounded-2xl shadow-card hover:shadow-card-hover border border-gray-100 hover:border-primary-200 transition-all duration-200 p-5"
+        >
+            <div className="flex items-start gap-4">
+                <CompanyLogo company={job.company} logoUrl={(job as any).company_logo_url} size="md" />
 
-            <div className="flex-1 pr-10">
-                <div className="flex items-center justify-between mb-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${jobTypeColors[job.type] || 'bg-gray-100 text-gray-800'}`}>
-                        {getJobTypeLabel(job.type)}
-                    </span>
-                    {user && hasApplied(job.id, user.id) && (
-                        <span className="text-green-600 text-sm font-medium mr-8 sm:mr-0">Applied</span>
-                    )}
-                </div>
-
-                <Link to={`/jobs/${job.id}`} className="block">
-                    <h3 className="text-xl font-bold text-secondary-900 hover:text-primary-600 transition-colors duration-300">
-                        {job.title}
-                    </h3>
-                </Link>
-
-                <div className="flex items-center text-gray-700 mt-2 mb-4">
-                    {companyProfile ? (
-                        <Link to={`/companies/${companyProfile.id}`} className="flex items-center hover:text-primary-600 transition-colors duration-300">
-                            <Building2 className="h-4 w-4 mr-1" />
-                            <span className="font-semibold text-secondary-800">{job.company}</span>
-                        </Link>
-                    ) : (
-                        <div className="flex items-center">
-                            <Building2 className="h-4 w-4 mr-1" />
-                            <span className="font-semibold text-secondary-800">{job.company}</span>
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                            <h3 className="font-display text-lg font-bold text-secondary-900 group-hover:text-primary-600 transition-colors line-clamp-1">
+                                {job.title}
+                            </h3>
+                            <div className="flex items-center gap-1.5 text-sm text-gray-600 mt-0.5">
+                                <span className="font-medium truncate">{job.company}</span>
+                                {job.location && (
+                                    <>
+                                        <span className="text-gray-300">·</span>
+                                        <span className="flex items-center gap-1 text-gray-500 truncate">
+                                            <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                                            {job.location}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    )}
-                    <span className="mx-2 text-gray-400">•</span>
-                    <div className="flex items-center">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        <span className="text-gray-600">{job.location}</span>
-                    </div>
-                </div>
 
-                <div className="flex items-center text-gray-700 mb-4">
-                    <DollarSign className="h-4 w-4 mr-1" />
-                    <span className="font-bold text-secondary-900">
-                        {(job as any).min_salary && (job as any).max_salary
-                            ? `$${((job as any).min_salary / 1000).toFixed(0)}k – $${((job as any).max_salary / 1000).toFixed(0)}k`
-                            : job.salary || 'Salary not disclosed'}
-                    </span>
-                </div>
-
-                <div className="text-gray-600 mb-6 leading-relaxed">
-                    <p className="line-clamp-3">
-                        {job.description.split('\n')[0].trim()}
-                    </p>
-                </div>
-
-                <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
-                    <div className="flex items-center space-x-6">
-                        <div className="flex items-center bg-gray-50 px-3 py-1 rounded-full">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            <span>Posted {formatDistanceToNow(new Date(job.postedDate), { addSuffix: true })}</span>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        {canOneClick && (
-                            <button
-                                type="button"
-                                onClick={handleQuickApply}
-                                disabled={applying}
-                                className="flex items-center gap-1 bg-gradient-to-r from-primary-400 to-primary-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:from-primary-500 hover:to-primary-600 disabled:opacity-50 transition-all"
-                            >
-                                <Zap className="h-3 w-3" />
-                                {applying ? 'Applying...' : 'Quick Apply'}
-                            </button>
-                        )}
-                        <Link
-                            to={`/jobs/${job.id}`}
-                            className="text-primary-600 hover:text-primary-800 font-medium transition-colors duration-200 flex items-center"
+                        <button
+                            type="button"
+                            onClick={handleBookmark}
+                            aria-label={saved ? 'Remove from saved' : 'Save job'}
+                            className={`h-9 w-9 flex items-center justify-center rounded-lg flex-shrink-0 transition-all ${
+                                saved
+                                    ? 'bg-primary-50 text-primary-600'
+                                    : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
+                            }`}
                         >
-                            View Details →
-                        </Link>
+                            {saved ? (
+                                <BookmarkCheck className="h-5 w-5 fill-primary-500 text-primary-500" />
+                            ) : (
+                                <Bookmark className="h-5 w-5" />
+                            )}
+                        </button>
+                    </div>
+
+                    {/* Tags row */}
+                    <div className="flex flex-wrap items-center gap-1.5 mt-3">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
+                            {typeLabel}
+                        </span>
+                        {salaryDisplay && (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+                                <DollarSign className="h-3 w-3" />
+                                {salaryDisplay}
+                            </span>
+                        )}
+                        {tags.map(t => (
+                            <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                {t}
+                            </span>
+                        ))}
+                    </div>
+
+                    {/* Bottom row */}
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
+                        <span className="flex items-center gap-1 text-xs text-gray-400">
+                            <Clock className="h-3 w-3" />
+                            Posted {formatDistanceToNow(new Date(job.postedDate), { addSuffix: true })}
+                        </span>
+
+                        <div className="flex items-center gap-2">
+                            {applied ? (
+                                <span className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600">
+                                    <CheckCircle className="h-4 w-4" />
+                                    Applied
+                                </span>
+                            ) : canOneClick ? (
+                                <button
+                                    type="button"
+                                    onClick={handleQuickApply}
+                                    disabled={applying}
+                                    className="inline-flex items-center gap-1 bg-primary-500 hover:bg-primary-600 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-soft hover:shadow-card-hover transition-all disabled:opacity-60"
+                                >
+                                    <Zap className="h-3.5 w-3.5" />
+                                    {applying ? 'Applying…' : 'Quick Apply'}
+                                </button>
+                            ) : null}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 

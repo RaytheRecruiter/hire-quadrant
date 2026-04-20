@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../utils/supabaseClient';
 import { User, Lock, Eye, EyeOff } from 'lucide-react';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 
@@ -26,7 +27,20 @@ const Login: React.FC = () => {
         } else if (result.role === 'admin') {
           navigate('/admin');
         } else {
-          navigate('/');
+          // Candidate — check if they need onboarding
+          const { data: session } = await supabase.auth.getSession();
+          const userId = session?.session?.user?.id;
+          if (userId) {
+            const { data: candidate } = await supabase
+              .from('candidates')
+              .select('location, headline, resume_url')
+              .eq('user_id', userId)
+              .maybeSingle();
+            const hasBasics = candidate && (candidate.location || candidate.headline || candidate.resume_url);
+            navigate(hasBasics ? '/' : '/onboarding');
+          } else {
+            navigate('/');
+          }
         }
       } else {
         setError('Invalid email or password');

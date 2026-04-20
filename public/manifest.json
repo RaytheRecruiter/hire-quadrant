@@ -9,31 +9,15 @@
   "theme_color": "#4a9960",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ],
   "categories": ["business", "productivity"],
   "shortcuts": [
-    {
-      "name": "Saved Jobs",
-      "short_name": "Saved",
-      "url": "/saved",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Job Alerts",
-      "short_name": "Alerts",
-      "url": "/alerts",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
-    }
+    { "name": "Saved Jobs", "short_name": "Saved", "url": "/saved" },
+    { "name": "Job Alerts", "short_name": "Alerts", "url": "/alerts" }
   ]
 }
