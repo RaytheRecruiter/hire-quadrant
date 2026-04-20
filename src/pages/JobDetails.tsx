@@ -14,6 +14,7 @@ import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
 import { extractTags } from '../utils/skillExtractor';
 import { useSEO } from '../hooks/useSEO';
+import { generateSlug, extractIdFromSlug, isUuid } from '../utils/slugGenerator';
 import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
 
 const viewedJobIds = new Set<string>();
@@ -103,7 +104,7 @@ const buildJobSchema = (job: any, url: string) => {
 
 const JobDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const { getJobById, applyToJob, hasApplied } = useJobs();
+    const { getJobById, applyToJob, hasApplied, jobs } = useJobs();
     const { user } = useAuth();
     const { getCompanyByName, getCompanyById } = useCompanies();
     const { isSaved, toggleSaved } = useSavedJobs();
@@ -113,7 +114,15 @@ const JobDetails: React.FC = () => {
     const [screeningOpen, setScreeningOpen] = React.useState(false);
     const [showSuccess, setShowSuccess] = React.useState(false);
 
-    const job = getJobById(id);
+    // Support both UUID and slug-based URLs
+    let job = getJobById(id);
+    if (!job && id && !isUuid(id)) {
+      // Try to find job by slug (search through jobs for matching title/company slug)
+      job = jobs.find(j => {
+        const slug = generateSlug(j.title, j.company || '');
+        return slug === id || slug.startsWith(id);
+      });
+    }
     const companyProfile = job ? (getCompanyByName(job.company) || getCompanyById(job.company)) : null;
     const saved = job ? isSaved(job.id) : false;
 
