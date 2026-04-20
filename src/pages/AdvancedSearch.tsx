@@ -22,8 +22,10 @@ const AdvancedSearch: React.FC = () => {
     if (filters.type) params.append('type', filters.type);
     if (filters.salary && filters.salary !== '0') params.append('salary', filters.salary);
     if (filters.keyword) params.append('keyword', filters.keyword);
+    if (filters.remote) params.append('remote', 'true');
 
     navigate(`/?${params.toString()}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (

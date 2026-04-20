@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Search, MapPin, Sparkles, ArrowRight } from 'lucide-react';
 import { useJobs } from '../contexts/JobContext';
 import { supabase } from '../utils/supabaseClient';
+import { useSearchParams } from 'react-router-dom';
 import JobList from '../components/JobList';
 import TrendingSection from '../components/TrendingSection';
 import { useSEO } from '../hooks/useSEO';
 
 const Home: React.FC = () => {
   const { helmet } = useSEO({ canonical: '/' });
-  const { setSearchTerm, setLocationFilter } = useJobs();
+  const { setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary } = useJobs();
+  const [searchParams] = useSearchParams();
   const [heroSearch, setHeroSearch] = useState('');
   const [heroLocation, setHeroLocation] = useState('');
   const [stats, setStats] = useState<{ jobs: number; companies: number; postedThisWeek: number }>({
@@ -16,6 +18,31 @@ const Home: React.FC = () => {
     companies: 0,
     postedThisWeek: 0,
   });
+
+  useEffect(() => {
+    const title = searchParams.get('title');
+    const location = searchParams.get('location');
+    const type = searchParams.get('type');
+    const salary = searchParams.get('salary');
+    const keyword = searchParams.get('keyword');
+    const company = searchParams.get('company');
+
+    if (title) setHeroSearch(title);
+    if (location) setHeroLocation(location);
+
+    if (title || company || keyword) {
+      setSearchTerm(title || company || keyword || '');
+    }
+    if (location) {
+      setLocationFilter(location);
+    }
+    if (type) {
+      setTypeFilter(type);
+    }
+    if (salary) {
+      setMinSalary(parseInt(salary, 10));
+    }
+  }, [searchParams, setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary]);
 
   useEffect(() => {
     const fetchStats = async () => {
