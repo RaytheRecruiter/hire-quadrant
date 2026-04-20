@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabaseClient';
-import { Users, Download, Filter } from 'lucide-react';
+import { Users, Download, Filter, Star, Bookmark, Eye } from 'lucide-react';
+import ApplicantDetailModal from './ApplicantDetailModal';
 
 interface CompanyApplicantsProps {
   applications: any[];
@@ -27,6 +28,9 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [jobFilter, setJobFilter] = useState<string>('all');
   const [candidateInfo, setCandidateInfo] = useState<Record<string, any>>({});
+  const [showShortlistedOnly, setShowShortlistedOnly] = useState(false);
+  const [detailApp, setDetailApp] = useState<any | null>(null);
+  const [refreshTick, setRefreshTick] = useState(0);
 
   // Fetch candidate info for resume URLs
   useEffect(() => {
@@ -91,6 +95,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   const filteredApplications = applications.filter((app) => {
     if (statusFilter !== 'all' && app.status !== statusFilter) return false;
     if (jobFilter !== 'all' && app.job_id !== jobFilter) return false;
+    if (showShortlistedOnly && !app.is_shortlisted) return false;
     return true;
   });
 
@@ -137,6 +142,16 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
             ))}
           </select>
         </div>
+        <label className="flex items-center gap-2 cursor-pointer ml-auto">
+          <input
+            type="checkbox"
+            checked={showShortlistedOnly}
+            onChange={(e) => setShowShortlistedOnly(e.target.checked)}
+            className="rounded text-primary-500 focus:ring-primary-400"
+          />
+          <Bookmark className={`h-4 w-4 ${showShortlistedOnly ? 'fill-primary-500 text-primary-500' : 'text-gray-400'}`} />
+          <span className="text-sm text-gray-700">Shortlisted only</span>
+        </label>
       </div>
 
       {/* Table */}
@@ -147,6 +162,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Candidate</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resume</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -175,6 +191,27 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       ? new Date(app.created_at).toLocaleDateString()
                       : 'N/A'}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <div className="flex items-center gap-1">
+                      {app.employer_rating ? (
+                        <>
+                          {[1, 2, 3, 4, 5].map(n => (
+                            <Star key={n} className={`h-3.5 w-3.5 ${n <= app.employer_rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
+                          ))}
+                        </>
+                      ) : (
+                        <span className="text-gray-300 text-xs">Not rated</span>
+                      )}
+                      {app.is_shortlisted && <Bookmark className="h-3.5 w-3.5 fill-primary-500 text-primary-500 ml-1" />}
+                    </div>
+                    {app.employer_tags && app.employer_tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {app.employer_tags.slice(0, 3).map((tag: string) => (
+                          <span key={tag} className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -195,7 +232,17 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       <Download className="h-4 w-4" />
                     </button>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        supabase.rpc('record_application_view', { app_id: app.id });
+                        setDetailApp(app);
+                      }}
+                      className="text-primary-600 hover:text-primary-800 text-sm font-medium flex items-center gap-1"
+                    >
+                      <Eye className="h-4 w-4" />
+                      Review
+                    </button>
                     <select
                       value={app.status || 'pending'}
                       onChange={(e) => {
@@ -223,6 +270,15 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
           No applicants match the selected filters.
         </div>
       )}
+
+      <ApplicantDetailModal
+        open={!!detailApp}
+        application={detailApp}
+        candidate={detailApp ? candidateInfo[detailApp.user_id] : null}
+        job={detailApp ? jobs.find(j => j.id === detailApp.job_id) : null}
+        onClose={() => setDetailApp(null)}
+        onSaved={() => setRefreshTick(t => t + 1)}
+      />
     </div>
   );
 };

@@ -16,6 +16,10 @@ import ProfilePage from './pages/ProfilePage'; // <-- Corrected path
 import CompanyDashboard from './pages/CompanyDashboard';
 import Pricing from './pages/Pricing';
 import SavedJobs from './pages/SavedJobs';
+import JobAlerts from './pages/JobAlerts';
+import ResumeSearch from './pages/ResumeSearch';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 
 function App() {
   return (
@@ -38,6 +42,10 @@ function App() {
                 <Route path="/company-dashboard" element={<CompanyDashboard />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/saved" element={<SavedJobs />} />
+                <Route path="/alerts" element={<JobAlerts />} />
+                <Route path="/talent-search" element={<ResumeSearch />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
               </Routes>
             </div>
           </Router>

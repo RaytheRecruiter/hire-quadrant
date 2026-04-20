@@ -7,6 +7,7 @@ import { supabase } from '../utils/supabaseClient';
 import { MapPin, Calendar, Clock, ArrowLeft, CheckCircle, Building2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import ScreeningQuestionsModal from '../components/ScreeningQuestionsModal';
+import SimilarJobs from '../components/SimilarJobs';
 import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
 
 // Session-level deduplication so a user doesn't inflate views by refreshing
@@ -290,6 +291,10 @@ const JobDetails: React.FC = () => {
                         )}
                     </div>
                 </div>
+            </div>
+
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <SimilarJobs jobId={job.id} />
             </div>
 
             <ScreeningQuestionsModal
