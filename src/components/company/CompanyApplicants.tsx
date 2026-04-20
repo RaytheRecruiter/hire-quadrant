@@ -54,12 +54,17 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
     fetchCandidates();
   }, [applications]);
 
-  const handleResumeDownload = async (userId: string) => {
+  const handleResumeDownload = async (userId: string, appId: string) => {
     const candidate = candidateInfo[userId];
     if (!candidate?.resume_url) {
       alert('No resume available for this candidate.');
       return;
     }
+
+    // Record the view so the candidate can see their application was reviewed
+    supabase.rpc('record_application_view', { app_id: appId }).then(({ error }) => {
+      if (error) console.error('Failed to record application view:', error);
+    });
 
     try {
       const { data, error } = await supabase.storage
@@ -183,7 +188,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
-                      onClick={() => handleResumeDownload(app.user_id)}
+                      onClick={() => handleResumeDownload(app.user_id, app.id)}
                       className="text-primary-500 hover:text-primary-700 transition-colors"
                       title="Download Resume"
                     >
@@ -193,7 +198,10 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
                       value={app.status || 'pending'}
-                      onChange={(e) => onStatusUpdate(app.id, e.target.value)}
+                      onChange={(e) => {
+                        supabase.rpc('record_application_view', { app_id: app.id });
+                        onStatusUpdate(app.id, e.target.value);
+                      }}
                       className="rounded-lg border border-gray-200 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
                     >
                       {STATUS_OPTIONS.map((s) => (

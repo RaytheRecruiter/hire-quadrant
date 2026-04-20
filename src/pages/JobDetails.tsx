@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import { useCompanies } from '../contexts/CompanyContext';
 import { supabase } from '../utils/supabaseClient';
-import { MapPin, Calendar, DollarSign, Clock, Users, Eye, ArrowLeft, CheckCircle, Building2 } from 'lucide-react';
+import { MapPin, Calendar, Clock, ArrowLeft, CheckCircle, Building2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import ScreeningQuestionsModal from '../components/ScreeningQuestionsModal';
+import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
 
 // Session-level deduplication so a user doesn't inflate views by refreshing
 const viewedJobIds = new Set<string>();
@@ -70,6 +72,60 @@ const formatJobDescription = (description: string) => {
     });
 };
 
+// Google for Jobs JSON-LD structured data
+const buildJobSchema = (job: any, url: string) => {
+    const schema: any = {
+        '@context': 'https://schema.org/',
+        '@type': 'JobPosting',
+        title: job.title,
+        description: job.description,
+        datePosted: job.postedDate || job.posted_date,
+        employmentType: (job.type || '').toUpperCase().replace('-', '_') || 'FULL_TIME',
+        hiringOrganization: {
+            '@type': 'Organization',
+            name: job.company || 'HireQuadrant',
+        },
+        directApply: true,
+        url,
+    };
+
+    if (job.location) {
+        schema.jobLocation = {
+            '@type': 'Place',
+            address: {
+                '@type': 'PostalAddress',
+                addressLocality: job.location,
+                addressCountry: 'US',
+            },
+        };
+    }
+
+    if (job.salary) {
+        // Try to extract a number; if not, just include as a string-ish range
+        const match = String(job.salary).match(/\d[\d,]*/g);
+        if (match && match.length > 0) {
+            const min = parseInt(match[0].replace(/,/g, ''), 10);
+            const max = match[1] ? parseInt(match[1].replace(/,/g, ''), 10) : min;
+            schema.baseSalary = {
+                '@type': 'MonetaryAmount',
+                currency: 'USD',
+                value: {
+                    '@type': 'QuantitativeValue',
+                    minValue: min,
+                    maxValue: max,
+                    unitText: 'YEAR',
+                },
+            };
+        }
+    }
+
+    if (job.applicationDeadline) {
+        schema.validThrough = new Date(job.applicationDeadline).toISOString();
+    }
+
+    return schema;
+};
+
 const JobDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { getJobById, applyToJob, hasApplied } = useJobs();
@@ -77,9 +133,15 @@ const JobDetails: React.FC = () => {
     const { getCompanyByName, getCompanyById } = useCompanies();
     const navigate = useNavigate();
     const [applied, setApplied] = React.useState(false);
+    const [screeningOpen, setScreeningOpen] = React.useState(false);
 
     const job = getJobById(id);
     const companyProfile = job ? (getCompanyByName(job.company) || getCompanyById(job.company)) : null;
+
+    const screeningQuestions: ScreeningQuestion[] = useMemo(
+        () => ((job as any)?.screening_questions as ScreeningQuestion[] | undefined) || [],
+        [job]
+    );
 
     useEffect(() => {
         if (user && job) {
@@ -95,6 +157,25 @@ const JobDetails: React.FC = () => {
         supabase.rpc('increment_job_views', { row_id: job.id }).then(({ error }) => {
             if (error) console.error('Failed to track job view:', error);
         });
+    }, [job]);
+
+    // Inject Google for Jobs JSON-LD into <head>
+    useEffect(() => {
+        if (!job) return;
+        const schema = buildJobSchema(job, window.location.href);
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = 'job-posting-schema';
+        script.text = JSON.stringify(schema);
+        // Remove any prior schema script to avoid duplicates
+        const prior = document.getElementById('job-posting-schema');
+        if (prior) prior.remove();
+        document.head.appendChild(script);
+
+        return () => {
+            const el = document.getElementById('job-posting-schema');
+            if (el) el.remove();
+        };
     }, [job]);
 
     if (!job) {
@@ -113,13 +194,26 @@ const JobDetails: React.FC = () => {
         );
     }
 
+    const submitApplication = async (answers: ScreeningAnswer[]) => {
+        const success = await applyToJob(job.id, answers);
+        if (success) {
+            setApplied(true);
+            setScreeningOpen(false);
+        }
+    };
+
     const handleApply = async () => {
         if (!user) {
             navigate('/login');
             return;
         }
 
-        const success = await applyToJob(job.id, user.id);
+        if (screeningQuestions.length > 0) {
+            setScreeningOpen(true);
+            return;
+        }
+
+        const success = await applyToJob(job.id);
         if (success) {
             setApplied(true);
         }
@@ -197,6 +291,14 @@ const JobDetails: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            <ScreeningQuestionsModal
+                open={screeningOpen}
+                questions={screeningQuestions}
+                companyName={job.company || 'this company'}
+                onClose={() => setScreeningOpen(false)}
+                onSubmit={submitApplication}
+            />
         </div>
     );
 };

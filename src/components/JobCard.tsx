@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import { useCompanies } from '../contexts/CompanyContext';
+import { useSavedJobs } from '../hooks/useSavedJobs';
 import { Job } from '../contexts/JobContext';
-import { MapPin, Calendar, DollarSign, Building2 } from 'lucide-react';
+import { MapPin, Calendar, DollarSign, Building2, Bookmark, BookmarkCheck } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface JobCardProps {
@@ -15,6 +16,20 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     const { user } = useAuth();
     const { hasApplied } = useJobs();
     const { getCompanyByName } = useCompanies();
+    const { isSaved, toggleSaved } = useSavedJobs();
+    const navigate = useNavigate();
+
+    const saved = isSaved(job.id);
+
+    const handleBookmark = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+        await toggleSaved(job.id);
+    };
 
     const jobTypeColors = {
         'full-time': 'bg-green-100 text-green-800',
@@ -38,14 +53,32 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     const companyProfile = getCompanyByName(job.company);
 
     return (
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-white/20 p-6 flex flex-col sm:flex-row justify-between items-start space-y-4 sm:space-y-0">
-            <div className="flex-1">
+        <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-white/20 p-6 flex flex-col sm:flex-row justify-between items-start space-y-4 sm:space-y-0">
+            <button
+                type="button"
+                onClick={handleBookmark}
+                aria-label={saved ? 'Remove from saved jobs' : 'Save this job'}
+                title={saved ? 'Saved' : 'Save job'}
+                className={`absolute top-4 right-4 h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${
+                    saved
+                        ? 'bg-primary-50 text-primary-600 hover:bg-primary-100'
+                        : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
+                }`}
+            >
+                {saved ? (
+                    <BookmarkCheck className="h-5 w-5 fill-primary-500 text-primary-500" />
+                ) : (
+                    <Bookmark className="h-5 w-5" />
+                )}
+            </button>
+
+            <div className="flex-1 pr-10">
                 <div className="flex items-center justify-between mb-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${jobTypeColors[job.type] || 'bg-gray-100 text-gray-800'}`}>
                         {getJobTypeLabel(job.type)}
                     </span>
                     {user && hasApplied(job.id, user.id) && (
-                        <span className="text-green-600 text-sm font-medium">Applied</span>
+                        <span className="text-green-600 text-sm font-medium mr-8 sm:mr-0">Applied</span>
                     )}
                 </div>
 

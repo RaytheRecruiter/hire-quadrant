@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Grid3X3, User, LogOut, BarChart3, FileText, Building2 } from 'lucide-react';
+import { Grid3X3, User, LogOut, BarChart3, FileText, Building2, Bookmark } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { user, logout, isAuthenticated, isAdmin, isCompany } = useAuth();
@@ -37,6 +37,15 @@ const Header: React.FC = () => {
                   <User className="h-4 w-4 mr-1" />
                   Profile
                 </Link>
+                {!isAdmin && !isCompany && (
+                  <Link
+                    to="/saved"
+                    className="flex items-center text-secondary-700 hover:text-primary-500 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 hover:bg-primary-50"
+                  >
+                    <Bookmark className="h-4 w-4 mr-1" />
+                    Saved Jobs
+                  </Link>
+                )}
                 {isAdmin && (
                   <Link
                     to="/admin"

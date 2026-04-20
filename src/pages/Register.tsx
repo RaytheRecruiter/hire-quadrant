@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { User, Lock, Mail, Eye, EyeOff, CheckCircle, Briefcase, Building2 } from 'lucide-react';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -95,6 +96,14 @@ const Register: React.FC = () => {
         </div>
 
         <div className="bg-white/90 backdrop-blur-sm p-10 rounded-3xl shadow-2xl border border-white/20">
+          <GoogleSignInButton role={userType} label="Sign up with Google" />
+
+          <div className="my-6 flex items-center gap-3">
+            <div className="flex-1 h-px bg-gray-200" />
+            <span className="text-xs uppercase tracking-wide text-gray-400">or</span>
+            <div className="flex-1 h-px bg-gray-200" />
+          </div>
+
           <form className="space-y-8" onSubmit={handleSubmit}>
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl font-medium">
