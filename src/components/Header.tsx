@@ -49,6 +49,8 @@ const Header: React.FC = () => {
   const mainNav = (
     <>
       <Link to="/" className={navClass('/')}>Jobs</Link>
+      <Link to="/companies" className={navClass('/companies')}>Companies</Link>
+      <Link to="/advanced-search" className={navClass('/advanced-search')}>Search</Link>
       <Link to="/blog" className={navClass('/blog')}>Blog</Link>
       <Link to="/pricing" className={navClass('/pricing')}>Pricing</Link>
     </>
@@ -188,6 +190,8 @@ const Header: React.FC = () => {
         <div className="lg:hidden border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 animate-fade-in">
           <div className="max-w-7xl mx-auto px-4 py-4 space-y-1">
             <Link to="/" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Jobs</Link>
+            <Link to="/companies" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Companies</Link>
+            <Link to="/advanced-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Search</Link>
             <Link to="/blog" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Blog</Link>
             <Link to="/pricing" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Pricing</Link>
             {isAuthenticated && !isAdmin && !isCompany && (
