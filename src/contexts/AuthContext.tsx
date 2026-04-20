@@ -17,6 +17,7 @@ interface AuthContextType {
   session: Session | null;
   login: (email: string, password: string) => Promise<{ success: boolean; role?: string }>;
   register: (email: string, password: string, name: string, role?: 'candidate' | 'company') => Promise<boolean>;
+  loginWithGoogle: (role?: 'candidate' | 'company') => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   isAdmin: boolean;
@@ -198,6 +199,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const loginWithGoogle = async (role: 'candidate' | 'company' = 'candidate'): Promise<void> => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/login`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+          // role is passed so the trigger can set it when creating user_profiles
+          // Note: Supabase only persists this via raw_user_meta_data on signup
+          scopes: 'email profile',
+        },
+      });
+
+      if (error) {
+        console.error('Google OAuth error:', error.message);
+        throw error;
+      }
+      // The browser will redirect to Google, so nothing else to do here
+    } catch (error) {
+      console.error('loginWithGoogle error:', error);
+      throw error;
+    }
+  };
+
   const logout = async (): Promise<void> => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -246,6 +274,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     session,
     login,
     register,
+    loginWithGoogle,
     logout,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin',

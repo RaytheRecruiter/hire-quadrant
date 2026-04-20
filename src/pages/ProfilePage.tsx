@@ -3,7 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
-import { MapPin, Phone, FileText, Briefcase, Calendar, Building2, ExternalLink } from 'lucide-react';
+import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
 
 interface CandidateProfile {
     user_id: string;
@@ -19,6 +20,7 @@ interface JobApplication {
     status: string;
     applied_at: string;
     source_company: string;
+    employer_views?: string[];
 }
 
 interface JobInfo {
@@ -197,6 +199,45 @@ const ProfilePage = () => {
         setUploading(false);
     };
 
+    // Delete the currently uploaded resume from storage + candidate row
+    const [deletingResume, setDeletingResume] = useState(false);
+
+    const handleDeleteResume = async () => {
+        if (!user || !profile?.resume_url) return;
+        if (!window.confirm('Delete your current resume? You can upload a new one after.')) return;
+
+        setDeletingResume(true);
+        setMessage(null);
+
+        try {
+            // Remove from storage (best-effort — continue if it fails)
+            const { error: storageError } = await supabase.storage
+                .from('resumes')
+                .remove([profile.resume_url]);
+            if (storageError) {
+                console.warn('Could not remove file from storage (continuing):', storageError);
+            }
+
+            // Clear the resume_url on the candidate row
+            const { error: updateError } = await supabase
+                .from('candidates')
+                .update({ resume_url: null })
+                .eq('user_id', user.id);
+
+            if (updateError) throw updateError;
+
+            setShowResumeViewer(false);
+            setResumeViewUrl(null);
+            setMessage({ type: 'success', text: 'Resume deleted. You can upload a new one below.' });
+            await fetchProfile();
+        } catch (err: any) {
+            console.error('Error deleting resume:', err);
+            setMessage({ type: 'error', text: err?.message || 'Failed to delete resume.' });
+        } finally {
+            setDeletingResume(false);
+        }
+    };
+
     // Generate a signed URL to view the resume
     const handleViewResume = async () => {
         if (!profile?.resume_url) return;
@@ -338,19 +379,33 @@ const ProfilePage = () => {
                     </h2>
                     {profile?.resume_url ? (
                         <div className="mb-4 p-3 bg-gray-50 rounded-lg flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <FileText className="h-4 w-4 text-primary-500" />
-                                <span className="text-sm text-gray-700">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <FileText className="h-4 w-4 text-primary-500 flex-shrink-0" />
+                                <span className="text-sm text-gray-700 truncate">
                                     {profile.resume_url.split('/').pop()?.replace(/^\d+_/, '') || 'Resume uploaded'}
                                 </span>
                             </div>
-                            <button
-                                onClick={handleViewResume}
-                                className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
-                            >
-                                <ExternalLink className="h-3 w-3" />
-                                View
-                            </button>
+                            <div className="flex items-center gap-3 ml-4">
+                                <button
+                                    onClick={handleViewResume}
+                                    className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
+                                >
+                                    <ExternalLink className="h-3 w-3" />
+                                    View
+                                </button>
+                                <button
+                                    onClick={handleDeleteResume}
+                                    disabled={deletingResume}
+                                    className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1 disabled:opacity-50"
+                                >
+                                    {deletingResume ? (
+                                        <Loader2 className="h-3 w-3 animate-spin" />
+                                    ) : (
+                                        <Trash2 className="h-3 w-3" />
+                                    )}
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     ) : (
                         <p className="text-gray-500 mb-4">No resume uploaded yet.</p>
@@ -447,6 +502,21 @@ const ProfilePage = () => {
                                                     <Calendar className="h-3 w-3" />
                                                     Applied {formatDate(app.applied_at)}
                                                 </span>
+                                            </div>
+                                            <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
+                                                <Eye className="h-3 w-3" />
+                                                {(app.employer_views?.length ?? 0) === 0 ? (
+                                                    <span className="italic text-gray-400">Not yet reviewed</span>
+                                                ) : (
+                                                    <>
+                                                        <span>
+                                                            Viewed {app.employer_views!.length} time{app.employer_views!.length === 1 ? '' : 's'}
+                                                        </span>
+                                                        <span className="text-gray-400">
+                                                            • last {formatDistanceToNow(new Date(app.employer_views![app.employer_views!.length - 1]), { addSuffix: true })}
+                                                        </span>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(app.status)}`}>

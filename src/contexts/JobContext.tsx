@@ -60,7 +60,7 @@ interface JobContextType {
     goToPage: (page: number) => void;
     loadMoreJobs: () => void;
     hasMoreJobs: boolean;
-    applyToJob: (jobId: string) => Promise<boolean>;
+    applyToJob: (jobId: string, screeningAnswers?: any[]) => Promise<boolean>;
     getJobById: (id: string) => Job | undefined;
     hasApplied: (jobId: string, userId: string) => boolean;
 }
@@ -199,7 +199,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         goToPage(currentPage + 1);
     };
 
-    const applyToJob = async (jobId: string) => {
+    const applyToJob = async (jobId: string, screeningAnswers?: any[]) => {
         if (!user) {
             console.error('User not logged in.');
             return false;
@@ -221,7 +221,8 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                 .insert([{
                     ...newApplication,
                     user_name: user.name,
-                    user_email: user.email
+                    user_email: user.email,
+                    screening_answers: screeningAnswers || [],
                 }])
                 .select()
                 .single();

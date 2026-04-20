@@ -15,6 +15,7 @@ import CompanySourceManager from './components/CompanySourceManager';
 import ProfilePage from './pages/ProfilePage'; // <-- Corrected path
 import CompanyDashboard from './pages/CompanyDashboard';
 import Pricing from './pages/Pricing';
+import SavedJobs from './pages/SavedJobs';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/company-dashboard" element={<CompanyDashboard />} />
                 <Route path="/pricing" element={<Pricing />} />
+                <Route path="/saved" element={<SavedJobs />} />
               </Routes>
             </div>
           </Router>
