@@ -1,0 +1,47 @@
+# HireQuadrant
+
+> HireQuadrant is a modern job board that connects candidates with employers who actually reply. Every application is screened, tracked, and acknowledged — no more black hole.
+
+HireQuadrant is built for both sides of hiring:
+- **Candidates** get AI-screened matches, saved searches with email alerts, a single dashboard for application tracking, and resume management
+- **Employers** get configurable screening questions, AI-powered candidate screening with fit scores, a talent database, and a simple applicant pipeline
+
+## Core pages
+
+- [Home / Jobs](https://hirequadrant.com/): Primary job search with filters (keyword, location, type, salary)
+- [Blog](https://hirequadrant.com/blog): Career resources covering resumes, interviews, hiring, and industry insights
+- [Pricing](https://hirequadrant.com/pricing): Subscription tiers for companies (Free, Basic, Premium, Enterprise)
+- [Register](https://hirequadrant.com/register): Sign up as a job seeker or employer (company/employer)
+- [Login](https://hirequadrant.com/login): Sign in with email/password or Google SSO
+
+## Job postings
+
+Each job listing at `/jobs/:id` includes:
+- Title, company, location, and salary range
+- Full-text description with responsibilities and requirements
+- Employment type (full-time, contract, part-time, internship)
+- Google for Jobs JSON-LD structured data (JobPosting schema)
+- Auto-detected skill and perk tags
+
+## Aggregator-friendly XML feed
+
+- [Jobs feed (XML)](https://npugrpsrgpyssupgxcxx.functions.supabase.co/jobs-feed-xml) — all active jobs in aggregator format for Indeed, Glassdoor, Jooble, Adzuna, and similar services.
+
+## Key features
+
+- AI job description generator (Anthropic Claude)
+- AI candidate screening and fit scoring
+- Screening questions (knockout & required) per job
+- Saved jobs + job alert email digests (daily/weekly)
+- Company reviews with aggregate star ratings
+- Resume search for employers (company role required)
+- Progressive Web App — installable on mobile
+
+## Contact
+
+- Site: https://hirequadrant.com
+- Support: hello@hirequadrant.com
+
+## Crawling
+
+This site welcomes major LLM crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, OAI-SearchBot, anthropic-ai, Applebot-Extended, CCBot). Administrative routes are disallowed — see /robots.txt.

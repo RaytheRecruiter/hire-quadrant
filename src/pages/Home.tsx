@@ -4,8 +4,10 @@ import { useJobs } from '../contexts/JobContext';
 import { supabase } from '../utils/supabaseClient';
 import JobList from '../components/JobList';
 import TrendingSection from '../components/TrendingSection';
+import { useSEO } from '../hooks/useSEO';
 
 const Home: React.FC = () => {
+  useSEO({ canonical: '/' });
   const { setSearchTerm, setLocationFilter } = useJobs();
   const [heroSearch, setHeroSearch] = useState('');
   const [heroLocation, setHeroLocation] = useState('');
@@ -45,35 +47,35 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50/60 pt-16 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(74,153,96,0.08),transparent_50%)] pointer-events-none" />
+      <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50/60 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 pt-16 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,53,148,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(61,107,175,0.18),transparent_60%)] pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="max-w-3xl mx-auto text-center">
-            <span className="inline-flex items-center gap-2 bg-white border border-primary-200 text-primary-700 rounded-full px-4 py-1.5 text-sm font-semibold mb-6 shadow-soft">
+            <span className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-primary-200 dark:border-slate-700 text-primary-700 dark:text-primary-300 rounded-full px-4 py-1.5 text-sm font-semibold mb-6 shadow-soft">
               <Sparkles className="h-3.5 w-3.5" />
               AI-powered job matching
             </span>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 leading-[1.05] tracking-tight text-balance">
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 dark:text-white leading-[1.05] tracking-tight text-balance">
               Jobs that actually
               <span className="block bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent pb-2">
                 reply to you.
               </span>
             </h1>
-            <p className="mt-6 text-lg md:text-xl text-secondary-600 max-w-xl mx-auto text-balance leading-relaxed">
+            <p className="mt-6 text-lg md:text-xl text-secondary-600 dark:text-slate-300 max-w-xl mx-auto text-balance leading-relaxed">
               Skip the black hole. Every application on HireQuadrant is screened, tracked, and acknowledged.
             </p>
 
             {/* Hero search */}
-            <form onSubmit={handleHeroSearch} className="mt-10 bg-white rounded-2xl shadow-card-hover border border-gray-100 p-2 max-w-3xl mx-auto">
+            <form onSubmit={handleHeroSearch} className="mt-10 bg-white dark:bg-slate-800 rounded-2xl shadow-card-hover border border-gray-100 dark:border-slate-700 p-2 max-w-3xl mx-auto">
               <div className="flex flex-col md:flex-row gap-2">
-                <div className="flex-1 flex items-center gap-2 px-4 py-2 md:border-r md:border-gray-100">
+                <div className="flex-1 flex items-center gap-2 px-4 py-2 md:border-r md:border-gray-100 dark:md:border-slate-700">
                   <Search className="h-5 w-5 text-gray-400 flex-shrink-0" />
                   <input
                     type="text"
                     value={heroSearch}
                     onChange={(e) => setHeroSearch(e.target.value)}
                     placeholder="Role, skill, or company"
-                    className="w-full py-2 focus:outline-none text-secondary-900 placeholder-gray-400"
+                    className="w-full py-2 focus:outline-none text-secondary-900 dark:text-white bg-transparent placeholder-gray-400 dark:placeholder-slate-500"
                   />
                 </div>
                 <div className="flex-1 flex items-center gap-2 px-4 py-2">
@@ -83,7 +85,7 @@ const Home: React.FC = () => {
                     value={heroLocation}
                     onChange={(e) => setHeroLocation(e.target.value)}
                     placeholder="City, state, or remote"
-                    className="w-full py-2 focus:outline-none text-secondary-900 placeholder-gray-400"
+                    className="w-full py-2 focus:outline-none text-secondary-900 dark:text-white bg-transparent placeholder-gray-400 dark:placeholder-slate-500"
                   />
                 </div>
                 <button
@@ -98,23 +100,23 @@ const Home: React.FC = () => {
 
             {/* Real stats */}
             {stats.jobs > 0 && (
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-secondary-500">
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-secondary-500 dark:text-slate-400">
                 <span>
-                  <strong className="text-secondary-900 font-display font-bold text-xl mr-1">
+                  <strong className="text-secondary-900 dark:text-white font-display font-bold text-xl mr-1">
                     {stats.jobs.toLocaleString()}
                   </strong>
                   open jobs
                 </span>
                 <span className="hidden sm:inline text-gray-300">·</span>
                 <span>
-                  <strong className="text-secondary-900 font-display font-bold text-xl mr-1">
+                  <strong className="text-secondary-900 dark:text-white font-display font-bold text-xl mr-1">
                     {stats.companies.toLocaleString()}
                   </strong>
                   companies hiring
                 </span>
                 <span className="hidden sm:inline text-gray-300">·</span>
                 <span>
-                  <strong className="text-secondary-900 font-display font-bold text-xl mr-1">
+                  <strong className="text-secondary-900 dark:text-white font-display font-bold text-xl mr-1">
                     {stats.postedThisWeek.toLocaleString()}
                   </strong>
                   posted this week

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../utils/supabaseClient';
 import { Check, Zap, Star, Crown, Building2 } from 'lucide-react';
+import { useSEO } from '../hooks/useSEO';
 
 interface PricingPlan {
   id: string;
@@ -28,7 +29,53 @@ const planHighlight: Record<string, string> = {
   enterprise: 'border-yellow-200',
 };
 
+const FAQ_ITEMS = [
+  {
+    q: 'Is HireQuadrant free for job seekers?',
+    a: 'Yes. Candidates never pay. You can browse jobs, save searches, set up email alerts, and apply to any role for free.',
+  },
+  {
+    q: 'How much does it cost for employers?',
+    a: 'Employers can start on the Free plan with 3 active job postings. Paid plans start at $29.99/month (Basic) and unlock more postings, advanced analytics, resume downloads, and featured listings. Enterprise is available for unlimited postings and dedicated support.',
+  },
+  {
+    q: 'Can I cancel or change plans anytime?',
+    a: 'Yes. You can upgrade, downgrade, or cancel your subscription at any time from your Company Dashboard.',
+  },
+  {
+    q: 'Does HireQuadrant use AI?',
+    a: 'Yes. Employers get an AI job description generator and AI candidate screening with fit scores. Candidates get similar-job recommendations and AI-assisted matching.',
+  },
+  {
+    q: 'Do you support applicant tracking system (ATS) integrations?',
+    a: 'Yes. We support Greenhouse, Lever, Workday, and iCIMS. Connect your ATS from the Admin panel to sync jobs and applicants.',
+  },
+];
+
 const Pricing: React.FC = () => {
+  useSEO({ title: 'Pricing', description: 'Simple, transparent pricing for employers. Free for job seekers forever.', canonical: '/pricing' });
+
+  // Inject FAQ JSON-LD
+  useEffect(() => {
+    const faq = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQ_ITEMS.map(item => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a },
+      })),
+    };
+    const prior = document.getElementById('pricing-faq-schema');
+    if (prior) prior.remove();
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'pricing-faq-schema';
+    script.text = JSON.stringify(faq);
+    document.head.appendChild(script);
+    return () => { document.getElementById('pricing-faq-schema')?.remove(); };
+  }, []);
+
   const [plans, setPlans] = useState<PricingPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [isYearly, setIsYearly] = useState(false);
@@ -197,13 +244,30 @@ const Pricing: React.FC = () => {
         })}
       </div>
 
-      {/* FAQ / Contact */}
+      {/* FAQ section — matches the FAQPage JSON-LD injected above */}
+      <div className="mt-20 max-w-3xl mx-auto">
+        <h2 className="font-display text-3xl font-bold text-secondary-900 dark:text-white text-center mb-10">
+          Frequently asked questions
+        </h2>
+        <div className="space-y-3">
+          {FAQ_ITEMS.map((item, i) => (
+            <details key={i} className="group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5">
+              <summary className="font-semibold text-secondary-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
+                {item.q}
+                <span className="text-primary-500 transition-transform group-open:rotate-45 text-2xl leading-none">+</span>
+              </summary>
+              <p className="mt-3 text-secondary-600 dark:text-slate-300 leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
       <div className="mt-16 text-center">
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-slate-400">
           Need a custom plan or have questions?{' '}
           <a
             href="mailto:sales@hirequadrant.com"
-            className="text-green-600 font-medium hover:text-green-700"
+            className="text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300"
           >
             Contact our sales team
           </a>

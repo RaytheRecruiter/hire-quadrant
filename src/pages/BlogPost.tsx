@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Clock, Loader2, BookOpen } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
+import { useSEO } from '../hooks/useSEO';
 import { format } from 'date-fns';
 
 interface Post {
@@ -42,6 +43,13 @@ const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useSEO({
+    title: post?.title,
+    description: post?.excerpt,
+    canonical: slug ? `/blog/${slug}` : undefined,
+    ogImage: post?.cover_image_url || undefined,
+  });
 
   useEffect(() => {
     const fetchPost = async () => {

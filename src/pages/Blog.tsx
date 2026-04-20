@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Clock, Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
+import { useSEO } from '../hooks/useSEO';
 import { formatDistanceToNow } from 'date-fns';
 
 interface Post {
@@ -24,6 +25,11 @@ const categoryColors: Record<string, string> = {
 };
 
 const Blog: React.FC = () => {
+  useSEO({
+    title: 'Career Resources',
+    description: 'Expert advice on resumes, interviews, and job hunting. Read our latest articles on career growth, hiring, and the tech industry.',
+    canonical: '/blog',
+  });
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<string>('all');
