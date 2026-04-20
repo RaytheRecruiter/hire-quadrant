@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { CompanyProvider } from './contexts/CompanyContext';
 import { JobProvider } from './contexts/JobContext';
 import { useGoogleAnalytics } from './hooks/useGoogleAnalytics';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import Header from './components/Header';
 import ProfileNudge from './components/ProfileNudge';
 import Home from './pages/Home';
@@ -42,12 +43,13 @@ function App() {
       <AuthProvider>
         <CompanyProvider>
           <JobProvider>
-            <Router>
-              <PageTracker>
-                <div className="min-h-screen bg-gray-50">
-                  <Header />
-                  <ProfileNudge />
-                  <Routes>
+            <ErrorBoundary>
+              <Router>
+                <PageTracker>
+                  <div className="min-h-screen bg-gray-50">
+                    <Header />
+                    <ProfileNudge />
+                    <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/jobs/:id" element={<JobDetails />} />
                 <Route path="/companies/:id" element={<CompanyProfile />} />
@@ -70,11 +72,12 @@ function App() {
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="*" element={<NotFound />} />
-                  </Routes>
-                  <Footer />
-                </div>
-              </PageTracker>
-            </Router>
+                    </Routes>
+                    <Footer />
+                  </div>
+                </PageTracker>
+              </Router>
+            </ErrorBoundary>
           </JobProvider>
         </CompanyProvider>
       </AuthProvider>
