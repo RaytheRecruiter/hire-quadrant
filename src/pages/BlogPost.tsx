@@ -88,7 +88,14 @@ const BlogPost: React.FC = () => {
         </Link>
 
         {post.cover_image_url && (
-          <img src={post.cover_image_url} alt={post.title} className="w-full h-64 md:h-96 object-cover rounded-3xl shadow-xl mb-8" />
+          <img
+            src={post.cover_image_url}
+            alt={post.title}
+            className="w-full h-64 md:h-96 object-cover rounded-3xl shadow-xl mb-8"
+            width={1200}
+            height={675}
+            fetchPriority="high"
+          />
         )}
 
         <article className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 md:p-12">

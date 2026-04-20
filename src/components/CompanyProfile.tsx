@@ -61,10 +61,13 @@ const CompanyProfile: React.FC = () => {
               <div className="absolute -top-16 left-8">
                 <div className="w-32 h-32 bg-white rounded-2xl shadow-lg border-4 border-white overflow-hidden">
                   {company.logo ? (
-                    <img 
-                      src={company.logo} 
+                    <img
+                      src={company.logo}
                       alt={`${company.displayName} logo`}
                       className="w-full h-full object-cover"
+                      width={128}
+                      height={128}
+                      fetchPriority="high"
                     />
                   ) : (
                     <div className="w-full h-full bg-primary-100 flex items-center justify-center">

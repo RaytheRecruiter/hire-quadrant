@@ -32,6 +32,9 @@ const CompanyLogo: React.FC<Props> = ({ company, logoUrl, size = 'md', className
           className="w-full h-full object-contain p-1"
           onError={() => setFailed(true)}
           loading="lazy"
+          width={96}
+          height={96}
+          fetchPriority="low"
         />
       </div>
     );

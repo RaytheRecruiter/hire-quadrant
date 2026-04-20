@@ -91,7 +91,14 @@ const Blog: React.FC = () => {
                 className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl border border-white/20 overflow-hidden transition-all duration-300 hover:scale-[1.02]"
               >
                 {p.cover_image_url ? (
-                  <img src={p.cover_image_url} alt={p.title} className="w-full h-48 object-cover" />
+                  <img
+                    src={p.cover_image_url}
+                    alt={p.title}
+                    className="w-full h-48 object-cover"
+                    width={400}
+                    height={225}
+                    fetchPriority="low"
+                  />
                 ) : (
                   <div className="w-full h-48 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
                     <BookOpen className="h-16 w-16 text-primary-500/50" />
