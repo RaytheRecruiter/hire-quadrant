@@ -56,13 +56,13 @@ const Home: React.FC = () => {
               AI-powered job matching
             </span>
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold text-secondary-900 dark:text-white leading-[1.02] tracking-tight text-balance">
-              We work for you,
+              Work with employers
               <span className="block bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent pb-2">
-                not the algorithm.
+                who show up.
               </span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-secondary-600 dark:text-slate-300 max-w-xl mx-auto text-balance leading-relaxed">
-              Skip the black hole. Every application is screened, tracked, and acknowledged.
+              See who's interested. Get real feedback. Know where you stand at every step.
             </p>
 
             {/* Hero search */}
