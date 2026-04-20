@@ -35,6 +35,63 @@ const Home: React.FC = () => {
     fetchStats();
   }, []);
 
+  useEffect(() => {
+    const organization = {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'HireQuadrant',
+      url: 'https://hirequadrant.com',
+      description: 'Job board where every application is screened, tracked, and acknowledged. We work for you, not the algorithm.',
+      logo: 'https://hirequadrant.com/logo.png',
+      sameAs: [
+        'https://www.linkedin.com/company/hirequadrant',
+        'https://twitter.com/hirequadrant',
+      ],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'Customer Service',
+        email: 'support@hirequadrant.com',
+      },
+    };
+
+    const website = {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'HireQuadrant',
+      url: 'https://hirequadrant.com',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: 'https://hirequadrant.com/?q={search_term_string}',
+        },
+        query_input: 'required name=search_term_string',
+      },
+    };
+
+    const prior = document.getElementById('organization-schema');
+    if (prior) prior.remove();
+    const priorWeb = document.getElementById('website-schema');
+    if (priorWeb) priorWeb.remove();
+
+    const orgScript = document.createElement('script');
+    orgScript.type = 'application/ld+json';
+    orgScript.id = 'organization-schema';
+    orgScript.text = JSON.stringify(organization);
+    document.head.appendChild(orgScript);
+
+    const webScript = document.createElement('script');
+    webScript.type = 'application/ld+json';
+    webScript.id = 'website-schema';
+    webScript.text = JSON.stringify(website);
+    document.head.appendChild(webScript);
+
+    return () => {
+      document.getElementById('organization-schema')?.remove();
+      document.getElementById('website-schema')?.remove();
+    };
+  }, []);
+
   const handleHeroSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setSearchTerm(heroSearch);

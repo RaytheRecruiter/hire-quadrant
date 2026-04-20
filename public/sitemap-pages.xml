@@ -5,6 +5,12 @@
   <url><loc>https://hirequadrant.com/blog/how-to-write-a-great-resume</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://hirequadrant.com/blog/ace-your-next-interview</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://hirequadrant.com/blog/what-hiring-managers-look-for</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://hirequadrant.com/companies</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://hirequadrant.com/advanced-search</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://hirequadrant.com/about</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://hirequadrant.com/contact</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://hirequadrant.com/privacy</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://hirequadrant.com/terms</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
   <url><loc>https://hirequadrant.com/pricing</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://hirequadrant.com/login</loc><priority>0.5</priority><changefreq>yearly</changefreq></url>
   <url><loc>https://hirequadrant.com/register</loc><priority>0.6</priority><changefreq>yearly</changefreq></url>

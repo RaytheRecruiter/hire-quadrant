@@ -48,4 +48,3 @@ User-agent: LinkedInBot
 Allow: /
 
 Sitemap: https://hirequadrant.com/sitemap.xml
-Sitemap: https://hirequadrant.com/sitemap-pages.xml

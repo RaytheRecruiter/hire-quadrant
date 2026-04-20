@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import ScreeningQuestionsModal from '../components/ScreeningQuestionsModal';
 import SimilarJobs from '../components/SimilarJobs';
 import CompanyLogo from '../components/CompanyLogo';
+import ShareButtons from '../components/ShareButtons';
 import { extractTags } from '../utils/skillExtractor';
 import { useSEO } from '../hooks/useSEO';
 import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
@@ -352,13 +353,7 @@ const JobDetails: React.FC = () => {
                                     >
                                         {saved ? <BookmarkCheck className="h-4.5 w-4.5 fill-primary-500" /> : <Bookmark className="h-4.5 w-4.5" />}
                                     </button>
-                                    <button
-                                        onClick={handleShare}
-                                        title="Share"
-                                        className="h-9 w-9 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700"
-                                    >
-                                        <Share2 className="h-4.5 w-4.5" />
-                                    </button>
+                                    <ShareButtons title={job.title} url={window.location.href} />
                                 </div>
                             </div>
                         </div>
