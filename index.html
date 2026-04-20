@@ -5,7 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#003594" />
+    <meta name="theme-color" content="#003594" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#041E42" media="(prefers-color-scheme: dark)" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -14,6 +15,7 @@
 
     <title>HireQuadrant — Jobs that actually reply to you</title>
     <meta name="description" content="Skip the black hole. Find your next career opportunity on HireQuadrant — every application is screened, tracked, and acknowledged." />
+    <link rel="canonical" href="https://hirequadrant.com/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -28,6 +30,49 @@
     <meta name="twitter:title" content="HireQuadrant — Jobs that actually reply to you" />
     <meta name="twitter:description" content="Skip the black hole. Every application is screened, tracked, and acknowledged." />
     <meta name="twitter:image" content="https://hirequadrant.com/og-image.svg" />
+
+    <!-- Dark-mode FOUC prevention — runs before React mounts -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = saved === 'dark' || (!saved && prefersDark);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (_) {}
+      })();
+    </script>
+
+    <!-- Organization JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "HireQuadrant",
+      "url": "https://hirequadrant.com",
+      "logo": "https://hirequadrant.com/favicon.svg",
+      "description": "HireQuadrant is a modern job board that connects candidates with employers who actually reply. Every application is screened, tracked, and acknowledged.",
+      "sameAs": [
+        "https://www.linkedin.com/company/hirequadrant",
+        "https://twitter.com/hirequadrant"
+      ]
+    }
+    </script>
+
+    <!-- WebSite + SearchAction for sitelinks search box -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "HireQuadrant",
+      "url": "https://hirequadrant.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://hirequadrant.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

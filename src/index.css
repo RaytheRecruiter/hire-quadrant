@@ -8,6 +8,10 @@
     font-feature-settings: 'cv11', 'ss01', 'ss03';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
   }
   h1, h2, h3, .font-display {
     font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
@@ -17,22 +21,17 @@
     background: #fafafa;
     color: #25282c;
   }
+  .dark body {
+    background: #0b1220;
+    color: #e2e8f0;
+  }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
+  .text-balance { text-wrap: balance; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0); }
 }
 
 .skeleton {
@@ -40,6 +39,10 @@
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
   border-radius: 8px;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%);
+  background-size: 200% 100%;
 }
 @keyframes skeleton-shimmer {
   0% { background-position: 200% 0; }

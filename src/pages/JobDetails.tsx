@@ -12,6 +12,7 @@ import ScreeningQuestionsModal from '../components/ScreeningQuestionsModal';
 import SimilarJobs from '../components/SimilarJobs';
 import CompanyLogo from '../components/CompanyLogo';
 import { extractTags } from '../utils/skillExtractor';
+import { useSEO } from '../hooks/useSEO';
 import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
 
 const viewedJobIds = new Set<string>();
@@ -26,7 +27,7 @@ const formatJobDescription = (description: string) => {
         const flushParagraph = () => {
             if (currentParagraph.length > 0) {
                 elements.push(
-                    <p key={`p-${elements.length}`} className="text-secondary-700 mb-3 leading-relaxed">
+                    <p key={`p-${elements.length}`} className="text-secondary-700 dark:text-slate-300 mb-3 leading-relaxed">
                         {currentParagraph.join(' ')}
                     </p>
                 );
@@ -43,14 +44,14 @@ const formatJobDescription = (description: string) => {
             if (isHeader) {
                 flushParagraph();
                 elements.push(
-                    <h3 key={`h-${elements.length}`} className="font-display font-bold text-secondary-900 mt-6 mb-2 text-lg">
+                    <h3 key={`h-${elements.length}`} className="font-display font-bold text-secondary-900 dark:text-white mt-6 mb-2 text-lg">
                         {trimmedLine.replace(/:$/, '')}
                     </h3>
                 );
             } else if (isBullet) {
                 flushParagraph();
                 elements.push(
-                    <li key={`b-${elements.length}`} className="text-secondary-700 ml-4 mb-1.5 list-disc list-outside">
+                    <li key={`b-${elements.length}`} className="text-secondary-700 dark:text-slate-300 ml-4 mb-1.5 list-disc list-outside">
                         {trimmedLine.replace(/^[\u2022\u2023\u25E6\u2043\u2219•\-\*]\s*/, '').replace(/^\d+[\.\)]\s*/, '')}
                     </li>
                 );
@@ -125,6 +126,13 @@ const JobDetails: React.FC = () => {
         if (user && job) setApplied(hasApplied(job.id, user.id));
     }, [job, user, hasApplied]);
 
+    // Per-page SEO
+    useSEO({
+        title: job ? `${job.title} at ${job.company}` : undefined,
+        description: job ? `${job.title} at ${job.company}${job.location ? ' in ' + job.location : ''}. ${job.description?.slice(0, 140) || ''}` : undefined,
+        canonical: job ? `/jobs/${job.id}` : undefined,
+    });
+
     useEffect(() => {
         if (!job || viewedJobIds.has(job.id)) return;
         viewedJobIds.add(job.id);
@@ -136,18 +144,38 @@ const JobDetails: React.FC = () => {
     useEffect(() => {
         if (!job) return;
         const schema = buildJobSchema(job, window.location.href);
+        const breadcrumb = {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Jobs', item: 'https://hirequadrant.com/' },
+                { '@type': 'ListItem', position: 2, name: job.company || 'Company', item: companyProfile ? `https://hirequadrant.com/companies/${companyProfile.id}` : 'https://hirequadrant.com/' },
+                { '@type': 'ListItem', position: 3, name: job.title, item: window.location.href },
+            ],
+        };
+
         const prior = document.getElementById('job-posting-schema');
         if (prior) prior.remove();
+        const priorBc = document.getElementById('job-breadcrumb-schema');
+        if (priorBc) priorBc.remove();
+
         const script = document.createElement('script');
         script.type = 'application/ld+json';
         script.id = 'job-posting-schema';
         script.text = JSON.stringify(schema);
         document.head.appendChild(script);
+
+        const bcScript = document.createElement('script');
+        bcScript.type = 'application/ld+json';
+        bcScript.id = 'job-breadcrumb-schema';
+        bcScript.text = JSON.stringify(breadcrumb);
+        document.head.appendChild(bcScript);
+
         return () => {
-            const el = document.getElementById('job-posting-schema');
-            if (el) el.remove();
+            document.getElementById('job-posting-schema')?.remove();
+            document.getElementById('job-breadcrumb-schema')?.remove();
         };
-    }, [job]);
+    }, [job, companyProfile]);
 
     if (!job) {
         return (
@@ -226,7 +254,7 @@ const JobDetails: React.FC = () => {
         : job.salary;
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-24 md:pb-12">
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-950 pb-24 md:pb-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
                 <button
                     onClick={() => navigate(-1)}
@@ -251,16 +279,16 @@ const JobDetails: React.FC = () => {
                     </div>
                 )}
 
-                <div className="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-gray-100 dark:border-slate-700 overflow-hidden">
                     {/* Header */}
-                    <div className="p-6 md:p-10 border-b border-gray-100">
+                    <div className="p-6 md:p-10 border-b border-gray-100 dark:border-slate-700">
                         <div className="flex items-start gap-4">
                             <CompanyLogo company={job.company} logoUrl={(companyProfile as any)?.logo_url} size="lg" />
                             <div className="flex-1 min-w-0">
-                                <h1 className="font-display text-2xl md:text-3xl font-bold text-secondary-900 leading-tight text-balance">
+                                <h1 className="font-display text-2xl md:text-3xl font-bold text-secondary-900 dark:text-white leading-tight text-balance">
                                     {job.title}
                                 </h1>
-                                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-secondary-600">
+                                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-secondary-600 dark:text-slate-400">
                                     {companyProfile ? (
                                         <Link to={`/companies/${companyProfile.id}`} className="font-semibold text-primary-700 hover:underline">
                                             {job.company}
@@ -346,7 +374,7 @@ const JobDetails: React.FC = () => {
             </div>
 
             {/* Sticky mobile apply bar */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 pb-safe shadow-card-hover z-30">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 p-4 pb-safe shadow-card-hover z-30">
                 <div className="flex items-center gap-2 max-w-4xl mx-auto">
                     <button
                         onClick={handleSave}

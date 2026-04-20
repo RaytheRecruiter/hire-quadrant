@@ -6,6 +6,7 @@ import {
   ChevronDown, Menu, X, Settings, Briefcase, Sparkles
 } from 'lucide-react';
 import { getInitials, colorFromString } from '../utils/companyLogo';
+import DarkModeToggle from './DarkModeToggle';
 
 const Header: React.FC = () => {
   const { user, logout, isAuthenticated, isAdmin, isCompany } = useAuth();
@@ -42,7 +43,7 @@ const Header: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
   const navClass = (path: string) =>
     `px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-      isActive(path) ? 'text-primary-700 bg-primary-50' : 'text-secondary-700 hover:text-primary-600 hover:bg-gray-50'
+      isActive(path) ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30' : 'text-secondary-700 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-slate-800'
     }`;
 
   const mainNav = (
@@ -57,7 +58,7 @@ const Header: React.FC = () => {
   const avatarColor = user ? colorFromString(user.name || user.email) : 'bg-gray-100 text-gray-500';
 
   return (
-    <header className="bg-white/95 backdrop-blur-md border-b border-gray-100 sticky top-0 z-40">
+    <header className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -65,7 +66,7 @@ const Header: React.FC = () => {
             <div className="p-1.5 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg shadow-soft">
               <Grid3X3 className="h-5 w-5 text-white" />
             </div>
-            <span className="font-display font-bold text-xl text-secondary-900 hidden sm:inline">Hire Quadrant</span>
+            <span className="font-display font-bold text-xl text-secondary-900 dark:text-white hidden sm:inline">Hire Quadrant</span>
           </Link>
 
           {/* Desktop nav */}
@@ -84,17 +85,17 @@ const Header: React.FC = () => {
                   <ChevronDown className="h-3.5 w-3.5" />
                 </button>
                 {adminMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-card-hover border border-gray-100 py-1 animate-fade-in">
-                    <Link to="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 hover:bg-gray-50" onClick={() => setAdminMenuOpen(false)}>
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-card-hover border border-gray-100 dark:border-slate-700 py-1 animate-fade-in">
+                    <Link to="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
                       <BarChart3 className="h-4 w-4 text-gray-400" /> Admin Dashboard
                     </Link>
-                    <Link to="/talent-search" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 hover:bg-gray-50" onClick={() => setAdminMenuOpen(false)}>
+                    <Link to="/talent-search" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
                       <Search className="h-4 w-4 text-gray-400" /> Talent Search
                     </Link>
-                    <Link to="/xml-feeder" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 hover:bg-gray-50" onClick={() => setAdminMenuOpen(false)}>
+                    <Link to="/xml-feeder" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
                       <FileText className="h-4 w-4 text-gray-400" /> XML Feeder
                     </Link>
-                    <Link to="/company-sources" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 hover:bg-gray-50" onClick={() => setAdminMenuOpen(false)}>
+                    <Link to="/company-sources" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
                       <Building2 className="h-4 w-4 text-gray-400" /> Company Sources
                     </Link>
                   </div>
@@ -105,6 +106,7 @@ const Header: React.FC = () => {
 
           {/* Right: Auth actions */}
           <div className="flex items-center gap-2">
+            <DarkModeToggle />
             {isAuthenticated ? (
               <div className="flex items-center gap-1">
                 {!isAdmin && !isCompany && (
@@ -126,26 +128,26 @@ const Header: React.FC = () => {
                     {initials}
                   </button>
                   {userMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-card-hover border border-gray-100 py-1 animate-fade-in">
+                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-card-hover border border-gray-100 dark:border-slate-700 py-1 animate-fade-in">
                       <div className="px-4 py-2 border-b border-gray-100">
                         <div className="text-sm font-semibold text-secondary-900 truncate">{user?.name}</div>
                         <div className="text-xs text-gray-500 truncate">{user?.email}</div>
                       </div>
-                      <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 hover:bg-gray-50" onClick={() => setUserMenuOpen(false)}>
+                      <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                         <User className="h-4 w-4 text-gray-400" /> Profile
                       </Link>
                       {!isAdmin && !isCompany && (
                         <>
-                          <Link to="/saved" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 hover:bg-gray-50" onClick={() => setUserMenuOpen(false)}>
+                          <Link to="/saved" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                             <Bookmark className="h-4 w-4 text-gray-400" /> Saved Jobs
                           </Link>
-                          <Link to="/alerts" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 hover:bg-gray-50" onClick={() => setUserMenuOpen(false)}>
+                          <Link to="/alerts" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                             <Bell className="h-4 w-4 text-gray-400" /> Job Alerts
                           </Link>
                         </>
                       )}
                       {isCompany && (
-                        <Link to="/company-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 hover:bg-gray-50" onClick={() => setUserMenuOpen(false)}>
+                        <Link to="/company-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                           <Briefcase className="h-4 w-4 text-gray-400" /> Company Dashboard
                         </Link>
                       )}
@@ -183,7 +185,7 @@ const Header: React.FC = () => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-gray-100 bg-white animate-fade-in">
+        <div className="lg:hidden border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 animate-fade-in">
           <div className="max-w-7xl mx-auto px-4 py-4 space-y-1">
             <Link to="/" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Jobs</Link>
             <Link to="/blog" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Blog</Link>

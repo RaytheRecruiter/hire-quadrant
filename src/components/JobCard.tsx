@@ -77,7 +77,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     return (
         <Link
             to={`/jobs/${job.id}`}
-            className="group block bg-white rounded-2xl shadow-card hover:shadow-card-hover border border-gray-100 hover:border-primary-200 transition-all duration-200 p-5"
+            className="group block bg-white dark:bg-slate-800 rounded-2xl shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all duration-200 p-5"
         >
             <div className="flex items-start gap-4">
                 <CompanyLogo company={job.company} logoUrl={(job as any).company_logo_url} size="md" />
@@ -85,10 +85,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                            <h3 className="font-display text-lg font-bold text-secondary-900 group-hover:text-primary-600 transition-colors line-clamp-1">
+                            <h3 className="font-display text-lg font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors line-clamp-1">
                                 {job.title}
                             </h3>
-                            <div className="flex items-center gap-1.5 text-sm text-gray-600 mt-0.5">
+                            <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-slate-400 mt-0.5">
                                 <span className="font-medium truncate">{job.company}</span>
                                 {job.location && (
                                     <>
@@ -108,8 +108,8 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                             aria-label={saved ? 'Remove from saved' : 'Save job'}
                             className={`h-9 w-9 flex items-center justify-center rounded-lg flex-shrink-0 transition-all ${
                                 saved
-                                    ? 'bg-primary-50 text-primary-600'
-                                    : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
+                                    ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600 dark:text-primary-300'
+                                    : 'text-gray-400 dark:text-slate-500 hover:bg-gray-100 dark:hover:bg-slate-700 hover:text-gray-700 dark:hover:text-slate-200'
                             }`}
                         >
                             {saved ? (
@@ -122,25 +122,25 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
                     {/* Tags row */}
                     <div className="flex flex-wrap items-center gap-1.5 mt-3">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300">
                             {typeLabel}
                         </span>
                         {salaryDisplay && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">
                                 <DollarSign className="h-3 w-3" />
                                 {salaryDisplay}
                             </span>
                         )}
                         {tags.map(t => (
-                            <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                            <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300">
                                 {t}
                             </span>
                         ))}
                     </div>
 
                     {/* Bottom row */}
-                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
-                        <span className="flex items-center gap-1 text-xs text-gray-400">
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-50 dark:border-slate-700">
+                        <span className="flex items-center gap-1 text-xs text-gray-400 dark:text-slate-500">
                             <Clock className="h-3 w-3" />
                             Posted {formatDistanceToNow(new Date(job.postedDate), { addSuffix: true })}
                         </span>
