@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Search, MapPin, Sparkles, ArrowRight } from 'lucide-react';
 import { useJobs } from '../contexts/JobContext';
 import { supabase } from '../utils/supabaseClient';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import JobList from '../components/JobList';
 import TrendingSection from '../components/TrendingSection';
 import NewsletterSignup from '../components/NewsletterSignup';
@@ -330,6 +330,103 @@ const Home: React.FC = () => {
             ))}
           </div>
         </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Preview */}
+      <section className="py-20 bg-white dark:bg-slate-950">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
+              Common Questions
+            </h2>
+            <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Get answers to questions about how HireQuadrant works
+            </p>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-4">
+            {[
+              { q: 'How do I apply for jobs?', a: 'Search for jobs, click "Apply", and submit your application. We keep track of your status for you.' },
+              { q: 'Is my data safe?', a: 'Yes. We use SSL encryption, secure databases, and never share your data without permission.' },
+              { q: 'How do I track my applications?', a: 'Go to your profile to see all applications with real-time status updates.' },
+              { q: 'Can I receive job recommendations?', a: 'Yes! Subscribe to our newsletter for weekly jobs matched to your skills.' },
+            ].map((item, idx) => (
+              <div key={idx} className="bg-gray-50 dark:bg-slate-800 rounded-xl p-6 border border-gray-100 dark:border-slate-700">
+                <h3 className="font-semibold text-secondary-900 dark:text-white mb-2">{item.q}</h3>
+                <p className="text-secondary-600 dark:text-slate-400">{item.a}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              to="/support"
+              className="inline-block bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+            >
+              View Full FAQ & Support
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust & Security */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
+              Your Privacy & Security Matter
+            </h2>
+            <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
+              We're committed to protecting your information with industry-leading security
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
+              <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">🔒</span>
+              </div>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Encrypted Data</h3>
+              <p className="text-secondary-600 dark:text-slate-400 text-sm">
+                All data transmitted over HTTPS with end-to-end encryption
+              </p>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
+              <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">✓</span>
+              </div>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Privacy First</h3>
+              <p className="text-secondary-600 dark:text-slate-400 text-sm">
+                We never sell your data. Full control over your privacy settings.
+              </p>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
+              <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">⚖️</span>
+              </div>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Compliant</h3>
+              <p className="text-secondary-600 dark:text-slate-400 text-sm">
+                GDPR, CCPA, and all data protection regulations complied
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm">
+            <Link to="/privacy" className="text-primary-600 hover:text-primary-800 font-semibold">
+              Privacy Policy
+            </Link>
+            <span className="text-gray-300">•</span>
+            <Link to="/terms" className="text-primary-600 hover:text-primary-800 font-semibold">
+              Terms of Service
+            </Link>
+            <span className="text-gray-300">•</span>
+            <Link to="/support" className="text-primary-600 hover:text-primary-800 font-semibold">
+              Security & Support
+            </Link>
           </div>
         </div>
       </section>
