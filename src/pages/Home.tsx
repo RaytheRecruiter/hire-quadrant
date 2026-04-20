@@ -5,6 +5,7 @@ import { supabase } from '../utils/supabaseClient';
 import { useSearchParams } from 'react-router-dom';
 import JobList from '../components/JobList';
 import TrendingSection from '../components/TrendingSection';
+import NewsletterSignup from '../components/NewsletterSignup';
 import { useSEO } from '../hooks/useSEO';
 
 const Home: React.FC = () => {
@@ -148,7 +149,7 @@ const Home: React.FC = () => {
               </span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-secondary-600 dark:text-slate-300 max-w-xl mx-auto text-balance leading-relaxed">
-              See who's interested. Get real feedback. Know where you stand at every step.
+              Transparent screening. Real feedback. Decisions in days, not months. Your career deserves better than the algorithm.
             </p>
 
             {/* Hero search */}
@@ -330,6 +331,19 @@ const Home: React.FC = () => {
           </div>
         </div>
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-16 bg-gradient-to-r from-primary-50 to-primary-50/50 dark:from-primary-900/20 dark:to-slate-900/20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-secondary-900 dark:text-white mb-4">
+            Stay ahead in your job search
+          </h2>
+          <p className="text-lg text-secondary-600 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
+            Get weekly job recommendations and career tips delivered to your inbox.
+          </p>
+          <NewsletterSignup variant="card" title="" description="" />
         </div>
       </section>
 

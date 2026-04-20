@@ -13,6 +13,8 @@ import JobDetails from './pages/JobDetails';
 import CompanyProfile from './components/CompanyProfile';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AuthCallback from './pages/AuthCallback';
+import PasswordReset from './pages/PasswordReset';
 import Admin from './pages/Admin';
 import XMLFeederAdmin from './components/XMLFeederAdmin';
 import CompanySourceManager from './components/CompanySourceManager';
@@ -57,6 +59,8 @@ function App() {
                 <Route path="/companies/:id" element={<CompanyProfile />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
+                <Route path="/reset-password" element={<PasswordReset />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Clock, Loader2, BookOpen } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useSEO } from '../hooks/useSEO';
+import ShareButtons from '../components/ShareButtons';
 import { format } from 'date-fns';
 
 interface Post {
@@ -112,7 +113,11 @@ const BlogPost: React.FC = () => {
           </div>
           <h1 className="text-4xl font-bold text-secondary-900 mb-6 leading-tight">{post.title}</h1>
           {post.excerpt && <p className="text-xl text-gray-600 mb-8 leading-relaxed">{post.excerpt}</p>}
-          <div className="prose max-w-none">{renderBody(post.body)}</div>
+          <div className="prose max-w-none mb-8">{renderBody(post.body)}</div>
+          <div className="border-t border-gray-200 pt-8">
+            <p className="text-sm text-gray-600 mb-4">Share this article:</p>
+            <ShareButtons title={post.title} url={window.location.href} />
+          </div>
         </article>
       </div>
     </div>
