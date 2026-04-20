@@ -62,7 +62,7 @@ const Home: React.FC = () => {
               </span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-secondary-600 dark:text-slate-300 max-w-xl mx-auto text-balance leading-relaxed">
-              Skip the black hole. Every application on HireQuadrant is screened, tracked, and acknowledged.
+              Skip the black hole. Every application is screened, tracked, and acknowledged.
             </p>
 
             {/* Hero search */}
