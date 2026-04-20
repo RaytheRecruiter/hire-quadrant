@@ -56,9 +56,9 @@ const Home: React.FC = () => {
               AI-powered job matching
             </span>
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold text-secondary-900 dark:text-white leading-[1.02] tracking-tight text-balance">
-              Work with employers
+              We work for you,
               <span className="block bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent pb-2">
-                who show up.
+                not the algorithm.
               </span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-secondary-600 dark:text-slate-300 max-w-xl mx-auto text-balance leading-relaxed">
