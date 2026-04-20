@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f0f9f2"/>
+      <stop offset="0%" stop-color="#e8edf5"/>
       <stop offset="100%" stop-color="#ffffff"/>
     </linearGradient>
     <linearGradient id="logo" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#6bb382"/>
-      <stop offset="100%" stop-color="#3a7a4a"/>
+      <stop offset="0%" stop-color="#003594"/>
+      <stop offset="100%" stop-color="#041E42"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#4a9960"/>
-      <stop offset="100%" stop-color="#10b981"/>
+      <stop offset="0%" stop-color="#003594"/>
+      <stop offset="100%" stop-color="#3d6baf"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
@@ -18,36 +18,36 @@
   <!-- Logo block -->
   <g transform="translate(80,90)">
     <rect x="0" y="0" width="80" height="80" rx="18" fill="url(#logo)"/>
-    <g fill="white">
-      <rect x="16" y="16" width="16" height="16" rx="2"/>
-      <rect x="36" y="16" width="28" height="16" rx="2" opacity="0.75"/>
-      <rect x="16" y="36" width="28" height="28" rx="2" opacity="0.75"/>
-      <rect x="48" y="36" width="16" height="28" rx="2"/>
+    <g>
+      <rect x="16" y="16" width="16" height="16" rx="2" fill="white"/>
+      <rect x="36" y="16" width="28" height="16" rx="2" fill="#b0b7bc" opacity="0.85"/>
+      <rect x="16" y="36" width="28" height="28" rx="2" fill="#b0b7bc" opacity="0.85"/>
+      <rect x="48" y="36" width="16" height="28" rx="2" fill="white"/>
     </g>
-    <text x="110" y="52" font-family="Inter,system-ui,sans-serif" font-size="36" font-weight="700" fill="#1a3a2a">HireQuadrant</text>
+    <text x="110" y="52" font-family="Inter,system-ui,sans-serif" font-size="36" font-weight="700" fill="#041E42">HireQuadrant</text>
   </g>
 
   <!-- Headline -->
-  <text x="80" y="310" font-family="Space Grotesk, Inter, sans-serif" font-size="92" font-weight="700" fill="#1a3a2a" letter-spacing="-3">
+  <text x="80" y="310" font-family="Space Grotesk, Inter, sans-serif" font-size="92" font-weight="700" fill="#041E42" letter-spacing="-3">
     Jobs that actually
   </text>
   <text x="80" y="420" font-family="Space Grotesk, Inter, sans-serif" font-size="92" font-weight="700" fill="url(#accent)" letter-spacing="-3">
     reply to you.
   </text>
 
-  <text x="80" y="490" font-family="Inter, system-ui, sans-serif" font-size="28" fill="#5a7474">
+  <text x="80" y="490" font-family="Inter, system-ui, sans-serif" font-size="28" fill="#555c62">
     Skip the black hole. Every application is screened, tracked, and acknowledged.
   </text>
 
   <!-- Decorative card preview bottom right -->
   <g transform="translate(780,470)">
-    <rect x="0" y="0" width="340" height="110" rx="16" fill="white" stroke="#dcf2e1" stroke-width="2"/>
+    <rect x="0" y="0" width="340" height="110" rx="16" fill="white" stroke="#cfdaeb" stroke-width="2"/>
     <rect x="20" y="20" width="60" height="60" rx="12" fill="url(#logo)"/>
-    <text x="96" y="46" font-family="Inter,sans-serif" font-size="18" font-weight="700" fill="#1a3a2a">Senior Engineer</text>
-    <text x="96" y="68" font-family="Inter,sans-serif" font-size="14" fill="#5a7474">Acme Co · Remote</text>
+    <text x="96" y="46" font-family="Inter,sans-serif" font-size="18" font-weight="700" fill="#041E42">Senior Engineer</text>
+    <text x="96" y="68" font-family="Inter,sans-serif" font-size="14" fill="#6b737a">Acme Co · Remote</text>
     <g transform="translate(96,80)">
-      <rect x="0" y="0" width="72" height="18" rx="9" fill="#f0f9f2"/>
-      <text x="8" y="13" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#3a7a4a">$120k–$160k</text>
+      <rect x="0" y="0" width="72" height="18" rx="9" fill="#e8edf5"/>
+      <text x="8" y="13" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#003594">$120k–$160k</text>
     </g>
   </g>
 </svg>

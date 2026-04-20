@@ -55,7 +55,7 @@ const Home: React.FC = () => {
             </span>
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 leading-[1.05] tracking-tight text-balance">
               Jobs that actually
-              <span className="block bg-gradient-to-r from-primary-500 to-emerald-500 bg-clip-text text-transparent pb-2">
+              <span className="block bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent pb-2">
                 reply to you.
               </span>
             </h1>
