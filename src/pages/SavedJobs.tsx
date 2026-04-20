@@ -6,6 +6,7 @@ import { useSavedJobs } from '../hooks/useSavedJobs';
 import { supabase } from '../utils/supabaseClient';
 import { Job } from '../contexts/JobContext';
 import JobCard from '../components/JobCard';
+import RecommendedJobs from '../components/RecommendedJobs';
 
 const SavedJobs: React.FC = () => {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -82,10 +83,16 @@ const SavedJobs: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="space-y-6">
-            {jobs.map(job => (
-              <JobCard key={job.id} job={job} />
-            ))}
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-xl font-bold text-secondary-900 dark:text-white mb-4">Your Saved Jobs</h2>
+              <div className="space-y-3">
+                {jobs.map(job => (
+                  <JobCard key={job.id} job={job} />
+                ))}
+              </div>
+            </div>
+            <RecommendedJobs />
           </div>
         )}
       </div>
