@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import { CompanyProvider } from './contexts/CompanyContext';
 import { JobProvider } from './contexts/JobContext';
+import { useGoogleAnalytics } from './hooks/useGoogleAnalytics';
 import Header from './components/Header';
 import ProfileNudge from './components/ProfileNudge';
 import Home from './pages/Home';
@@ -30,6 +31,11 @@ import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
 
+const PageTracker: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  useGoogleAnalytics();
+  return <>{children}</>;
+};
+
 function App() {
   return (
     <HelmetProvider>
@@ -37,10 +43,11 @@ function App() {
         <CompanyProvider>
           <JobProvider>
             <Router>
-            <div className="min-h-screen bg-gray-50">
-              <Header />
-              <ProfileNudge />
-              <Routes>
+              <PageTracker>
+                <div className="min-h-screen bg-gray-50">
+                  <Header />
+                  <ProfileNudge />
+                  <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/jobs/:id" element={<JobDetails />} />
                 <Route path="/companies/:id" element={<CompanyProfile />} />
@@ -63,9 +70,10 @@ function App() {
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-              <Footer />
-            </div>
+                  </Routes>
+                  <Footer />
+                </div>
+              </PageTracker>
             </Router>
           </JobProvider>
         </CompanyProvider>
