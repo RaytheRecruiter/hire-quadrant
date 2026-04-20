@@ -213,6 +213,126 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Value Props */}
+      <section className="py-20 bg-white dark:bg-slate-950">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
+              Why candidates choose HireQuadrant
+            </h2>
+            <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
+              A job board that respects your time and keeps you informed every step of the way
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-8 bg-gradient-to-br from-primary-50 to-primary-50/50 dark:from-primary-900/20 dark:to-slate-900/20 rounded-2xl border border-primary-100/20 dark:border-primary-900/20">
+              <div className="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center mb-4">
+                <span className="text-white font-bold">✓</span>
+              </div>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">No Black Hole</h3>
+              <p className="text-secondary-600 dark:text-slate-400">
+                Every application is reviewed. Get real feedback, not silence.
+              </p>
+            </div>
+
+            <div className="p-8 bg-gradient-to-br from-amber-50 to-amber-50/50 dark:from-amber-900/20 dark:to-slate-900/20 rounded-2xl border border-amber-100/20 dark:border-amber-900/20">
+              <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center mb-4">
+                <span className="text-white font-bold">📊</span>
+              </div>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Track Progress</h3>
+              <p className="text-secondary-600 dark:text-slate-400">
+                See your application status in real-time. Know exactly where you stand.
+              </p>
+            </div>
+
+            <div className="p-8 bg-gradient-to-br from-emerald-50 to-emerald-50/50 dark:from-emerald-900/20 dark:to-slate-900/20 rounded-2xl border border-emerald-100/20 dark:border-emerald-900/20">
+              <div className="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center mb-4">
+                <span className="text-white font-bold">🎯</span>
+              </div>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Better Matches</h3>
+              <p className="text-secondary-600 dark:text-slate-400">
+                Smart filtering helps you find roles that actually fit your skills and goals.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-20 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
+              How it works
+            </h2>
+            <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Get started in minutes and find your next opportunity
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {[
+              { num: '1', title: 'Browse Openings', desc: 'Search thousands of open positions filtered by role, location, and salary.' },
+              { num: '2', title: 'Apply in Seconds', desc: 'Submit your application with a single click. Screening questions optional.' },
+              { num: '3', title: 'Track Status', desc: 'Watch your application progress through every stage of hiring.' },
+              { num: '4', title: 'Get Hired', desc: 'Receive real feedback and land your dream role.' },
+            ].map((step, idx) => (
+              <div key={idx} className="relative">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 h-full border border-gray-100 dark:border-slate-700 hover:shadow-card-hover transition-all">
+                  <div className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold mb-4 flex-shrink-0">
+                    {step.num}
+                  </div>
+                  <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">{step.title}</h3>
+                  <p className="text-secondary-600 dark:text-slate-400 text-sm leading-relaxed">{step.desc}</p>
+                </div>
+                {idx < 3 && (
+                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-gray-300 dark:text-slate-700 text-2xl">
+                    →
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials / Social Proof */}
+      <section className="py-20 bg-white dark:bg-slate-950">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
+              Job seekers love HireQuadrant
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { quote: 'Finally, a job board that actually keeps me in the loop. No more wondering if my application went to the void.', author: 'Sarah M.', role: 'Product Manager' },
+              { quote: 'The filtering tools here are incredible. Found a perfect fit within minutes instead of hours.', author: 'James K.', role: 'Software Engineer' },
+              { quote: 'I appreciated the transparency. Every company was responsive and professional throughout the process.', author: 'Maria L.', role: 'Data Analyst' },
+            ].map((testimonial, idx) => (
+              <div key={idx} className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-amber-400 text-lg">★</span>
+                  ))}
+                </div>
+                <p className="text-secondary-600 dark:text-slate-300 mb-6 italic leading-relaxed">
+                  "{testimonial.quote}"
+                </p>
+                <div>
+                  <div className="font-semibold text-secondary-900 dark:text-white">{testimonial.author}</div>
+                  <div className="text-sm text-secondary-500 dark:text-slate-400">{testimonial.role}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+          </div>
+        </div>
+      </section>
+
       {/* Main Content */}
       <div id="jobs-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <TrendingSection />
