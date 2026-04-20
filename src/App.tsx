@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import { CompanyProvider } from './contexts/CompanyContext';
 import { JobProvider } from './contexts/JobContext';
@@ -25,10 +26,11 @@ import Onboarding from './pages/Onboarding';
 
 function App() {
   return (
-    <AuthProvider>
-      <CompanyProvider>
-        <JobProvider>
-          <Router>
+    <HelmetProvider>
+      <AuthProvider>
+        <CompanyProvider>
+          <JobProvider>
+            <Router>
             <div className="min-h-screen bg-gray-50">
               <Header />
               <ProfileNudge />
@@ -52,10 +54,11 @@ function App() {
                 <Route path="/blog/:slug" element={<BlogPost />} />
               </Routes>
             </div>
-          </Router>
-        </JobProvider>
-      </CompanyProvider>
-    </AuthProvider>
+            </Router>
+          </JobProvider>
+        </CompanyProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 
