@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Search, MapPin, Sparkles, ArrowRight } from 'lucide-react';
+import { Search, MapPin, Sparkles, ArrowRight, Users, Building2, CheckCircle2 } from 'lucide-react';
 import { useJobs } from '../contexts/JobContext';
 import { supabase } from '../utils/supabaseClient';
 import { useSearchParams, Link } from 'react-router-dom';
-import JobList from '../components/JobList';
 import TrendingSection from '../components/TrendingSection';
 import NewsletterSignup from '../components/NewsletterSignup';
 import { useSEO } from '../hooks/useSEO';
+import CompanyLogo from '../components/CompanyLogo';
+
+interface FeaturedCompany {
+  name: string;
+  logo_url: string | null;
+}
+
+const CATEGORIES = [
+  { label: 'Engineering', icon: '⚙️' },
+  { label: 'Design', icon: '🎨' },
+  { label: 'Marketing', icon: '📣' },
+  { label: 'Finance', icon: '💰' },
+  { label: 'Sales', icon: '📈' },
+  { label: 'Operations', icon: '🏗️' },
+  { label: 'Data & Analytics', icon: '📊' },
+  { label: 'Healthcare', icon: '🏥' },
+] as const;
 
 const Home: React.FC = () => {
   const { helmet } = useSEO({ canonical: '/' });
@@ -19,6 +35,7 @@ const Home: React.FC = () => {
     companies: 0,
     postedThisWeek: 0,
   });
+  const [featuredCompanies, setFeaturedCompanies] = useState<FeaturedCompany[]>([]);
 
   useEffect(() => {
     const title = searchParams.get('title');
@@ -43,6 +60,13 @@ const Home: React.FC = () => {
     if (salary) {
       setMinSalary(parseInt(salary, 10));
     }
+
+    // Auto-scroll to jobs section if searching
+    if (keyword || title) {
+      setTimeout(() => {
+        document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
   }, [searchParams, setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary]);
 
   useEffect(() => {
@@ -61,6 +85,30 @@ const Home: React.FC = () => {
       });
     };
     fetchStats();
+  }, []);
+
+  useEffect(() => {
+    const fetchFeaturedCompanies = async () => {
+      const { data } = await supabase
+        .from('jobs')
+        .select('company, company_logo_url')
+        .not('company', 'is', null)
+        .not('company_logo_url', 'is', null)
+        .limit(40);
+
+      if (data) {
+        const seen = new Set<string>();
+        const unique: FeaturedCompany[] = [];
+        for (const row of data) {
+          if (row.company && !seen.has(row.company) && unique.length < 8) {
+            seen.add(row.company);
+            unique.push({ name: row.company, logo_url: row.company_logo_url });
+          }
+        }
+        setFeaturedCompanies(unique);
+      }
+    };
+    fetchFeaturedCompanies();
   }, []);
 
   useEffect(() => {
@@ -149,7 +197,7 @@ const Home: React.FC = () => {
               </span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-secondary-600 dark:text-slate-300 max-w-xl mx-auto text-balance leading-relaxed">
-              Transparent screening. Real feedback. Decisions in days, not months. Your career deserves better than the algorithm.
+              Skip the black hole. Every application is screened, tracked, and acknowledged.
             </p>
 
             {/* Hero search */}
@@ -185,6 +233,26 @@ const Home: React.FC = () => {
               </div>
             </form>
 
+            {/* Dual CTAs */}
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => {
+                  document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3.5 rounded-xl shadow-soft transition-all flex items-center justify-center gap-2"
+              >
+                <Search className="h-5 w-5" />
+                Search Jobs
+              </button>
+              <Link
+                to="/pricing"
+                className="bg-white dark:bg-slate-800 border-2 border-primary-200 dark:border-primary-700 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-slate-700 font-semibold px-8 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                Post a Job
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </div>
+
             {/* Real stats */}
             {stats.jobs > 0 && (
               <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-secondary-500 dark:text-slate-400">
@@ -214,48 +282,113 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Value Props */}
-      <section className="py-20 bg-white dark:bg-slate-950">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
-              Why candidates choose HireQuadrant
-            </h2>
-            <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
-              A job board that respects your time and keeps you informed every step of the way
-            </p>
+      {/* Dual Pathway Cards */}
+      <section className="py-16 bg-white dark:bg-slate-950">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Job Seeker Card */}
+            <div className="group relative bg-gradient-to-br from-primary-50 to-primary-100/40 dark:from-primary-900/20 dark:to-slate-900 rounded-3xl p-8 border border-primary-100 dark:border-primary-900/30 hover:shadow-card-hover transition-all">
+              <Users className="h-10 w-10 text-primary-500 mb-4" />
+              <h3 className="font-display text-2xl font-bold text-secondary-900 dark:text-white mb-4">
+                Find Your Next Role
+              </h3>
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
+                  <CheckCircle2 className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                  <span>Search thousands of positions</span>
+                </li>
+                <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
+                  <CheckCircle2 className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                  <span>Track every application</span>
+                </li>
+                <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
+                  <CheckCircle2 className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                  <span>Get real feedback</span>
+                </li>
+              </ul>
+              <button
+                onClick={() => {
+                  document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                Browse Jobs
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Employer Card */}
+            <div className="group relative bg-gradient-to-br from-amber-50 to-amber-100/40 dark:from-amber-900/20 dark:to-slate-900 rounded-3xl p-8 border border-amber-200 dark:border-amber-900/30 hover:shadow-card-hover transition-all">
+              <Building2 className="h-10 w-10 text-amber-500 mb-4" />
+              <h3 className="font-display text-2xl font-bold text-secondary-900 dark:text-white mb-4">
+                Find Your Next Hire
+              </h3>
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
+                  <CheckCircle2 className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                  <span>Post in minutes</span>
+                </li>
+                <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
+                  <CheckCircle2 className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                  <span>AI-powered screening</span>
+                </li>
+                <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
+                  <CheckCircle2 className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                  <span>Track candidates</span>
+                </li>
+              </ul>
+              <Link
+                to="/pricing"
+                className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                Post a Job Free
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 bg-gradient-to-br from-primary-50 to-primary-50/50 dark:from-primary-900/20 dark:to-slate-900/20 rounded-2xl border border-primary-100/20 dark:border-primary-900/20">
-              <div className="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center mb-4">
-                <span className="text-white font-bold">✓</span>
-              </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">No Black Hole</h3>
-              <p className="text-secondary-600 dark:text-slate-400">
-                Every application is reviewed. Get real feedback, not silence.
-              </p>
+      {/* Featured Employers */}
+      {featuredCompanies.length > 0 && (
+        <section className="py-16 bg-gray-50 dark:bg-slate-900">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-center text-sm font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-widest mb-10">
+              Trusted by companies of all sizes
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-center">
+              {featuredCompanies.map((company) => (
+                <div
+                  key={company.name}
+                  className="bg-white dark:bg-slate-800 rounded-2xl p-4 flex items-center justify-center border border-gray-100 dark:border-slate-700 h-20"
+                >
+                  <CompanyLogo company={company.name} logoUrl={company.logo_url} size="md" />
+                </div>
+              ))}
             </div>
+          </div>
+        </section>
+      )}
 
-            <div className="p-8 bg-gradient-to-br from-amber-50 to-amber-50/50 dark:from-amber-900/20 dark:to-slate-900/20 rounded-2xl border border-amber-100/20 dark:border-amber-900/20">
-              <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center mb-4">
-                <span className="text-white font-bold">📊</span>
-              </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Track Progress</h3>
-              <p className="text-secondary-600 dark:text-slate-400">
-                See your application status in real-time. Know exactly where you stand.
-              </p>
-            </div>
-
-            <div className="p-8 bg-gradient-to-br from-emerald-50 to-emerald-50/50 dark:from-emerald-900/20 dark:to-slate-900/20 rounded-2xl border border-emerald-100/20 dark:border-emerald-900/20">
-              <div className="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center mb-4">
-                <span className="text-white font-bold">🎯</span>
-              </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Better Matches</h3>
-              <p className="text-secondary-600 dark:text-slate-400">
-                Smart filtering helps you find roles that actually fit your skills and goals.
-              </p>
-            </div>
+      {/* Browse by Category */}
+      <section className="py-16 bg-white dark:bg-slate-950">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary-900 dark:text-white text-center mb-10">
+            Browse by Category
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {CATEGORIES.map((cat) => (
+              <Link
+                key={cat.label}
+                to={`/?keyword=${encodeURIComponent(cat.label)}`}
+                className="flex items-center gap-3 bg-gray-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 rounded-xl p-4 transition-all group"
+              >
+                <span className="text-2xl">{cat.icon}</span>
+                <span className="font-semibold text-secondary-700 dark:text-slate-300 group-hover:text-primary-700 dark:group-hover:text-primary-300 text-sm">
+                  {cat.label}
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -265,7 +398,7 @@ const Home: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
-              How it works
+              How it works for job seekers
             </h2>
             <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
               Get started in minutes and find your next opportunity
@@ -330,7 +463,24 @@ const Home: React.FC = () => {
             ))}
           </div>
         </div>
-          </div>
+      </section>
+
+      {/* Employer CTA Banner */}
+      <section className="py-16 bg-amber-500 dark:bg-amber-600">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
+            Hiring? Post your first job free.
+          </h2>
+          <p className="text-amber-100 text-lg mb-8">
+            Reach thousands of qualified candidates today.
+          </p>
+          <Link
+            to="/pricing"
+            className="inline-flex items-center gap-2 bg-white text-amber-700 hover:bg-amber-50 font-bold px-8 py-4 rounded-xl shadow-soft transition-all text-lg"
+          >
+            Start Posting Free
+            <ArrowRight className="h-5 w-5" />
+          </Link>
         </div>
       </section>
 
@@ -444,10 +594,26 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Main Content */}
-      <div id="jobs-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <TrendingSection />
-        <JobList />
+      {/* Featured Jobs */}
+      <div id="jobs-section" className="py-16 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white">
+              Trending Now
+            </h2>
+            <Link
+              to="/"
+              onClick={() => {
+                window.location.href = '/?browse=all';
+              }}
+              className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-semibold flex items-center gap-1 text-sm"
+            >
+              Browse all jobs
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <TrendingSection />
+        </div>
       </div>
     </div>
     </>
