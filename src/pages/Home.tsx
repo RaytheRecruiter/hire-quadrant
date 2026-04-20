@@ -714,7 +714,7 @@ const Home: React.FC = () => {
           <TrendingSection />
         </div>
       </div>
-    </div>
+      </div>
     </>
   );
 };
