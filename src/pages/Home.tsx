@@ -465,6 +465,48 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* About Section */}
+      <section className="py-20 bg-gradient-to-b from-white to-primary-50/30 dark:from-slate-950 dark:to-primary-900/20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-6">
+                About HireQuadrant
+              </h2>
+              <p className="text-lg text-secondary-600 dark:text-slate-300 mb-4 leading-relaxed">
+                We believe job seekers deserve better than the black hole. Every application matters. Every candidate deserves feedback.
+              </p>
+              <p className="text-lg text-secondary-600 dark:text-slate-300 mb-6 leading-relaxed">
+                HireQuadrant is built on transparency. We work for candidates, not algorithms. We help employers find their best people and give candidates the clarity they deserve.
+              </p>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-all"
+              >
+                Learn Our Story
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-primary-100 dark:border-primary-900/30 shadow-card">
+              <div className="space-y-6">
+                <div>
+                  <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">100%</div>
+                  <p className="text-secondary-600 dark:text-slate-300">Transparent Screening</p>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">24hr</div>
+                  <p className="text-secondary-600 dark:text-slate-300">Average Response Time</p>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">10K+</div>
+                  <p className="text-secondary-600 dark:text-slate-300">Jobs & Counting</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Employer CTA Banner */}
       <section className="py-16 bg-amber-500 dark:bg-amber-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -577,6 +619,63 @@ const Home: React.FC = () => {
             <Link to="/support" className="text-primary-600 hover:text-primary-800 font-semibold">
               Security & Support
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Legal & Support Section */}
+      <section className="py-20 bg-white dark:bg-slate-950">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
+              Company & Resources
+            </h2>
+            <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Everything you need to know about HireQuadrant
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: '📖',
+                title: 'About Us',
+                description: 'Learn our story, mission, and values',
+                link: '/about',
+              },
+              {
+                icon: '🛟',
+                title: 'Support',
+                description: 'Get help with your account and questions',
+                link: '/support',
+              },
+              {
+                icon: '🔐',
+                title: 'Privacy Policy',
+                description: 'How we protect your personal data',
+                link: '/privacy',
+              },
+              {
+                icon: '⚖️',
+                title: 'Terms of Service',
+                description: 'Our terms and conditions',
+                link: '/terms',
+              },
+            ].map((item, idx) => (
+              <Link
+                key={idx}
+                to={item.link}
+                className="group bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
+              >
+                <div className="text-4xl mb-4">{item.icon}</div>
+                <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-secondary-600 dark:text-slate-400 text-sm">
+                  {item.description}
+                </p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
