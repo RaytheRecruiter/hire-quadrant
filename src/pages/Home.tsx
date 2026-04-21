@@ -244,13 +244,6 @@ const Home: React.FC = () => {
                 <Search className="h-5 w-5" />
                 Search Jobs
               </button>
-              <Link
-                to="/pricing"
-                className="bg-white dark:bg-slate-800 border-2 border-primary-200 dark:border-primary-700 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-slate-700 font-semibold px-8 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
-              >
-                Post a Job
-                <ArrowRight className="h-5 w-5" />
-              </Link>
             </div>
 
             {/* Real stats */}
@@ -337,13 +330,6 @@ const Home: React.FC = () => {
                   <span>Track candidates</span>
                 </li>
               </ul>
-              <Link
-                to="/pricing"
-                className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2"
-              >
-                Post a Job Free
-                <ArrowRight className="h-4 w-4" />
-              </Link>
             </div>
           </div>
         </div>
@@ -507,24 +493,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Employer CTA Banner */}
-      <section className="py-16 bg-amber-500 dark:bg-amber-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
-            Hiring? Post your first job free.
-          </h2>
-          <p className="text-amber-100 text-lg mb-8">
-            Reach thousands of qualified candidates today.
-          </p>
-          <Link
-            to="/pricing"
-            className="inline-flex items-center gap-2 bg-white text-amber-700 hover:bg-amber-50 font-bold px-8 py-4 rounded-xl shadow-soft transition-all text-lg"
-          >
-            Start Posting Free
-            <ArrowRight className="h-5 w-5" />
-          </Link>
-        </div>
-      </section>
 
       {/* FAQ Preview */}
       <section className="py-20 bg-white dark:bg-slate-950">

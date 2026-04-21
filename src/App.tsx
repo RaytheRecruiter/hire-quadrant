@@ -20,7 +20,6 @@ import XMLFeederAdmin from './components/XMLFeederAdmin';
 import CompanySourceManager from './components/CompanySourceManager';
 import ProfilePage from './pages/ProfilePage';
 import CompanyDashboard from './pages/CompanyDashboard';
-import Pricing from './pages/Pricing';
 import SavedJobs from './pages/SavedJobs';
 import JobAlerts from './pages/JobAlerts';
 import ResumeSearch from './pages/ResumeSearch';
@@ -69,7 +68,6 @@ function App() {
                 <Route path="/company-sources" element={<CompanySourceManager />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/company-dashboard" element={<CompanyDashboard />} />
-                <Route path="/pricing" element={<Pricing />} />
                 <Route path="/saved" element={<SavedJobs />} />
                 <Route path="/alerts" element={<JobAlerts />} />
                 <Route path="/advanced-search" element={<AdvancedSearch />} />
