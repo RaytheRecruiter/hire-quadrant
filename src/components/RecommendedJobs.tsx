@@ -1,96 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Lightbulb, MapPin, Building2, Clock, Loader2 } from 'lucide-react';
-import { useJobs } from '../contexts/JobContext';
-import { useSavedJobs } from '../hooks/useSavedJobs';
+import { Lightbulb, MapPin, Building2, Clock, Loader2, X } from 'lucide-react';
+import { useRecommendedJobs } from '../hooks/useRecommendedJobs';
+import { useSkippedJobs } from '../hooks/useSkippedJobs';
 import { generateSlug } from '../utils/slugGenerator';
-import { extractTags } from '../utils/skillExtractor';
-
-interface RecommendedJob {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  type: string;
-  description: string;
-  matchScore: number;
-}
 
 const RecommendedJobs: React.FC = () => {
-  const { jobs } = useJobs();
-  const { savedJobIds } = useSavedJobs();
-  const [recommended, setRecommended] = useState<RecommendedJob[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    const savedJobs = jobs.filter(j => savedJobIds.has(j.id));
-
-    if (savedJobs.length === 0) {
-      setRecommended([]);
-      setLoading(false);
-      return;
-    }
-
-    // Extract skills from saved jobs
-    const savedSkills = new Set<string>();
-    const savedLocations = new Set<string>();
-    const savedTypes = new Set<string>();
-
-    savedJobs.forEach(job => {
-      const tags = extractTags(job.title, job.description);
-      tags.forEach(tag => savedSkills.add(tag.toLowerCase()));
-      if (job.location) savedLocations.add(job.location.toLowerCase());
-      if (job.type) savedTypes.add(job.type.toLowerCase());
-    });
-
-    // Score unsaved jobs based on similarity
-    const scored: RecommendedJob[] = jobs
-      .filter(job => !savedJobIds.has(job.id))
-      .map(job => {
-        let matchScore = 0;
-
-        // Score based on matching skills
-        const jobTags = extractTags(job.title, job.description);
-        const matchingSkills = jobTags.filter(tag =>
-          savedSkills.has(tag.toLowerCase())
-        ).length;
-        matchScore += matchingSkills * 15;
-
-        // Score based on location match
-        if (job.location && savedLocations.has(job.location.toLowerCase())) {
-          matchScore += 25;
-        }
-
-        // Score based on job type match
-        if (job.type && savedTypes.has(job.type.toLowerCase())) {
-          matchScore += 15;
-        }
-
-        // Score based on recency
-        const daysOld = Math.floor(
-          (Date.now() - new Date(job.postedDate).getTime()) / (1000 * 60 * 60 * 24)
-        );
-        if (daysOld < 7) matchScore += 20;
-        else if (daysOld < 14) matchScore += 10;
-
-        return {
-          id: job.id,
-          title: job.title,
-          company: job.company || 'Unknown',
-          location: job.location || 'Remote',
-          type: job.type || 'Full Time',
-          description: job.description,
-          matchScore,
-        };
-      })
-      .filter(job => job.matchScore > 0)
-      .sort((a, b) => b.matchScore - a.matchScore)
-      .slice(0, 6);
-
-    setRecommended(scored);
-    setLoading(false);
-  }, [jobs, savedJobIds]);
+  const { recommended, loading } = useRecommendedJobs(6);
+  const { skipJob } = useSkippedJobs();
 
   if (loading) {
     return (
@@ -116,42 +33,58 @@ const RecommendedJobs: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {recommended.map(job => (
-          <Link
+          <div
             key={job.id}
-            to={`/job/${generateSlug(job.title, job.company)}`}
-            className="group bg-white dark:bg-slate-800 rounded-2xl p-5 hover:shadow-card-hover transition-all hover:border-primary-200 dark:hover:border-primary-700 border border-gray-100 dark:border-slate-700"
+            className="group relative bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
           >
-            <div className="flex items-start justify-between gap-3 mb-3">
-              <div className="flex-1 min-w-0">
-                <h4 className="font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors line-clamp-2">
-                  {job.title}
-                </h4>
-                <p className="text-sm text-gray-600 dark:text-slate-400 font-medium mt-0.5">
-                  {job.company}
-                </p>
+            <Link
+              to={`/job/${generateSlug(job.title, job.company)}`}
+              className="block p-5"
+            >
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors line-clamp-2">
+                    {job.title}
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-slate-400 font-medium mt-0.5">
+                    {job.company}
+                  </p>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold">
+                    {Math.min(job.matchScore, 99)}%
+                  </span>
+                </div>
               </div>
-              <div className="text-right flex-shrink-0">
-                <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold">
-                  {Math.min(job.matchScore, 99)}%
-                </span>
-              </div>
-            </div>
 
-            <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
-              {job.location && (
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-3 w-3" />
-                  {job.location}
-                </span>
-              )}
-              {job.type && (
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  {job.type}
-                </span>
-              )}
-            </div>
-          </Link>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
+                {job.location && (
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {job.location}
+                  </span>
+                )}
+                {job.type && (
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    {job.type}
+                  </span>
+                )}
+              </div>
+            </Link>
+
+            {/* "Not Interested" dismiss button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                skipJob(job.id);
+              }}
+              className="absolute top-3 right-3 p-1.5 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+              title="Not interested in this job"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         ))}
       </div>
     </div>

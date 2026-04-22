@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Search, MapPin, Sparkles, ArrowRight, Users, Building2, CheckCircle2 } from 'lucide-react';
 import { useJobs } from '../contexts/JobContext';
+import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
 import { useSearchParams, Link } from 'react-router-dom';
 import TrendingSection from '../components/TrendingSection';
 import NewsletterSignup from '../components/NewsletterSignup';
+import RecommendedJobs from '../components/RecommendedJobs';
 import { useSEO } from '../hooks/useSEO';
 import CompanyLogo from '../components/CompanyLogo';
 
@@ -26,6 +28,7 @@ const CATEGORIES = [
 
 const Home: React.FC = () => {
   const { helmet } = useSEO({ canonical: '/' });
+  const { user } = useAuth();
   const { setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary } = useJobs();
   const [searchParams] = useSearchParams();
   const [heroSearch, setHeroSearch] = useState('');
@@ -660,6 +663,9 @@ const Home: React.FC = () => {
           <NewsletterSignup variant="card" title="" description="" />
         </div>
       </section>
+
+      {/* Personalized Recommendations (Phase 2) */}
+      {user && <RecommendedJobs />}
 
       {/* Featured Jobs */}
       <div id="jobs-section" className="py-16 bg-gray-50 dark:bg-slate-900">
