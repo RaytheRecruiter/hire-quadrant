@@ -11,6 +11,7 @@ interface CandidateProfile {
     location: string;
     phone_number: string;
     resume_url: string;
+    resume_text: string;
     email: string;
 }
 
@@ -40,6 +41,7 @@ const ProfilePage = () => {
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
     const [locationValue, setLocationValue] = useState('');
     const [phoneValue, setPhoneValue] = useState('');
+    const [resumeTextValue, setResumeTextValue] = useState('');
     const [resumeViewUrl, setResumeViewUrl] = useState<string | null>(null);
     const [showResumeViewer, setShowResumeViewer] = useState(false);
 
@@ -63,6 +65,7 @@ const ProfilePage = () => {
                 setProfile(data);
                 setLocationValue(data.location || '');
                 setPhoneValue(data.phone_number || '');
+                setResumeTextValue(data.resume_text || '');
             }
         } catch (err) {
             console.error('Error in fetchProfile:', err);
@@ -125,6 +128,7 @@ const ProfilePage = () => {
                     .update({
                         location: locationValue,
                         phone_number: phoneValue,
+                        resume_text: resumeTextValue || null,
                         email: user.email,
                     })
                     .eq('user_id', user.id);
@@ -138,6 +142,7 @@ const ProfilePage = () => {
                         user_id: user.id,
                         location: locationValue,
                         phone_number: phoneValue,
+                        resume_text: resumeTextValue || null,
                         email: user.email,
                     });
 
@@ -410,7 +415,7 @@ const ProfilePage = () => {
                     ) : (
                         <p className="text-gray-500 mb-4">No resume uploaded yet.</p>
                     )}
-                    <div>
+                    <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             {profile?.resume_url ? 'Upload New Resume' : 'Upload Resume'}
                         </label>
@@ -422,6 +427,26 @@ const ProfilePage = () => {
                             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
                         />
                         {uploading && <p className="text-sm text-gray-500 mt-2">Uploading...</p>}
+                    </div>
+
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <label className="block text-sm font-medium text-gray-700">
+                                Resume Text (paste your resume for AI job matching)
+                            </label>
+                            {resumeTextValue && (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-violet-50 text-violet-700 text-xs font-semibold rounded-full">
+                                    ✨ AI matching enabled
+                                </span>
+                            )}
+                        </div>
+                        <textarea
+                            value={resumeTextValue}
+                            onChange={(e) => setResumeTextValue(e.target.value)}
+                            placeholder="Paste your resume content here to unlock AI match scores on every job..."
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 font-mono text-sm"
+                            rows={8}
+                        />
                     </div>
 
                     {showResumeViewer && resumeViewUrl && (

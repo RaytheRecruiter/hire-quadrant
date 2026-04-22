@@ -59,9 +59,16 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
                   <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{j.type}</span>
                 </div>
               </div>
-              {j.salary && (
-                <span className="text-sm font-semibold text-primary-600 flex-shrink-0">{j.salary}</span>
-              )}
+              <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+                {j.similarity_score > 0 && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-violet-50 text-violet-700 text-xs font-semibold whitespace-nowrap">
+                    {Math.round(j.similarity_score)}% similar
+                  </span>
+                )}
+                {j.salary && (
+                  <span className="text-sm font-semibold text-primary-600">{j.salary}</span>
+                )}
+              </div>
             </div>
           </Link>
         ))}

@@ -107,6 +107,43 @@ ${(screeningAnswers || []).map((a: any, i: number) => `${i + 1}. ${a.answer}`).j
       });
     }
 
+    if (path === 'job-match') {
+      const body = await req.json();
+      const { resumeText, jobTitle, jobDescription, jobCompany } = body;
+      if (!resumeText || !jobTitle || !jobDescription) {
+        return new Response('resumeText, jobTitle, jobDescription required', { status: 400, headers: corsHeaders });
+      }
+
+      const system = `You are a job matching assistant. Score how well a resume matches a job description on a scale of 0-100.
+Return JSON only, no preamble, no code fences. Output shape:
+{
+  "match_score": <0-100 integer>,
+  "matching_skills": ["skill1", "skill2", "skill3"]
+}
+match_score: 0=no match, 100=perfect match. Be realistic, most scores are 30-75.
+matching_skills: list 3-5 skills from the resume that match the job requirements.`;
+
+      const userMsg = `RESUME:
+${resumeText.slice(0, 3000)}
+
+JOB: ${jobTitle}${jobCompany ? ` at ${jobCompany}` : ''}
+${jobDescription.slice(0, 2000)}
+
+Score the match between this resume and job.`;
+
+      const raw = await callClaude(system, userMsg);
+      const cleaned = raw.replace(/^```(?:json)?\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        parsed = { match_score: 0, matching_skills: [] };
+      }
+      return new Response(JSON.stringify(parsed), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     return new Response('Not Found', { status: 404, headers: corsHeaders });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {

@@ -42,3 +42,17 @@ export async function screenCandidate(params: {
 }): Promise<CandidateScreening> {
   return callEdgeFunction('screen-candidate', params);
 }
+
+export interface JobMatchResult {
+  match_score: number;
+  matching_skills: string[];
+}
+
+export async function getJobMatchScore(params: {
+  resumeText: string;
+  jobTitle: string;
+  jobDescription: string;
+  jobCompany?: string;
+}): Promise<JobMatchResult> {
+  return callEdgeFunction('job-match', params);
+}

@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import { useCompanies } from '../contexts/CompanyContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
+import { useJobMatchScore } from '../hooks/useJobMatchScore';
 import { supabase } from '../utils/supabaseClient';
 import { MapPin, Calendar, Clock, ArrowLeft, CheckCircle, DollarSign, Bookmark, BookmarkCheck, Share2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -132,6 +133,7 @@ const JobDetails: React.FC = () => {
         [job]
     );
     const tags = useMemo(() => job ? extractTags(job.title, job.description) : [], [job]);
+    const { matchScore, matchingSkills } = useJobMatchScore(job?.id || '');
 
     useEffect(() => {
         if (user && job) setApplied(hasApplied(job.id, user.id));
@@ -344,12 +346,20 @@ const JobDetails: React.FC = () => {
                                             {salaryDisplay}
                                         </span>
                                     )}
+                                    {matchScore !== null && (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                                            ✨ {matchScore}% match
+                                        </span>
+                                    )}
                                     {tags.map(t => (
                                         <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
                                             {t}
                                         </span>
                                     ))}
                                 </div>
+                                {matchingSkills.length > 0 && (
+                                    <p className="text-xs text-violet-600 dark:text-violet-300 mt-1">Matches: {matchingSkills.join(', ')}</p>
+                                )}
                             </div>
 
                             {/* Desktop actions */}
