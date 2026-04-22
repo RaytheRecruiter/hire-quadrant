@@ -6,6 +6,45 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 );
 
+async function verifyStripeSignature(
+  body: string,
+  signature: string,
+  signingSecret: string
+): Promise<boolean> {
+  try {
+    const parts = signature.split(',');
+    let timestamp = '';
+    let sig = '';
+
+    for (const part of parts) {
+      const [key, value] = part.split('=');
+      if (key === 't') timestamp = value;
+      if (key === 'v1') sig = value;
+    }
+
+    if (!timestamp || !sig) return false;
+
+    const signedContent = `${timestamp}.${body}`;
+    const key = await crypto.subtle.importKey(
+      'raw',
+      new TextEncoder().encode(signingSecret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+
+    const computed = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedContent));
+    const computedSig = Array.from(new Uint8Array(computed))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    return computedSig === sig;
+  } catch (error) {
+    console.error('Signature verification error:', error);
+    return false;
+  }
+}
+
 serve(async (req) => {
   try {
     if (req.method === 'OPTIONS') {
@@ -33,9 +72,14 @@ serve(async (req) => {
 
     const body = await req.text();
 
-    // In production, verify Stripe signature:
-    // const verified = verifyStripeSignature(body, signature, signingSecret);
-    // if (!verified) return new Response('Unauthorized', { status: 401 });
+    const verified = await verifyStripeSignature(body, signature, signingSecret);
+    if (!verified) {
+      console.error('Invalid Stripe signature');
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     const event = JSON.parse(body);
 
