@@ -15,6 +15,12 @@ interface CandidateProfile {
     email: string;
 }
 
+interface CareerSettings {
+    user_id: string;
+    current_role: string;
+    target_role: string;
+}
+
 interface JobApplication {
     id: string;
     job_id: string;
@@ -42,6 +48,8 @@ const ProfilePage = () => {
     const [locationValue, setLocationValue] = useState('');
     const [phoneValue, setPhoneValue] = useState('');
     const [resumeTextValue, setResumeTextValue] = useState('');
+    const [currentRoleValue, setCurrentRoleValue] = useState('');
+    const [targetRoleValue, setTargetRoleValue] = useState('');
     const [resumeViewUrl, setResumeViewUrl] = useState<string | null>(null);
     const [showResumeViewer, setShowResumeViewer] = useState(false);
 
@@ -53,19 +61,29 @@ const ProfilePage = () => {
         }
 
         try {
-            const { data, error } = await supabase
-                .from('candidates')
-                .select('*')
-                .eq('user_id', user.id)
-                .maybeSingle();
+            const [{ data: candidateData }, { data: careerData }] = await Promise.all([
+                supabase
+                    .from('candidates')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .maybeSingle(),
+                supabase
+                    .from('user_career_settings')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .maybeSingle(),
+            ]);
 
-            if (error) {
-                console.error('Error fetching profile:', error);
-            } else if (data) {
-                setProfile(data);
-                setLocationValue(data.location || '');
-                setPhoneValue(data.phone_number || '');
-                setResumeTextValue(data.resume_text || '');
+            if (candidateData) {
+                setProfile(candidateData);
+                setLocationValue(candidateData.location || '');
+                setPhoneValue(candidateData.phone_number || '');
+                setResumeTextValue(candidateData.resume_text || '');
+            }
+
+            if (careerData) {
+                setCurrentRoleValue(careerData.current_role || '');
+                setTargetRoleValue(careerData.target_role || '');
             }
         } catch (err) {
             console.error('Error in fetchProfile:', err);
@@ -148,6 +166,13 @@ const ProfilePage = () => {
 
                 if (error) throw error;
             }
+
+            // Update career settings (upsert)
+            await supabase.from('user_career_settings').upsert({
+                user_id: user.id,
+                current_role: currentRoleValue || null,
+                target_role: targetRoleValue || null,
+            });
 
             setMessage({ type: 'success', text: 'Profile updated successfully!' });
             await fetchProfile();
@@ -365,6 +390,26 @@ const ProfilePage = () => {
                                 onChange={(e) => setPhoneValue(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                                 placeholder="e.g. (555) 123-4567"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Current Role</label>
+                            <input
+                                type="text"
+                                value={currentRoleValue}
+                                onChange={(e) => setCurrentRoleValue(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                                placeholder="e.g. Software Engineer"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Target Role</label>
+                            <input
+                                type="text"
+                                value={targetRoleValue}
+                                onChange={(e) => setTargetRoleValue(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                                placeholder="e.g. Engineering Manager"
                             />
                         </div>
                         <button

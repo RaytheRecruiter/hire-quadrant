@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import ScreeningQuestionsModal from '../components/ScreeningQuestionsModal';
 import SimilarJobs from '../components/SimilarJobs';
 import RecentlyViewedJobs from '../components/RecentlyViewedJobs';
+import CareerGrowthPaths from '../components/CareerGrowthPaths';
 import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
 import { extractTags } from '../utils/skillExtractor';
@@ -397,6 +398,7 @@ const JobDetails: React.FC = () => {
                     </div>
                 </div>
 
+                <CareerGrowthPaths jobTitle={job.title} jobDescription={job.description} />
                 <SimilarJobs jobId={job.id} />
                 <RecentlyViewedJobs excludeJobId={job.id} />
             </div>

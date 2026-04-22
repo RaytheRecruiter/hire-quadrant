@@ -56,3 +56,21 @@ export async function getJobMatchScore(params: {
 }): Promise<JobMatchResult> {
   return callEdgeFunction('job-match', params);
 }
+
+export interface CareerPath {
+  role: string;
+  skill_transfer_pct: number;
+  salary_delta_low: number;
+  salary_delta_high: number;
+  time_to_transition: string;
+  missing_skills: string[];
+  match_label: 'high' | 'medium' | 'low';
+}
+
+export async function getCareerPaths(params: {
+  jobTitle: string;
+  jobDescription?: string;
+}): Promise<CareerPath[]> {
+  const result = await callEdgeFunction('career-paths', params);
+  return result.paths || [];
+}

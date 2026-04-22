@@ -15,6 +15,8 @@ interface Candidate {
   years_experience?: number;
   resume_url?: string;
   open_to_work?: boolean;
+  current_role?: string;
+  target_role?: string;
 }
 
 const ResumeSearch: React.FC = () => {
@@ -39,8 +41,24 @@ const ResumeSearch: React.FC = () => {
       q = q.or(`headline.ilike.%${query}%,resume_text.ilike.%${query}%,name.ilike.%${query}%`);
     }
 
-    const { data, error } = await q.limit(50);
-    if (!error && data) setCandidates(data);
+    const { data: candidateData, error } = await q.limit(50);
+    if (!error && candidateData) {
+      // Fetch career settings for all candidates
+      const userIds = candidateData.map(c => c.user_id);
+      const { data: careerData } = await supabase
+        .from('user_career_settings')
+        .select('user_id, current_role, target_role')
+        .in('user_id', userIds);
+
+      // Merge career settings into candidates
+      const careerMap = new Map((careerData || []).map(c => [c.user_id, c]));
+      const enriched = candidateData.map(c => ({
+        ...c,
+        ...(careerMap.get(c.user_id) || {}),
+      }));
+
+      setCandidates(enriched);
+    }
     setLoading(false);
   };
 
@@ -144,6 +162,11 @@ const ResumeSearch: React.FC = () => {
                     <div>
                       <h3 className="font-bold text-secondary-900">{c.name || 'Candidate'}</h3>
                       {c.headline && <p className="text-sm text-gray-600">{c.headline}</p>}
+                      {c.current_role && (
+                        <p className="text-xs font-semibold text-amber-600 mt-1">
+                          Current: {c.current_role}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mt-2">

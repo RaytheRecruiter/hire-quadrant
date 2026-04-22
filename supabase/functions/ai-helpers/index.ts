@@ -144,6 +144,54 @@ Score the match between this resume and job.`;
       });
     }
 
+    if (path === 'career-paths') {
+      const body = await req.json();
+      const { jobTitle, jobDescription } = body;
+      if (!jobTitle) {
+        return new Response('jobTitle required', { status: 400, headers: corsHeaders });
+      }
+
+      const system = `You are a career counselor. Given a job role, suggest 3-5 realistic next career steps.
+Return JSON only, no preamble, no code fences. Output shape:
+{
+  "paths": [
+    {
+      "role": "Next Role Title",
+      "skill_transfer_pct": 75,
+      "salary_delta_low": 10000,
+      "salary_delta_high": 25000,
+      "time_to_transition": "6-12 months",
+      "missing_skills": ["skill1", "skill2", "skill3"],
+      "match_label": "high"
+    }
+  ]
+}
+Rules:
+- skill_transfer_pct: realistic overlap (0-100)
+- salary_delta: conservative estimates based on role progression
+- time_to_transition: realistic time to build missing skills
+- missing_skills: max 3 key gaps to close
+- match_label: "high" (>=70%), "medium" (50-69%), "low" (<50%) based on skill_transfer_pct
+- Order by likelihood/commonness of transition`;
+
+      const userMsg = `Current role: ${jobTitle}
+${jobDescription ? `Description:\n${jobDescription.slice(0, 1000)}` : ''}
+
+Suggest 3-5 realistic next career steps for someone in this role.`;
+
+      const raw = await callClaude(system, userMsg);
+      const cleaned = raw.replace(/^```(?:json)?\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        parsed = { paths: [] };
+      }
+      return new Response(JSON.stringify(parsed), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     return new Response('Not Found', { status: 404, headers: corsHeaders });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {

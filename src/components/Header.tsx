@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import {
   Grid3X3, User, LogOut, BarChart3, FileText, Building2, Bookmark, Bell, Search, BookOpen,
-  ChevronDown, Menu, X, Settings, Briefcase, Sparkles
+  ChevronDown, Menu, X, Settings, Briefcase, Sparkles, GraduationCap
 } from 'lucide-react';
 import { getInitials, colorFromString } from '../utils/companyLogo';
 import DarkModeToggle from './DarkModeToggle';
@@ -49,6 +49,7 @@ const Header: React.FC = () => {
   const mainNav = (
     <>
       <Link to="/" className={navClass('/')}>Jobs</Link>
+      <Link to="/career" className={navClass('/career')}>Career Paths</Link>
       <Link to="/companies" className={navClass('/companies')}>Companies</Link>
       <Link to="/advanced-search" className={navClass('/advanced-search')}>Search</Link>
       <Link to="/blog" className={navClass('/blog')}>Blog</Link>

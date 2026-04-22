@@ -26,6 +26,7 @@ import ResumeSearch from './pages/ResumeSearch';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Onboarding from './pages/Onboarding';
+import CareerPath from './pages/CareerPath';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
@@ -71,6 +72,7 @@ function App() {
                 <Route path="/saved" element={<SavedJobs />} />
                 <Route path="/alerts" element={<JobAlerts />} />
                 <Route path="/advanced-search" element={<AdvancedSearch />} />
+                <Route path="/career" element={<CareerPath />} />
                 <Route path="/companies" element={<Companies />} />
                 <Route path="/talent-search" element={<ResumeSearch />} />
                 <Route path="/blog" element={<Blog />} />
