@@ -739,3 +739,10 @@ export class TrackingService {
 
 // Ensure the service initializes
 TrackingService.initialize();
+
+// Cleanup on page unload to prevent memory leaks
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeunload', () => {
+    TrackingService.cleanup();
+  });
+}

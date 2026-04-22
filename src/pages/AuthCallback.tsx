@@ -27,12 +27,12 @@ const AuthCallback: React.FC = () => {
 
         // Redirect to onboarding or profile
         const { data: profile } = await supabase
-          .from('profiles')
-          .select('onboarding_complete')
+          .from('user_profiles')
+          .select('id')
           .eq('id', data.session.user.id)
           .maybeSingle();
 
-        if (profile?.onboarding_complete) {
+        if (profile) {
           navigate('/profile');
         } else {
           navigate('/onboarding');

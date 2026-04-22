@@ -104,15 +104,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Listen for auth changes
     // IMPORTANT: Do not make async Supabase calls inside this callback
     // as it can cause deadlocks with the auth token refresh cycle.
+    let isMounted = true;
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        if (!isMounted) return;
+
         if (session?.user) {
           setSession(session);
           // Defer the profile fetch to avoid blocking the auth state change
           setTimeout(async () => {
+            if (!isMounted) return;
             const userProfile = await fetchUserProfile(session.user);
-            setUser(userProfile);
-            setLoading(false);
+            if (isMounted) {
+              setUser(userProfile);
+              setLoading(false);
+            }
           }, 0);
         } else {
           setUser(null);
@@ -123,6 +129,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
   }, []);
