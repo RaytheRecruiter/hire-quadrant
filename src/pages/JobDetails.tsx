@@ -10,6 +10,7 @@ import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
 import ScreeningQuestionsModal from '../components/ScreeningQuestionsModal';
 import SimilarJobs from '../components/SimilarJobs';
+import RecentlyViewedJobs from '../components/RecentlyViewedJobs';
 import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
 import { extractTags } from '../utils/skillExtractor';
@@ -149,7 +150,19 @@ const JobDetails: React.FC = () => {
         supabase.rpc('increment_job_views', { row_id: job.id }).then(({ error }) => {
             if (error) console.error('Failed to track job view:', error);
         });
-    }, [job]);
+
+        // Track view in job_views table for authenticated users (for recently viewed feature)
+        if (user?.id) {
+            supabase.from('job_views').insert({
+                job_id: job.id,
+                user_id: user.id,
+                session_id: crypto.randomUUID(),
+                viewed_at: new Date().toISOString(),
+            }).catch(error => {
+                console.error('Failed to insert job view record:', error);
+            });
+        }
+    }, [job, user?.id]);
 
     useEffect(() => {
         if (!job) return;
@@ -375,6 +388,7 @@ const JobDetails: React.FC = () => {
                 </div>
 
                 <SimilarJobs jobId={job.id} />
+                <RecentlyViewedJobs excludeJobId={job.id} />
             </div>
 
             {/* Sticky mobile apply bar */}
