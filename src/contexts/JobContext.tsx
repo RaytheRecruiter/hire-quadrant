@@ -57,6 +57,13 @@ export interface JobApplication {
     source_company?: string;
 }
 
+export interface ApplicationDetails {
+    coverLetter?: string;
+    applicantName?: string;
+    applicantEmail?: string;
+    applicantPhone?: string;
+}
+
 interface JobContextType {
     jobs: Job[];
     applications: JobApplication[];
@@ -78,7 +85,7 @@ interface JobContextType {
     goToPage: (page: number) => void;
     loadMoreJobs: () => void;
     hasMoreJobs: boolean;
-    applyToJob: (jobId: string, screeningAnswers?: any[]) => Promise<boolean>;
+    applyToJob: (jobId: string, screeningAnswers?: any[], details?: ApplicationDetails) => Promise<boolean>;
     getJobById: (id: string) => Job | undefined;
     hasApplied: (jobId: string, userId: string) => boolean;
 }
@@ -229,7 +236,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     }, [currentPage, totalPages]);
 
-    const applyToJob = useCallback(async (jobId: string, screeningAnswers?: any[]) => {
+    const applyToJob = useCallback(async (jobId: string, screeningAnswers?: any[], details?: ApplicationDetails) => {
         if (!user) {
             console.error('User not logged in.');
             return false;
@@ -250,8 +257,10 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                 .from('job_applications')
                 .insert([{
                     ...newApplication,
-                    user_name: user.name,
-                    user_email: user.email,
+                    user_name: details?.applicantName?.trim() || user.name,
+                    user_email: details?.applicantEmail?.trim() || user.email,
+                    applicant_phone: details?.applicantPhone?.trim() || null,
+                    cover_letter: details?.coverLetter?.trim() || null,
                     screening_answers: screeningAnswers || [],
                 }])
                 .select()

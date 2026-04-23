@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
@@ -14,6 +14,14 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const returnTo = searchParams.get('returnTo');
+
+  // Only honor returnTo values that stay on this origin — prevents open
+  // redirect attacks via crafted ?returnTo=https://evil.com URLs.
+  const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')
+    ? returnTo
+    : null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +31,12 @@ const Login: React.FC = () => {
     try {
       const result = await login(email, password);
       if (result.success) {
+        if (safeReturnTo) {
+          // Hard nav so the target page loads fresh with the new session
+          // (matches HardLink pattern used elsewhere on the site).
+          window.location.assign(safeReturnTo);
+          return;
+        }
         if (result.role === 'company') {
           navigate('/company-dashboard');
         } else if (result.role === 'admin') {
