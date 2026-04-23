@@ -16,6 +16,8 @@ import SimilarJobs from '../components/SimilarJobs';
 import { CareerGrowthPaths } from '../components/CareerGrowthPaths';
 import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
+import ShareJobBox from '../components/ShareJobBox';
+import JobApplicationForm from '../components/JobApplicationForm';
 import { extractTags } from '../utils/skillExtractor';
 import { useSEO } from '../hooks/useSEO';
 import { generateSlug, extractIdFromSlug, isUuid } from '../utils/slugGenerator';
@@ -260,26 +262,32 @@ const JobDetails: React.FC = () => {
         }
     };
 
-    const handleApply = async () => {
+    // Apply buttons now scroll to the inline application form instead of
+    // silently submitting. Preserves the old login-redirect behavior.
+    const handleApply = () => {
         if (!user) {
             toast.error('Sign in to apply');
-            navigate('/login');
+            navigate(`/login?returnTo=${encodeURIComponent(`/jobs/${job.id}#apply-form`)}`);
             return;
         }
-        if (screeningQuestions.length > 0) {
-            setScreeningOpen(true);
-            return;
+        const el = document.getElementById('apply-form');
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const firstInput = el.querySelector<HTMLElement>('input,textarea,button[type="submit"]');
+            setTimeout(() => firstInput?.focus({ preventScroll: true }), 400);
         }
+    };
+
+    const handleInlineSubmit = async (answers: ScreeningAnswer[]): Promise<boolean> => {
+        if (!job) return false;
         setApplying(true);
-        const success = await applyToJob(job.id);
+        const success = await applyToJob(job.id, answers);
         setApplying(false);
         if (success) {
             setApplied(true);
             setShowSuccess(true);
-            toast.success('Application submitted!');
-        } else {
-            toast.error('Could not submit application');
         }
+        return success;
     };
 
     const handleSave = async () => {
@@ -425,6 +433,23 @@ const JobDetails: React.FC = () => {
                     {/* Description */}
                     <div className="p-6 md:p-10 prose max-w-none">
                         {formatJobDescription(job.description)}
+                    </div>
+
+                    {/* Inline application form */}
+                    <div className="px-6 md:px-10 pb-10">
+                        <JobApplicationForm
+                            jobId={job.id}
+                            jobTitle={job.title}
+                            company={job.company}
+                            screeningQuestions={screeningQuestions}
+                            applied={applied}
+                            onSubmit={handleInlineSubmit}
+                        />
+                    </div>
+
+                    {/* Share this job */}
+                    <div className="px-6 md:px-10 pb-10">
+                        <ShareJobBox title={job.title} company={job.company} url={window.location.href} />
                     </div>
                 </div>
 
