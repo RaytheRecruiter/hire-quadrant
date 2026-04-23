@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
-import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle } from 'lucide-react';
+import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle, Sparkles } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface CandidateProfile {
@@ -521,6 +521,12 @@ const ProfilePage = () => {
                     </div>
 
                     <div>
+                        <div className="flex items-start gap-2 p-3 rounded-lg bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 mb-3">
+                            <Sparkles className="h-4 w-4 text-violet-600 mt-0.5 flex-shrink-0" />
+                            <p className="text-xs text-violet-800 dark:text-violet-300">
+                                Paste your resume here to unlock <strong>AI match scores</strong> on every job listing.
+                            </p>
+                        </div>
                         <div className="flex items-center gap-2 mb-2">
                             <label className="block text-sm font-medium text-gray-700">
                                 Resume Text (paste your resume for AI job matching)

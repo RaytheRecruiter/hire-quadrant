@@ -35,14 +35,6 @@ const ProfileNudge: React.FC = () => {
   }, [user, isCompany, isAdmin, dismissed, location.pathname]);
 
   // Reset dismissed flag when returning to homepage so banner can re-appear
-  useEffect(() => {
-    if (location.pathname === '/' && dismissed) {
-      const wasActuallyDismissed = sessionStorage.getItem('profile-nudge-dismissed') === 'true';
-      if (!wasActuallyDismissed) {
-        setDismissed(false);
-      }
-    }
-  }, [location.pathname, dismissed]);
 
   if (!user || isCompany || isAdmin || dismissed || missing === null || missing.length === 0) return null;
 
@@ -52,8 +44,6 @@ const ProfileNudge: React.FC = () => {
   };
 
   const completion = Math.round(((3 - missing.length) / 3) * 100);
-
-  console.log('ProfileNudge Debug:', { user: !!user, isCompany, isAdmin, dismissed, missingCount: missing.length, missing });
 
   return (
     <div className="relative bg-gradient-to-r from-primary-50 via-primary-100 to-primary-50 border-b border-primary-200">

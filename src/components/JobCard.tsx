@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
+import { useJobMatchScore } from '../hooks/useJobMatchScore';
 import { Job } from '../contexts/JobContext';
 import { MapPin, DollarSign, Bookmark, BookmarkCheck, Zap, CheckCircle, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -16,9 +17,10 @@ interface JobCardProps {
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
-    const { user } = useAuth();
+    const { user, isCompany, isAdmin } = useAuth();
     const { hasApplied, applyToJob } = useJobs();
     const { isSaved, toggleSaved } = useSavedJobs();
+    const { matchScore, loading: scoreLoading } = useJobMatchScore(job.id);
     const navigate = useNavigate();
     const [applying, setApplying] = React.useState(false);
 
@@ -131,6 +133,15 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                                 <DollarSign className="h-3 w-3" />
                                 {salaryDisplay}
                             </span>
+                        )}
+                        {!isCompany && !isAdmin && user && (
+                            scoreLoading ? (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/30 animate-pulse w-16 h-5" />
+                            ) : matchScore !== null ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300">
+                                    ✨ {matchScore}% match
+                                </span>
+                            ) : null
                         )}
                         {tags.map(t => (
                             <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200 cursor-default">
