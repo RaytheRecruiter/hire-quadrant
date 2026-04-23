@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import { parseJobsXml } from '../src/utils/xmlParser';
+import { deriveJobCategory } from '../src/utils/deriveJobCategory';
 
 dotenv.config({ path: path.resolve(process.cwd(), 'supabaseapi.env') });
 
@@ -59,6 +60,7 @@ async function migrateFromLocal() {
         location: job.location,
         type: job.type,
         salary: job.salary,
+        category: deriveJobCategory(job.title),
     }));
 
     const { error } = await supabase
