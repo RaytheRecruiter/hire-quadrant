@@ -85,10 +85,12 @@ interface JobContextType {
     searchTerm: string;
     locationFilter: string;
     typeFilter: string;
+    categoryFilter: string;
     minSalary: number;
     setSearchTerm: (term: string) => void;
     setLocationFilter: (location: string) => void;
     setTypeFilter: (type: string) => void;
+    setCategoryFilter: (category: string) => void;
     setMinSalary: (value: number) => void;
     filteredJobs: Job[];
     allFilteredJobs: Job[];
@@ -126,6 +128,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [typeFilter, setTypeFilter] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('');
     const [minSalary, setMinSalary] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalJobsCount, setTotalJobsCount] = useState<number>(0);
@@ -146,6 +149,11 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
 
     const handleSetTypeFilter = useCallback((type: string) => {
         setTypeFilter(type);
+        setCurrentPage(1);
+    }, []);
+
+    const handleSetCategoryFilter = useCallback((category: string) => {
+        setCategoryFilter(category);
         setCurrentPage(1);
     }, []);
 
@@ -174,6 +182,9 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                 }
                 if (typeFilter) {
                     query = query.eq('type', typeFilter);
+                }
+                if (categoryFilter) {
+                    query = query.eq('category', categoryFilter);
                 }
                 if (minSalary > 0) {
                     query = query.gte('min_salary', minSalary);
@@ -204,7 +215,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         };
 
         fetchJobs();
-    }, [searchTerm, locationFilter, typeFilter, minSalary, currentPage]); // Rerun when filters or page change
+    }, [searchTerm, locationFilter, typeFilter, categoryFilter, minSalary, currentPage]); // Rerun when filters or page change
 
     // Fetch applications whenever the user state changes
     useEffect(() => {
@@ -329,10 +340,12 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         searchTerm,
         locationFilter,
         typeFilter,
+        categoryFilter,
         minSalary,
         setSearchTerm: debouncedSetSearchTerm,
         setLocationFilter: handleSetLocationFilter,
         setTypeFilter: handleSetTypeFilter,
+        setCategoryFilter: handleSetCategoryFilter,
         setMinSalary: handleSetMinSalary,
         filteredJobs,
         allFilteredJobs,
@@ -347,10 +360,10 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         hasApplied
     }), [
         jobs, applications, loading, error,
-        searchTerm, locationFilter, typeFilter, minSalary,
+        searchTerm, locationFilter, typeFilter, categoryFilter, minSalary,
         filteredJobs, allFilteredJobs,
         currentPage, totalPages, totalJobsCount, hasMoreJobs,
-        debouncedSetSearchTerm, handleSetLocationFilter, handleSetTypeFilter, handleSetMinSalary,
+        debouncedSetSearchTerm, handleSetLocationFilter, handleSetTypeFilter, handleSetCategoryFilter, handleSetMinSalary,
         goToPage, loadMoreJobs, applyToJob, getJobById, hasApplied,
     ]);
 

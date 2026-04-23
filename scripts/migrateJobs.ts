@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 import { fetchAndParseJobsXmlWithSources, XmlSource } from '../src/utils/xmlParser';
+import { deriveJobCategory } from '../src/utils/deriveJobCategory';
 
 // Load environment variables from supabaseapi.env file
 dotenv.config({ path: path.resolve(process.cwd(), 'supabaseapi.env') });
@@ -79,7 +80,8 @@ async function migrateJobs() {
             company: job.company,
             location: job.location,
             type: job.type,
-            salary: job.salary
+            salary: job.salary,
+            category: deriveJobCategory(job.title),
         }));
 
         const { data, error } = await supabase

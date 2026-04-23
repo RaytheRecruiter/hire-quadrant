@@ -61,7 +61,7 @@ const CATEGORIES = [
 const Home: React.FC = () => {
   const { helmet } = useSEO({ canonical: '/' });
   const { user } = useAuth();
-  const { setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary, jobs, loading } = useJobs();
+  const { setSearchTerm, setLocationFilter, setTypeFilter, setCategoryFilter, setMinSalary, jobs, loading } = useJobs();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const [heroSearch, setHeroSearch] = useState('');
@@ -80,12 +80,15 @@ const Home: React.FC = () => {
     const salary = searchParams.get('salary');
     const keyword = searchParams.get('keyword');
     const company = searchParams.get('company');
+    const category = searchParams.get('category');
 
     if (title) setHeroSearch(title);
     if (location) setHeroLocation(location);
 
     if (title || company || keyword) {
       setSearchTerm(title || company || keyword || '');
+    } else {
+      setSearchTerm('');
     }
     if (location) {
       setLocationFilter(location);
@@ -93,17 +96,18 @@ const Home: React.FC = () => {
     if (type) {
       setTypeFilter(type);
     }
+    setCategoryFilter(category || '');
     if (salary) {
       setMinSalary(parseInt(salary, 10));
     }
 
-    // Auto-scroll to jobs section if searching
-    if (keyword || title) {
+    // Auto-scroll to jobs section if searching or filtering
+    if (keyword || title || category) {
       setTimeout(() => {
         document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
       }, 300);
     }
-  }, [searchParams, setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary]);
+  }, [searchParams, setSearchTerm, setLocationFilter, setTypeFilter, setCategoryFilter, setMinSalary]);
 
   useEffect(() => {
     if (readCache<StatsShape>(STATS_CACHE_KEY, STATS_TTL_MS)) return;
@@ -426,7 +430,7 @@ const Home: React.FC = () => {
             {CATEGORIES.map((cat) => (
               <HardLink
                 key={cat.label}
-                to={`/?keyword=${encodeURIComponent(cat.label)}`}
+                to={`/?category=${encodeURIComponent(cat.label)}`}
                 className="flex items-center gap-3 bg-gray-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 rounded-xl p-4 transition-all group"
               >
                 <span className="text-2xl">{cat.icon}</span>
