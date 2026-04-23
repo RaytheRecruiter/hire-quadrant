@@ -1,6 +1,5 @@
 import React, { ReactNode, ErrorInfo } from 'react';
 import { AlertCircle, Home } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   children: ReactNode;
@@ -35,8 +34,6 @@ export class ErrorBoundary extends React.Component<Props, State> {
 }
 
 const ErrorFallback: React.FC<{ error: Error | null }> = ({ error }) => {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950 px-4">
       <div className="max-w-md text-center">
@@ -64,7 +61,7 @@ const ErrorFallback: React.FC<{ error: Error | null }> = ({ error }) => {
             Refresh Page
           </button>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => { window.location.href = '/'; }}
             className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <Home className="h-4 w-4" />
