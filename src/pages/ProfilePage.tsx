@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
-import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2 } from 'lucide-react';
+import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface CandidateProfile {
@@ -44,6 +44,7 @@ const ProfilePage = () => {
     const [profile, setProfile] = useState<CandidateProfile | null>(null);
     const [applications, setApplications] = useState<(JobApplication & { job?: JobInfo })[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
     const [headlineValue, setHeadlineValue] = useState('');
@@ -63,6 +64,7 @@ const ProfilePage = () => {
         }
 
         try {
+            setError(null);
             const [{ data: candidateData }, { data: careerData }] = await Promise.all([
                 supabase
                     .from('candidates')
@@ -90,6 +92,7 @@ const ProfilePage = () => {
             }
         } catch (err) {
             console.error('Error in fetchProfile:', err);
+            setError('Failed to load profile. Please try again later.');
         }
 
         setLoading(false);
@@ -334,6 +337,30 @@ const ProfilePage = () => {
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
                     <p className="text-gray-500">Loading profile...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12">
+                <div className="max-w-md w-full mx-auto px-4">
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+                        <div className="flex items-start gap-3">
+                            <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                            <div>
+                                <h3 className="font-semibold text-red-900 mb-1">Unable to Load Profile</h3>
+                                <p className="text-red-800 text-sm mb-4">{error}</p>
+                                <button
+                                    onClick={() => window.location.reload()}
+                                    className="text-red-700 hover:text-red-800 font-medium text-sm"
+                                >
+                                    Try Reloading
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
