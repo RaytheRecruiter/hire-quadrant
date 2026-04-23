@@ -6,6 +6,19 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 );
 
+// Maximum age of a Stripe webhook we'll accept. Stripe's own libraries use 5 min.
+// Rejecting older events defends against replay of previously-intercepted webhooks.
+const WEBHOOK_TOLERANCE_SECONDS = 300;
+
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
+}
+
 async function verifyStripeSignature(
   body: string,
   signature: string,
@@ -24,6 +37,15 @@ async function verifyStripeSignature(
 
     if (!timestamp || !sig) return false;
 
+    // Reject events older than the tolerance window (replay defense).
+    const eventSeconds = Number(timestamp);
+    if (!Number.isFinite(eventSeconds)) return false;
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    if (Math.abs(nowSeconds - eventSeconds) > WEBHOOK_TOLERANCE_SECONDS) {
+      console.error(`Stripe webhook timestamp outside tolerance: event=${eventSeconds}, now=${nowSeconds}`);
+      return false;
+    }
+
     const signedContent = `${timestamp}.${body}`;
     const key = await crypto.subtle.importKey(
       'raw',
@@ -38,7 +60,7 @@ async function verifyStripeSignature(
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');
 
-    return computedSig === sig;
+    return timingSafeEqual(computedSig, sig);
   } catch (error) {
     console.error('Signature verification error:', error);
     return false;

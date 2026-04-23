@@ -26,11 +26,11 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
     const applied = user ? hasApplied(job.id, user.id) : false;
     const saved = isSaved(job.id);
-    const screeningCount = ((job as any).screening_questions as any[] | undefined)?.length || 0;
+    const screeningCount = job.screening_questions?.length ?? 0;
     const canOneClick = !!user && screeningCount === 0 && !applied;
     const tags = React.useMemo(() => extractTags(job.title, job.description), [job.title, job.description]);
-    const minSalary = (job as any).min_salary;
-    const maxSalary = (job as any).max_salary;
+    const minSalary = job.min_salary;
+    const maxSalary = job.max_salary;
     const salaryDisplay = minSalary && maxSalary
         ? `$${(minSalary / 1000).toFixed(0)}k – $${(maxSalary / 1000).toFixed(0)}k`
         : job.salary;
@@ -83,7 +83,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             className="group block bg-white dark:bg-slate-800 rounded-2xl shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all duration-300 hover:scale-[1.01] p-4"
         >
             <div className="flex items-start gap-3">
-                <CompanyLogo company={job.company} logoUrl={(job as any).company_logo_url} size="md" />
+                <CompanyLogo company={job.company} logoUrl={job.company_logo_url} size="md" />
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3">
@@ -186,16 +186,14 @@ export default React.memo(JobCard, (prev, next) => {
     if (prev.job.id !== next.job.id) return false;
     if (prev.job.title !== next.job.title) return false;
     if (prev.job.company !== next.job.company) return false;
-    if ((prev.job as any).company_logo_url !== (next.job as any).company_logo_url) return false;
+    if (prev.job.company_logo_url !== next.job.company_logo_url) return false;
     if (prev.job.location !== next.job.location) return false;
     if (prev.job.type !== next.job.type) return false;
     if (prev.job.salary !== next.job.salary) return false;
-    if ((prev.job as any).min_salary !== (next.job as any).min_salary) return false;
-    if ((prev.job as any).max_salary !== (next.job as any).max_salary) return false;
+    if (prev.job.min_salary !== next.job.min_salary) return false;
+    if (prev.job.max_salary !== next.job.max_salary) return false;
     if (prev.job.description !== next.job.description) return false;
     if (prev.job.postedDate !== next.job.postedDate) return false;
-    const prevQs = ((prev.job as any).screening_questions as any[] | undefined)?.length ?? 0;
-    const nextQs = ((next.job as any).screening_questions as any[] | undefined)?.length ?? 0;
-    if (prevQs !== nextQs) return false;
+    if ((prev.job.screening_questions?.length ?? 0) !== (next.job.screening_questions?.length ?? 0)) return false;
     return true;
 });

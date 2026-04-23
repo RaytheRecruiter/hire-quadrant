@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Sparkles, Loader2, Copy, Check } from 'lucide-react';
 import { generateJobDescription } from '../utils/aiClient';
 
@@ -16,6 +16,13 @@ const AIJobDescriptionGenerator: React.FC<Props> = ({ title: initialTitle = '', 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copiedTimer.current) clearTimeout(copiedTimer.current);
+    };
+  }, []);
 
   const handleGenerate = async () => {
     if (!title) return setError('Job title is required.');
@@ -40,7 +47,8 @@ const AIJobDescriptionGenerator: React.FC<Props> = ({ title: initialTitle = '', 
   const handleCopy = () => {
     navigator.clipboard.writeText(description);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (copiedTimer.current) clearTimeout(copiedTimer.current);
+    copiedTimer.current = setTimeout(() => setCopied(false), 2000);
   };
 
   return (

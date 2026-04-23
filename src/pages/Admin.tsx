@@ -17,6 +17,7 @@ const Admin: React.FC = () => {
   const { jobs, applications, userProfiles, loading, error, updateApplicationStatus, refreshData } = useAdminData();
   const [activeTab, setActiveTab] = useState('overview');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [importResult, setImportResult] = useState<{ kind: 'success' | 'error'; message: string } | null>(null);
 
   useEffect(() => {
     TrackingService.initialize();
@@ -194,26 +195,13 @@ const Admin: React.FC = () => {
     reader.onload = (e) => {
       const content = e.target?.result as string;
       if (TrackingService.importData(content)) {
-        const messageBox = document.createElement('div');
-        messageBox.innerHTML = `
-          <div style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:2rem; border-radius:0.5rem; box-shadow:0 4px 6px rgba(0,0,0,0.1); z-index:100;">
-            <p>Tracking data imported successfully!</p>
-            <button onclick="document.body.removeChild(this.parentNode.parentNode); window.location.reload();" style="margin-top:1rem; padding:0.5rem 1rem; background-color:blue; color:white; border-radius:0.25rem;">OK</button>
-          </div>
-        `;
-        document.body.appendChild(messageBox);
+        setImportResult({ kind: 'success', message: 'Tracking data imported successfully.' });
       } else {
-        const messageBox = document.createElement('div');
-        messageBox.innerHTML = `
-          <div style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:2rem; border-radius:0.5rem; box-shadow:0 4px 6px rgba(0,0,0,0.1); z-index:100;">
-            <p>Failed to import tracking data. Please check the file format.</p>
-            <button onclick="document.body.removeChild(this.parentNode.parentNode);" style="margin-top:1rem; padding:0.5rem 1rem; background-color:red; color:white; border-radius:0.25rem;">OK</button>
-          </div>
-        `;
-        document.body.appendChild(messageBox);
+        setImportResult({ kind: 'error', message: 'Failed to import tracking data. Please check the file format.' });
       }
     };
     reader.readAsText(file);
+    event.target.value = '';
   };
 
   const handleStatusChange = async (applicationId: string, newStatus: string) => {
@@ -260,6 +248,27 @@ const Admin: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
+      {importResult && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-lg shadow-xl p-8 max-w-sm w-full mx-4">
+            <p className={importResult.kind === 'success' ? 'text-gray-900' : 'text-red-900'}>
+              {importResult.message}
+            </p>
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => {
+                  const wasSuccess = importResult.kind === 'success';
+                  setImportResult(null);
+                  if (wasSuccess) window.location.reload();
+                }}
+                className={`px-4 py-2 rounded text-white ${importResult.kind === 'success' ? 'bg-blue-500 hover:bg-blue-600' : 'bg-red-500 hover:bg-red-600'}`}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>

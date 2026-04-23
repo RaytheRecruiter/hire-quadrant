@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import { CompanyProvider } from './contexts/CompanyContext';
@@ -11,32 +12,40 @@ import ProfileNudge from './components/ProfileNudge';
 import { ScrollToTop } from './components/ScrollToTop';
 import Home from './pages/Home';
 import JobDetails from './pages/JobDetails';
-import CompanyProfile from './components/CompanyProfile';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AuthCallback from './pages/AuthCallback';
 import PasswordReset from './pages/PasswordReset';
-import Admin from './pages/Admin';
-import XMLFeederAdmin from './components/XMLFeederAdmin';
-import CompanySourceManager from './components/CompanySourceManager';
 import ProfilePage from './pages/ProfilePage';
-import CompanyDashboard from './pages/CompanyDashboard';
 import SavedJobs from './pages/SavedJobs';
-import JobAlerts from './pages/JobAlerts';
-import ResumeSearch from './pages/ResumeSearch';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
 import Onboarding from './pages/Onboarding';
-import CareerPath from './pages/CareerPath';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Support from './pages/Support';
-import AdvancedSearch from './pages/AdvancedSearch';
-import Companies from './pages/Companies';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
+
+// Heavier / less-visited routes are lazy-loaded to keep the main bundle small.
+const CompanyProfile = lazy(() => import('./components/CompanyProfile'));
+const Admin = lazy(() => import('./pages/Admin'));
+const XMLFeederAdmin = lazy(() => import('./components/XMLFeederAdmin'));
+const CompanySourceManager = lazy(() => import('./components/CompanySourceManager'));
+const CompanyDashboard = lazy(() => import('./pages/CompanyDashboard'));
+const JobAlerts = lazy(() => import('./pages/JobAlerts'));
+const ResumeSearch = lazy(() => import('./pages/ResumeSearch'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const CareerPath = lazy(() => import('./pages/CareerPath'));
+const AdvancedSearch = lazy(() => import('./pages/AdvancedSearch'));
+const Companies = lazy(() => import('./pages/Companies'));
+
+const RouteFallback: React.FC = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+  </div>
+);
 
 const PageTracker: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useGoogleAnalytics();
@@ -56,7 +65,8 @@ function App() {
                   <div className="min-h-screen bg-gray-50">
                     <Header />
                     <ProfileNudge />
-                    <Routes>
+                    <Suspense fallback={<RouteFallback />}>
+                      <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/jobs/:id" element={<JobDetails />} />
                 <Route path="/job/:slug" element={<JobDetails />} />
@@ -85,7 +95,8 @@ function App() {
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="*" element={<NotFound />} />
-                    </Routes>
+                      </Routes>
+                    </Suspense>
                     <Footer />
                   </div>
                 </PageTracker>
