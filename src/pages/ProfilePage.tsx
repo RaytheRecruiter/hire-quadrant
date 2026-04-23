@@ -65,7 +65,7 @@ const ProfilePage = () => {
 
         try {
             setError(null);
-            const [{ data: candidateData }, { data: careerData }] = await Promise.all([
+            const [candRes, careerRes] = await Promise.all([
                 supabase
                     .from('candidates')
                     .select('*')
@@ -78,17 +78,20 @@ const ProfilePage = () => {
                     .maybeSingle(),
             ]);
 
-            if (candidateData) {
-                setProfile(candidateData);
-                setHeadlineValue(candidateData.headline || '');
-                setLocationValue(candidateData.location || '');
-                setPhoneValue(candidateData.phone_number || '');
-                setResumeTextValue(candidateData.resume_text || '');
+            if (candRes.error) throw candRes.error;
+            if (careerRes.error) throw careerRes.error;
+
+            if (candRes.data) {
+                setProfile(candRes.data);
+                setHeadlineValue(candRes.data.headline || '');
+                setLocationValue(candRes.data.location || '');
+                setPhoneValue(candRes.data.phone_number || '');
+                setResumeTextValue(candRes.data.resume_text || '');
             }
 
-            if (careerData) {
-                setCurrentRoleValue(careerData.current_role || '');
-                setTargetRoleValue(careerData.target_role || '');
+            if (careerRes.data) {
+                setCurrentRoleValue(careerRes.data.current_role || '');
+                setTargetRoleValue(careerRes.data.target_role || '');
             }
         } catch (err) {
             console.error('Error in fetchProfile:', err);
