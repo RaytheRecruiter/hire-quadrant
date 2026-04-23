@@ -57,11 +57,24 @@ export interface JobApplication {
     source_company?: string;
 }
 
+export interface ApplicationEEO {
+    race_ethnicity?: string;
+    gender?: string;
+    disability?: string;
+    veteran?: string;
+}
+
 export interface ApplicationDetails {
     coverLetter?: string;
     applicantName?: string;
     applicantEmail?: string;
     applicantPhone?: string;
+    applicantFirstName?: string;
+    applicantLastName?: string;
+    applicantZip?: string;
+    resumeUrl?: string;
+    eeo?: ApplicationEEO;
+    privacyAcceptedAt?: string;
 }
 
 interface JobContextType {
@@ -253,14 +266,21 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                 source_company: job?.sourceCompany
             };
 
+            const eeoHasAny = details?.eeo && Object.values(details.eeo).some((v) => v && v.trim());
             const { data, error } = await supabase
                 .from('job_applications')
                 .insert([{
                     ...newApplication,
                     user_name: details?.applicantName?.trim() || user.name,
                     user_email: details?.applicantEmail?.trim() || user.email,
+                    applicant_first_name: details?.applicantFirstName?.trim() || null,
+                    applicant_last_name: details?.applicantLastName?.trim() || null,
                     applicant_phone: details?.applicantPhone?.trim() || null,
+                    applicant_zip: details?.applicantZip?.trim() || null,
+                    resume_url: details?.resumeUrl || null,
                     cover_letter: details?.coverLetter?.trim() || null,
+                    eeo_responses: eeoHasAny ? details!.eeo : null,
+                    privacy_accepted_at: details?.privacyAcceptedAt || null,
                     screening_answers: screeningAnswers || [],
                 }])
                 .select()
