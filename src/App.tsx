@@ -8,6 +8,7 @@ import { useGoogleAnalytics } from './hooks/useGoogleAnalytics';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Header from './components/Header';
 import ProfileNudge from './components/ProfileNudge';
+import { ScrollToTop } from './components/ScrollToTop';
 import Home from './pages/Home';
 import JobDetails from './pages/JobDetails';
 import CompanyProfile from './components/CompanyProfile';
@@ -50,6 +51,7 @@ function App() {
           <JobProvider>
             <ErrorBoundary>
               <Router>
+                <ScrollToTop />
                 <PageTracker>
                   <div className="min-h-screen bg-gray-50">
                     <Header />
