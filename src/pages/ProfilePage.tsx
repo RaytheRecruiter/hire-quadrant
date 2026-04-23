@@ -39,9 +39,40 @@ interface JobInfo {
     type: string;
 }
 
+// Diagnostic banner. Delete after confirming /profile rendering works.
+const ProfilePageDiagnostic: React.FC = () => (
+    <div
+        style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            background: 'limegreen',
+            color: 'black',
+            padding: '12px 16px',
+            fontWeight: 700,
+            fontSize: 16,
+            fontFamily: 'system-ui, sans-serif',
+            textAlign: 'center',
+            borderBottom: '3px solid black',
+        }}
+    >
+        ✅ ProfilePage IS RENDERING — location.pathname = {window.location.pathname}
+    </div>
+);
+
 const ProfilePage = () => {
     const { user } = useAuth();
     const [profile, setProfile] = useState<CandidateProfile | null>(null);
+    useEffect(() => {
+        // eslint-disable-next-line no-console
+        console.log('[DIAG] ProfilePage mounted at', window.location.pathname, 'user =', user?.id ?? 'NO_USER');
+        return () => {
+            // eslint-disable-next-line no-console
+            console.log('[DIAG] ProfilePage unmounted');
+        };
+    }, [user]);
     const [applications, setApplications] = useState<(JobApplication & { job?: JobInfo })[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -326,54 +357,65 @@ const ProfilePage = () => {
 
     if (!user) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-gray-600 mb-4">Please log in to view your profile.</p>
-                    <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
-                        Go to Login
-                    </Link>
+            <>
+                <ProfilePageDiagnostic />
+                <div className="min-h-screen flex items-center justify-center pt-20">
+                    <div className="text-center">
+                        <p className="text-gray-600 mb-4">Please log in to view your profile.</p>
+                        <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+                            Go to Login
+                        </Link>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
-                    <p className="text-gray-500">Loading profile...</p>
+            <>
+                <ProfilePageDiagnostic />
+                <div className="min-h-screen flex items-center justify-center pt-20">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
+                        <p className="text-gray-500">Loading profile...</p>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12">
-                <div className="max-w-md w-full mx-auto px-4">
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-6">
-                        <div className="flex items-start gap-3">
-                            <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                            <div>
-                                <h3 className="font-semibold text-red-900 mb-1">Unable to Load Profile</h3>
-                                <p className="text-red-800 text-sm mb-4">{error}</p>
-                                <button
-                                    onClick={() => window.location.reload()}
-                                    className="text-red-700 hover:text-red-800 font-medium text-sm"
-                                >
-                                    Try Reloading
-                                </button>
+            <>
+                <ProfilePageDiagnostic />
+                <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 pt-20">
+                    <div className="max-w-md w-full mx-auto px-4">
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+                            <div className="flex items-start gap-3">
+                                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                <div>
+                                    <h3 className="font-semibold text-red-900 mb-1">Unable to Load Profile</h3>
+                                    <p className="text-red-800 text-sm mb-4">{error}</p>
+                                    <button
+                                        onClick={() => window.location.reload()}
+                                        className="text-red-700 hover:text-red-800 font-medium text-sm"
+                                    >
+                                        Try Reloading
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <>
+        <ProfilePageDiagnostic />
+        <div className="min-h-screen bg-gray-50 py-12 pt-20">
             <div className="max-w-3xl mx-auto px-4">
                 {/* Header */}
                 <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
@@ -655,6 +697,7 @@ const ProfilePage = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
