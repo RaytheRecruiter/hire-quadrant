@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { HelpCircle, MessageCircle, BookOpen, Search, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 
 interface FAQItem {
   category: string;
@@ -113,14 +114,14 @@ const Support: React.FC = () => {
 
             {/* Quick Links */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-              <Link
+              <HardLink
                 to="/contact"
                 className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
               >
                 <MessageCircle className="h-6 w-6 text-primary-500 mx-auto mb-2" />
                 <h3 className="font-semibold text-secondary-900 dark:text-white mb-1">Contact Us</h3>
                 <p className="text-sm text-gray-600 dark:text-slate-400">Send us a message</p>
-              </Link>
+              </HardLink>
 
               <a
                 href="mailto:support@hirequadrant.com"
@@ -217,12 +218,12 @@ const Support: React.FC = () => {
             <p className="text-gray-600 dark:text-slate-400 mb-6">
               Our support team is here to help. Reach out and we'll respond within 24 hours.
             </p>
-            <Link
+            <HardLink
               to="/contact"
               className="inline-block bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
             >
               Contact Support
-            </Link>
+            </HardLink>
           </div>
         </div>
       </div>

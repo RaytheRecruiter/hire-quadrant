@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from './HardLink';
 import { Mail, Linkedin, Twitter, Github } from 'lucide-react';
 
 const Footer: React.FC = () => {
@@ -21,11 +22,11 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-semibold mb-4 text-white">For Candidates</h4>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/" className="hover:text-white transition">Browse Jobs</Link></li>
-              <li><Link to="/saved" className="hover:text-white transition">Saved Jobs</Link></li>
-              <li><Link to="/alerts" className="hover:text-white transition">Job Alerts</Link></li>
-              <li><Link to="/pricing" className="hover:text-white transition">Pricing</Link></li>
-              <li><Link to="/blog" className="hover:text-white transition">Career Blog</Link></li>
+              <li><HardLink to="/" className="hover:text-white transition">Browse Jobs</HardLink></li>
+              <li><HardLink to="/saved" className="hover:text-white transition">Saved Jobs</HardLink></li>
+              <li><HardLink to="/alerts" className="hover:text-white transition">Job Alerts</HardLink></li>
+              <li><HardLink to="/pricing" className="hover:text-white transition">Pricing</HardLink></li>
+              <li><HardLink to="/blog" className="hover:text-white transition">Career Blog</HardLink></li>
             </ul>
           </div>
 
@@ -34,7 +35,7 @@ const Footer: React.FC = () => {
             <h4 className="font-semibold mb-4 text-white">For Employers</h4>
             <ul className="space-y-2 text-sm text-gray-300">
               <li><a href="mailto:employers@hirequadrant.com" className="hover:text-white transition">Post a Job</a></li>
-              <li><Link to="/pricing" className="hover:text-white transition">Plans & Pricing</Link></li>
+              <li><HardLink to="/pricing" className="hover:text-white transition">Plans & Pricing</HardLink></li>
               <li><a href="mailto:sales@hirequadrant.com" className="hover:text-white transition">Contact Sales</a></li>
             </ul>
           </div>
@@ -43,10 +44,10 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-semibold mb-4 text-white">Company</h4>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/about" className="hover:text-white transition">About</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition">Contact</Link></li>
-              <li><Link to="/privacy" className="hover:text-white transition">Privacy</Link></li>
-              <li><Link to="/terms" className="hover:text-white transition">Terms</Link></li>
+              <li><HardLink to="/about" className="hover:text-white transition">About</HardLink></li>
+              <li><HardLink to="/contact" className="hover:text-white transition">Contact</HardLink></li>
+              <li><HardLink to="/privacy" className="hover:text-white transition">Privacy</HardLink></li>
+              <li><HardLink to="/terms" className="hover:text-white transition">Terms</HardLink></li>
             </ul>
           </div>
         </div>

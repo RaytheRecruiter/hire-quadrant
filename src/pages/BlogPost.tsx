@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { ArrowLeft, Clock, Loader2, BookOpen } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useSEO } from '../hooks/useSEO';
@@ -75,7 +76,7 @@ const BlogPost: React.FC = () => {
         <div>
           <BookOpen className="mx-auto h-12 w-12 text-gray-300 mb-3" />
           <h2 className="text-xl font-bold mb-2">Post not found</h2>
-          <Link to="/blog" className="text-primary-600 hover:underline">← Back to blog</Link>
+          <HardLink to="/blog" className="text-primary-600 hover:underline">← Back to blog</HardLink>
         </div>
       </div>
     );
@@ -84,9 +85,9 @@ const BlogPost: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link to="/blog" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 font-medium mb-6">
+        <HardLink to="/blog" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 font-medium mb-6">
           <ArrowLeft className="h-4 w-4" /> Back to Career Resources
-        </Link>
+        </HardLink>
 
         {post.cover_image_url && (
           <img

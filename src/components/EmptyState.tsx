@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from './HardLink';
 
 interface Props {
   illustration?: React.ReactNode;
@@ -25,12 +26,12 @@ const EmptyState: React.FC<Props> = ({ illustration, icon, title, description, p
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         {primaryAction && (
           primaryAction.to ? (
-            <Link
+            <HardLink
               to={primaryAction.to}
               className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-2.5 rounded-xl font-semibold shadow-soft hover:shadow-card-hover transition-all"
             >
               {primaryAction.label}
-            </Link>
+            </HardLink>
           ) : (
             <button
               onClick={primaryAction.onClick}
@@ -42,12 +43,12 @@ const EmptyState: React.FC<Props> = ({ illustration, icon, title, description, p
         )}
         {secondaryAction && (
           secondaryAction.to ? (
-            <Link
+            <HardLink
               to={secondaryAction.to}
               className="text-primary-600 hover:text-primary-800 font-semibold px-4 py-2"
             >
               {secondaryAction.label}
-            </Link>
+            </HardLink>
           ) : (
             <button
               onClick={secondaryAction.onClick}

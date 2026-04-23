@@ -62,12 +62,12 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <HardLink to="/" className="flex items-center gap-2.5 flex-shrink-0">
             <div className="p-1.5 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg shadow-soft">
               <Grid3X3 className="h-5 w-5 text-white" />
             </div>
             <span className="font-display font-bold text-xl text-secondary-900 dark:text-white hidden sm:inline">Hire Quadrant</span>
-          </Link>
+          </HardLink>
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1">
@@ -91,18 +91,18 @@ const Header: React.FC = () => {
                 </button>
                 {adminMenuOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-card-hover border border-gray-100 dark:border-slate-700 py-1 animate-fade-in">
-                    <Link to="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
+                    <HardLink to="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
                       <BarChart3 className="h-4 w-4 text-gray-400" /> Admin Dashboard
-                    </Link>
-                    <Link to="/talent-search" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
+                    </HardLink>
+                    <HardLink to="/talent-search" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
                       <Search className="h-4 w-4 text-gray-400" /> Talent Search
-                    </Link>
-                    <Link to="/xml-feeder" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
+                    </HardLink>
+                    <HardLink to="/xml-feeder" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
                       <FileText className="h-4 w-4 text-gray-400" /> XML Feeder
-                    </Link>
-                    <Link to="/company-sources" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
+                    </HardLink>
+                    <HardLink to="/company-sources" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
                       <Building2 className="h-4 w-4 text-gray-400" /> Company Sources
-                    </Link>
+                    </HardLink>
                   </div>
                 )}
               </div>
@@ -116,12 +116,12 @@ const Header: React.FC = () => {
               <div className="flex items-center gap-1">
                 {!isAdmin && !isCompany && (
                   <>
-                    <Link to="/saved" title="Saved jobs" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
+                    <HardLink to="/saved" title="Saved jobs" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
                       <Bookmark className="h-5 w-5" />
-                    </Link>
-                    <Link to="/alerts" title="Job alerts" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
+                    </HardLink>
+                    <HardLink to="/alerts" title="Job alerts" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
                       <Bell className="h-5 w-5" />
-                    </Link>
+                    </HardLink>
                   </>
                 )}
 
@@ -168,12 +168,12 @@ const Header: React.FC = () => {
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-2">
-                <Link to="/login" className="text-secondary-700 hover:text-primary-600 px-4 py-2 text-sm font-semibold transition-colors">
+                <HardLink to="/login" className="text-secondary-700 hover:text-primary-600 px-4 py-2 text-sm font-semibold transition-colors">
                   Sign in
-                </Link>
-                <Link to="/register" className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-soft hover:shadow-card-hover transition-all">
+                </HardLink>
+                <HardLink to="/register" className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-soft hover:shadow-card-hover transition-all">
                   Sign up
-                </Link>
+                </HardLink>
               </div>
             )}
 
@@ -216,20 +216,20 @@ const Header: React.FC = () => {
             {isAdmin && (
               <>
                 <div className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">Admin</div>
-                <Link to="/admin" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Admin Dashboard</Link>
-                <Link to="/talent-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Talent Search</Link>
-                <Link to="/xml-feeder" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">XML Feeder</Link>
-                <Link to="/company-sources" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Company Sources</Link>
+                <HardLink to="/admin" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Admin Dashboard</HardLink>
+                <HardLink to="/talent-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Talent Search</HardLink>
+                <HardLink to="/xml-feeder" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">XML Feeder</HardLink>
+                <HardLink to="/company-sources" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Company Sources</HardLink>
               </>
             )}
             {!isAuthenticated && (
               <div className="pt-3 mt-3 border-t border-gray-100 flex flex-col gap-2">
-                <Link to="/login" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold text-center border border-gray-200 hover:bg-gray-50">
+                <HardLink to="/login" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold text-center border border-gray-200 hover:bg-gray-50">
                   Sign in
-                </Link>
-                <Link to="/register" className="block px-4 py-2.5 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold text-center shadow-soft">
+                </HardLink>
+                <HardLink to="/register" className="block px-4 py-2.5 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold text-center shadow-soft">
                   Sign up
-                </Link>
+                </HardLink>
               </div>
             )}
           </div>

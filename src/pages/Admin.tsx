@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { BarChart3, Users, Briefcase, Eye, TrendingUp, Calendar, Building2, RotateCcw, Download, Upload, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
@@ -637,9 +638,9 @@ const Admin: React.FC = () => {
                   {
                     key: 'title', label: 'Job Title',
                     render: (job) => (
-                      <Link to={`/jobs/${job.id}`} className="text-sm font-medium text-primary-700 hover:underline">
+                      <HardLink to={`/jobs/${job.id}`} className="text-sm font-medium text-primary-700 hover:underline">
                         {job.title}
-                      </Link>
+                      </HardLink>
                     ),
                     getValue: (job) => job.title,
                   },
@@ -742,7 +743,7 @@ const Admin: React.FC = () => {
                     render: (app) => {
                       const job = jobs.find(j => j.id === app.job_id);
                       return job ? (
-                        <Link to={`/jobs/${job.id}`} className="text-sm text-primary-700 hover:underline">{job.title}</Link>
+                        <HardLink to={`/jobs/${job.id}`} className="text-sm text-primary-700 hover:underline">{job.title}</HardLink>
                       ) : <span className="text-gray-400">Unknown</span>;
                     },
                   },

@@ -4,6 +4,7 @@ import { useJobs } from '../contexts/JobContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
 import { useSearchParams, Link, useLocation } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import TrendingSection from '../components/TrendingSection';
 import NewsletterSignup from '../components/NewsletterSignup';
 import RecommendedJobs from '../components/RecommendedJobs';
@@ -423,7 +424,7 @@ const Home: React.FC = () => {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {CATEGORIES.map((cat) => (
-              <Link
+              <HardLink
                 key={cat.label}
                 to={`/?keyword=${encodeURIComponent(cat.label)}`}
                 className="flex items-center gap-3 bg-gray-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 rounded-xl p-4 transition-all group"
@@ -432,7 +433,7 @@ const Home: React.FC = () => {
                 <span className="font-semibold text-secondary-700 dark:text-slate-300 group-hover:text-primary-700 dark:group-hover:text-primary-300 text-sm">
                   {cat.label}
                 </span>
-              </Link>
+              </HardLink>
             ))}
           </div>
         </div>
@@ -524,13 +525,13 @@ const Home: React.FC = () => {
               <p className="text-lg text-secondary-600 dark:text-slate-300 mb-6 leading-relaxed">
                 HireQuadrant is built on transparency. We work for candidates, not algorithms. We help employers find their best people and give candidates the clarity they deserve.
               </p>
-              <Link
+              <HardLink
                 to="/about"
                 className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-all"
               >
                 Learn Our Story
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </HardLink>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-primary-100 dark:border-primary-900/30 shadow-card">
               <div className="space-y-6">
@@ -580,12 +581,12 @@ const Home: React.FC = () => {
           </div>
 
           <div className="text-center mt-10">
-            <Link
+            <HardLink
               to="/support"
               className="inline-block bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-colors"
             >
               View Full FAQ & Support
-            </Link>
+            </HardLink>
           </div>
         </div>
       </section>
@@ -635,17 +636,17 @@ const Home: React.FC = () => {
           </div>
 
           <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm">
-            <Link to="/privacy" className="text-primary-600 hover:text-primary-800 font-semibold">
+            <HardLink to="/privacy" className="text-primary-600 hover:text-primary-800 font-semibold">
               Privacy Policy
-            </Link>
+            </HardLink>
             <span className="text-gray-300">•</span>
-            <Link to="/terms" className="text-primary-600 hover:text-primary-800 font-semibold">
+            <HardLink to="/terms" className="text-primary-600 hover:text-primary-800 font-semibold">
               Terms of Service
-            </Link>
+            </HardLink>
             <span className="text-gray-300">•</span>
-            <Link to="/support" className="text-primary-600 hover:text-primary-800 font-semibold">
+            <HardLink to="/support" className="text-primary-600 hover:text-primary-800 font-semibold">
               Security & Support
-            </Link>
+            </HardLink>
           </div>
         </div>
       </section>
@@ -689,7 +690,7 @@ const Home: React.FC = () => {
                 link: '/terms',
               },
             ].map((item, idx) => (
-              <Link
+              <HardLink
                 key={idx}
                 to={item.link}
                 className="group bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
@@ -701,7 +702,7 @@ const Home: React.FC = () => {
                 <p className="text-secondary-600 dark:text-slate-400 text-sm">
                   {item.description}
                 </p>
-              </Link>
+              </HardLink>
             ))}
           </div>
         </div>
@@ -730,14 +731,14 @@ const Home: React.FC = () => {
             <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white">
               Trending Now
             </h2>
-            <Link
+            <HardLink
               to="/"
               onClick={handleBrowseAllJobs}
               className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-semibold flex items-center gap-1 text-sm"
             >
               Browse all jobs
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </HardLink>
           </div>
           {loading ? (
             <div className="text-center py-12">
@@ -748,7 +749,7 @@ const Home: React.FC = () => {
           ) : jobs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {jobs.slice(0, 9).map((job) => (
-                <Link
+                <HardLink
                   key={job.id}
                   to={`/jobs/${job.id}`}
                   className="group bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-200 dark:border-slate-700 hover:shadow-card-hover transition-all hover:border-primary-300"
@@ -773,7 +774,7 @@ const Home: React.FC = () => {
                       </div>
                     )}
                   </div>
-                </Link>
+                </HardLink>
               ))}
             </div>
           ) : (

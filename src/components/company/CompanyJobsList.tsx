@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from '../HardLink';
 import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2 } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import ScreeningQuestionsEditor from '../ScreeningQuestionsEditor';
@@ -75,12 +76,12 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
               return (
                 <tr key={job.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Link
+                    <HardLink
                       to={`/jobs/${job.id}`}
                       className="text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline"
                     >
                       {job.title}
-                    </Link>
+                    </HardLink>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     <div className="flex items-center">

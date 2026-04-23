@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from './HardLink';
 import { Lightbulb, MapPin, Building2, Clock, Loader2, X } from 'lucide-react';
 import { useRecommendedJobs } from '../hooks/useRecommendedJobs';
 import { useSkippedJobs } from '../hooks/useSkippedJobs';
@@ -37,7 +38,7 @@ const RecommendedJobs: React.FC = () => {
             key={job.id}
             className="group relative bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
           >
-            <Link
+            <HardLink
               to={`/job/${generateSlug(job.title, job.company)}`}
               className="block p-5"
             >
@@ -71,7 +72,7 @@ const RecommendedJobs: React.FC = () => {
                   </span>
                 )}
               </div>
-            </Link>
+            </HardLink>
 
             {/* "Not Interested" dismiss button */}
             <button

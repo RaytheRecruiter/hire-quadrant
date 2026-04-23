@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { User, Lock, Mail, Eye, EyeOff, CheckCircle, Briefcase, Building2 } from 'lucide-react';
 import GoogleSignInButton from '../components/GoogleSignInButton';
@@ -65,12 +66,12 @@ const Register: React.FC = () => {
             <p className="text-sm text-gray-500 mb-8">
               Didn't receive the email? Check your spam folder or try registering again.
             </p>
-            <Link
+            <HardLink
               to="/login"
               className="inline-block bg-gradient-to-r from-primary-400 to-primary-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary-500 hover:to-primary-600 transition-all duration-300 shadow-lg"
             >
               Go to Login
-            </Link>
+            </HardLink>
           </div>
         </div>
       </div>
@@ -86,12 +87,12 @@ const Register: React.FC = () => {
           </h2>
           <p className="mt-4 text-center text-gray-600">
             Or{' '}
-            <Link
+            <HardLink
               to="/login"
               className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
             >
               sign in to your existing account
-            </Link>
+            </HardLink>
           </p>
         </div>
 

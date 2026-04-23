@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { supabase } from '../utils/supabaseClient';
 import { Check, Zap, Star, Crown, Building2, AlertCircle } from 'lucide-react';
 import { useSEO } from '../hooks/useSEO';
@@ -242,12 +243,12 @@ const Pricing: React.FC = () => {
               {/* CTA */}
               <div className="mt-auto">
                 {plan.slug === 'free' ? (
-                  <Link
+                  <HardLink
                     to="/register"
                     className="block w-full text-center py-2.5 px-4 rounded-lg font-medium text-sm bg-amber-500 hover:bg-amber-600 text-white transition-colors shadow-soft hover:shadow-card-hover"
                   >
                     Get Started
-                  </Link>
+                  </HardLink>
                 ) : (
                   <button
                     disabled

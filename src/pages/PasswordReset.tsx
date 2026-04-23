@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import toast from 'react-hot-toast';
 import { confirmPasswordReset, validatePassword } from '../utils/passwordReset';
 
@@ -63,9 +64,9 @@ const PasswordReset: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12">
         <div className="w-full max-w-md">
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-8">
-            <Link to="/login" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 text-sm font-medium mb-6">
+            <HardLink to="/login" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 text-sm font-medium mb-6">
               <ArrowLeft className="h-4 w-4" /> Back to Login
-            </Link>
+            </HardLink>
 
             <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
               <Lock className="h-6 w-6 text-primary-600 dark:text-primary-400" />
@@ -160,7 +161,7 @@ const PasswordReset: React.FC = () => {
             </form>
 
             <p className="text-xs text-gray-500 dark:text-slate-500 text-center mt-6">
-              If the reset link has expired, <Link to="/login?tab=forgot" className="text-primary-600 hover:underline">request a new one</Link>.
+              If the reset link has expired, <HardLink to="/login?tab=forgot" className="text-primary-600 hover:underline">request a new one</HardLink>.
             </p>
           </div>
         </div>

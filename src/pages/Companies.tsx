@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { supabase } from '../utils/supabaseClient';
 import { Building2, MapPin, Briefcase, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import CompanyLogo from '../components/CompanyLogo';
 
 interface Company {
@@ -108,7 +109,7 @@ const Companies: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((company) => (
-                <Link
+                <HardLink
                   key={company.id}
                   to={`/?company=${encodeURIComponent(company.name)}`}
                   className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 transition-all hover:scale-[1.01]"
@@ -134,7 +135,7 @@ const Companies: React.FC = () => {
                       {company.job_count} open {company.job_count === 1 ? 'role' : 'roles'}
                     </span>
                   </div>
-                </Link>
+                </HardLink>
               ))}
             </div>
           )}

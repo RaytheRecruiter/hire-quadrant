@@ -1,6 +1,7 @@
 // src/pages/ProfilePage.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle, Sparkles } from 'lucide-react';
@@ -329,9 +330,9 @@ const ProfilePage = () => {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <p className="text-gray-600 mb-4">Please log in to view your profile.</p>
-                    <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+                    <HardLink to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
                         Go to Login
-                    </Link>
+                    </HardLink>
                 </div>
             </div>
         );
@@ -590,17 +591,17 @@ const ProfilePage = () => {
                         <div className="text-center py-8">
                             <Briefcase className="h-10 w-10 text-gray-300 mx-auto mb-3" />
                             <p className="text-gray-500 mb-2">You haven't applied to any jobs yet.</p>
-                            <Link
+                            <HardLink
                                 to="/"
                                 className="text-primary-600 hover:text-primary-700 font-medium text-sm"
                             >
                                 Browse Jobs
-                            </Link>
+                            </HardLink>
                         </div>
                     ) : (
                         <div className="space-y-3">
                             {applications.map((app) => (
-                                <Link
+                                <HardLink
                                     key={app.id}
                                     to={`/jobs/${app.job_id}`}
                                     className="block p-4 rounded-lg border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
@@ -648,7 +649,7 @@ const ProfilePage = () => {
                                             {app.status}
                                         </span>
                                     </div>
-                                </Link>
+                                </HardLink>
                             ))}
                         </div>
                     )}

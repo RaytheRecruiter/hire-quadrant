@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { Bookmark, Loader2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
@@ -79,12 +80,12 @@ const SavedJobs: React.FC = () => {
             <p className="text-gray-600 mb-6">
               Click the bookmark icon on any job to save it here.
             </p>
-            <Link
+            <HardLink
               to="/"
               className="inline-block bg-gradient-to-r from-primary-400 to-primary-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary-500 hover:to-primary-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
               Browse Jobs
-            </Link>
+            </HardLink>
           </div>
         ) : (
           <div className="space-y-8">
