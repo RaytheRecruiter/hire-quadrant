@@ -127,7 +127,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
             try {
                 let query = supabase
                     .from('jobs')
-                    .select('*', { count: 'exact' });
+                    .select('*');
 
                 // Add filters to the query for server-side processing
                 if (searchTerm) {
@@ -146,7 +146,7 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                 // Add pagination
                 const from = (currentPage - 1) * jobsPerPage;
                 const to = from + jobsPerPage - 1;
-                const { data, error, count } = await query.range(from, to);
+                const { data, error } = await query.range(from, to);
 
                 if (error) {
                     throw error;
@@ -154,10 +154,16 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
 
                 if (data) {
                     setJobs(data as Job[]);
-                    setTotalJobsCount(count as number);
+                    // Estimate total count: if we got fewer than jobsPerPage items, we're on the last page
+                    if (data.length < jobsPerPage) {
+                        setTotalJobsCount((currentPage - 1) * jobsPerPage + data.length);
+                    } else {
+                        // If we got a full page, assume there might be more (conservative estimate)
+                        setTotalJobsCount((currentPage + 1) * jobsPerPage);
+                    }
                 }
             } catch (err) {
-                console.error('Error fetching jobs:', err.message);
+                console.error('Error fetching jobs:', err);
                 setError('Failed to fetch jobs. Please try again later.');
             } finally {
                 setLoading(false);
