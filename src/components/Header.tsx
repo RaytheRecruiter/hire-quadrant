@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import HardLink from './HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import {
   Grid3X3, User, LogOut, BarChart3, FileText, Building2, Bookmark, Bell, Search, BookOpen,
@@ -70,14 +71,14 @@ const Header: React.FC = () => {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1">
-            <Link to="/" onClick={handleJobsClick} className={navClass('/')}>Jobs</Link>
-            <Link to="/career" className={navClass('/career')}>Career Paths</Link>
-            <Link to="/companies" className={navClass('/companies')}>Companies</Link>
-            <Link to="/advanced-search" className={navClass('/advanced-search')}>Search</Link>
-            <Link to="/blog" className={navClass('/blog')}>Blog</Link>
-            <Link to="/pricing" className={navClass('/pricing')}>Pricing</Link>
-            {isCompany && <Link to="/talent-search" className={navClass('/talent-search')}>Talent Search</Link>}
-            {isCompany && <Link to="/company-dashboard" className={navClass('/company-dashboard')}>Dashboard</Link>}
+            <HardLink to="/" onClick={handleJobsClick} className={navClass('/')}>Jobs</HardLink>
+            <HardLink to="/career" className={navClass('/career')}>Career Paths</HardLink>
+            <HardLink to="/companies" className={navClass('/companies')}>Companies</HardLink>
+            <HardLink to="/advanced-search" className={navClass('/advanced-search')}>Search</HardLink>
+            <HardLink to="/blog" className={navClass('/blog')}>Blog</HardLink>
+            <HardLink to="/pricing" className={navClass('/pricing')}>Pricing</HardLink>
+            {isCompany && <HardLink to="/talent-search" className={navClass('/talent-search')}>Talent Search</HardLink>}
+            {isCompany && <HardLink to="/company-dashboard" className={navClass('/company-dashboard')}>Dashboard</HardLink>}
             {isAdmin && (
               <div className="relative" ref={adminMenuRef}>
                 <button
@@ -137,23 +138,23 @@ const Header: React.FC = () => {
                         <div className="text-sm font-semibold text-secondary-900 truncate">{user?.name}</div>
                         <div className="text-xs text-gray-500 truncate">{user?.email}</div>
                       </div>
-                      <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                      <HardLink to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                         <User className="h-4 w-4 text-gray-400" /> Profile
-                      </Link>
+                      </HardLink>
                       {!isAdmin && !isCompany && (
                         <>
-                          <Link to="/saved" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                          <HardLink to="/saved" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                             <Bookmark className="h-4 w-4 text-gray-400" /> Saved Jobs
-                          </Link>
-                          <Link to="/alerts" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                          </HardLink>
+                          <HardLink to="/alerts" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                             <Bell className="h-4 w-4 text-gray-400" /> Job Alerts
-                          </Link>
+                          </HardLink>
                         </>
                       )}
                       {isCompany && (
-                        <Link to="/company-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                        <HardLink to="/company-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                           <Briefcase className="h-4 w-4 text-gray-400" /> Company Dashboard
-                        </Link>
+                        </HardLink>
                       )}
                       <button
                         onClick={handleLogout}
@@ -191,25 +192,25 @@ const Header: React.FC = () => {
       {mobileOpen && (
         <div className="lg:hidden border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 animate-fade-in">
           <div className="max-w-7xl mx-auto px-4 py-4 space-y-1">
-            <Link to="/" onClick={handleJobsClick} className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Jobs</Link>
-            <Link to="/companies" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Companies</Link>
-            <Link to="/advanced-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Search</Link>
-            <Link to="/blog" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Blog</Link>
-            <Link to="/pricing" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Pricing</Link>
+            <HardLink to="/" onClick={handleJobsClick} className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Jobs</HardLink>
+            <HardLink to="/companies" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Companies</HardLink>
+            <HardLink to="/advanced-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Search</HardLink>
+            <HardLink to="/blog" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Blog</HardLink>
+            <HardLink to="/pricing" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Pricing</HardLink>
             {isAuthenticated && !isAdmin && !isCompany && (
               <>
-                <Link to="/saved" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">
+                <HardLink to="/saved" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">
                   <Bookmark className="h-4 w-4 text-gray-400" /> Saved Jobs
-                </Link>
-                <Link to="/alerts" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">
+                </HardLink>
+                <HardLink to="/alerts" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">
                   <Bell className="h-4 w-4 text-gray-400" /> Job Alerts
-                </Link>
+                </HardLink>
               </>
             )}
             {isCompany && (
               <>
-                <Link to="/company-dashboard" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Dashboard</Link>
-                <Link to="/talent-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Talent Search</Link>
+                <HardLink to="/company-dashboard" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Dashboard</HardLink>
+                <HardLink to="/talent-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Talent Search</HardLink>
               </>
             )}
             {isAdmin && (

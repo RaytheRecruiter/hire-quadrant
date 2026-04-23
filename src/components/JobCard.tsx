@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
@@ -9,6 +9,7 @@ import { MapPin, DollarSign, Bookmark, BookmarkCheck, Zap, CheckCircle, Clock } 
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
 import CompanyLogo from './CompanyLogo';
+import HardLink from './HardLink';
 import { extractTags } from '../utils/skillExtractor';
 import { generateSlug } from '../utils/slugGenerator';
 
@@ -78,7 +79,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     })();
 
     return (
-        <Link
+        <HardLink
             to={`/job/${generateSlug(job.title, job.company || '')}`}
             className="group block bg-white dark:bg-slate-800 rounded-2xl shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all duration-300 hover:scale-[1.01] p-4"
         >
@@ -178,7 +179,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                     </div>
                 </div>
             </div>
-        </Link>
+        </HardLink>
     );
 };
 
