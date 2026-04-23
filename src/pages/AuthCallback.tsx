@@ -25,13 +25,38 @@ const AuthCallback: React.FC = () => {
           return;
         }
 
-        // Redirect to onboarding or profile
-        const { data: profile } = await supabase
+        const userId = data.session.user.id;
+        const userEmail = data.session.user.email || '';
+        const metadata = data.session.user.user_metadata || {};
+
+        // Check if profile exists
+        const { data: profile, error: fetchError } = await supabase
           .from('user_profiles')
           .select('id')
-          .eq('id', data.session.user.id)
+          .eq('id', userId)
           .maybeSingle();
 
+        if (fetchError) {
+          console.error('Error fetching profile:', fetchError);
+        }
+
+        // If profile doesn't exist, create it
+        if (!profile) {
+          const { error: insertError } = await supabase
+            .from('user_profiles')
+            .insert({
+              id: userId,
+              name: metadata.name || userEmail,
+              role: metadata.role || 'candidate'
+            });
+
+          if (insertError) {
+            console.error('Error creating user profile:', insertError);
+            // Continue anyway - user is authenticated, just missing profile
+          }
+        }
+
+        // Navigate to onboarding or profile
         if (profile) {
           navigate('/profile');
         } else {
