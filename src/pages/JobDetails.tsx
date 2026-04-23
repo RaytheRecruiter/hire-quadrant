@@ -107,7 +107,9 @@ const buildJobSchema = (job: any, url: string) => {
 
 const JobDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const { getJobById, applyToJob, hasApplied, jobs } = useJobs();
+    console.log('🔍 JobDetails mounted with id:', id);
+
+    const { getJobById, applyToJob, hasApplied } = useJobs();
     const { user } = useAuth();
     const { getCompanyByName, getCompanyById } = useCompanies();
     const { isSaved, toggleSaved } = useSavedJobs();
@@ -116,34 +118,39 @@ const JobDetails: React.FC = () => {
     const [applying, setApplying] = React.useState(false);
     const [screeningOpen, setScreeningOpen] = React.useState(false);
     const [showSuccess, setShowSuccess] = React.useState(false);
-
-    const [directJob, setDirectJob] = React.useState<Job | null>(null);
+    const [job, setJob] = React.useState<Job | null>(null);
     const [loading, setLoading] = React.useState(true);
 
-    // Support both UUID and slug-based URLs
-    let job = getJobById(id) || directJob;
-    if (!job && id && !isUuid(id)) {
-      // Try to find job by slug (search through jobs for matching title/company slug)
-      job = jobs.find(j => {
-        const slug = generateSlug(j.title, j.company || '');
-        return slug === id || slug.startsWith(id);
-      });
-    }
-
-    // Load job directly from Supabase if not in context
+    // Single fetch from Supabase
     React.useEffect(() => {
-      const contextJob = getJobById(id);
-      if (!contextJob && id) {
-        setLoading(true);
-        supabase.from('jobs').select('*').eq('id', id).maybeSingle().then(({ data }) => {
-          if (data) setDirectJob(data as Job);
-        }).catch(err => console.error('Failed to fetch job:', err)).finally(() => setLoading(false));
-      } else {
+      if (!id) {
+        console.log('❌ No id provided');
         setLoading(false);
+        return;
       }
+
+      console.log('📡 Fetching job with id:', id);
+      setLoading(true);
+
+      supabase
+        .from('jobs')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle()
+        .then(({ data, error }) => {
+          console.log('✅ Fetch result:', { data, error });
+          if (error) {
+            console.error('Error fetching job:', error);
+          } else if (data) {
+            setJob(data as Job);
+          }
+        })
+        .finally(() => setLoading(false));
     }, [id]);
     const companyProfile = job ? (getCompanyByName(job.company) || getCompanyById(job.company)) : null;
     const saved = job ? isSaved(job.id) : false;
+
+    console.log('🎬 Rendering JobDetails:', { id, loading, jobFound: !!job });
 
     const screeningQuestions: ScreeningQuestion[] = useMemo(
         () => ((job as any)?.screening_questions as ScreeningQuestion[] | undefined) || [],
