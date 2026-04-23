@@ -39,6 +39,8 @@ const ProfileNudge: React.FC = () => {
 
   const completion = Math.round(((3 - missing.length) / 3) * 100);
 
+  console.log('ProfileNudge Debug:', { user: !!user, isCompany, isAdmin, dismissed, missingCount: missing.length, missing });
+
   return (
     <div className="relative bg-gradient-to-r from-primary-50 via-primary-100 to-primary-50 border-b border-primary-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
