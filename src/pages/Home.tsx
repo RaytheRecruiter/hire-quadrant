@@ -4,7 +4,7 @@ import { useJobs } from '../contexts/JobContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
 import { useSearchParams, Link } from 'react-router-dom';
-import TrendingSection from '../components/TrendingSection';
+// Removed unused TrendingSection import
 import NewsletterSignup from '../components/NewsletterSignup';
 import RecommendedJobs from '../components/RecommendedJobs';
 import { useSEO } from '../hooks/useSEO';
@@ -29,7 +29,7 @@ const CATEGORIES = [
 const Home: React.FC = () => {
   const { helmet } = useSEO({ canonical: '/' });
   const { user } = useAuth();
-  const { setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary } = useJobs();
+  const { setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary, jobs, loading } = useJobs();
   const [searchParams] = useSearchParams();
   const [heroSearch, setHeroSearch] = useState('');
   const [heroLocation, setHeroLocation] = useState('');
@@ -671,20 +671,53 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white">
-              Trending Now
+              Latest Jobs
             </h2>
             <Link
-              to="/"
-              onClick={() => {
-                window.location.href = '/?browse=all';
-              }}
+              to="/advanced-search"
               className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-semibold flex items-center gap-1 text-sm"
             >
-              Browse all jobs
+              Advanced Search
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <TrendingSection />
+
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin">
+                <Briefcase className="h-8 w-8 text-primary-500" />
+              </div>
+            </div>
+          ) : jobs.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {jobs.slice(0, 6).map((job) => (
+                <Link
+                  key={job.id}
+                  to={`/jobs/${job.id}`}
+                  className="group bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-200 dark:border-slate-700 hover:shadow-card-hover transition-all hover:border-primary-300"
+                >
+                  <h3 className="font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 mb-2 line-clamp-2">
+                    {job.title}
+                  </h3>
+                  <p className="text-sm text-secondary-600 dark:text-slate-400 mb-4 line-clamp-2">
+                    {job.company || job.sourceCompany}
+                  </p>
+                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+                    {job.location && (
+                      <>
+                        <MapPin className="h-3 w-3" />
+                        <span className="line-clamp-1">{job.location}</span>
+                      </>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-600 dark:text-slate-400">
+              No jobs available yet. Check back soon!
+            </div>
+          )}
         </div>
       </div>
       </div>
