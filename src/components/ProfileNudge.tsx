@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Sparkles, X } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/AuthContext';
 // Dismissal is persisted per session via localStorage.
 const ProfileNudge: React.FC = () => {
   const { user, isCompany, isAdmin } = useAuth();
+  const location = useLocation();
   const [missing, setMissing] = useState<string[] | null>(null);
   const [dismissed, setDismissed] = useState(() => sessionStorage.getItem('profile-nudge-dismissed') === 'true');
 
@@ -31,7 +32,7 @@ const ProfileNudge: React.FC = () => {
       setMissing(gaps);
     };
     check();
-  }, [user, isCompany, isAdmin, dismissed]);
+  }, [user, isCompany, isAdmin, dismissed, location.pathname]);
 
   if (!user || isCompany || isAdmin || dismissed || missing === null || missing.length === 0) return null;
 
