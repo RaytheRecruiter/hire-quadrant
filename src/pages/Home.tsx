@@ -101,8 +101,11 @@ const Home: React.FC = () => {
       setMinSalary(parseInt(salary, 10));
     }
 
-    // Auto-scroll to jobs section if searching or filtering
-    if (keyword || title || category) {
+    // Auto-scroll to jobs section if searching, filtering, or landing via
+    // #jobs-section hash (e.g. clicking "Jobs" in the header from another
+    // page does a hard nav to /#jobs-section).
+    const wantsScroll = keyword || title || category || window.location.hash === '#jobs-section';
+    if (wantsScroll) {
       setTimeout(() => {
         document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
       }, 300);

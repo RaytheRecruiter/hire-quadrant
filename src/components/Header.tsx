@@ -71,7 +71,7 @@ const Header: React.FC = () => {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1">
-            <HardLink to="/" onClick={handleJobsClick} className={navClass('/')}>Jobs</HardLink>
+            <HardLink to="/#jobs-section" onClick={handleJobsClick} className={navClass('/')}>Jobs</HardLink>
             <HardLink to="/career" className={navClass('/career')}>Career Paths</HardLink>
             <HardLink to="/companies" className={navClass('/companies')}>Companies</HardLink>
             <HardLink to="/advanced-search" className={navClass('/advanced-search')}>Search</HardLink>
