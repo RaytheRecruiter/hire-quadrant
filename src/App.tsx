@@ -57,7 +57,7 @@ function App() {
                     <Header />
                     <ProfileNudge />
                     <Routes>
-                <Route path="/" element={<Home />} end />
+                <Route path="/" element={<Home />} />
                 <Route path="/jobs/:id" element={<JobDetails />} />
                 <Route path="/job/:slug" element={<JobDetails />} />
                 <Route path="/companies/:id" element={<CompanyProfile />} />
