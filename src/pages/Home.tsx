@@ -94,9 +94,8 @@ const Home: React.FC = () => {
     const fetchFeaturedCompanies = async () => {
       const { data } = await supabase
         .from('jobs')
-        .select('company, company_logo_url')
+        .select('company')
         .not('company', 'is', null)
-        .not('company_logo_url', 'is', null)
         .limit(40);
 
       if (data) {
@@ -105,7 +104,7 @@ const Home: React.FC = () => {
         for (const row of data) {
           if (row.company && !seen.has(row.company) && unique.length < 8) {
             seen.add(row.company);
-            unique.push({ name: row.company, logo_url: row.company_logo_url });
+            unique.push({ name: row.company, logo_url: null });
           }
         }
         setFeaturedCompanies(unique);

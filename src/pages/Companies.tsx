@@ -23,7 +23,7 @@ const Companies: React.FC = () => {
       try {
         const { data } = await supabase
           .from('jobs')
-          .select('company, location, company_logo_url')
+          .select('company, location')
           .neq('company', null);
 
         const companyMap = new Map<string, { location?: string; logo?: string; count: number }>();
@@ -32,7 +32,7 @@ const Companies: React.FC = () => {
             const existing = companyMap.get(job.company) || { count: 0 };
             companyMap.set(job.company, {
               location: job.location || existing.location,
-              logo: job.company_logo_url || existing.logo,
+              logo: undefined,
               count: existing.count + 1,
             });
           }
