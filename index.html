@@ -77,12 +77,13 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
+    <!-- Service worker disabled — was causing MIME type issues with cached assets -->
+    <!-- <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js').catch((e) => console.warn('SW register failed', e));
         });
       }
-    </script>
+    </script> -->
   </body>
 </html>
