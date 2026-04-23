@@ -126,6 +126,18 @@ const JobDetails: React.FC = () => {
         return slug === id || slug.startsWith(id);
       });
     }
+
+    // Load job directly from Supabase if not in context
+    const [directJob, setDirectJob] = React.useState<Job | null>(null);
+    React.useEffect(() => {
+      if (!job && id) {
+        supabase.from('jobs').select('*').eq('id', id).maybeSingle().then(({ data }) => {
+          if (data) setDirectJob(data as Job);
+        });
+      }
+    }, [id, job]);
+
+    if (!job && directJob) job = directJob;
     const companyProfile = job ? (getCompanyByName(job.company) || getCompanyById(job.company)) : null;
     const saved = job ? isSaved(job.id) : false;
 
