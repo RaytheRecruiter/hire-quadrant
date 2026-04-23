@@ -184,7 +184,7 @@ const JobDetails: React.FC = () => {
                 user_id: user.id,
                 session_id: crypto.randomUUID(),
                 viewed_at: new Date().toISOString(),
-            }).catch(error => {
+            }).then().catch(error => {
                 console.error('Failed to insert job view record:', error);
             });
         }
