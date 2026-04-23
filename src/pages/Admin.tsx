@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { BarChart3, Users, Briefcase, Eye, TrendingUp, Calendar, Building2, RotateCcw, Download, Upload, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -17,6 +17,11 @@ const Admin: React.FC = () => {
   const { jobs, applications, userProfiles, loading, error, updateApplicationStatus, refreshData } = useAdminData();
   const [activeTab, setActiveTab] = useState('overview');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  useEffect(() => {
+    TrackingService.initialize();
+    return () => TrackingService.cleanup();
+  }, []);
 
   if (!isAdmin) {
     return <Navigate to="/" replace />;

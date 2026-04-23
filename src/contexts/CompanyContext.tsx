@@ -109,7 +109,8 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
       setLoading(true);
       const { data, error: fetchError } = await supabase
         .from('companies')
-        .select('*');
+        .select('*')
+        .limit(200);
 
       if (fetchError) {
         console.error('Error fetching companies:', fetchError);

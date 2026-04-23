@@ -39,10 +39,13 @@ export function useCareerPaths(jobTitle: string, jobDescription?: string) {
           }
         }
 
-        const newPaths = await getCareerPaths({
-          jobTitle,
-          jobDescription,
-        });
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Career paths timed out')), 15_000)
+        );
+        const newPaths = await Promise.race([
+          getCareerPaths({ jobTitle, jobDescription }),
+          timeoutPromise,
+        ]);
 
         const { error: upsertError } = await supabase
           .from('career_path_cache')
@@ -76,7 +79,7 @@ export function useCareerPaths(jobTitle: string, jobDescription?: string) {
     return () => {
       isMounted = false;
     };
-  }, [jobTitle, jobDescription]);
+  }, [jobTitle]);
 
   return { paths, loading, error };
 }

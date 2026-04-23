@@ -23,20 +23,30 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10_000);
+
     const fetchSimilar = async () => {
       setLoading(true);
       try {
         const { data, error } = await supabase.rpc('find_similar_jobs', {
           source_job_id: jobId,
           result_limit: 5,
-        });
+        }).abortSignal(controller.signal);
         if (!error && data) setJobs(data as SimilarJob[]);
-      } catch (err) {
-        console.error('Error fetching similar jobs:', err);
+      } catch (err: any) {
+        if (err?.name !== 'AbortError') console.error('Error fetching similar jobs:', err);
+      } finally {
+        clearTimeout(timer);
+        setLoading(false);
       }
-      setLoading(false);
     };
+
     fetchSimilar();
+    return () => {
+      controller.abort();
+      clearTimeout(timer);
+    };
   }, [jobId]);
 
   if (loading || jobs.length === 0) return null;

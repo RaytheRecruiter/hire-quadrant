@@ -76,15 +76,15 @@ const Home: React.FC = () => {
     const fetchStats = async () => {
       try {
         const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-        const [companiesResult, recentResult] = await Promise.all([
-          supabase.from('jobs').select('company').not('company', 'is', null).limit(1000),
-          supabase.from('jobs').select('id').gte('posted_date', weekAgo),
+        const [jobsRes, companiesRes, recentRes] = await Promise.all([
+          supabase.from('jobs').select('*', { count: 'exact', head: true }),
+          supabase.from('jobs').select('company', { count: 'exact', head: true }).not('company', 'is', null),
+          supabase.from('jobs').select('*', { count: 'exact', head: true }).gte('posted_date', weekAgo),
         ]);
-        const uniqueCompanies = new Set((companiesResult.data || []).map((j: any) => j.company).filter(Boolean));
         setStats({
-          jobs: companiesResult.data?.length || 0,
-          companies: uniqueCompanies.size,
-          postedThisWeek: recentResult.data?.length || 0,
+          jobs: jobsRes.count ?? 0,
+          companies: companiesRes.count ?? 0,
+          postedThisWeek: recentRes.count ?? 0,
         });
       } catch (err) {
         console.error('Error fetching stats:', err);
@@ -99,7 +99,7 @@ const Home: React.FC = () => {
         .from('jobs')
         .select('company')
         .not('company', 'is', null)
-        .limit(40);
+        .limit(16);
 
       if (data) {
         const seen = new Set<string>();

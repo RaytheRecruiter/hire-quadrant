@@ -245,6 +245,8 @@ export class TrackingService {
 
   /**
    * Start periodic sync interval for database synchronization
+   * WARNING: Do not enable without rate limiting. A 2-second interval caused production freeze.
+   * Kept disabled by default. Only enable if sync is truly necessary and with adequate backoff.
    */
   private static startSyncInterval(): void {
     this.syncInterval = setInterval(() => {
@@ -737,12 +739,5 @@ export class TrackingService {
   }
 }
 
-// Ensure the service initializes
-TrackingService.initialize();
-
-// Cleanup on page unload to prevent memory leaks
-if (typeof window !== 'undefined') {
-  window.addEventListener('beforeunload', () => {
-    TrackingService.cleanup();
-  });
-}
+// NOTE: TrackingService.initialize() is now called lazily from Admin.tsx on mount
+// to avoid unconditional Supabase queries at module load time
