@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Clock, Loader2 } from 'lucide-react';
+import { BookOpen, Clock, Loader2, AlertCircle } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useSEO } from '../hooks/useSEO';
 import { formatDistanceToNow } from 'date-fns';
@@ -32,20 +32,29 @@ const Blog: React.FC = () => {
   });
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState<string>('all');
 
   useEffect(() => {
     const fetchPosts = async () => {
-      setLoading(true);
-      let q = supabase
-        .from('blog_posts')
-        .select('id, slug, title, excerpt, category, cover_image_url, author_name, published_at')
-        .eq('published', true)
-        .order('published_at', { ascending: false });
-      if (category !== 'all') q = q.eq('category', category);
-      const { data } = await q;
-      setPosts(data || []);
-      setLoading(false);
+      try {
+        setLoading(true);
+        setError(null);
+        let q = supabase
+          .from('blog_posts')
+          .select('id, slug, title, excerpt, category, cover_image_url, author_name, published_at')
+          .eq('published', true)
+          .order('published_at', { ascending: false });
+        if (category !== 'all') q = q.eq('category', category);
+        const { data, error: queryError } = await q;
+        if (queryError) throw queryError;
+        setPosts(data || []);
+      } catch (err) {
+        console.error('Error fetching blog posts:', err);
+        setError('Failed to load blog posts. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPosts();
   }, [category]);
@@ -77,6 +86,16 @@ const Blog: React.FC = () => {
 
         {loading ? (
           <div className="text-center py-20"><Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500" /></div>
+        ) : error ? (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-red-900 dark:text-red-200 mb-1">Unable to Load Articles</h3>
+                <p className="text-red-800 dark:text-red-300 text-sm">{error}</p>
+              </div>
+            </div>
+          </div>
         ) : posts.length === 0 ? (
           <div className="bg-white rounded-2xl shadow p-12 text-center">
             <BookOpen className="mx-auto h-12 w-12 text-gray-300 mb-3" />

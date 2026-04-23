@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../utils/supabaseClient';
-import { Check, Zap, Star, Crown, Building2 } from 'lucide-react';
+import { Check, Zap, Star, Crown, Building2, AlertCircle } from 'lucide-react';
 import { useSEO } from '../hooks/useSEO';
 
 interface PricingPlan {
@@ -78,6 +78,7 @@ const Pricing: React.FC = () => {
 
   const [plans, setPlans] = useState<PricingPlan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isYearly, setIsYearly] = useState(false);
 
   useEffect(() => {
@@ -99,6 +100,7 @@ const Pricing: React.FC = () => {
         setPlans(parsed);
       } catch (err) {
         console.error('Error fetching plans:', err);
+        setError('Failed to load pricing plans. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -116,6 +118,22 @@ const Pricing: React.FC = () => {
             {[1, 2, 3, 4].map(i => (
               <div key={i} className="h-96 bg-gray-100 rounded-lg"></div>
             ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-red-900 dark:text-red-200 mb-1">Unable to Load Pricing</h3>
+              <p className="text-red-800 dark:text-red-300 text-sm">{error}</p>
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { supabase } from '../utils/supabaseClient';
-import { Building2, MapPin, Briefcase } from 'lucide-react';
+import { Building2, MapPin, Briefcase, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CompanyLogo from '../components/CompanyLogo';
 
@@ -16,6 +16,7 @@ interface Company {
 const Companies: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -49,6 +50,7 @@ const Companies: React.FC = () => {
         setCompanies(companies.sort((a, b) => b.job_count - a.job_count));
       } catch (err) {
         console.error('Error fetching companies:', err);
+        setError('Failed to load companies. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -91,6 +93,16 @@ const Companies: React.FC = () => {
             <div className="text-center py-12">
               <div className="inline-block animate-spin">
                 <Building2 className="h-8 w-8 text-primary-500" />
+              </div>
+            </div>
+          ) : error ? (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-red-900 dark:text-red-200 mb-1">Unable to Load Companies</h3>
+                  <p className="text-red-800 dark:text-red-300 text-sm">{error}</p>
+                </div>
               </div>
             </div>
           ) : (
