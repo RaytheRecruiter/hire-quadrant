@@ -14,10 +14,19 @@ export function useCareerPaths(jobTitle: string, jobDescription?: string) {
 
     const fetchPaths = async () => {
       try {
+        const normalizedTitle = jobTitle.toLowerCase().trim();
+
+        if (!normalizedTitle) {
+          if (isMounted) {
+            setPaths([]);
+            setError(null);
+            setLoading(false);
+          }
+          return;
+        }
+
         setLoading(true);
         setError(null);
-
-        const normalizedTitle = jobTitle.toLowerCase().trim();
 
         const { data: cached } = await supabase
           .from('career_path_cache')
