@@ -34,6 +34,16 @@ const ProfileNudge: React.FC = () => {
     check();
   }, [user, isCompany, isAdmin, dismissed, location.pathname]);
 
+  // Reset dismissed flag when returning to homepage so banner can re-appear
+  useEffect(() => {
+    if (location.pathname === '/' && dismissed) {
+      const wasActuallyDismissed = sessionStorage.getItem('profile-nudge-dismissed') === 'true';
+      if (!wasActuallyDismissed) {
+        setDismissed(false);
+      }
+    }
+  }, [location.pathname, dismissed]);
+
   if (!user || isCompany || isAdmin || dismissed || missing === null || missing.length === 0) return null;
 
   const handleDismiss = () => {
