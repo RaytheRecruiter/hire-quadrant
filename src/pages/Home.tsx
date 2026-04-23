@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, MapPin, Sparkles, ArrowRight, Users, Building2, CheckCircle2 } from 'lucide-react';
+import { Search, MapPin, Sparkles, ArrowRight, Users, Building2, CheckCircle2, Briefcase } from 'lucide-react';
 import { useJobs } from '../contexts/JobContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
