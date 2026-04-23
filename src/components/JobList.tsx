@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useJobs } from '../contexts/JobContext';
 import JobCard from './JobCard';
 import JobCardSkeleton from './JobCardSkeleton';
 import EmptyState from './EmptyState';
 import SearchBar from './SearchBar';
 import { AlertCircle, ChevronLeft, ChevronRight, SlidersHorizontal } from 'lucide-react';
+import { useBulkJobMatchScores } from '../hooks/useBulkJobMatchScores';
 
 const JobList: React.FC = () => {
   const {
@@ -21,6 +22,9 @@ const JobList: React.FC = () => {
     setMinSalary,
   } = useJobs();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const visibleJobIds = useMemo(() => filteredJobs.map((j) => j.id), [filteredJobs]);
+  useBulkJobMatchScores(visibleJobIds);
 
   if (loading) {
     return (

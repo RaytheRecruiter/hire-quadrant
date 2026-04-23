@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCompanies } from '../contexts/CompanyContext';
 import { useJobs } from '../contexts/JobContext';
+import { useBulkJobMatchScores } from '../hooks/useBulkJobMatchScores';
 import { ArrowLeft, MapPin, Users, Calendar, Globe, Mail, Building2, Award, Heart, Briefcase } from 'lucide-react';
 import JobCard from './JobCard';
 import CompanyReviews from './CompanyReviews';
@@ -13,6 +14,23 @@ const CompanyProfile: React.FC = () => {
   const { jobs } = useJobs();
 
   const company = id ? getCompanyById(id) : undefined;
+
+  const companyJobs = useMemo(
+    () =>
+      company
+        ? jobs.filter(
+            (job) =>
+              job.sourceCompany === company.name ||
+              job.sourceCompany === company.displayName ||
+              job.company === company.name ||
+              job.company === company.displayName
+          )
+        : [],
+    [jobs, company]
+  );
+
+  const companyJobIds = useMemo(() => companyJobs.map((j) => j.id), [companyJobs]);
+  useBulkJobMatchScores(companyJobIds);
 
   if (!company) {
     return (
@@ -29,14 +47,6 @@ const CompanyProfile: React.FC = () => {
       </div>
     );
   }
-
-  // Get jobs from this company
-  const companyJobs = jobs.filter(job => 
-    job.sourceCompany === company.name || 
-    job.sourceCompany === company.displayName ||
-    job.company === company.name ||
-    job.company === company.displayName
-  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30">

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Bookmark, Loader2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
+import { useBulkJobMatchScores } from '../hooks/useBulkJobMatchScores';
 import { supabase } from '../utils/supabaseClient';
 import { Job } from '../contexts/JobContext';
 import JobCard from '../components/JobCard';
@@ -13,6 +14,9 @@ const SavedJobs: React.FC = () => {
   const { savedJobIds, loading: savedLoading } = useSavedJobs();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [jobsLoading, setJobsLoading] = useState(true);
+
+  const jobIds = useMemo(() => jobs.map((j) => j.id), [jobs]);
+  useBulkJobMatchScores(jobIds);
 
   useEffect(() => {
     const fetchJobs = async () => {
