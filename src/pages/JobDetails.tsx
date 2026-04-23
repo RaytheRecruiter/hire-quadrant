@@ -220,6 +220,23 @@ const JobDetails: React.FC = () => {
         };
     }, [job, companyProfile]);
 
+    // Hide the mobile sticky Apply bar once the inline form scrolls into view,
+    // so it doesn't overlap the form's submit button. Declared up here (before
+    // any early return) so hook order stays stable across renders.
+    const [applyFormVisible, setApplyFormVisible] = useState(false);
+    const formObserverRef = useRef<IntersectionObserver | null>(null);
+    useEffect(() => {
+        if (!job) return;
+        const el = document.getElementById('apply-form');
+        if (!el || typeof IntersectionObserver === 'undefined') return;
+        formObserverRef.current = new IntersectionObserver(
+            ([entry]) => setApplyFormVisible(entry.isIntersecting),
+            { rootMargin: '0px 0px -20% 0px' }
+        );
+        formObserverRef.current.observe(el);
+        return () => formObserverRef.current?.disconnect();
+    }, [job]);
+
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -285,21 +302,6 @@ const JobDetails: React.FC = () => {
         }
         return success;
     };
-
-    // Hide the mobile sticky Apply bar once the inline form scrolls into view,
-    // so it doesn't overlap the form's submit button.
-    const [applyFormVisible, setApplyFormVisible] = useState(false);
-    const formObserverRef = useRef<IntersectionObserver | null>(null);
-    useEffect(() => {
-        const el = document.getElementById('apply-form');
-        if (!el || typeof IntersectionObserver === 'undefined') return;
-        formObserverRef.current = new IntersectionObserver(
-            ([entry]) => setApplyFormVisible(entry.isIntersecting),
-            { rootMargin: '0px 0px -20% 0px' }
-        );
-        formObserverRef.current.observe(el);
-        return () => formObserverRef.current?.disconnect();
-    }, []);
 
     const handleSave = async () => {
         if (!user) {
