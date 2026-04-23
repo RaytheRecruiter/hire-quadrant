@@ -1,72 +1,40 @@
-// Service Worker for HireQuadrant PWA
-// Enables offline functionality and caching
+// Self-destruct service worker.
+//
+// An earlier version of this file used a cache-first strategy that served
+// stale index.html with dead asset hashes, producing whitepage errors and
+// broken client-side navigation for users with the old worker installed
+// (see PR #8 for context, 2026-04-23).
+//
+// This version takes over any existing hirequadrant SW registration, wipes
+// the Cache Storage it left behind, and then unregisters itself so the
+// browser falls back to the network for every request. The file must stay
+// in place (returning 200) long enough for every active client to pick it
+// up — removing it would 404 instead, and some browsers keep serving the
+// old SW in that case.
 
-const CACHE_NAME = 'hirequadrant-v1';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.svg',
-];
-
-// Install event - cache essential assets
-self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Installing...');
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[Service Worker] Caching app shell');
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Activating...');
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('[Service Worker] Removing old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-  self.clients.claim();
-});
-
-// Fetch event - implement caching strategy
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // Skip non-GET requests
-  if (request.method !== 'GET') return;
-
-  // Skip API requests
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      fetch(request).catch(() => new Response('Network error', { status: 503 }))
-    );
-    return;
-  }
-
-  // Cache-first for static assets
-  event.respondWith(
-    caches.match(request).then((response) => {
-      if (response) return response;
-      return fetch(request).then((response) => {
-        if (response && response.status === 200) {
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, response.clone());
-          });
+  event.waitUntil((async () => {
+    const cacheNames = await caches.keys();
+    await Promise.all(cacheNames.map((name) => caches.delete(name)));
+    const clients = await self.clients.matchAll({ type: 'window' });
+    for (const client of clients) {
+      client.postMessage({ type: 'sw-self-destruct' });
+    }
+    await self.registration.unregister();
+    for (const client of clients) {
+      if ('navigate' in client) {
+        try {
+          await client.navigate(client.url);
+        } catch {
+          /* ignore */
         }
-        return response;
-      }).catch(() => caches.match('/') || new Response('Offline', { status: 503 }));
-    })
-  );
+      }
+    }
+  })());
 });
+
+// No fetch handler — all requests go straight to the network.
