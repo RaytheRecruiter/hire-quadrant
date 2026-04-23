@@ -15,6 +15,37 @@ interface FeaturedCompany {
   logo_url: string | null;
 }
 
+const STATS_CACHE_KEY = 'hq-home-stats-v1';
+const STATS_TTL_MS = 5 * 60 * 1000;
+const FEATURED_CACHE_KEY = 'hq-home-featured-v1';
+const FEATURED_TTL_MS = 30 * 60 * 1000;
+
+interface StatsShape {
+  jobs: number;
+  companies: number;
+  postedThisWeek: number;
+}
+
+function readCache<T>(key: string, ttlMs: number): T | null {
+  try {
+    const raw = sessionStorage.getItem(key);
+    if (!raw) return null;
+    const { value, storedAt } = JSON.parse(raw) as { value: T; storedAt: number };
+    if (Date.now() - storedAt > ttlMs) return null;
+    return value;
+  } catch {
+    return null;
+  }
+}
+
+function writeCache<T>(key: string, value: T): void {
+  try {
+    sessionStorage.setItem(key, JSON.stringify({ value, storedAt: Date.now() }));
+  } catch {
+    /* sessionStorage unavailable — ignore */
+  }
+}
+
 const CATEGORIES = [
   { label: 'Engineering', icon: '⚙️' },
   { label: 'Design', icon: '🎨' },
@@ -34,12 +65,12 @@ const Home: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [heroSearch, setHeroSearch] = useState('');
   const [heroLocation, setHeroLocation] = useState('');
-  const [stats, setStats] = useState<{ jobs: number; companies: number; postedThisWeek: number }>({
-    jobs: 0,
-    companies: 0,
-    postedThisWeek: 0,
-  });
-  const [featuredCompanies, setFeaturedCompanies] = useState<FeaturedCompany[]>([]);
+  const [stats, setStats] = useState<StatsShape>(
+    () => readCache<StatsShape>(STATS_CACHE_KEY, STATS_TTL_MS) ?? { jobs: 0, companies: 0, postedThisWeek: 0 }
+  );
+  const [featuredCompanies, setFeaturedCompanies] = useState<FeaturedCompany[]>(
+    () => readCache<FeaturedCompany[]>(FEATURED_CACHE_KEY, FEATURED_TTL_MS) ?? []
+  );
 
   useEffect(() => {
     const title = searchParams.get('title');
@@ -74,6 +105,9 @@ const Home: React.FC = () => {
   }, [searchParams, setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary]);
 
   useEffect(() => {
+    if (readCache<StatsShape>(STATS_CACHE_KEY, STATS_TTL_MS)) return;
+
+    let cancelled = false;
     const fetchStats = async () => {
       try {
         const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -82,19 +116,28 @@ const Home: React.FC = () => {
           supabase.from('jobs').select('company', { count: 'exact', head: true }).not('company', 'is', null),
           supabase.from('jobs').select('*', { count: 'exact', head: true }).gte('posted_date', weekAgo),
         ]);
-        setStats({
+        if (cancelled) return;
+        const next: StatsShape = {
           jobs: jobsRes.count ?? 0,
           companies: companiesRes.count ?? 0,
           postedThisWeek: recentRes.count ?? 0,
-        });
+        };
+        setStats(next);
+        writeCache(STATS_CACHE_KEY, next);
       } catch (err) {
         console.error('Error fetching stats:', err);
       }
     };
     fetchStats();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
+    if (readCache<FeaturedCompany[]>(FEATURED_CACHE_KEY, FEATURED_TTL_MS)) return;
+
+    let cancelled = false;
     const fetchFeaturedCompanies = async () => {
       const { data } = await supabase
         .from('jobs')
@@ -102,19 +145,22 @@ const Home: React.FC = () => {
         .not('company', 'is', null)
         .limit(16);
 
-      if (data) {
-        const seen = new Set<string>();
-        const unique: FeaturedCompany[] = [];
-        for (const row of data) {
-          if (row.company && !seen.has(row.company) && unique.length < 8) {
-            seen.add(row.company);
-            unique.push({ name: row.company, logo_url: null });
-          }
+      if (cancelled || !data) return;
+      const seen = new Set<string>();
+      const unique: FeaturedCompany[] = [];
+      for (const row of data) {
+        if (row.company && !seen.has(row.company) && unique.length < 8) {
+          seen.add(row.company);
+          unique.push({ name: row.company, logo_url: null });
         }
-        setFeaturedCompanies(unique);
       }
+      setFeaturedCompanies(unique);
+      writeCache(FEATURED_CACHE_KEY, unique);
     };
     fetchFeaturedCompanies();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {

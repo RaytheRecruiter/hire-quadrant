@@ -1,40 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Sparkles, X } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 
-// Shows a banner if a candidate is missing key profile fields (resume, location, phone).
-// Dismissal is persisted per session via localStorage.
+// Shows a banner if a candidate is missing key profile fields (resume, location, headline).
+// Dismissal is persisted per session via sessionStorage. Re-checks fire on user change
+// or when a 'profile-updated' event is dispatched by ProfilePage after a save.
 const ProfileNudge: React.FC = () => {
   const { user, isCompany, isAdmin } = useAuth();
-  const location = useLocation();
   const [missing, setMissing] = useState<string[] | null>(null);
   const [dismissed, setDismissed] = useState(() => sessionStorage.getItem('profile-nudge-dismissed') === 'true');
 
-  useEffect(() => {
+  const check = useCallback(async () => {
     if (!user || isCompany || isAdmin || dismissed) {
       setMissing([]);
       return;
     }
+    const { data } = await supabase
+      .from('candidates')
+      .select('resume_url, location, phone_number, headline')
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-    const check = async () => {
-      const { data } = await supabase
-        .from('candidates')
-        .select('resume_url, location, phone_number, headline')
-        .eq('user_id', user.id)
-        .maybeSingle();
+    const gaps: string[] = [];
+    if (!data?.resume_url) gaps.push('resume');
+    if (!data?.location) gaps.push('location');
+    if (!data?.headline) gaps.push('headline');
+    setMissing(gaps);
+  }, [user, isCompany, isAdmin, dismissed]);
 
-      const gaps: string[] = [];
-      if (!data?.resume_url) gaps.push('resume');
-      if (!data?.location) gaps.push('location');
-      if (!data?.headline) gaps.push('headline');
-      setMissing(gaps);
-    };
+  useEffect(() => {
     check();
-  }, [user, isCompany, isAdmin, dismissed, location.pathname]);
+  }, [check]);
 
-  // Reset dismissed flag when returning to homepage so banner can re-appear
+  useEffect(() => {
+    const handler = () => {
+      check();
+    };
+    window.addEventListener('profile-updated', handler);
+    return () => window.removeEventListener('profile-updated', handler);
+  }, [check]);
 
   if (!user || isCompany || isAdmin || dismissed || missing === null || missing.length === 0) return null;
 

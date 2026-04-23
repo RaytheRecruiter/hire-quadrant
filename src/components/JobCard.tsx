@@ -182,4 +182,20 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     );
 };
 
-export default JobCard;
+export default React.memo(JobCard, (prev, next) => {
+    if (prev.job.id !== next.job.id) return false;
+    if (prev.job.title !== next.job.title) return false;
+    if (prev.job.company !== next.job.company) return false;
+    if ((prev.job as any).company_logo_url !== (next.job as any).company_logo_url) return false;
+    if (prev.job.location !== next.job.location) return false;
+    if (prev.job.type !== next.job.type) return false;
+    if (prev.job.salary !== next.job.salary) return false;
+    if ((prev.job as any).min_salary !== (next.job as any).min_salary) return false;
+    if ((prev.job as any).max_salary !== (next.job as any).max_salary) return false;
+    if (prev.job.description !== next.job.description) return false;
+    if (prev.job.postedDate !== next.job.postedDate) return false;
+    const prevQs = ((prev.job as any).screening_questions as any[] | undefined)?.length ?? 0;
+    const nextQs = ((next.job as any).screening_questions as any[] | undefined)?.length ?? 0;
+    if (prevQs !== nextQs) return false;
+    return true;
+});

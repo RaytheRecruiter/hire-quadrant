@@ -10,13 +10,13 @@ interface SEOOptions {
 }
 
 const BASE_URL = 'https://hirequadrant.com';
-const DEFAULT_TITLE = 'HireQuadrant - Work with employers who show up';
-const DEFAULT_DESCRIPTION = 'See who is interested. Get real feedback. Know where you stand at every step. Find jobs with transparent, responsive employers.';
+const DEFAULT_TITLE = 'HireQuadrant — Work with employers who show up';
+const DEFAULT_DESCRIPTION = "See who's interested. Get real feedback. Know where you stand at every step. Find jobs with transparent, responsive employers.";
 const DEFAULT_OG_IMAGE = 'https://hirequadrant.com/og-image.svg';
 
 export function useSEO(options: SEOOptions = {}) {
   const title = options.title
-    ? `${options.title} - HireQuadrant`
+    ? `${options.title} · HireQuadrant`
     : DEFAULT_TITLE;
   const description = options.description || DEFAULT_DESCRIPTION;
   const canonical = options.canonical

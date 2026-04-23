@@ -187,6 +187,7 @@ const ProfilePage = () => {
 
             setMessage({ type: 'success', text: 'Profile updated successfully!' });
             await fetchProfile();
+            window.dispatchEvent(new CustomEvent('profile-updated'));
         } catch (error: any) {
             console.error('Error updating profile:', error);
             setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
@@ -232,6 +233,7 @@ const ProfilePage = () => {
 
                 setMessage({ type: 'success', text: 'Resume uploaded successfully!' });
                 await fetchProfile();
+                window.dispatchEvent(new CustomEvent('profile-updated'));
             } catch (err: any) {
                 console.error('Error saving resume to profile:', err);
                 setMessage({ type: 'error', text: 'File uploaded but failed to save to profile.' });
@@ -271,6 +273,7 @@ const ProfilePage = () => {
             setResumeViewUrl(null);
             setMessage({ type: 'success', text: 'Resume deleted. You can upload a new one below.' });
             await fetchProfile();
+            window.dispatchEvent(new CustomEvent('profile-updated'));
         } catch (err: any) {
             console.error('Error deleting resume:', err);
             setMessage({ type: 'error', text: err?.message || 'Failed to delete resume.' });
