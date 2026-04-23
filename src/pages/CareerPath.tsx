@@ -17,7 +17,7 @@ export default function CareerPath() {
   const { jobs } = useJobs();
 
   const currentRole = searchRole || searchParams.get('from') || '';
-  const { paths, loading } = useCareerPaths(currentRole);
+  const { paths, loading, error } = useCareerPaths(currentRole);
 
   const getMatchIcon = (label: 'high' | 'medium' | 'low') => {
     switch (label) {
@@ -85,8 +85,21 @@ export default function CareerPath() {
           </div>
         )}
 
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 mb-8">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-red-900 dark:text-red-200 mb-1">Unable to Generate Career Paths</h3>
+                <p className="text-red-800 dark:text-red-300 text-sm">{error}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Empty State */}
-        {!loading && (!searchRole || paths.length === 0) && (
+        {!loading && !error && (!searchRole || paths.length === 0) && (
           <div className="text-center py-12">
             <GraduationCap className="h-12 w-12 text-gray-300 mx-auto mb-4" />
             <p className="text-gray-500 dark:text-slate-400">
@@ -96,7 +109,7 @@ export default function CareerPath() {
         )}
 
         {/* Career Paths Timeline */}
-        {!loading && searchRole && pathsWithJobs.length > 0 && (
+        {!loading && !error && searchRole && pathsWithJobs.length > 0 && (
           <div className="space-y-4">
             {pathsWithJobs.map((path, idx) => (
               <div key={idx} className="relative">
