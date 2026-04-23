@@ -426,14 +426,15 @@ export class TrackingService {
             .from('job_tracking')
             .select('views, applications')
             .eq('job_id', jobId)
-            .single();
+            .maybeSingle();
 
-          if (error && error.code !== 'PGRST116') {
+          if (error) {
             console.error('Error fetching current job stats:', error);
           } else if (jobData) {
             currentViews = jobData.views || 0;
             currentApplications = jobData.applications || 0;
           }
+          // jobData === null is the first-view case — currentViews stays 0
         } catch (error) {
           console.error('Error fetching job stats from Supabase:', error);
         }
@@ -442,7 +443,7 @@ export class TrackingService {
         currentViews = localStats.views;
         currentApplications = localStats.applications;
       }
-      
+
       const newViews = currentViews + 1;
 
       this.data!.jobs[jobId] = {
@@ -478,14 +479,15 @@ export class TrackingService {
             .from('job_tracking')
             .select('views, applications')
             .eq('job_id', jobId)
-            .single();
+            .maybeSingle();
 
-          if (error && error.code !== 'PGRST116') {
+          if (error) {
             console.error('Error fetching current job stats:', error);
           } else if (jobData) {
             currentViews = jobData.views || 0;
             currentApplications = jobData.applications || 0;
           }
+          // jobData === null is the first-application case — counters stay 0
         } catch (error) {
           console.error('Error fetching job stats from Supabase:', error);
         }
@@ -494,7 +496,7 @@ export class TrackingService {
         currentViews = localStats.views;
         currentApplications = localStats.applications;
       }
-      
+
       const newApplications = currentApplications + 1;
 
       this.data!.jobs[jobId] = {

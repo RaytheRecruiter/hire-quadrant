@@ -8,20 +8,30 @@ const AuthCallback: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+    let redirectTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const scheduleRedirect = (to: string) => {
+      redirectTimer = setTimeout(() => {
+        if (!cancelled) navigate(to);
+      }, 2000);
+    };
+
     const handleCallback = async () => {
       try {
-        // Get the session from the hash
         const { data, error: authError } = await supabase.auth.getSession();
+
+        if (cancelled) return;
 
         if (authError) {
           setError('Authentication failed. Please try again.');
-          setTimeout(() => navigate('/login'), 2000);
+          scheduleRedirect('/login');
           return;
         }
 
         if (!data.session) {
           setError('No session found. Please try signing in again.');
-          setTimeout(() => navigate('/login'), 2000);
+          scheduleRedirect('/login');
           return;
         }
 
@@ -29,18 +39,18 @@ const AuthCallback: React.FC = () => {
         const userEmail = data.session.user.email || '';
         const metadata = data.session.user.user_metadata || {};
 
-        // Check if profile exists
         const { data: profile, error: fetchError } = await supabase
           .from('user_profiles')
           .select('id')
           .eq('id', userId)
           .maybeSingle();
 
+        if (cancelled) return;
+
         if (fetchError) {
           console.error('Error fetching profile:', fetchError);
         }
 
-        // If profile doesn't exist, create it
         if (!profile) {
           const { error: insertError } = await supabase
             .from('user_profiles')
@@ -52,24 +62,25 @@ const AuthCallback: React.FC = () => {
 
           if (insertError) {
             console.error('Error creating user profile:', insertError);
-            // Continue anyway - user is authenticated, just missing profile
           }
         }
 
-        // Navigate to onboarding or profile
-        if (profile) {
-          navigate('/profile');
-        } else {
-          navigate('/onboarding');
-        }
+        if (cancelled) return;
+        navigate(profile ? '/profile' : '/onboarding');
       } catch (err) {
+        if (cancelled) return;
         console.error('Auth callback error:', err);
         setError('An error occurred. Redirecting...');
-        setTimeout(() => navigate('/login'), 2000);
+        scheduleRedirect('/login');
       }
     };
 
     handleCallback();
+
+    return () => {
+      cancelled = true;
+      if (redirectTimer) clearTimeout(redirectTimer);
+    };
   }, [navigate]);
 
   return (

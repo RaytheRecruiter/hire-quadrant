@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,6 +13,13 @@ const PasswordReset: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
+  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    };
+  }, []);
 
   const handlePasswordChange = (value: string) => {
     setPassword(value);
@@ -39,7 +46,7 @@ const PasswordReset: React.FC = () => {
 
     if (result.success) {
       toast.success(result.message);
-      setTimeout(() => navigate('/profile'), 2000);
+      redirectTimer.current = setTimeout(() => navigate('/profile'), 2000);
     } else {
       toast.error(result.error || 'Failed to reset password');
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Save, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface CompanyProfileEditorProps {
@@ -20,6 +20,13 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
   });
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (messageTimer.current) clearTimeout(messageTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (company) {
@@ -54,7 +61,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
       setMessage({ type: 'error', text: 'Failed to update company profile. Please try again.' });
     } finally {
       setSaving(false);
-      setTimeout(() => setMessage(null), 5000);
+      if (messageTimer.current) clearTimeout(messageTimer.current);
+      messageTimer.current = setTimeout(() => setMessage(null), 5000);
     }
   };
 

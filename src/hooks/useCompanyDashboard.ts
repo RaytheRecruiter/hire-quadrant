@@ -30,7 +30,7 @@ export const useCompanyDashboard = (user: DashboardUser | null) => {
         .from('companies')
         .select('*')
         .eq('id', user.companyId)
-        .single();
+        .maybeSingle();
 
       if (companyError) {
         console.error('Error fetching company:', companyError);
@@ -39,8 +39,14 @@ export const useCompanyDashboard = (user: DashboardUser | null) => {
         return;
       }
 
+      if (!companyData) {
+        setError('Your company profile could not be found. It may have been removed — please contact support.');
+        setLoading(false);
+        return;
+      }
+
       setCompany(companyData);
-      const companyName = companyData?.name || companyData?.display_name || '';
+      const companyName = companyData.name || companyData.display_name || '';
 
       // Fetch jobs for this company
       const { data: allJobs, error: jobsError } = await supabase

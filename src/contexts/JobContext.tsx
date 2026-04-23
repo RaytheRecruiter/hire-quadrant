@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from './AuthContext';
 import { Job, JobApplication } from '../types';
@@ -17,6 +17,18 @@ const debounce = (func, delay) => {
 };
 
 // --- Job and Application Interfaces ---
+// Fields below match what the Supabase `jobs` row returns. Optional fields
+// are present when the job row has them populated (min_salary/max_salary,
+// company_logo_url, screening_questions). Keep this type in sync with the
+// select() lists in JobContext and anywhere jobs are loaded from Supabase.
+export interface ScreeningQuestion {
+    id?: string;
+    prompt: string;
+    required?: boolean;
+    type?: 'text' | 'yes_no' | 'choice';
+    options?: string[];
+}
+
 export interface Job {
     id: string;
     title: string;
@@ -27,9 +39,13 @@ export interface Job {
     sourceCompany: string;
     sourceXmlFile?: string;
     company?: string;
+    company_logo_url?: string | null;
     location?: string;
     type?: string;
     salary?: string;
+    min_salary?: number | null;
+    max_salary?: number | null;
+    screening_questions?: ScreeningQuestion[] | null;
 }
 
 export interface JobApplication {
@@ -103,20 +119,20 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         setCurrentPage(1);
     }, 500), []);
 
-    const handleSetLocationFilter = (location: string) => {
+    const handleSetLocationFilter = useCallback((location: string) => {
         setLocationFilter(location);
         setCurrentPage(1);
-    };
+    }, []);
 
-    const handleSetTypeFilter = (type: string) => {
+    const handleSetTypeFilter = useCallback((type: string) => {
         setTypeFilter(type);
         setCurrentPage(1);
-    };
+    }, []);
 
-    const handleSetMinSalary = (value: number) => {
+    const handleSetMinSalary = useCallback((value: number) => {
         setMinSalary(value);
         setCurrentPage(1);
-    };
+    }, []);
 
     // Main effect to fetch jobs with server-side filtering and pagination
     useEffect(() => {
@@ -203,17 +219,17 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
     const totalPages = Math.max(1, Math.ceil(totalJobsCount / jobsPerPage));
     const hasMoreJobs = currentPage < totalPages;
 
-    const goToPage = (page: number) => {
+    const goToPage = useCallback((page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
         }
-    };
+    }, [totalPages]);
 
-    const loadMoreJobs = () => {
-        goToPage(currentPage + 1);
-    };
+    const loadMoreJobs = useCallback(() => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    }, [currentPage, totalPages]);
 
-    const applyToJob = async (jobId: string, screeningAnswers?: any[]) => {
+    const applyToJob = useCallback(async (jobId: string, screeningAnswers?: any[]) => {
         if (!user) {
             console.error('User not logged in.');
             return false;
@@ -266,17 +282,17 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
             localStorage.setItem('applications', JSON.stringify(updatedApplications));
             return false;
         }
-    };
+    }, [user, jobs, applications]);
 
-    const getJobById = (id: string) => {
+    const getJobById = useCallback((id: string) => {
         return jobs.find(job => job.id === id);
-    };
+    }, [jobs]);
 
-    const hasApplied = (jobId: string, userId: string) => {
+    const hasApplied = useCallback((jobId: string, userId: string) => {
         return applications.some(app => app.job_id === jobId && app.user_id === userId);
-    };
+    }, [applications]);
 
-    const value: JobContextType = {
+    const value = useMemo<JobContextType>(() => ({
         jobs,
         applications,
         loading,
@@ -300,7 +316,14 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
         applyToJob,
         getJobById,
         hasApplied
-    };
+    }), [
+        jobs, applications, loading, error,
+        searchTerm, locationFilter, typeFilter, minSalary,
+        filteredJobs, allFilteredJobs,
+        currentPage, totalPages, totalJobsCount, hasMoreJobs,
+        debouncedSetSearchTerm, handleSetLocationFilter, handleSetTypeFilter, handleSetMinSalary,
+        goToPage, loadMoreJobs, applyToJob, getJobById, hasApplied,
+    ]);
 
     return <JobContext.Provider value={value}>{children}</JobContext.Provider>;
 };

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
 import { supabase } from '../utils/supabaseClient';
 
 export interface CompanyProfile {
@@ -132,18 +132,18 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
     fetchCompanies();
   }, []);
 
-  const getCompanyByName = (name: string) => {
+  const getCompanyByName = useCallback((name: string) => {
     return companies.find(company =>
       company.name.toLowerCase() === name.toLowerCase() ||
       company.displayName.toLowerCase() === name.toLowerCase()
     );
-  };
+  }, [companies]);
 
-  const getCompanyById = (id: string) => {
+  const getCompanyById = useCallback((id: string) => {
     return companies.find(company => company.id === id);
-  };
+  }, [companies]);
 
-  const addCompany = async (companyData: Omit<CompanyProfile, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const addCompany = useCallback(async (companyData: Omit<CompanyProfile, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
       const row = mapCompanyToRow(companyData);
       const { data, error: insertError } = await supabase
@@ -164,9 +164,9 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
       console.error('Error adding company:', err);
       setError('Failed to add company');
     }
-  };
+  }, []);
 
-  const updateCompany = async (id: string, updates: Partial<CompanyProfile>) => {
+  const updateCompany = useCallback(async (id: string, updates: Partial<CompanyProfile>) => {
     try {
       const row = mapCompanyToRow(updates);
       const { error: updateError } = await supabase
@@ -191,9 +191,9 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
       console.error('Error updating company:', err);
       setError('Failed to update company');
     }
-  };
+  }, []);
 
-  const deleteCompany = async (id: string) => {
+  const deleteCompany = useCallback(async (id: string) => {
     try {
       const { error: deleteError } = await supabase
         .from('companies')
@@ -217,9 +217,9 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
       console.error('Error deleting company:', err);
       setError('Failed to delete company');
     }
-  };
+  }, []);
 
-  const value: CompanyContextType = {
+  const value = useMemo<CompanyContextType>(() => ({
     companies,
     loading,
     error,
@@ -228,7 +228,7 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
     addCompany,
     updateCompany,
     deleteCompany
-  };
+  }), [companies, loading, error, getCompanyByName, getCompanyById, addCompany, updateCompany, deleteCompany]);
 
   return <CompanyContext.Provider value={value}>{children}</CompanyContext.Provider>;
 };

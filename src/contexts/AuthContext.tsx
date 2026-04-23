@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef, useCallback, useMemo } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
@@ -54,10 +54,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .from('user_profiles')
         .select('name, role, company_id, is_approved, created_at')
         .eq('id', supabaseUser.id)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching user profile:', error);
+        return null;
+      }
+
+      if (!profile) {
+        console.warn(`No user_profiles row for auth user ${supabaseUser.id}`);
         return null;
       }
 
@@ -136,7 +141,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
   }, []);
 
-  const login = async (email: string, password: string): Promise<{ success: boolean; role?: string }> => {
+  const login = useCallback(async (email: string, password: string): Promise<{ success: boolean; role?: string }> => {
     try {
       isHandlingLogin.current = true;
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -167,9 +172,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       isHandlingLogin.current = false;
       return { success: false };
     }
-  };
+  }, []);
 
-  const register = async (
+  const register = useCallback(async (
     email: string, 
     password: string, 
     name: string, 
@@ -211,9 +216,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error('Registration error:', error);
       return false;
     }
-  };
+  }, []);
 
-  const loginWithGoogle = async (role: 'candidate' | 'company' = 'candidate'): Promise<void> => {
+  const loginWithGoogle = useCallback(async (role: 'candidate' | 'company' = 'candidate'): Promise<void> => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -238,9 +243,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error('loginWithGoogle error:', error);
       throw error;
     }
-  };
+  }, []);
 
-  const logout = async (): Promise<void> => {
+  const logout = useCallback(async (): Promise<void> => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {
@@ -252,9 +257,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     }
-  };
+  }, []);
 
-  const updateProfile = async (updates: Partial<Pick<User, 'name' | 'role' | 'companyId'>>): Promise<boolean> => {
+  const updateProfile = useCallback(async (updates: Partial<Pick<User, 'name' | 'role' | 'companyId'>>): Promise<boolean> => {
     if (!user) {
       return false;
     }
@@ -281,9 +286,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error('Profile update error:', error);
       return false;
     }
-  };
+  }, [user]);
 
-  const value: AuthContextType = {
+  const value = useMemo<AuthContextType>(() => ({
     user,
     session,
     login,
@@ -296,7 +301,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isCompany: user?.role === 'company',
     loading,
     updateProfile
-  };
+  }), [user, session, loading, login, register, loginWithGoogle, logout, updateProfile]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
