@@ -10,6 +10,7 @@ interface CandidateProfile {
     user_id: string;
     location: string;
     phone_number: string;
+    headline: string;
     resume_url: string;
     resume_text: string;
     email: string;
@@ -45,6 +46,7 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+    const [headlineValue, setHeadlineValue] = useState('');
     const [locationValue, setLocationValue] = useState('');
     const [phoneValue, setPhoneValue] = useState('');
     const [resumeTextValue, setResumeTextValue] = useState('');
@@ -76,6 +78,7 @@ const ProfilePage = () => {
 
             if (candidateData) {
                 setProfile(candidateData);
+                setHeadlineValue(candidateData.headline || '');
                 setLocationValue(candidateData.location || '');
                 setPhoneValue(candidateData.phone_number || '');
                 setResumeTextValue(candidateData.resume_text || '');
@@ -144,6 +147,7 @@ const ProfilePage = () => {
                 const { error } = await supabase
                     .from('candidates')
                     .update({
+                        headline: headlineValue || null,
                         location: locationValue,
                         phone_number: phoneValue,
                         resume_text: resumeTextValue || null,
@@ -158,6 +162,7 @@ const ProfilePage = () => {
                     .from('candidates')
                     .insert({
                         user_id: user.id,
+                        headline: headlineValue || null,
                         location: locationValue,
                         phone_number: phoneValue,
                         resume_text: resumeTextValue || null,
@@ -372,6 +377,17 @@ const ProfilePage = () => {
                         Personal Information
                     </h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Professional Headline</label>
+                            <input
+                                type="text"
+                                value={headlineValue}
+                                onChange={(e) => setHeadlineValue(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                                placeholder="e.g. Senior React Developer | 5+ years experience"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">A short headline that helps employers find you</p>
+                        </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
                             <input
