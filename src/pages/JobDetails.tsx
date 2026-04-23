@@ -10,8 +10,8 @@ import { supabase } from '../utils/supabaseClient';
 import { MapPin, Calendar, Clock, ArrowLeft, CheckCircle, DollarSign, Bookmark, BookmarkCheck, Share2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
-import SimilarJobs from '../components/SimilarJobs';
-// import RecentlyViewedJobs from '../components/RecentlyViewedJobs'; // Disabled: causing infinite job_tracking queries
+import RelatedJobs from '../components/RelatedJobs';
+import RecentlyViewedJobs from '../components/RecentlyViewedJobs';
 import { CareerGrowthPaths } from '../components/CareerGrowthPaths';
 import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
@@ -472,9 +472,14 @@ const JobDetails: React.FC = () => {
                     </div>
                 </div>
 
-                <SimilarJobs jobId={job.id} />
+                <RelatedJobs
+                    jobId={job.id}
+                    currentLocation={job.location}
+                    currentMinSalary={(job as any).min_salary}
+                    currentMaxSalary={(job as any).max_salary}
+                />
                 <CareerGrowthPaths jobTitle={job.title} jobDescription={job.description} />
-                {/* <RecentlyViewedJobs excludeJobId={job.id} /> */}
+                <RecentlyViewedJobs excludeJobId={job.id} />
             </div>
 
             {/* Sticky mobile apply bar — hidden when the inline form is on screen */}
