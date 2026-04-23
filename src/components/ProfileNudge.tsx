@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Sparkles, X } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
@@ -68,12 +67,19 @@ const ProfileNudge: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Link
-            to="/profile"
+          <a
+            href="/profile"
+            onClick={(e) => {
+              // Bypass React Router's delegated click handler. Some intercept
+              // on prod is rewriting the target of SPA navigation; forcing a
+              // full page load gets the user to ProfilePage reliably.
+              e.preventDefault();
+              window.location.assign('/profile');
+            }}
             className="text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 rounded-lg shadow-soft transition-all"
           >
             Complete profile
-          </Link>
+          </a>
           <button
             onClick={handleDismiss}
             className="h-7 w-7 flex items-center justify-center rounded-md text-primary-700 hover:bg-primary-200"
