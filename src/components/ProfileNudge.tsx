@@ -8,11 +8,14 @@ import { useAuth } from '../contexts/AuthContext';
 // Dismissal is persisted per session via localStorage.
 const ProfileNudge: React.FC = () => {
   const { user, isCompany, isAdmin } = useAuth();
-  const [missing, setMissing] = useState<string[]>([]);
+  const [missing, setMissing] = useState<string[] | null>(null);
   const [dismissed, setDismissed] = useState(() => sessionStorage.getItem('profile-nudge-dismissed') === 'true');
 
   useEffect(() => {
-    if (!user || isCompany || isAdmin || dismissed) return;
+    if (!user || isCompany || isAdmin || dismissed) {
+      setMissing([]);
+      return;
+    }
 
     const check = async () => {
       const { data } = await supabase
@@ -30,7 +33,7 @@ const ProfileNudge: React.FC = () => {
     check();
   }, [user, isCompany, isAdmin, dismissed]);
 
-  if (!user || isCompany || isAdmin || dismissed || missing.length === 0) return null;
+  if (!user || isCompany || isAdmin || dismissed || missing === null || missing.length === 0) return null;
 
   const handleDismiss = () => {
     sessionStorage.setItem('profile-nudge-dismissed', 'true');
