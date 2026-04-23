@@ -25,6 +25,13 @@ const Header: React.FC = () => {
     navigate('/');
   };
 
+  const handleJobsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Click-outside
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -46,17 +53,6 @@ const Header: React.FC = () => {
       isActive(path) ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30' : 'text-secondary-700 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-slate-800'
     }`;
 
-  const mainNav = (
-    <>
-      <Link to="/" className={navClass('/')}>Jobs</Link>
-      <Link to="/career" className={navClass('/career')}>Career Paths</Link>
-      <Link to="/companies" className={navClass('/companies')}>Companies</Link>
-      <Link to="/advanced-search" className={navClass('/advanced-search')}>Search</Link>
-      <Link to="/blog" className={navClass('/blog')}>Blog</Link>
-      <Link to="/pricing" className={navClass('/pricing')}>Pricing</Link>
-    </>
-  );
-
   const initials = user ? getInitials(user.name) : '';
   const avatarColor = user ? colorFromString(user.name || user.email) : 'bg-gray-100 text-gray-500';
 
@@ -74,7 +70,12 @@ const Header: React.FC = () => {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1">
-            {mainNav}
+            <Link to="/" onClick={handleJobsClick} className={navClass('/')}>Jobs</Link>
+            <Link to="/career" className={navClass('/career')}>Career Paths</Link>
+            <Link to="/companies" className={navClass('/companies')}>Companies</Link>
+            <Link to="/advanced-search" className={navClass('/advanced-search')}>Search</Link>
+            <Link to="/blog" className={navClass('/blog')}>Blog</Link>
+            <Link to="/pricing" className={navClass('/pricing')}>Pricing</Link>
             {isCompany && <Link to="/talent-search" className={navClass('/talent-search')}>Talent Search</Link>}
             {isCompany && <Link to="/company-dashboard" className={navClass('/company-dashboard')}>Dashboard</Link>}
             {isAdmin && (
@@ -190,7 +191,7 @@ const Header: React.FC = () => {
       {mobileOpen && (
         <div className="lg:hidden border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 animate-fade-in">
           <div className="max-w-7xl mx-auto px-4 py-4 space-y-1">
-            <Link to="/" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Jobs</Link>
+            <Link to="/" onClick={handleJobsClick} className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Jobs</Link>
             <Link to="/companies" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Companies</Link>
             <Link to="/advanced-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Search</Link>
             <Link to="/blog" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Blog</Link>

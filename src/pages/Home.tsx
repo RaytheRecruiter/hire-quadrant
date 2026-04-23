@@ -3,7 +3,7 @@ import { Search, MapPin, Sparkles, ArrowRight, Users, Building2, CheckCircle2, B
 import { useJobs } from '../contexts/JobContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useLocation } from 'react-router-dom';
 import TrendingSection from '../components/TrendingSection';
 import NewsletterSignup from '../components/NewsletterSignup';
 import RecommendedJobs from '../components/RecommendedJobs';
@@ -30,6 +30,7 @@ const Home: React.FC = () => {
   const { helmet } = useSEO({ canonical: '/' });
   const { user } = useAuth();
   const { setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary, jobs, loading } = useJobs();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [heroSearch, setHeroSearch] = useState('');
   const [heroLocation, setHeroLocation] = useState('');
@@ -180,6 +181,13 @@ const Home: React.FC = () => {
     // Smooth scroll to job list
     const list = document.getElementById('jobs-section');
     if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleBrowseAllJobs = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -678,9 +686,7 @@ const Home: React.FC = () => {
             </h2>
             <Link
               to="/"
-              onClick={() => {
-                window.location.href = '/?browse=all';
-              }}
+              onClick={handleBrowseAllJobs}
               className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-semibold flex items-center gap-1 text-sm"
             >
               Browse all jobs
