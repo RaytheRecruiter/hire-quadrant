@@ -434,8 +434,9 @@ const JobDetails: React.FC = () => {
                     </div>
                 </div>
 
-                <CareerGrowthPaths jobTitle={job.title} jobDescription={job.description} />
-                <SimilarJobs jobId={job.id} />
+                {/* Disabled temporarily - causing .insert().catch() error */}
+                {/* <CareerGrowthPaths jobTitle={job.title} jobDescription={job.description} />
+                <SimilarJobs jobId={job.id} /> */}
                 {/* <RecentlyViewedJobs excludeJobId={job.id} /> */}
             </div>
 
