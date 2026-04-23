@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
@@ -10,14 +10,13 @@ import { supabase } from '../utils/supabaseClient';
 import { MapPin, Calendar, Clock, ArrowLeft, CheckCircle, DollarSign, Bookmark, BookmarkCheck, Share2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
-import ScreeningQuestionsModal from '../components/ScreeningQuestionsModal';
 import SimilarJobs from '../components/SimilarJobs';
 // import RecentlyViewedJobs from '../components/RecentlyViewedJobs'; // Disabled: causing infinite job_tracking queries
 import { CareerGrowthPaths } from '../components/CareerGrowthPaths';
 import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
 import ShareJobBox from '../components/ShareJobBox';
-import JobApplicationForm from '../components/JobApplicationForm';
+import JobApplicationForm, { SubmittedApplicationDetails } from '../components/JobApplicationForm';
 import { extractTags } from '../utils/skillExtractor';
 import { useSEO } from '../hooks/useSEO';
 import { generateSlug, extractIdFromSlug, isUuid } from '../utils/slugGenerator';
@@ -117,7 +116,6 @@ const JobDetails: React.FC = () => {
     const navigate = useNavigate();
     const [applied, setApplied] = React.useState(false);
     const [applying, setApplying] = React.useState(false);
-    const [screeningOpen, setScreeningOpen] = React.useState(false);
     const [showSuccess, setShowSuccess] = React.useState(false);
     const [job, setJob] = React.useState<Job | null>(null);
     const [loading, setLoading] = React.useState(true);
@@ -252,16 +250,6 @@ const JobDetails: React.FC = () => {
         );
     }
 
-    const submitApplication = async (answers: ScreeningAnswer[]) => {
-        const success = await applyToJob(job.id, answers);
-        if (success) {
-            setApplied(true);
-            setScreeningOpen(false);
-            setShowSuccess(true);
-            toast.success('Application submitted!');
-        }
-    };
-
     // Apply buttons now scroll to the inline application form instead of
     // silently submitting. Preserves the old login-redirect behavior.
     const handleApply = () => {
@@ -278,10 +266,18 @@ const JobDetails: React.FC = () => {
         }
     };
 
-    const handleInlineSubmit = async (answers: ScreeningAnswer[]): Promise<boolean> => {
+    const handleInlineSubmit = async (
+        answers: ScreeningAnswer[],
+        details: SubmittedApplicationDetails,
+    ): Promise<boolean> => {
         if (!job) return false;
         setApplying(true);
-        const success = await applyToJob(job.id, answers);
+        const success = await applyToJob(job.id, answers, {
+            applicantName: details.name,
+            applicantEmail: details.email,
+            applicantPhone: details.phone,
+            coverLetter: details.coverLetter,
+        });
         setApplying(false);
         if (success) {
             setApplied(true);
@@ -289,6 +285,21 @@ const JobDetails: React.FC = () => {
         }
         return success;
     };
+
+    // Hide the mobile sticky Apply bar once the inline form scrolls into view,
+    // so it doesn't overlap the form's submit button.
+    const [applyFormVisible, setApplyFormVisible] = useState(false);
+    const formObserverRef = useRef<IntersectionObserver | null>(null);
+    useEffect(() => {
+        const el = document.getElementById('apply-form');
+        if (!el || typeof IntersectionObserver === 'undefined') return;
+        formObserverRef.current = new IntersectionObserver(
+            ([entry]) => setApplyFormVisible(entry.isIntersecting),
+            { rootMargin: '0px 0px -20% 0px' }
+        );
+        formObserverRef.current.observe(el);
+        return () => formObserverRef.current?.disconnect();
+    }, []);
 
     const handleSave = async () => {
         if (!user) {
@@ -458,8 +469,8 @@ const JobDetails: React.FC = () => {
                 {/* <RecentlyViewedJobs excludeJobId={job.id} /> */}
             </div>
 
-            {/* Sticky mobile apply bar */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 p-4 pb-safe shadow-card-hover z-30">
+            {/* Sticky mobile apply bar — hidden when the inline form is on screen */}
+            <div className={`md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 p-4 pb-safe shadow-card-hover z-30 transition-opacity duration-200 ${applyFormVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <div className="flex items-center gap-2 max-w-4xl mx-auto">
                     <button
                         onClick={handleSave}
@@ -482,14 +493,6 @@ const JobDetails: React.FC = () => {
                     </button>
                 </div>
             </div>
-
-            <ScreeningQuestionsModal
-                open={screeningOpen}
-                questions={screeningQuestions}
-                companyName={job.company || 'this company'}
-                onClose={() => setScreeningOpen(false)}
-                onSubmit={submitApplication}
-            />
         </div>
     );
 };

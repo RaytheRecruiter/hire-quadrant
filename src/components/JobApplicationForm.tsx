@@ -5,13 +5,20 @@ import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
 import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
 
+export interface SubmittedApplicationDetails {
+  name: string;
+  email: string;
+  phone?: string;
+  coverLetter?: string;
+}
+
 interface JobApplicationFormProps {
   jobId: string;
   jobTitle: string;
   company?: string;
   screeningQuestions: ScreeningQuestion[];
   applied: boolean;
-  onSubmit: (answers: ScreeningAnswer[], coverLetter?: string) => Promise<boolean>;
+  onSubmit: (answers: ScreeningAnswer[], details: SubmittedApplicationDetails) => Promise<boolean>;
 }
 
 const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
@@ -81,7 +88,12 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
     setSubmitting(true);
     try {
-      const ok = await onSubmit(answers, coverLetter.trim() || undefined);
+      const ok = await onSubmit(answers, {
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim() || undefined,
+        coverLetter: coverLetter.trim() || undefined,
+      });
       if (ok) {
         toast.success('Application submitted!');
       } else {
