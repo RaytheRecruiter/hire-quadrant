@@ -29,7 +29,7 @@ const CATEGORIES = [
 const Home: React.FC = () => {
   const { helmet } = useSEO({ canonical: '/' });
   const { user } = useAuth();
-  const { setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary } = useJobs();
+  const { setSearchTerm, setLocationFilter, setTypeFilter, setMinSalary, jobs, loading } = useJobs();
   const [searchParams] = useSearchParams();
   const [heroSearch, setHeroSearch] = useState('');
   const [heroLocation, setHeroLocation] = useState('');
@@ -684,7 +684,48 @@ const Home: React.FC = () => {
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <TrendingSection />
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin">
+                <Briefcase className="h-8 w-8 text-primary-500" />
+              </div>
+            </div>
+          ) : jobs.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {jobs.slice(0, 9).map((job) => (
+                <Link
+                  key={job.id}
+                  to={`/jobs/${job.id}`}
+                  className="group bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-200 dark:border-slate-700 hover:shadow-card-hover transition-all hover:border-primary-300"
+                >
+                  <h3 className="font-bold text-lg text-secondary-900 dark:text-white group-hover:text-primary-600 mb-2 line-clamp-2">
+                    {job.title}
+                  </h3>
+                  <p className="text-sm text-secondary-600 dark:text-slate-400 mb-3 font-medium">
+                    {job.company || job.sourceCompany}
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {job.location && (
+                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+                        <MapPin className="h-3 w-3 flex-shrink-0" />
+                        <span className="line-clamp-1">{job.location}</span>
+                      </div>
+                    )}
+                    {job.type && (
+                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+                        <Briefcase className="h-3 w-3 flex-shrink-0" />
+                        <span>{job.type}</span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-600 dark:text-slate-400">
+              <p>No jobs available yet. Check back soon!</p>
+            </div>
+          )}
         </div>
       </div>
       </div>
