@@ -118,6 +118,7 @@ const JobDetails: React.FC = () => {
     const [showSuccess, setShowSuccess] = React.useState(false);
 
     const [directJob, setDirectJob] = React.useState<Job | null>(null);
+    const [loading, setLoading] = React.useState(true);
 
     // Support both UUID and slug-based URLs
     let job = getJobById(id) || directJob;
@@ -133,9 +134,12 @@ const JobDetails: React.FC = () => {
     React.useEffect(() => {
       const contextJob = getJobById(id);
       if (!contextJob && id) {
+        setLoading(true);
         supabase.from('jobs').select('*').eq('id', id).maybeSingle().then(({ data }) => {
           if (data) setDirectJob(data as Job);
-        }).catch(err => console.error('Failed to fetch job:', err));
+        }).catch(err => console.error('Failed to fetch job:', err)).finally(() => setLoading(false));
+      } else {
+        setLoading(false);
       }
     }, [id]);
     const companyProfile = job ? (getCompanyByName(job.company) || getCompanyById(job.company)) : null;
@@ -214,6 +218,19 @@ const JobDetails: React.FC = () => {
             document.getElementById('job-breadcrumb-schema')?.remove();
         };
     }, [job, companyProfile]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+                <div className="text-center">
+                    <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary-100 mb-4">
+                        <div className="h-6 w-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                    <p className="text-gray-500">Loading job details...</p>
+                </div>
+            </div>
+        );
+    }
 
     if (!job) {
         return (
