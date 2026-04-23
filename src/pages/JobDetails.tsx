@@ -293,7 +293,13 @@ const JobDetails: React.FC = () => {
             applicantName: details.name,
             applicantEmail: details.email,
             applicantPhone: details.phone,
+            applicantFirstName: details.firstName,
+            applicantLastName: details.lastName,
+            applicantZip: details.zip,
+            resumeUrl: details.resumeUrl,
             coverLetter: details.coverLetter,
+            eeo: details.eeo,
+            privacyAcceptedAt: details.privacyAcceptedAt,
         });
         setApplying(false);
         if (success) {
