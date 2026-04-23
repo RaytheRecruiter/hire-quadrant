@@ -27,7 +27,7 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
     );
   }
 
-  if (error || !paths || paths.length === 0) {
+  if (!paths || paths.length === 0) {
     return null;
   }
 
