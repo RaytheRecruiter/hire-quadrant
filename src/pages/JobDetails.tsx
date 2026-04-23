@@ -107,8 +107,6 @@ const buildJobSchema = (job: any, url: string) => {
 
 const JobDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    console.log('🔍 JobDetails mounted with id:', id);
-
     const { getJobById, applyToJob, hasApplied } = useJobs();
     const { user } = useAuth();
     const { getCompanyByName, getCompanyById } = useCompanies();
@@ -124,12 +122,10 @@ const JobDetails: React.FC = () => {
     // Single fetch from Supabase
     React.useEffect(() => {
       if (!id) {
-        console.log('❌ No id provided');
         setLoading(false);
         return;
       }
 
-      console.log('📡 Fetching job with id:', id);
       setLoading(true);
 
       supabase
@@ -138,7 +134,6 @@ const JobDetails: React.FC = () => {
         .eq('id', id)
         .maybeSingle()
         .then(({ data, error }) => {
-          console.log('✅ Fetch result:', { data, error });
           if (error) {
             console.error('Error fetching job:', error);
           } else if (data) {
@@ -149,8 +144,6 @@ const JobDetails: React.FC = () => {
     }, [id]);
     const companyProfile = job ? (getCompanyByName(job.company) || getCompanyById(job.company)) : null;
     const saved = job ? isSaved(job.id) : false;
-
-    console.log('🎬 Rendering JobDetails:', { id, loading, jobFound: !!job });
 
     const screeningQuestions: ScreeningQuestion[] = useMemo(
         () => ((job as any)?.screening_questions as ScreeningQuestion[] | undefined) || [],
@@ -435,7 +428,7 @@ const JobDetails: React.FC = () => {
                 </div>
 
                 <SimilarJobs jobId={job.id} />
-                {/* <CareerGrowthPaths jobTitle={job.title} jobDescription={job.description} /> */}
+                <CareerGrowthPaths jobTitle={job.title} jobDescription={job.description} />
                 {/* <RecentlyViewedJobs excludeJobId={job.id} /> */}
             </div>
 
