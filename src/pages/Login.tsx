@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
 import { User, Lock, Eye, EyeOff } from 'lucide-react';
@@ -61,12 +62,12 @@ const Login: React.FC = () => {
           </h2>
           <p className="mt-4 text-center text-gray-600">
             Or{' '}
-            <Link
+            <HardLink
               to="/register"
               className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
             >
               create a new account
-            </Link>
+            </HardLink>
           </p>
         </div>
 
@@ -111,12 +112,12 @@ const Login: React.FC = () => {
                 <label htmlFor="password" className="block text-sm font-semibold text-secondary-800">
                   Password
                 </label>
-                <Link
+                <HardLink
                   to="/reset-password"
                   className="text-sm font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
                 >
                   Forgot?
-                </Link>
+                </HardLink>
               </div>
               <div className="mt-1 relative">
                 <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />

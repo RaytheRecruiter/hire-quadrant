@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import { useCompanies } from '../contexts/CompanyContext';
@@ -328,7 +329,7 @@ const JobDetails: React.FC = () => {
                         <div className="flex-1">
                             <h3 className="font-display text-lg font-bold text-secondary-900">Application sent!</h3>
                             <p className="text-sm text-secondary-700 mt-1">
-                                We've notified <strong>{job.company}</strong>. Track the status on your <Link to="/profile" className="text-primary-600 hover:underline font-semibold">profile page</Link>.
+                                We've notified <strong>{job.company}</strong>. Track the status on your <HardLink to="/profile" className="text-primary-600 hover:underline font-semibold">profile page</HardLink>.
                             </p>
                         </div>
                     </div>
@@ -345,9 +346,9 @@ const JobDetails: React.FC = () => {
                                 </h1>
                                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-secondary-600 dark:text-slate-400">
                                     {companyProfile ? (
-                                        <Link to={`/companies/${companyProfile.id}`} className="font-semibold text-primary-700 hover:underline">
+                                        <HardLink to={`/companies/${companyProfile.id}`} className="font-semibold text-primary-700 hover:underline">
                                             {job.company}
-                                        </Link>
+                                        </HardLink>
                                     ) : (
                                         <span className="font-semibold text-secondary-800">{job.company}</span>
                                     )}

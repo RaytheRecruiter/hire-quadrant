@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from './HardLink';
 import { Sparkles, MapPin, Building2, Clock } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { generateSlug } from '../utils/slugGenerator';
@@ -58,7 +59,7 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
       </h3>
       <div className="space-y-3">
         {jobs.map(j => (
-          <Link
+          <HardLink
             key={j.id}
             to={`/job/${generateSlug(j.title, j.company)}`}
             className="block p-4 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
@@ -83,7 +84,7 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
                 )}
               </div>
             </div>
-          </Link>
+          </HardLink>
         ))}
       </div>
     </div>

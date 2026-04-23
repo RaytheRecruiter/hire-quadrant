@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from './HardLink';
 import { Clock, MapPin, Building2 } from 'lucide-react';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
 import { useAuth } from '../contexts/AuthContext';
@@ -24,7 +25,7 @@ const RecentlyViewedJobs: React.FC<Props> = ({ excludeJobId }) => {
       </h3>
       <div className="space-y-3">
         {recentJobs.map(job => (
-          <Link
+          <HardLink
             key={job.id}
             to={`/job/${generateSlug(job.title, job.company)}`}
             className="block p-4 rounded-xl border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:bg-primary-50/30 dark:hover:bg-primary-900/10 transition-colors"
@@ -51,7 +52,7 @@ const RecentlyViewedJobs: React.FC<Props> = ({ excludeJobId }) => {
                 </span>
               )}
             </div>
-          </Link>
+          </HardLink>
         ))}
       </div>
     </div>

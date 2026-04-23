@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { BookOpen, Clock, Loader2, AlertCircle } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useSEO } from '../hooks/useSEO';
@@ -104,7 +105,7 @@ const Blog: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map(p => (
-              <Link
+              <HardLink
                 key={p.id}
                 to={`/blog/${p.slug}`}
                 className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl border border-white/20 overflow-hidden transition-all duration-300 hover:scale-[1.02]"
@@ -140,7 +141,7 @@ const Blog: React.FC = () => {
                     </span>
                   </div>
                 </div>
-              </Link>
+              </HardLink>
             ))}
           </div>
         )}

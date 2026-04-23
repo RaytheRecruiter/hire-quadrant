@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import HardLink from '../components/HardLink';
 import { ArrowLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
@@ -20,13 +21,13 @@ const NotFound: React.FC = () => {
             </p>
           </div>
 
-          <Link
+          <HardLink
             to="/"
             className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-soft hover:shadow-card-hover"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Home
-          </Link>
+          </HardLink>
         </div>
       </div>
     </>
