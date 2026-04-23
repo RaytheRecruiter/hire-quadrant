@@ -117,8 +117,10 @@ const JobDetails: React.FC = () => {
     const [screeningOpen, setScreeningOpen] = React.useState(false);
     const [showSuccess, setShowSuccess] = React.useState(false);
 
+    const [directJob, setDirectJob] = React.useState<Job | null>(null);
+
     // Support both UUID and slug-based URLs
-    let job = getJobById(id);
+    let job = getJobById(id) || directJob;
     if (!job && id && !isUuid(id)) {
       // Try to find job by slug (search through jobs for matching title/company slug)
       job = jobs.find(j => {
@@ -128,16 +130,14 @@ const JobDetails: React.FC = () => {
     }
 
     // Load job directly from Supabase if not in context
-    const [directJob, setDirectJob] = React.useState<Job | null>(null);
     React.useEffect(() => {
-      if (!job && id) {
+      const contextJob = getJobById(id);
+      if (!contextJob && id) {
         supabase.from('jobs').select('*').eq('id', id).maybeSingle().then(({ data }) => {
           if (data) setDirectJob(data as Job);
-        });
+        }).catch(err => console.error('Failed to fetch job:', err));
       }
-    }, [id, job]);
-
-    if (!job && directJob) job = directJob;
+    }, [id]);
     const companyProfile = job ? (getCompanyByName(job.company) || getCompanyById(job.company)) : null;
     const saved = job ? isSaved(job.id) : false;
 
