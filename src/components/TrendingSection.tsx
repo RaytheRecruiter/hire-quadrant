@@ -24,11 +24,19 @@ const TrendingSection: React.FC = () => {
   useEffect(() => {
     const fetchTrending = async () => {
       const [compRes, locRes] = await Promise.all([
-        supabase.from('trending_companies').select('*'),
-        supabase.from('trending_locations').select('*'),
+        supabase.from('trending_companies').select('*').limit(20),
+        supabase.from('trending_locations').select('*').limit(20),
       ]);
-      if (compRes.data) setCompanies(compRes.data);
-      if (locRes.data) setLocations(locRes.data);
+      if (compRes.error) {
+        console.error('Error fetching trending companies:', compRes.error);
+      } else if (compRes.data) {
+        setCompanies(compRes.data);
+      }
+      if (locRes.error) {
+        console.error('Error fetching trending locations:', locRes.error);
+      } else if (locRes.data) {
+        setLocations(locRes.data);
+      }
       setLoading(false);
     };
     fetchTrending();

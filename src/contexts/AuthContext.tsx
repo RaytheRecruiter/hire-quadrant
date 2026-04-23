@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
@@ -45,6 +45,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const isHandlingLogin = useRef(false);
 
   // Fetch user profile from user_profiles table
   const fetchUserProfile = async (supabaseUser: SupabaseUser): Promise<User | null> => {
@@ -112,8 +113,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (session?.user) {
           setSession(session);
           // Defer the profile fetch to avoid blocking the auth state change
+          // Skip if login() is already handling it to avoid duplicate fetch
           setTimeout(async () => {
-            if (!isMounted) return;
+            if (!isMounted || isHandlingLogin.current) return;
             const userProfile = await fetchUserProfile(session.user);
             if (isMounted) {
               setUser(userProfile);
@@ -136,6 +138,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string): Promise<{ success: boolean; role?: string }> => {
     try {
+      isHandlingLogin.current = true;
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -143,6 +146,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (error) {
         console.error('Login error:', error.message);
+        isHandlingLogin.current = false;
         return { success: false };
       }
 
@@ -151,13 +155,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (userProfile) {
           setUser(userProfile);
           setSession(data.session);
+          isHandlingLogin.current = false;
           return { success: true, role: userProfile.role };
         }
       }
 
+      isHandlingLogin.current = false;
       return { success: false };
     } catch (error) {
       console.error('Login error:', error);
+      isHandlingLogin.current = false;
       return { success: false };
     }
   };
