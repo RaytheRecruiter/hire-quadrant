@@ -50,9 +50,9 @@ export class TrackingService {
     this.initializeLocalData();
     await this.loadDataFromSupabase();
     this.setupBroadcastChannel();
-    this.startSyncInterval();
+    // this.startSyncInterval(); // Disabled: was causing infinite polling loop every 2 seconds
     this.viewedJobIds.clear(); // Clear viewedJobIds on initialization to ensure fresh session tracking
-    
+
     this.initialized = true;
     
     console.log('TrackingService initialized with session ID:', this.sessionId);
