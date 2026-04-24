@@ -14,6 +14,9 @@ import '@fontsource/space-grotesk/700.css';
 
 import App from './App.tsx';
 import './index.css';
+import { installErrorCapture } from './utils/errorCapture';
+
+installErrorCapture();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
