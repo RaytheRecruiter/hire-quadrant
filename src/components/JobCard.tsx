@@ -89,9 +89,16 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                            <h3 className="font-display text-lg font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors line-clamp-1">
-                                {job.title}
-                            </h3>
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <h3 className="font-display text-lg font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors line-clamp-1">
+                                    {job.title}
+                                </h3>
+                                {job.is_sponsored && (
+                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 flex-shrink-0">
+                                        Sponsored
+                                    </span>
+                                )}
+                            </div>
                             <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-slate-400 mt-0.5">
                                 <span className="font-medium truncate">{job.company}</span>
                                 {job.location && (
