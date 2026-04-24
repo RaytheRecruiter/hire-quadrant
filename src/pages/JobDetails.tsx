@@ -17,6 +17,8 @@ import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
 import ShareJobBox from '../components/ShareJobBox';
 import JobApplicationForm, { SubmittedApplicationDetails } from '../components/JobApplicationForm';
+import JobReferralShare from '../components/JobReferralShare';
+import { useReferralTracking, attachStoredReferral } from '../hooks/useReferralTracking';
 import { extractTags } from '../utils/skillExtractor';
 import { useSEO } from '../hooks/useSEO';
 import { generateSlug } from '../utils/slugGenerator';
@@ -102,6 +104,7 @@ const JobDetails: React.FC = () => {
     const { id: idParam, slug: slugParam } = useParams<{ id?: string; slug?: string }>();
     const { getJobById, applyToJob, hasApplied } = useJobs();
     const { user } = useAuth();
+    useReferralTracking();
     const { getCompanyByName, getCompanyById } = useCompanies();
     const { isSaved, toggleSaved } = useSavedJobs();
     const navigate = useNavigate();
@@ -327,6 +330,7 @@ const JobDetails: React.FC = () => {
         if (success) {
             setApplied(true);
             setShowSuccess(true);
+            if (user?.id) attachStoredReferral(user.id);
         }
         return success;
     };
@@ -489,8 +493,17 @@ const JobDetails: React.FC = () => {
                     </div>
 
                     {/* Share this job */}
-                    <div className="px-6 md:px-10 pb-10">
+                    <div className="px-6 md:px-10 pb-6">
                         <ShareJobBox title={job.title} company={job.company} url={window.location.href} />
+                    </div>
+
+                    {/* Referral share (attributed) */}
+                    <div className="px-6 md:px-10 pb-10">
+                        <JobReferralShare
+                            jobId={job.id}
+                            jobTitle={job.title}
+                            companyName={job.company ?? job.sourceCompany ?? ''}
+                        />
                     </div>
                 </div>
 
