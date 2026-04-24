@@ -78,9 +78,10 @@ create policy applicant_tags_write
   with check (author_id = auth.uid());
 
 -- 3. Custom application fields per job --------------------------------------
+-- jobs.id is TEXT (see 20250722191000_small_snowflake.sql), so job_id must be text.
 create table if not exists job_custom_fields (
   id uuid primary key default gen_random_uuid(),
-  job_id uuid not null references jobs(id) on delete cascade,
+  job_id text not null references jobs(id) on delete cascade,
   label text not null,
   field_type text not null check (field_type in ('short_text','long_text','yes_no','single_choice','multi_choice')),
   required boolean not null default false,
@@ -88,6 +89,24 @@ create table if not exists job_custom_fields (
   order_index int not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- Heal partial runs created with uuid.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'job_custom_fields'
+      and column_name = 'job_id'
+      and data_type = 'uuid'
+  ) then
+    -- Drop the broken FK constraint (may or may not exist), then retype.
+    alter table job_custom_fields drop constraint if exists job_custom_fields_job_id_fkey;
+    alter table job_custom_fields alter column job_id type text using job_id::text;
+    alter table job_custom_fields
+      add constraint job_custom_fields_job_id_fkey
+      foreign key (job_id) references jobs(id) on delete cascade;
+  end if;
+end $$;
 
 create index if not exists job_custom_fields_job_idx on job_custom_fields(job_id, order_index);
 
