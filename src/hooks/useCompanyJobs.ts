@@ -29,35 +29,49 @@ export function useCompanyJobs(
         setLoading(true);
         setError(null);
 
-        let query = supabase
-          .from('jobs')
-          .select(
-            'id, title, company, location, type, salary, posted_date, description, external_job_id, external_url, source_company, source_xml_file, company_id, is_sponsored, sponsor_tier',
-          )
-          .order('posted_date', { ascending: false })
-          .limit(limit);
+        const select =
+          'id, title, company, location, type, salary, posted_date, description, external_job_id, external_url, source_company, source_xml_file, company_id, is_sponsored, sponsor_tier';
 
-        // Prefer FK match; fall back to name match for legacy rows where
-        // company_id was never backfilled.
+        let rows: Job[] = [];
+
+        // Primary path: FK match. Fast, covers all rows the Phase 5
+        // backfill linked up.
         if (companyId) {
-          const names = [companyName, companyDisplayName]
-            .filter((n): n is string => !!n)
-            .map((n) => n.replace(/,/g, '\\,'));
-          if (names.length > 0) {
-            query = query.or(`company_id.eq.${companyId},company.in.(${names.join(',')})`);
-          } else {
-            query = query.eq('company_id', companyId);
-          }
-        } else if (companyName || companyDisplayName) {
-          const names = [companyName, companyDisplayName]
-            .filter((n): n is string => !!n)
-            .map((n) => n.replace(/,/g, '\\,'));
-          query = query.in('company', names);
+          const { data, error: err } = await supabase
+            .from('jobs')
+            .select(select)
+            .eq('company_id', companyId)
+            .order('posted_date', { ascending: false })
+            .limit(limit);
+          if (err) throw err;
+          rows = (data ?? []) as Job[];
         }
 
-        const { data, error: err } = await query;
-        if (err) throw err;
-        if (!cancelled) setJobs((data ?? []) as Job[]);
+        // Fallback: name match. Covers legacy rows the backfill missed
+        // (edge cases with trailing whitespace, slug collisions, etc.).
+        // Only runs when the FK path returned nothing so commas/special
+        // chars in company names can't break the query.
+        if (rows.length === 0) {
+          const names = Array.from(
+            new Set([companyName, companyDisplayName].filter((n): n is string => !!n && n.length > 0)),
+          );
+          for (const name of names) {
+            const { data, error: err } = await supabase
+              .from('jobs')
+              .select(select)
+              .eq('company', name)
+              .order('posted_date', { ascending: false })
+              .limit(limit);
+            if (err) continue; // soft-fail; keep any rows we already have
+            const found = (data ?? []) as Job[];
+            if (found.length > 0) {
+              rows = found;
+              break;
+            }
+          }
+        }
+
+        if (!cancelled) setJobs(rows);
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load jobs');
       } finally {
