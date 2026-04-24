@@ -58,6 +58,7 @@ const CompanyPortal = lazy(() => import('./pages/CompanyPortal'));
 const SalaryInsightsPage = lazy(() => import('./pages/SalaryInsightsPage'));
 const BestCompaniesPage = lazy(() => import('./pages/BestCompaniesPage'));
 const BrowseJobs = lazy(() => import('./pages/BrowseJobs'));
+const AdminAuditLog = lazy(() => import('./pages/AdminAuditLog'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -99,6 +100,7 @@ function App() {
                 <Route path="/admin/reviews" element={<ReviewModeration />} />
                 <Route path="/admin/reports" element={<ReviewReports />} />
                 <Route path="/admin/appeals" element={<ReviewAppeals />} />
+                <Route path="/admin/audit" element={<AdminAuditLog />} />
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />
                 <Route path="/company-sources" element={<CompanySourceManager />} />
                 <Route path="/profile" element={<ProfilePage />} />

@@ -83,7 +83,7 @@ const CompanyPortal: React.FC = () => {
     {
       title: 'Audit Log',
       description: 'Append-only history of moderation decisions, claims, and reports.',
-      to: '/admin#audit',
+      to: '/admin/audit',
       icon: ClipboardList,
       accent: 'bg-violet-100 text-violet-700',
     },
