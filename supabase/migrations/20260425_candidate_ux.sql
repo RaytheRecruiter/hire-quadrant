@@ -70,7 +70,7 @@ create policy app_status_history_read
   on application_status_history for select
   using (
     exists (
-      select 1 from applications a
+      select 1 from job_applications a
       where a.id = application_id
         and (a.user_id = auth.uid()
              or exists (select 1 from user_profiles p where p.id = auth.uid() and p.role in ('admin','company')))
@@ -92,9 +92,9 @@ begin
 end;
 $$;
 
-drop trigger if exists trg_record_application_status on applications;
+drop trigger if exists trg_record_application_status on job_applications;
 create trigger trg_record_application_status
-  after insert or update of status on applications
+  after insert or update of status on job_applications
   for each row execute function fn_record_application_status();
 
 -- 4. Advanced filter columns on jobs ----------------------------------------

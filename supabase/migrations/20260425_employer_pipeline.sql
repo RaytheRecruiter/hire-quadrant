@@ -166,7 +166,7 @@ create policy scheduled_interviews_read
   on scheduled_interviews for select
   using (
     exists (
-      select 1 from applications a
+      select 1 from job_applications a
       where a.id = application_id and a.user_id = auth.uid()
     )
     or exists (

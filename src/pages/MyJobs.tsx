@@ -48,7 +48,7 @@ const MyJobs: React.FC = () => {
         setJobs(((data ?? []).map((r: any) => r.job).filter(Boolean)) as JobRow[]);
       } else if (active === 'applied') {
         const { data } = await supabase
-          .from('applications')
+          .from('job_applications')
           .select('id, job:jobs(id, title, company, location, posted_date)')
           .eq('user_id', user.id);
         setJobs(
@@ -79,7 +79,7 @@ const MyJobs: React.FC = () => {
 
   const withdraw = async (applicationId: string) => {
     if (!window.confirm('Withdraw this application?')) return;
-    const { error } = await supabase.from('applications').delete().eq('id', applicationId);
+    const { error } = await supabase.from('job_applications').delete().eq('id', applicationId);
     if (error) { toast.error(error.message); return; }
     toast.success('Application withdrawn');
     load();
