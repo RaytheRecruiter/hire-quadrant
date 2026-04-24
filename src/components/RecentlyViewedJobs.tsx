@@ -27,7 +27,7 @@ const RecentlyViewedJobs: React.FC<Props> = ({ excludeJobId }) => {
         {recentJobs.map(job => (
           <HardLink
             key={job.id}
-            to={`/job/${generateSlug(job.title, job.company)}`}
+            to={`/job/${generateSlug(job.title, job.company, job.id)}`}
             className="block p-4 rounded-xl border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:bg-primary-50/30 dark:hover:bg-primary-900/10 transition-colors"
           >
             <div className="flex items-start justify-between gap-4">

@@ -80,7 +80,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
     return (
         <HardLink
-            to={`/job/${generateSlug(job.title, job.company || '')}`}
+            to={`/job/${generateSlug(job.title, job.company || '', job.id)}`}
             className="group block bg-white dark:bg-slate-800 rounded-2xl shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all duration-300 hover:scale-[1.01] p-4"
         >
             <div className="flex items-start gap-3">
