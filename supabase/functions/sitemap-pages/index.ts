@@ -30,6 +30,20 @@ const staticPages = [
   { path: '/best/remote-first', priority: '0.6', changefreq: 'weekly' },
   { path: '/best/startups', priority: '0.6', changefreq: 'weekly' },
   { path: '/best/enterprise', priority: '0.6', changefreq: 'weekly' },
+  { path: '/guide/technology', priority: '0.6', changefreq: 'weekly' },
+  { path: '/guide/healthcare', priority: '0.6', changefreq: 'weekly' },
+  { path: '/guide/finance', priority: '0.6', changefreq: 'weekly' },
+  { path: '/guide/manufacturing', priority: '0.6', changefreq: 'weekly' },
+  { path: '/guide/retail', priority: '0.6', changefreq: 'weekly' },
+  { path: '/guide/government', priority: '0.6', changefreq: 'weekly' },
+  { path: '/guide/education', priority: '0.6', changefreq: 'weekly' },
+  { path: '/guide/non-profit', priority: '0.6', changefreq: 'weekly' },
+  { path: '/interview-prep/software-engineer', priority: '0.6', changefreq: 'monthly' },
+  { path: '/interview-prep/data-scientist', priority: '0.6', changefreq: 'monthly' },
+  { path: '/interview-prep/product-manager', priority: '0.6', changefreq: 'monthly' },
+  { path: '/interview-prep/designer', priority: '0.6', changefreq: 'monthly' },
+  { path: '/interview-prep/engineering-manager', priority: '0.6', changefreq: 'monthly' },
+  { path: '/interview-prep/account-executive', priority: '0.6', changefreq: 'monthly' },
 ];
 
 function toSeoSlug(value: string | null | undefined): string {

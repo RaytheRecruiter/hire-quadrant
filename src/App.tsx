@@ -59,6 +59,9 @@ const SalaryInsightsPage = lazy(() => import('./pages/SalaryInsightsPage'));
 const BestCompaniesPage = lazy(() => import('./pages/BestCompaniesPage'));
 const BrowseJobs = lazy(() => import('./pages/BrowseJobs'));
 const AdminAuditLog = lazy(() => import('./pages/AdminAuditLog'));
+const InterviewPrepPage = lazy(() => import('./pages/InterviewPrepPage'));
+const IndustryGuidePage = lazy(() => import('./pages/IndustryGuidePage'));
+const CareerTransitionPage = lazy(() => import('./pages/CareerTransitionPage'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -122,6 +125,9 @@ function App() {
                 <Route path="/jobs/location/:locationSlug" element={<LocationPage />} />
                 <Route path="/salaries/:titleSlug" element={<SalaryInsightsPage />} />
                 <Route path="/best/:categorySlug" element={<BestCompaniesPage />} />
+                <Route path="/interview-prep/:roleSlug" element={<InterviewPrepPage />} />
+                <Route path="/guide/:industrySlug" element={<IndustryGuidePage />} />
+                <Route path="/career/from/:fromSlug/to/:toSlug" element={<CareerTransitionPage />} />
                 <Route path="/talent-search" element={<ResumeSearch />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />

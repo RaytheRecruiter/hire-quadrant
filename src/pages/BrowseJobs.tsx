@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { MapPin, Search as SearchIcon, Briefcase, Loader2 } from 'lucide-react';
 import HardLink from '../components/HardLink';
 import JobFilterSidebar, { AdvancedFilters, DEFAULT_ADVANCED_FILTERS } from '../components/JobFilterSidebar';
+import AutocompleteField from '../components/AutocompleteField';
 import { supabase } from '../utils/supabaseClient';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -141,26 +142,22 @@ const BrowseJobs: React.FC = () => {
               syncParams({}, q, loc);
             }}
           >
-            <div className="flex-1 relative">
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Job title, skill, company"
-                className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
-              />
-            </div>
-            <div className="flex-1 relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                value={loc}
-                onChange={(e) => setLoc(e.target.value)}
-                placeholder="City or remote"
-                className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
-              />
-            </div>
+            <AutocompleteField
+              value={q}
+              onChange={setQ}
+              placeholder="Job title, skill, company"
+              icon={<SearchIcon className="h-4 w-4" />}
+              column="title"
+              className="flex-1"
+            />
+            <AutocompleteField
+              value={loc}
+              onChange={setLoc}
+              placeholder="City or remote"
+              icon={<MapPin className="h-4 w-4" />}
+              column="location"
+              className="flex-1"
+            />
             <button
               type="submit"
               className="px-5 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700"
