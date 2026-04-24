@@ -94,10 +94,10 @@ const EducationSection: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-          <GraduationCap className="h-5 w-5 text-gray-400" />
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 flex items-center gap-2">
+          <GraduationCap className="h-5 w-5 text-gray-400 dark:text-slate-500" />
           Education
         </h2>
         {!editing && (
@@ -108,13 +108,13 @@ const EducationSection: React.FC = () => {
       </div>
 
       {editing && (
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 space-y-3">
+        <div className="bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-xl p-4 mb-4 space-y-3">
           <input
             type="text"
             value={form.school}
             onChange={(e) => setForm((f) => ({ ...f, school: e.target.value }))}
             placeholder="School *"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <input
@@ -122,14 +122,14 @@ const EducationSection: React.FC = () => {
               value={form.degree}
               onChange={(e) => setForm((f) => ({ ...f, degree: e.target.value }))}
               placeholder="Degree (e.g. B.S.)"
-              className="px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+              className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
             <input
               type="text"
               value={form.field_of_study}
               onChange={(e) => setForm((f) => ({ ...f, field_of_study: e.target.value }))}
               placeholder="Field of study"
-              className="px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+              className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
             <input
               type="number"
@@ -138,7 +138,7 @@ const EducationSection: React.FC = () => {
               value={form.start_year}
               onChange={(e) => setForm((f) => ({ ...f, start_year: e.target.value }))}
               placeholder="Start year"
-              className="px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+              className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
             <input
               type="number"
@@ -147,7 +147,7 @@ const EducationSection: React.FC = () => {
               value={form.end_year}
               onChange={(e) => setForm((f) => ({ ...f, end_year: e.target.value }))}
               placeholder="End year (blank = in progress)"
-              className="px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+              className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
           </div>
           <textarea
@@ -156,10 +156,10 @@ const EducationSection: React.FC = () => {
             value={form.description}
             onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
             placeholder="Notes (optional)"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
           />
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={() => setEditing(null)} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-700 hover:bg-white">
+            <button type="button" onClick={() => setEditing(null)} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-white dark:bg-slate-800">
               <X className="h-4 w-4" /> Cancel
             </button>
             <button type="button" onClick={save} disabled={saving} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60">
@@ -175,30 +175,30 @@ const EducationSection: React.FC = () => {
           <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
         </div>
       ) : rows.length === 0 && !editing ? (
-        <p className="text-sm text-gray-500">No education added yet.</p>
+        <p className="text-sm text-gray-500 dark:text-slate-400">No education added yet.</p>
       ) : (
         <ul className="space-y-4">
           {rows.map((r) => (
-            <li key={r.id} className="border-l-2 border-gray-200 pl-4 group">
+            <li key={r.id} className="border-l-2 border-gray-200 dark:border-slate-700 pl-4 group">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-gray-900">{r.school}</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">{r.school}</h3>
                   {(r.degree || r.field_of_study) && (
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-gray-700 dark:text-slate-300">
                       {[r.degree, r.field_of_study].filter(Boolean).join(' · ')}
                     </p>
                   )}
                   {(r.start_year || r.end_year) && (
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
                       {r.start_year ?? '—'} – {r.end_year ?? 'Present'}
                     </p>
                   )}
                   {r.description && (
-                    <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">{r.description}</p>
+                    <p className="text-sm text-gray-700 dark:text-slate-300 mt-1 whitespace-pre-line">{r.description}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button type="button" onClick={() => openEdit(r)} className="p-1.5 rounded hover:bg-gray-100 text-gray-500" aria-label="Edit">
+                  <button type="button" onClick={() => openEdit(r)} className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:bg-slate-700 text-gray-500 dark:text-slate-400" aria-label="Edit">
                     <Edit2 className="h-4 w-4" />
                   </button>
                   <button type="button" onClick={() => remove(r.id)} className="p-1.5 rounded hover:bg-rose-50 text-rose-600" aria-label="Delete">

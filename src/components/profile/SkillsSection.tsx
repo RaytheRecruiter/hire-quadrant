@@ -59,9 +59,9 @@ const SkillsSection: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
-      <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-4">
-        <Sparkles className="h-5 w-5 text-gray-400" />
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 flex items-center gap-2 mb-4">
+        <Sparkles className="h-5 w-5 text-gray-400 dark:text-slate-500" />
         Skills
       </h2>
 
@@ -73,7 +73,7 @@ const SkillsSection: React.FC = () => {
         <>
           <div className="flex flex-wrap gap-2 mb-3">
             {skills.length === 0 ? (
-              <p className="text-sm text-gray-500">Add skills to help employers find you.</p>
+              <p className="text-sm text-gray-500 dark:text-slate-400">Add skills to help employers find you.</p>
             ) : (
               skills.map((s) => (
                 <span
@@ -106,7 +106,7 @@ const SkillsSection: React.FC = () => {
                 }
               }}
               placeholder="Add a skill (press Enter)"
-              className="flex-1 px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+              className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
               maxLength={40}
             />
             <button

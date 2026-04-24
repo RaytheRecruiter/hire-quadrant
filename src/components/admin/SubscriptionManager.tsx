@@ -110,21 +110,21 @@ const SubscriptionManager: React.FC = () => {
 
   if (loading || loadingCompanies) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-          <div className="h-4 bg-gray-200 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 rounded w-full"></div>
+          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/3"></div>
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow">
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <Building2 className="w-5 h-5 text-green-600" />
           Subscription Manager
         </h2>
@@ -148,35 +148,35 @@ const SubscriptionManager: React.FC = () => {
         {companies.length === 0 ? (
           <div className="text-center py-8">
             <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No companies found</p>
+            <p className="text-gray-500 dark:text-slate-400">No companies found</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
               <thead>
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Company
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Current Plan
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Job Limit
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Assign Plan
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
                 {companies.map((company) => (
-                  <tr key={company.id} className="hover:bg-gray-50">
+                  <tr key={company.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {company.display_name || company.name}
                       </div>
                     </td>
@@ -184,11 +184,11 @@ const SubscriptionManager: React.FC = () => {
                       {company.currentPlanName ? (
                         <SubscriptionBadge planName={company.currentPlanName} />
                       ) : (
-                        <span className="text-sm text-gray-400">None</span>
+                        <span className="text-sm text-gray-400 dark:text-slate-500">None</span>
                       )}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-gray-600 dark:text-slate-400">
                         {company.currentPlanId ? getPlanJobLimit(company.currentPlanId) : '-'}
                       </span>
                     </td>
@@ -196,7 +196,7 @@ const SubscriptionManager: React.FC = () => {
                       <select
                         value={company.selectedPlanId}
                         onChange={(e) => handlePlanChange(company.id, e.target.value)}
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
+                        className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
                       >
                         <option value="">Select a plan</option>
                         {plans.map((plan) => (

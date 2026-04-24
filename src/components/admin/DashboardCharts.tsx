@@ -83,14 +83,14 @@ const DashboardCharts: React.FC = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Applications trend */}
-        <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-gray-100 dark:border-slate-700 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-display text-lg font-bold text-secondary-900 flex items-center gap-2">
+              <h3 className="font-display text-lg font-bold text-secondary-900 dark:text-white flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary-500" />
                 Applications — last 30 days
               </h3>
-              <p className="text-sm text-gray-500 mt-0.5">
+              <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
                 {totalApps30} total · peak {peakDay?.applications || 0} on {peakDay?.date || '—'}
               </p>
             </div>
@@ -116,14 +116,14 @@ const DashboardCharts: React.FC = () => {
         </div>
 
         {/* Funnel */}
-        <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-gray-100 dark:border-slate-700 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-display text-lg font-bold text-secondary-900 flex items-center gap-2">
+              <h3 className="font-display text-lg font-bold text-secondary-900 dark:text-white flex items-center gap-2">
                 <Target className="h-5 w-5 text-primary-500" />
                 Hiring funnel
               </h3>
-              <p className="text-sm text-gray-500 mt-0.5">
+              <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
                 {conversion}% view → application rate
               </p>
             </div>

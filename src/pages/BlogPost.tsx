@@ -24,20 +24,20 @@ const renderBody = (body: string) => {
   const blocks = body.split(/\n\s*\n/);
   return blocks.map((block, i) => {
     if (block.startsWith('## ')) {
-      return <h2 key={i} className="text-2xl font-bold text-secondary-900 mt-8 mb-3">{block.replace(/^## /, '')}</h2>;
+      return <h2 key={i} className="text-2xl font-bold text-secondary-900 dark:text-white mt-8 mb-3">{block.replace(/^## /, '')}</h2>;
     }
     if (block.startsWith('# ')) {
-      return <h1 key={i} className="text-3xl font-bold text-secondary-900 mt-8 mb-3">{block.replace(/^# /, '')}</h1>;
+      return <h1 key={i} className="text-3xl font-bold text-secondary-900 dark:text-white mt-8 mb-3">{block.replace(/^# /, '')}</h1>;
     }
     const lines = block.split('\n');
     if (lines.every(l => l.startsWith('- '))) {
       return (
-        <ul key={i} className="list-disc list-inside space-y-1 text-gray-700 mb-4 ml-4">
+        <ul key={i} className="list-disc list-inside space-y-1 text-gray-700 dark:text-slate-300 mb-4 ml-4">
           {lines.map((l, j) => <li key={j}>{l.replace(/^-\s*/, '')}</li>)}
         </ul>
       );
     }
-    return <p key={i} className="text-gray-700 leading-relaxed mb-4">{block}</p>;
+    return <p key={i} className="text-gray-700 dark:text-slate-300 leading-relaxed mb-4">{block}</p>;
   });
 };
 
@@ -101,7 +101,7 @@ const BlogPost: React.FC = () => {
         )}
 
         <article className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 md:p-12">
-          <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
+          <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400 mb-4">
             <span className="px-3 py-0.5 rounded-full bg-primary-50 text-primary-700 font-semibold uppercase tracking-wide">
               {post.category}
             </span>
@@ -112,11 +112,11 @@ const BlogPost: React.FC = () => {
               {format(new Date(post.published_at), 'MMM d, yyyy')}
             </span>
           </div>
-          <h1 className="text-4xl font-bold text-secondary-900 mb-6 leading-tight">{post.title}</h1>
-          {post.excerpt && <p className="text-xl text-gray-600 mb-8 leading-relaxed">{post.excerpt}</p>}
+          <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-6 leading-tight">{post.title}</h1>
+          {post.excerpt && <p className="text-xl text-gray-600 dark:text-slate-400 mb-8 leading-relaxed">{post.excerpt}</p>}
           <div className="prose max-w-none mb-8">{renderBody(post.body)}</div>
-          <div className="border-t border-gray-200 pt-8">
-            <p className="text-sm text-gray-600 mb-4">Share this article:</p>
+          <div className="border-t border-gray-200 dark:border-slate-700 pt-8">
+            <p className="text-sm text-gray-600 dark:text-slate-400 mb-4">Share this article:</p>
             <ShareButtons title={post.title} url={window.location.href} />
           </div>
         </article>

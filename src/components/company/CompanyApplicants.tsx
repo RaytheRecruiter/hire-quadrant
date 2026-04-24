@@ -104,8 +104,8 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
     return (
       <div className="text-center py-16">
         <Users className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">No Applicants Yet</h3>
-        <p className="text-gray-500">Applicants for your jobs will appear here.</p>
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">No Applicants Yet</h3>
+        <p className="text-gray-500 dark:text-slate-400">Applicants for your jobs will appear here.</p>
       </div>
     );
   }
@@ -115,11 +115,11 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
       {/* Filters */}
       <div className="flex flex-wrap gap-4 mb-6">
         <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-gray-500" />
+          <Filter className="h-4 w-4 text-gray-500 dark:text-slate-400" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+            className="rounded-lg border border-gray-200 dark:border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
           >
             <option value="all">All Statuses</option>
             {STATUS_OPTIONS.map((s) => (
@@ -133,7 +133,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
           <select
             value={jobFilter}
             onChange={(e) => setJobFilter(e.target.value)}
-            className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+            className="rounded-lg border border-gray-200 dark:border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
           >
             <option value="all">All Jobs</option>
             {jobs.map((job) => (
@@ -150,44 +150,44 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
             onChange={(e) => setShowShortlistedOnly(e.target.checked)}
             className="rounded text-primary-500 focus:ring-primary-400"
           />
-          <Bookmark className={`h-4 w-4 ${showShortlistedOnly ? 'fill-primary-500 text-primary-500' : 'text-gray-400'}`} />
-          <span className="text-sm text-gray-700">Shortlisted only</span>
+          <Bookmark className={`h-4 w-4 ${showShortlistedOnly ? 'fill-primary-500 text-primary-500' : 'text-gray-400 dark:text-slate-500'}`} />
+          <span className="text-sm text-gray-700 dark:text-slate-300">Shortlisted only</span>
         </label>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+          <thead className="bg-gray-50 dark:bg-slate-900/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Candidate</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resume</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Candidate</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Job</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Applied</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Rating</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Resume</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
             {filteredApplications.map((app) => {
               const candidate = candidateInfo[app.user_id];
               return (
-                <tr key={app.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={app.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-sm font-semibold text-gray-900 dark:text-white">
                         {candidate?.name || app.candidate_name || 'Unknown'}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-gray-500 dark:text-slate-400">
                         {candidate?.email || app.candidate_email || ''}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                     {getJobTitle(app.job_id)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                     {app.created_at
                       ? new Date(app.created_at).toLocaleDateString()
                       : 'N/A'}
@@ -208,7 +208,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                     {app.employer_tags && app.employer_tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {app.employer_tags.slice(0, 3).map((tag: string) => (
-                          <span key={tag} className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">{tag}</span>
+                          <span key={tag} className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400 text-xs">{tag}</span>
                         ))}
                       </div>
                     )}
@@ -216,7 +216,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        statusColors[app.status] || 'bg-gray-100 text-gray-800'
+                        statusColors[app.status] || 'bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-200'
                       }`}
                     >
                       {app.status
@@ -250,7 +250,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                         supabase.rpc('record_application_view', { app_id: app.id });
                         onStatusUpdate(app.id, e.target.value);
                       }}
-                      className="rounded-lg border border-gray-200 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                      className="rounded-lg border border-gray-200 dark:border-slate-700 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
                     >
                       {STATUS_OPTIONS.map((s) => (
                         <option key={s} value={s}>
@@ -267,7 +267,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
       </div>
 
       {filteredApplications.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-500 dark:text-slate-400">
           No applicants match the selected filters.
         </div>
       )}

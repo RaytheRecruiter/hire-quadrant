@@ -58,8 +58,8 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
       <div className="flex items-center gap-3 mb-6">
         <GraduationCap className="h-6 w-6 text-primary-600" />
         <div>
-          <h3 className="text-2xl font-bold text-secondary-900">Career Growth Paths</h3>
-          <p className="text-sm text-gray-600 mt-1">Where this role can take you next</p>
+          <h3 className="text-2xl font-bold text-secondary-900 dark:text-white">Career Growth Paths</h3>
+          <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">Where this role can take you next</p>
         </div>
       </div>
 
@@ -67,14 +67,14 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
         {paths.slice(0, 3).map((path, idx) => (
           <div
             key={idx}
-            className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-6 hover:shadow-md transition-shadow"
           >
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h4 className="font-semibold text-secondary-900 text-lg">{path.role}</h4>
+                <h4 className="font-semibold text-secondary-900 dark:text-white text-lg">{path.role}</h4>
               </div>
-              <div className="flex items-center gap-1 px-2 py-1 bg-gray-100 rounded text-sm font-medium text-gray-700">
+              <div className="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-slate-700 rounded text-sm font-medium text-gray-700 dark:text-slate-300">
                 {getMatchIcon(path.match_label)}
                 <span>{getMatchLabel(path.match_label)}</span>
               </div>
@@ -83,10 +83,10 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
             {/* Skill Transfer */}
             <div className="mb-4">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700">Skill Transfer</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-slate-300">Skill Transfer</span>
                 <span className="text-sm font-semibold text-primary-600">{path.skill_transfer_pct}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
                 <div
                   className="bg-gradient-to-r from-primary-400 to-primary-500 h-2 rounded-full transition-all"
                   style={{ width: `${path.skill_transfer_pct}%` }}
@@ -106,13 +106,13 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
 
             {/* Time to Transition */}
             <div className="mb-4 text-sm">
-              <span className="text-gray-600">Time to Transition:</span>
-              <p className="font-semibold text-secondary-900 mt-1">{path.time_to_transition}</p>
+              <span className="text-gray-600 dark:text-slate-400">Time to Transition:</span>
+              <p className="font-semibold text-secondary-900 dark:text-white mt-1">{path.time_to_transition}</p>
             </div>
 
             {/* Missing Skills */}
             <div className="mb-4">
-              <p className="text-sm font-medium text-gray-700 mb-2">You'll Need to Learn</p>
+              <p className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">You'll Need to Learn</p>
               <div className="flex flex-wrap gap-2">
                 {path.missing_skills.slice(0, 3).map((skill, i) => (
                   <span

@@ -43,28 +43,28 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-semibold text-secondary-800">
-          Screening Questions <span className="text-gray-400 font-normal">(optional)</span>
+        <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200">
+          Screening Questions <span className="text-gray-400 dark:text-slate-500 font-normal">(optional)</span>
         </label>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
           Pre-qualify applicants. Add up to {maxQuestions} questions.
         </p>
       </div>
 
       {value.length === 0 && (
-        <div className="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-6 text-center text-sm text-gray-500">
+        <div className="bg-gray-50 dark:bg-slate-900/50 border border-dashed border-gray-200 dark:border-slate-700 rounded-xl p-6 text-center text-sm text-gray-500 dark:text-slate-400">
           No screening questions yet.
         </div>
       )}
 
       {value.map((q, idx) => (
-        <div key={q.id} className="relative bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+        <div key={q.id} className="relative bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-gray-500 uppercase">Question {idx + 1}</span>
+            <span className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">Question {idx + 1}</span>
             <button
               type="button"
               onClick={() => removeQuestion(q.id)}
-              className="text-gray-400 hover:text-red-600 transition-colors"
+              className="text-gray-400 dark:text-slate-500 hover:text-red-600 transition-colors"
               aria-label="Remove question"
             >
               <Trash2 className="h-4 w-4" />
@@ -73,11 +73,11 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="sm:col-span-1">
-              <label className="block text-xs font-medium text-gray-600 mb-1">Type</label>
+              <label className="block text-xs font-medium text-gray-600 dark:text-slate-400 mb-1">Type</label>
               <select
                 value={q.type}
                 onChange={e => updateQuestion(q.id, { type: e.target.value as ScreeningQuestionType, expectedAnswer: undefined, choices: undefined })}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="w-full border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
               >
                 {TYPE_OPTIONS.map(opt => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -85,25 +85,25 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
               </select>
             </div>
             <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">Question</label>
+              <label className="block text-xs font-medium text-gray-600 dark:text-slate-400 mb-1">Question</label>
               <input
                 type="text"
                 value={q.question}
                 onChange={e => updateQuestion(q.id, { question: e.target.value })}
                 placeholder="e.g. Do you have 5+ years of React experience?"
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="w-full border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
               />
             </div>
           </div>
 
           {q.type === 'multiple_choice' && (
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Choices (one per line)</label>
+              <label className="block text-xs font-medium text-gray-600 dark:text-slate-400 mb-1">Choices (one per line)</label>
               <textarea
                 value={(q.choices || []).join('\n')}
                 onChange={e => updateQuestion(q.id, { choices: e.target.value.split('\n').filter(Boolean) })}
                 rows={3}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="w-full border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
               />
             </div>
           )}
@@ -116,7 +116,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                 onChange={e => updateQuestion(q.id, { required: e.target.checked })}
                 className="rounded text-primary-500 focus:ring-primary-400"
               />
-              <span className="text-gray-700">Required</span>
+              <span className="text-gray-700 dark:text-slate-300">Required</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer" title="Automatically reject applicants who don't meet the expected answer">
               <input
@@ -125,20 +125,20 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                 onChange={e => updateQuestion(q.id, { knockout: e.target.checked })}
                 className="rounded text-primary-500 focus:ring-primary-400"
               />
-              <span className="text-gray-700 flex items-center gap-1">
-                Knockout <HelpCircle className="h-3 w-3 text-gray-400" />
+              <span className="text-gray-700 dark:text-slate-300 flex items-center gap-1">
+                Knockout <HelpCircle className="h-3 w-3 text-gray-400 dark:text-slate-500" />
               </span>
             </label>
           </div>
 
           {q.knockout && (
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Required answer for qualification</label>
+              <label className="block text-xs font-medium text-gray-600 dark:text-slate-400 mb-1">Required answer for qualification</label>
               {q.type === 'yes_no' ? (
                 <select
                   value={q.expectedAnswer || 'yes'}
                   onChange={e => updateQuestion(q.id, { expectedAnswer: e.target.value })}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  className="w-full border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
                 >
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
@@ -147,7 +147,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                 <select
                   value={q.expectedAnswer || ''}
                   onChange={e => updateQuestion(q.id, { expectedAnswer: e.target.value })}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  className="w-full border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
                 >
                   <option value="">— Select —</option>
                   {(q.choices || []).map(c => <option key={c} value={c}>{c}</option>)}
@@ -158,7 +158,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                   placeholder="Minimum value"
                   value={q.expectedAnswer || ''}
                   onChange={e => updateQuestion(q.id, { expectedAnswer: e.target.value })}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  className="w-full border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
                 />
               ) : (
                 <input
@@ -166,7 +166,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                   placeholder="Expected answer (contains)"
                   value={q.expectedAnswer || ''}
                   onChange={e => updateQuestion(q.id, { expectedAnswer: e.target.value })}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  className="w-full border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
                 />
               )}
             </div>

@@ -43,13 +43,13 @@ const ScreeningQuestionsModal: React.FC<Props> = ({ open, questions, companyName
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-0 sm:p-4">
-      <div className="bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-2xl flex flex-col">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+      <div className="bg-white dark:bg-slate-800 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-2xl flex flex-col">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
           <div>
-            <h2 className="text-lg font-bold text-secondary-900">Quick questions from {companyName}</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Please answer before submitting your application.</p>
+            <h2 className="text-lg font-bold text-secondary-900 dark:text-white">Quick questions from {companyName}</h2>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Please answer before submitting your application.</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600" aria-label="Close">
+          <button onClick={onClose} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400" aria-label="Close">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -57,7 +57,7 @@ const ScreeningQuestionsModal: React.FC<Props> = ({ open, questions, companyName
         <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
           {questions.map((q, idx) => (
             <div key={q.id}>
-              <label className="block text-sm font-semibold text-secondary-800 mb-2">
+              <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">
                 {idx + 1}. {q.question}
                 {q.required && <span className="text-red-500 ml-1">*</span>}
               </label>
@@ -68,7 +68,7 @@ const ScreeningQuestionsModal: React.FC<Props> = ({ open, questions, companyName
                     <label key={v} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 cursor-pointer transition-all ${
                       answers[q.id] === v
                         ? 'border-primary-500 bg-primary-50 text-primary-700'
-                        : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                        : 'border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:border-slate-600'
                     }`}>
                       <input
                         type="radio"
@@ -86,7 +86,7 @@ const ScreeningQuestionsModal: React.FC<Props> = ({ open, questions, companyName
                 <select
                   value={answers[q.id] || ''}
                   onChange={e => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
                 >
                   <option value="">— Select —</option>
                   {(q.choices || []).map(c => <option key={c} value={c}>{c}</option>)}
@@ -96,14 +96,14 @@ const ScreeningQuestionsModal: React.FC<Props> = ({ open, questions, companyName
                   type="number"
                   value={answers[q.id] || ''}
                   onChange={e => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
                 />
               ) : (
                 <input
                   type="text"
                   value={answers[q.id] || ''}
                   onChange={e => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
                 />
               )}
             </div>
@@ -114,10 +114,10 @@ const ScreeningQuestionsModal: React.FC<Props> = ({ open, questions, companyName
           )}
         </div>
 
-        <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-between gap-3">
+        <div className="border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl text-gray-600 font-medium hover:bg-gray-100 transition-colors"
+            className="px-5 py-2.5 rounded-xl text-gray-600 dark:text-slate-400 font-medium hover:bg-gray-100 dark:hover:bg-slate-700 dark:bg-slate-700 transition-colors"
           >
             Cancel
           </button>

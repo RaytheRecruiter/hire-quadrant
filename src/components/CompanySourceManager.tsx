@@ -116,13 +116,13 @@ const CompanySourceManager: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Company Source Manager</h1>
-        <p className="text-gray-600">Manage XML feeds from partner companies</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Company Source Manager</h1>
+        <p className="text-gray-600 dark:text-slate-400">Manage XML feeds from partner companies</p>
       </div>
 
       {/* Add New Source */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Add New Company Source</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6 mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Add New Company Source</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <input
@@ -130,28 +130,28 @@ const CompanySourceManager: React.FC = () => {
             placeholder="Company Name"
             value={newSource.name || ''}
             onChange={(e) => setNewSource({ ...newSource, name: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+            className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
           />
           <input
             type="text"
             placeholder="XML File Path (e.g., /data/company-jobs.xml)"
             value={newSource.xmlPath || ''}
             onChange={(e) => setNewSource({ ...newSource, xmlPath: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+            className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
           />
           <input
             type="email"
             placeholder="Contact Email"
             value={newSource.contactEmail || ''}
             onChange={(e) => setNewSource({ ...newSource, contactEmail: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+            className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
           />
           <input
             type="url"
             placeholder="API Endpoint (optional)"
             value={newSource.apiEndpoint || ''}
             onChange={(e) => setNewSource({ ...newSource, apiEndpoint: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+            className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
           />
         </div>
         
@@ -165,61 +165,61 @@ const CompanySourceManager: React.FC = () => {
       </div>
 
       {/* Sources List */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Company Sources</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Company Sources</h2>
           
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+              <thead className="bg-gray-50 dark:bg-slate-900/50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Company
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     XML Path
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Contact
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Jobs
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
                 {sources.map((source) => (
-                  <tr key={source.id} className="hover:bg-gray-50">
+                  <tr key={source.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="p-2 bg-primary-100 rounded-lg mr-3">
                           <Building2 className="h-5 w-5 text-primary-600" />
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{source.name}</div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">{source.name}</div>
                           {source.lastSync && (
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500 dark:text-slate-400">
                               Last sync: {source.lastSync.toLocaleDateString()}
                             </div>
                           )}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      <code className="bg-gray-100 px-2 py-1 rounded text-xs">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
+                      <code className="bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">
                         {source.xmlPath}
                       </code>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                       {source.contactEmail}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                         {calculateJobCount(source.xmlPath)} jobs
                       </span>

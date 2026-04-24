@@ -48,7 +48,7 @@ const TrendingSection: React.FC = () => {
     <div className="mb-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
       {companies.length > 0 && (
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 p-6">
-          <h3 className="text-lg font-bold text-secondary-900 mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-secondary-900 dark:text-white mb-4 flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary-500" />
             Trending Companies
           </h3>
@@ -57,11 +57,11 @@ const TrendingSection: React.FC = () => {
               <button
                 key={c.company}
                 onClick={() => setSearchTerm(c.company)}
-                className="group flex items-center gap-2 bg-gray-50 hover:bg-primary-50 px-3 py-2 rounded-full text-sm text-gray-700 hover:text-primary-700 transition-colors"
+                className="group flex items-center gap-2 bg-gray-50 dark:bg-slate-900/50 hover:bg-primary-50 px-3 py-2 rounded-full text-sm text-gray-700 dark:text-slate-300 hover:text-primary-700 transition-colors"
               >
-                <Building2 className="h-3.5 w-3.5 text-gray-400 group-hover:text-primary-500" />
+                <Building2 className="h-3.5 w-3.5 text-gray-400 dark:text-slate-500 group-hover:text-primary-500" />
                 <span className="font-medium">{c.company}</span>
-                <span className="text-xs text-gray-400">{c.job_count}</span>
+                <span className="text-xs text-gray-400 dark:text-slate-500">{c.job_count}</span>
               </button>
             ))}
           </div>
@@ -70,7 +70,7 @@ const TrendingSection: React.FC = () => {
 
       {locations.length > 0 && (
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 p-6">
-          <h3 className="text-lg font-bold text-secondary-900 mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-secondary-900 dark:text-white mb-4 flex items-center gap-2">
             <MapPin className="h-5 w-5 text-primary-500" />
             Trending Locations
           </h3>
@@ -79,11 +79,11 @@ const TrendingSection: React.FC = () => {
               <button
                 key={l.location}
                 onClick={() => setLocationFilter(l.location)}
-                className="group flex items-center gap-2 bg-gray-50 hover:bg-primary-50 px-3 py-2 rounded-full text-sm text-gray-700 hover:text-primary-700 transition-colors"
+                className="group flex items-center gap-2 bg-gray-50 dark:bg-slate-900/50 hover:bg-primary-50 px-3 py-2 rounded-full text-sm text-gray-700 dark:text-slate-300 hover:text-primary-700 transition-colors"
               >
-                <MapPin className="h-3.5 w-3.5 text-gray-400 group-hover:text-primary-500" />
+                <MapPin className="h-3.5 w-3.5 text-gray-400 dark:text-slate-500 group-hover:text-primary-500" />
                 <span className="font-medium">{l.location}</span>
-                <span className="text-xs text-gray-400">{l.job_count}</span>
+                <span className="text-xs text-gray-400 dark:text-slate-500">{l.job_count}</span>
               </button>
             ))}
           </div>
