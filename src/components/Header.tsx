@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { getInitials, colorFromString } from '../utils/companyLogo';
 import DarkModeToggle from './DarkModeToggle';
+import GlobalSearch from './GlobalSearch';
 
 const Header: React.FC = () => {
   const { user, logout, isAuthenticated, isAdmin, isCompany } = useAuth();
@@ -17,6 +18,7 @@ const Header: React.FC = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const adminMenuRef = useRef<HTMLDivElement>(null);
 
@@ -49,6 +51,18 @@ const Header: React.FC = () => {
     setMobileOpen(false);
   }, [location.pathname]);
 
+  // Cmd+K / Ctrl+K to open global search
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
   const isActive = (path: string) => location.pathname === path;
   const navClass = (path: string) =>
     `px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
@@ -75,7 +89,16 @@ const Header: React.FC = () => {
             <HardLink to="/#jobs-section" onClick={handleJobsClick} className={navClass('/')}>Jobs</HardLink>
             <HardLink to="/career" className={navClass('/career')}>Career Paths</HardLink>
             <HardLink to="/companies" className={navClass('/companies')}>Companies</HardLink>
-            <HardLink to="/advanced-search" className={navClass('/advanced-search')}>Search</HardLink>
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className={`${navClass('/advanced-search')} flex items-center gap-1.5`}
+              aria-label="Open search"
+            >
+              <Search className="h-4 w-4" />
+              <span>Search</span>
+              <kbd className="hidden xl:inline text-[10px] px-1 py-0.5 rounded bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 font-mono">⌘K</kbd>
+            </button>
             <HardLink to="/blog" className={navClass('/blog')}>Blog</HardLink>
             <HardLink to="/pricing" className={navClass('/pricing')}>Pricing</HardLink>
             {isCompany && (
@@ -254,6 +277,7 @@ const Header: React.FC = () => {
           </div>
         </div>
       )}
+    <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 };
