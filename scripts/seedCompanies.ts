@@ -82,10 +82,24 @@ async function ensureAuthUser(
   password: string,
   meta: Record<string, unknown>,
 ): Promise<string> {
-  // Find existing first — admin.listUsers is paged; filter by email
-  const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
-  const existing = list?.users.find((u) => u.email?.toLowerCase() === email.toLowerCase());
-  if (existing) return existing.id;
+  // Paginate through all users to find a match (listUsers caps at ~1000/page)
+  const target = email.toLowerCase();
+  const findByEmail = async (): Promise<string | null> => {
+    let page = 1;
+    const perPage = 1000;
+    while (true) {
+      const { data } = await supabase.auth.admin.listUsers({ page, perPage });
+      const users = data?.users ?? [];
+      const hit = users.find((u) => u.email?.toLowerCase() === target);
+      if (hit) return hit.id;
+      if (users.length < perPage) return null; // last page
+      page++;
+      if (page > 50) return null; // safety cap at 50k users
+    }
+  };
+
+  const existingId = await findByEmail();
+  if (existingId) return existingId;
 
   const { data, error } = await supabase.auth.admin.createUser({
     email,
@@ -93,7 +107,16 @@ async function ensureAuthUser(
     email_confirm: true,
     user_metadata: meta,
   });
-  if (error || !data.user) throw new Error(`createUser(${email}): ${error?.message}`);
+  if (error || !data.user) {
+    // If createUser rejects as duplicate, the user exists but was missed
+    // on the first pagination sweep (racy insert between pages). Re-scan.
+    if (error?.message?.toLowerCase().includes('already been registered')) {
+      const retryId = await findByEmail();
+      if (retryId) return retryId;
+    }
+    console.error(`  createUser(${email}) failed. Full error:`, JSON.stringify(error, null, 2));
+    throw new Error(`createUser(${email}): ${error?.message}`);
+  }
   return data.user.id;
 }
 
@@ -246,10 +269,16 @@ async function main() {
   console.log('\nPhase 5 seed starting...');
 
   console.log('\n[1/5] Ensuring super admin accounts...');
+  const failedSuperAdmins: string[] = [];
   for (const email of SUPER_ADMIN_EMAILS) {
-    const id = await ensureAuthUser(supabase, email, DEFAULT_PASSWORD, { role: 'admin', name: email.split('@')[0] });
-    await setUserRole(supabase, id, 'admin');
-    console.log(`  ✓ ${email}  (id: ${id.slice(0, 8)}...)`);
+    try {
+      const id = await ensureAuthUser(supabase, email, DEFAULT_PASSWORD, { role: 'admin', name: email.split('@')[0] });
+      await setUserRole(supabase, id, 'admin');
+      console.log(`  ✓ ${email}  (id: ${id.slice(0, 8)}...)`);
+    } catch (err) {
+      console.warn(`  ⚠ skipping ${email} (${err instanceof Error ? err.message : err}) — add manually later`);
+      failedSuperAdmins.push(email);
+    }
   }
 
   console.log('\n[2/5] Seeding 25 companies across 5 industries...');
@@ -301,7 +330,10 @@ async function main() {
   console.log('SEED CREDENTIALS (all passwords: ' + DEFAULT_PASSWORD + ')');
   console.log('────────────────────────────────────────────────');
   console.log('\nSuper admins:');
-  SUPER_ADMIN_EMAILS.forEach((e) => console.log(`  ${e}`));
+  SUPER_ADMIN_EMAILS.forEach((e) => {
+    const suffix = failedSuperAdmins.includes(e) ? '  (NOT CREATED — add manually)' : '';
+    console.log(`  ${e}${suffix}`);
+  });
   console.log('\nEmployer test accounts:');
   employerCreds.forEach((c) => console.log(`  ${c.email}  →  ${c.company}`));
   console.log('\nReviewer test accounts: seed-reviewer-1..20@hirequadrant-seed.test');
