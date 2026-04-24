@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { formatDistanceToNow } from 'date-fns';
-import { MessageCircleQuestion, Loader2, Plus, ShieldCheck } from 'lucide-react';
+import { HelpCircle, Loader2, Plus, ShieldCheck } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -80,7 +80,7 @@ const CompanyQASection: React.FC<Props> = ({ companyId, companySlug, companyName
     <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
         <h2 className="text-xl font-bold text-secondary-900 dark:text-white flex items-center gap-2">
-          <MessageCircleQuestion className="h-5 w-5 text-primary-600" />
+          <HelpCircle className="h-5 w-5 text-primary-600" />
           Questions & Answers
         </h2>
         {!asking && (

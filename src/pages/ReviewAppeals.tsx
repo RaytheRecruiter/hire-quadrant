@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import toast from 'react-hot-toast';
 import { formatDistanceToNow } from 'date-fns';
-import { MessageCircleWarning, Check, X, Loader2, ArrowLeft } from 'lucide-react';
+import { AlertTriangle, Check, X, Loader2, ArrowLeft } from 'lucide-react';
 import HardLink from '../components/HardLink';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
@@ -71,7 +71,7 @@ const ReviewAppeals: React.FC = () => {
 
           <header className="mb-6 flex items-center gap-3">
             <div className="bg-amber-100 dark:bg-amber-900/30 p-3 rounded-xl">
-              <MessageCircleWarning className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+              <AlertTriangle className="h-6 w-6 text-amber-600 dark:text-amber-400" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-secondary-900 dark:text-white">Review Appeals</h1>

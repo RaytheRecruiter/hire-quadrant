@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
-import { Star, Loader2, Clock, CheckCircle2, XCircle, MessageCircleWarning } from 'lucide-react';
+import { Star, Loader2, Clock, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
@@ -145,7 +145,7 @@ const MyReviews: React.FC = () => {
                         onClick={() => { setAppealingId(r.id); setAppealText(''); }}
                         className="mt-2 inline-flex items-center gap-1.5 text-xs text-primary-700 dark:text-primary-300 hover:underline"
                       >
-                        <MessageCircleWarning className="h-3.5 w-3.5" />
+                        <AlertTriangle className="h-3.5 w-3.5" />
                         Appeal this decision
                       </button>
                     )}
