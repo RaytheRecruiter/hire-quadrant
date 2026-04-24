@@ -192,6 +192,55 @@ Suggest 3-5 realistic next career steps for someone in this role.`;
       });
     }
 
+    if (path === 'interview-feedback') {
+      const body = await req.json();
+      const { question, answer, role, questionType } = body;
+      if (!question || !answer) {
+        return new Response('question and answer required', { status: 400, headers: corsHeaders });
+      }
+
+      const system = `You are an experienced interview coach grading mock interview answers.
+Return JSON only, no preamble, no code fences. Output shape:
+{
+  "score": <0-100 integer>,
+  "summary": "one sentence overall assessment",
+  "strengths": ["specific strength 1", "specific strength 2"],
+  "improvements": ["actionable improvement 1", "actionable improvement 2", "actionable improvement 3"],
+  "better_example": "a 2-3 sentence example of how to answer this better"
+}
+Scoring rubric for ${questionType || 'behavioral'} questions:
+- Specificity (numbers, names, concrete outcomes)
+- Structure (STAR for behavioral; systematic approach for technical)
+- Self-awareness (for weakness/failure questions)
+- Relevance (does it actually answer the question?)
+- Length (not too short, not rambling)
+Be rigorous but kind. Most real answers score 55-75.`;
+
+      const userMsg = `Role target: ${role || 'generic'}
+Question: ${question}
+
+Candidate answer:
+${answer.slice(0, 4000)}`;
+
+      const raw = await callClaude(system, userMsg);
+      const cleaned = raw.replace(/^```(?:json)?\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        parsed = {
+          score: 0,
+          summary: raw.slice(0, 200),
+          strengths: [],
+          improvements: [],
+          better_example: '',
+        };
+      }
+      return new Response(JSON.stringify(parsed), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     if (path === 'jd-score') {
       const body = await req.json();
       const { title, description } = body;
