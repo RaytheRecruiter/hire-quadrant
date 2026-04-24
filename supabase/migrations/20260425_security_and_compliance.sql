@@ -140,9 +140,13 @@ $$;
 grant execute on function delete_my_data() to authenticated;
 
 -- 6. Admin audit trail view -------------------------------------------------
+-- audit_log uses entity_type/entity_id (see 20260425_audit_log.sql).
+-- Alias to target_* in the view so the UI can stay stable if schema changes.
 create or replace view admin_audit_feed as
-  select a.id, a.actor_id, up.name as actor_name, a.action, a.target_type,
-         a.target_id, a.metadata, a.created_at
+  select a.id, a.actor_id, up.name as actor_name, a.action,
+         a.entity_type as target_type,
+         a.entity_id   as target_id,
+         a.metadata, a.created_at
     from audit_log a
     left join user_profiles up on up.id = a.actor_id
    order by a.created_at desc;
