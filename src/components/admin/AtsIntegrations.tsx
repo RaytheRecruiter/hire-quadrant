@@ -44,13 +44,13 @@ const AtsIntegrations: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow">
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <Plug className="w-5 h-5 text-primary-600" />
           ATS Integrations
         </h2>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
           Connect external Applicant Tracking Systems. Currently a placeholder — full sync logic per ATS is on the roadmap.
         </p>
       </div>
@@ -62,18 +62,18 @@ const AtsIntegrations: React.FC = () => {
           {PROVIDERS.map(p => {
             const existing = integrations.find(i => i.provider === p.id);
             return (
-              <div key={p.id} className="border border-gray-200 rounded-2xl p-5">
+              <div key={p.id} className="border border-gray-200 dark:border-slate-700 rounded-2xl p-5">
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <h4 className="font-bold text-secondary-900">{p.name}</h4>
-                    <p className="text-sm text-gray-500 mt-1">{p.description}</p>
+                    <h4 className="font-bold text-secondary-900 dark:text-white">{p.name}</h4>
+                    <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">{p.description}</p>
                   </div>
                   {existing?.is_active ? (
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                       Connected
                     </span>
                   ) : (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400">
                       Not connected
                     </span>
                   )}
@@ -94,7 +94,7 @@ const AtsIntegrations: React.FC = () => {
                         placeholder={`${p.name} API key`}
                         value={apiKey}
                         onChange={e => setApiKey(e.target.value)}
-                        className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                        className="flex-1 border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
                       />
                       <button
                         onClick={() => handleConnect(p.id)}
@@ -102,7 +102,7 @@ const AtsIntegrations: React.FC = () => {
                       >
                         Connect
                       </button>
-                      <button onClick={() => { setAdding(null); setApiKey(''); }} className="text-sm text-gray-500 px-2">Cancel</button>
+                      <button onClick={() => { setAdding(null); setApiKey(''); }} className="text-sm text-gray-500 dark:text-slate-400 px-2">Cancel</button>
                     </div>
                   ) : (
                     !existing?.is_active && (

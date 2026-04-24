@@ -91,37 +91,37 @@ const ResumeSearch: React.FC = () => {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
             Resume Database
           </h1>
-          <p className="mt-2 text-gray-600">Search candidates open to new opportunities.</p>
+          <p className="mt-2 text-gray-600 dark:text-slate-400">Search candidates open to new opportunities.</p>
         </div>
 
         <div className="bg-white/90 backdrop-blur-sm shadow-lg border border-white/20 rounded-2xl p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <div className="md:col-span-2 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Skill, headline, or keyword"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
               />
             </div>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Location"
                 value={location}
                 onChange={e => setLocation(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
               />
             </div>
             <div className="relative">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
               <select
                 value={minYears}
                 onChange={e => setMinYears(Number(e.target.value))}
-                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
+                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
               >
                 <option value="0">Any experience</option>
                 <option value="1">1+ years</option>
@@ -144,9 +144,9 @@ const ResumeSearch: React.FC = () => {
         {loading ? (
           <div className="text-center py-16"><Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500" /></div>
         ) : candidates.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow p-12 text-center">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-12 text-center">
             <User className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-            <p className="text-gray-500">No candidates match your search.</p>
+            <p className="text-gray-500 dark:text-slate-400">No candidates match your search.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -160,8 +160,8 @@ const ResumeSearch: React.FC = () => {
                       </span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-secondary-900">{c.name || 'Candidate'}</h3>
-                      {c.headline && <p className="text-sm text-gray-600">{c.headline}</p>}
+                      <h3 className="font-bold text-secondary-900 dark:text-white">{c.name || 'Candidate'}</h3>
+                      {c.headline && <p className="text-sm text-gray-600 dark:text-slate-400">{c.headline}</p>}
                       {c.current_role && (
                         <p className="text-xs font-semibold text-amber-600 mt-1">
                           Current: {c.current_role}
@@ -169,7 +169,7 @@ const ResumeSearch: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mt-2">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-slate-400 mt-2">
                     {c.location && (
                       <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{c.location}</span>
                     )}

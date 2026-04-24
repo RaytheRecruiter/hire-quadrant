@@ -157,16 +157,16 @@ const XMLFeederAdmin: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">XML Job Feeder</h1>
-        <p className="text-gray-600">Generate XML files from job data for external systems</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">XML Job Feeder</h1>
+        <p className="text-gray-600 dark:text-slate-400">Generate XML files from job data for external systems</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Column - Controls */}
         <div className="space-y-6">
           {/* Quick Actions */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h2>
             <div className="space-y-3">
               <button
                 onClick={generateXMLFromAll}
@@ -187,9 +187,9 @@ const XMLFeederAdmin: React.FC = () => {
           </div>
 
           {/* Job Selection */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-gray-900">Select Jobs</h2>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Select Jobs</h2>
               <button
                 onClick={handleSelectAll}
                 className="text-primary-500 hover:text-primary-600 font-medium"
@@ -200,16 +200,16 @@ const XMLFeederAdmin: React.FC = () => {
             
             <div className="max-h-64 overflow-y-auto space-y-2">
               {jobs.map((job) => (
-                <label key={job.id} className="flex items-center p-2 hover:bg-gray-50 rounded">
+                <label key={job.id} className="flex items-center p-2 hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50 rounded">
                   <input
                     type="checkbox"
                     checked={selectedJobs.includes(job.id)}
                     onChange={(e) => handleJobSelection(job.id, e.target.checked)}
-                    className="mr-3 h-4 w-4 text-primary-500 focus:ring-primary-400 border-gray-300 rounded"
+                    className="mr-3 h-4 w-4 text-primary-500 focus:ring-primary-400 border-gray-300 dark:border-slate-600 rounded"
                   />
                   <div className="flex-1">
-                    <div className="font-medium text-gray-900">{job.title}</div>
-                    <div className="text-sm text-gray-500">{job.company} - {job.location}</div>
+                    <div className="font-medium text-gray-900 dark:text-white">{job.title}</div>
+                    <div className="text-sm text-gray-500 dark:text-slate-400">{job.company} - {job.location}</div>
                   </div>
                 </label>
               ))}
@@ -227,8 +227,8 @@ const XMLFeederAdmin: React.FC = () => {
           </div>
 
           {/* Add Custom Job */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Add Custom Job</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Add Custom Job</h2>
             
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -237,14 +237,14 @@ const XMLFeederAdmin: React.FC = () => {
                   placeholder="Job Title"
                   value={newJob.title || ''}
                   onChange={(e) => updateNewJobField('title', e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 />
                 <input
                   type="text"
                   placeholder="Company"
                   value={newJob.company || ''}
                   onChange={(e) => updateNewJobField('company', e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 />
               </div>
               
@@ -254,12 +254,12 @@ const XMLFeederAdmin: React.FC = () => {
                   placeholder="Location"
                   value={newJob.location || ''}
                   onChange={(e) => updateNewJobField('location', e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 />
                 <select
                   value={newJob.type || 'full-time'}
                   onChange={(e) => updateNewJobField('type', e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 >
                   <option value="full-time">Full Time</option>
                   <option value="part-time">Part Time</option>
@@ -273,7 +273,7 @@ const XMLFeederAdmin: React.FC = () => {
                 placeholder="Salary Range"
                 value={newJob.salary || ''}
                 onChange={(e) => updateNewJobField('salary', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
               />
               
               <textarea
@@ -281,12 +281,12 @@ const XMLFeederAdmin: React.FC = () => {
                 value={newJob.description || ''}
                 onChange={(e) => updateNewJobField('description', e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
               />
               
               {/* Requirements */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Requirements</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Requirements</label>
                 {(newJob.requirements || ['']).map((req, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
@@ -294,7 +294,7 @@ const XMLFeederAdmin: React.FC = () => {
                       placeholder="Requirement"
                       value={req}
                       onChange={(e) => updateArrayField('requirements', index, e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                     />
                     <button
                       onClick={() => removeArrayItem('requirements', index)}
@@ -314,7 +314,7 @@ const XMLFeederAdmin: React.FC = () => {
               
               {/* Benefits */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Benefits</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Benefits</label>
                 {(newJob.benefits || ['']).map((benefit, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
@@ -322,7 +322,7 @@ const XMLFeederAdmin: React.FC = () => {
                       placeholder="Benefit"
                       value={benefit}
                       onChange={(e) => updateArrayField('benefits', index, e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                     />
                     <button
                       onClick={() => removeArrayItem('benefits', index)}
@@ -354,9 +354,9 @@ const XMLFeederAdmin: React.FC = () => {
         {/* Right Column - XML Preview */}
         <div className="space-y-6">
           {showPreview && xmlPreview && (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">XML Preview</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">XML Preview</h2>
                 <div className="flex space-x-2">
                   <button
                     onClick={copyToClipboard}
@@ -382,8 +382,8 @@ const XMLFeederAdmin: React.FC = () => {
                 </div>
               </div>
               
-              <div className="bg-gray-50 rounded-lg p-4 max-h-96 overflow-auto">
-                <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono">
+              <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-4 max-h-96 overflow-auto">
+                <pre className="text-sm text-gray-800 dark:text-slate-200 whitespace-pre-wrap font-mono">
                   {xmlPreview}
                 </pre>
               </div>

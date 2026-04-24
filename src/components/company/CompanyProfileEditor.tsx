@@ -86,57 +86,57 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
       )}
 
       <div>
-        <label className="block text-sm font-semibold text-secondary-800 mb-1">Display Name</label>
+        <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Display Name</label>
         <input
           type="text"
           name="display_name"
           value={formData.display_name}
           onChange={handleChange}
-          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+          className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-secondary-800 mb-1">Description</label>
+        <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Description</label>
         <textarea
           name="description"
           value={formData.description}
           onChange={handleChange}
           rows={4}
-          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+          className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 mb-1">Website</label>
+          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Website</label>
           <input
             type="url"
             name="website"
             value={formData.website}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 mb-1">Industry</label>
+          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Industry</label>
           <input
             type="text"
             name="industry"
             value={formData.industry}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 mb-1">Company Size</label>
+          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Company Size</label>
           <select
             name="size"
             value={formData.size}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           >
             <option value="">Select size</option>
             <option value="1-10 employees">1-10 employees</option>
@@ -149,48 +149,48 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 mb-1">Location</label>
+          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Location</label>
           <input
             type="text"
             name="location"
             value={formData.location}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 mb-1">Founded</label>
+          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Founded</label>
           <input
             type="text"
             name="founded"
             value={formData.founded}
             onChange={handleChange}
             placeholder="e.g. 2015"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 mb-1">Contact Email</label>
+          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Contact Email</label>
           <input
             type="email"
             name="contact_email"
             value={formData.contact_email}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-secondary-800 mb-1">Culture</label>
+        <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Culture</label>
         <textarea
           name="culture"
           value={formData.culture}
           onChange={handleChange}
           rows={3}
-          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white focus:bg-white transition-all"
+          className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
         />
       </div>
 

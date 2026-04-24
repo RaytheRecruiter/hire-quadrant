@@ -72,8 +72,8 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
     return (
       <div className="text-center py-16">
         <Briefcase className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">No Jobs Posted Yet</h3>
-        <p className="text-gray-500">Your posted jobs will appear here.</p>
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">No Jobs Posted Yet</h3>
+        <p className="text-gray-500 dark:text-slate-400">Your posted jobs will appear here.</p>
       </div>
     );
   }
@@ -81,25 +81,25 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
   return (
     <>
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+          <thead className="bg-gray-50 dark:bg-slate-900/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Salary</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posted</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apps</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Screening</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sponsor</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Location</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Type</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Salary</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Posted</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Apps</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Screening</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Sponsor</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
             {jobs.map((job) => {
               const qCount = (job.screening_questions as ScreeningQuestion[] | undefined)?.length || 0;
               return (
-                <tr key={job.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={job.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <HardLink
                       to={`/jobs/${job.id}`}
@@ -108,9 +108,9 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
                       {job.title}
                     </HardLink>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                     <div className="flex items-center">
-                      <MapPin className="h-4 w-4 mr-1 text-gray-400" />
+                      <MapPin className="h-4 w-4 mr-1 text-gray-400 dark:text-slate-500" />
                       {job.location || 'Remote'}
                     </div>
                   </td>
@@ -120,30 +120,30 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
                       {job.type || job.job_type || 'Full-time'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                     <div className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-1 text-gray-400" />
+                      <DollarSign className="h-4 w-4 mr-1 text-gray-400 dark:text-slate-500" />
                       {job.salary || job.salary_range || 'Not specified'}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                     <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1 text-gray-400" />
+                      <Calendar className="h-4 w-4 mr-1 text-gray-400 dark:text-slate-500" />
                       {job.created_at ? new Date(job.created_at).toLocaleDateString() : 'N/A'}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                       {job.application_count ?? 0}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                     {qCount > 0 ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
                         {qCount} question{qCount === 1 ? '' : 's'}
                       </span>
                     ) : (
-                      <span className="text-xs text-gray-400">None</span>
+                      <span className="text-xs text-gray-400 dark:text-slate-500">None</span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -153,7 +153,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
                         onChange={(e) => updateSponsor(job.id, Number(e.target.value))}
                         disabled={sponsorBusyId === job.id}
                         aria-label="Sponsor tier"
-                        className="text-xs rounded-md border border-gray-200 bg-white text-gray-700 px-2 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-60"
+                        className="text-xs rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-2 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-60"
                       >
                         <option value={0}>Off</option>
                         <option value={1}>Tier 1</option>
@@ -183,10 +183,10 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
 
       {editingJobId && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-0 sm:p-4">
-          <div className="bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-2xl flex flex-col">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-bold text-secondary-900">Manage Screening Questions</h2>
-              <button onClick={closeEditor} className="text-gray-400 hover:text-gray-600" aria-label="Close">
+          <div className="bg-white dark:bg-slate-800 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-2xl flex flex-col">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+              <h2 className="text-lg font-bold text-secondary-900 dark:text-white">Manage Screening Questions</h2>
+              <button onClick={closeEditor} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400" aria-label="Close">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -196,10 +196,10 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
                 <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>
               )}
             </div>
-            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
+            <div className="border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex items-center justify-end gap-3">
               <button
                 onClick={closeEditor}
-                className="px-5 py-2.5 rounded-xl text-gray-600 font-medium hover:bg-gray-100 transition-colors"
+                className="px-5 py-2.5 rounded-xl text-gray-600 dark:text-slate-400 font-medium hover:bg-gray-100 dark:hover:bg-slate-700 dark:bg-slate-700 transition-colors"
               >
                 Cancel
               </button>

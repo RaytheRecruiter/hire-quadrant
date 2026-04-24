@@ -83,7 +83,7 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
   return (
     <div>
       {hasActiveFilters && (
-        <div className="mb-3 flex items-center gap-2 text-sm text-gray-500">
+        <div className="mb-3 flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
           <span>Showing {processedData.length} of {data.length} rows</span>
           <button
             onClick={() => setFilters({})}
@@ -94,14 +94,14 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
         </div>
       )}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+          <thead className="bg-gray-50 dark:bg-slate-900/50">
             <tr>
               {columns.map(col => (
-                <th key={col.key} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th key={col.key} className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                   <div className="flex flex-col gap-1">
                     <div
-                      className={`flex items-center gap-1 ${col.sortable !== false ? 'cursor-pointer select-none hover:text-gray-700' : ''}`}
+                      className={`flex items-center gap-1 ${col.sortable !== false ? 'cursor-pointer select-none hover:text-gray-700 dark:text-slate-300' : ''}`}
                       onClick={() => col.sortable !== false && handleSort(col.key)}
                     >
                       {col.label}
@@ -119,7 +119,7 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
                       {col.filterable !== false && (
                         <button
                           onClick={(e) => { e.stopPropagation(); setActiveFilter(activeFilter === col.key ? null : col.key); }}
-                          className={`ml-1 ${filters[col.key] ? 'text-primary-500' : 'text-gray-300 hover:text-gray-500'}`}
+                          className={`ml-1 ${filters[col.key] ? 'text-primary-500' : 'text-gray-300 hover:text-gray-500 dark:text-slate-400'}`}
                         >
                           <Search className="h-3 w-3" />
                         </button>
@@ -132,13 +132,13 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
                           value={filters[col.key] || ''}
                           onChange={e => setFilters(prev => ({ ...prev, [col.key]: e.target.value }))}
                           placeholder={`Filter ${col.label.toLowerCase()}...`}
-                          className="w-full text-xs font-normal normal-case border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary-300"
+                          className="w-full text-xs font-normal normal-case border border-gray-300 dark:border-slate-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary-300"
                           autoFocus
                         />
                         {filters[col.key] && (
                           <button
                             onClick={() => setFilters(prev => ({ ...prev, [col.key]: '' }))}
-                            className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400"
                           >
                             <X className="h-3 w-3" />
                           </button>
@@ -150,18 +150,18 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
             {processedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={columns.length} className="px-6 py-8 text-center text-gray-500 dark:text-slate-400">
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
               processedData.map(row => (
-                <tr key={rowKey(row)} className="hover:bg-gray-50">
+                <tr key={rowKey(row)} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
                   {columns.map(col => (
-                    <td key={col.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td key={col.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                       {col.render ? col.render(row) : String(getValue(row, col))}
                     </td>
                   ))}

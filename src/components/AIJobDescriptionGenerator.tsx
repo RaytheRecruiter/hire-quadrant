@@ -57,9 +57,9 @@ const AIJobDescriptionGenerator: React.FC<Props> = ({ title: initialTitle = '', 
         <div className="p-2 bg-primary-100 rounded-lg">
           <Sparkles className="h-5 w-5 text-primary-600" />
         </div>
-        <h3 className="text-lg font-bold text-secondary-900">AI Job Description Generator</h3>
+        <h3 className="text-lg font-bold text-secondary-900 dark:text-white">AI Job Description Generator</h3>
       </div>
-      <p className="text-sm text-gray-600 mb-4">
+      <p className="text-sm text-gray-600 dark:text-slate-400 mb-4">
         Paste a few bullet points about the role and Claude will draft a polished job description.
       </p>
 
@@ -69,7 +69,7 @@ const AIJobDescriptionGenerator: React.FC<Props> = ({ title: initialTitle = '', 
           placeholder="Job title"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400"
+          className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400"
         />
         <textarea
           rows={5}
@@ -80,7 +80,7 @@ Fully remote, USA only
 Competitive equity + health benefits"
           value={bullets}
           onChange={e => setBullets(e.target.value)}
-          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400 font-mono text-sm"
+          className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400 font-mono text-sm"
         />
         <button
           onClick={handleGenerate}
@@ -105,7 +105,7 @@ Competitive equity + health benefits"
               {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
-          <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">{description}</pre>
+          <pre className="whitespace-pre-wrap text-sm text-gray-800 dark:text-slate-200 font-sans">{description}</pre>
         </div>
       )}
     </div>

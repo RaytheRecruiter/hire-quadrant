@@ -31,10 +31,10 @@ const Admin: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-12 w-12 text-primary-300 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 text-lg">Loading admin dashboard...</p>
+          <p className="text-gray-600 dark:text-slate-400 text-lg">Loading admin dashboard...</p>
         </div>
       </div>
     );
@@ -42,7 +42,7 @@ const Admin: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
         <div className="text-center max-w-md">
           <div className="bg-red-100 text-red-700 p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-2">Error Loading Dashboard</h2>
@@ -248,11 +248,11 @@ const Admin: React.FC = () => {
   }));
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 font-sans">
       {importResult && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-lg shadow-xl p-8 max-w-sm w-full mx-4">
-            <p className={importResult.kind === 'success' ? 'text-gray-900' : 'text-red-900'}>
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-8 max-w-sm w-full mx-4">
+            <p className={importResult.kind === 'success' ? 'text-gray-900 dark:text-white' : 'text-red-900'}>
               {importResult.message}
             </p>
             <div className="mt-4 flex justify-end">
@@ -273,8 +273,8 @@ const Admin: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-600 mt-2">Monitor job board performance and manage applications</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+            <p className="text-gray-600 dark:text-slate-400 mt-2">Monitor job board performance and manage applications</p>
           </div>
           <div className="flex items-center space-x-3">
             <button
@@ -307,9 +307,9 @@ const Admin: React.FC = () => {
         {/* Reset Confirmation Modal */}
         {showResetConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Reset All Statistics</h3>
-              <p className="text-gray-600 mb-6">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Reset All Statistics</h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-6">
                 This will reset all job views, applications, and tracking data. This action cannot be undone.
               </p>
               <div className="flex space-x-3">
@@ -321,7 +321,7 @@ const Admin: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setShowResetConfirm(false)}
-                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors duration-300"
+                  className="flex-1 bg-gray-300 text-gray-700 dark:text-slate-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors duration-300"
                 >
                   Cancel
                 </button>
@@ -332,87 +332,87 @@ const Admin: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
             <div className="flex items-center">
               <div className="p-2 bg-primary-100 rounded-lg">
                 <Briefcase className="h-6 w-6 text-primary-300" />
               </div>
               <div className="ml-4">
-                <p className="text-sm text-gray-600">Total Jobs</p>
-                <p className="text-2xl font-bold text-gray-900">{totalJobs}</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">Total Jobs</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalJobs}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
             <div className="flex items-center">
               <div className="p-2 bg-primary-100 rounded-lg">
                 <Users className="h-6 w-6 text-primary-300" />
               </div>
               <div className="ml-4">
-                <p className="text-sm text-gray-600">Total Applications</p>
-                <p className="text-2xl font-bold text-gray-900">{totalApplications}</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">Total Applications</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalApplications}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
             <div className="flex items-center">
               <div className="p-2 bg-secondary-100 rounded-lg">
-                <Eye className="h-6 w-6 text-secondary-900" />
+                <Eye className="h-6 w-6 text-secondary-900 dark:text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm text-gray-600">Total Views</p>
-                <p className="text-2xl font-bold text-gray-900">{totalViews}</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">Total Views</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalViews}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
             <div className="flex items-center">
               <div className="p-2 bg-primary-100 rounded-lg">
                 <TrendingUp className="h-6 w-6 text-primary-300" />
               </div>
               <div className="ml-4">
-                <p className="text-sm text-gray-600">Avg Applications/Job</p>
-                <p className="text-2xl font-bold text-gray-900">{averageApplicationsPerJob}</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">Avg Applications/Job</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{averageApplicationsPerJob}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tracking Summary */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Tracking Summary</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6 mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tracking Summary</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <p className="text-gray-600">Jobs Tracked</p>
-              <p className="font-bold text-gray-900">{trackingSummary.jobCount}</p>
+              <p className="text-gray-600 dark:text-slate-400">Jobs Tracked</p>
+              <p className="font-bold text-gray-900 dark:text-white">{trackingSummary.jobCount}</p>
             </div>
             <div>
-              <p className="text-gray-600">Avg Views/Job</p>
-              <p className="font-bold text-gray-900">{trackingSummary.averageViewsPerJob}</p>
+              <p className="text-gray-600 dark:text-slate-400">Avg Views/Job</p>
+              <p className="font-bold text-gray-900 dark:text-white">{trackingSummary.averageViewsPerJob}</p>
             </div>
             <div>
-              <p className="text-gray-600">Conversion Rate</p>
-              <p className="font-bold text-gray-900">{trackingSummary.conversionRate}%</p>
+              <p className="text-gray-600 dark:text-slate-400">Conversion Rate</p>
+              <p className="font-bold text-gray-900 dark:text-white">{trackingSummary.conversionRate}%</p>
             </div>
             <div>
-              <p className="text-gray-600">Last Reset</p>
-              <p className="font-bold text-gray-900">{format(trackingSummary.lastReset, 'MMM d, yyyy')}</p>
+              <p className="text-gray-600 dark:text-slate-400">Last Reset</p>
+              <p className="font-bold text-gray-900 dark:text-white">{format(trackingSummary.lastReset, 'MMM d, yyyy')}</p>
             </div>
           </div>
         </div>
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <nav className="flex space-x-8 border-b border-gray-200">
+          <nav className="flex space-x-8 border-b border-gray-200 dark:border-slate-700">
             <button
               onClick={() => setActiveTab('overview')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'overview'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               Overview
@@ -422,7 +422,7 @@ const Admin: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'approvals'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               Pending Approvals
@@ -432,7 +432,7 @@ const Admin: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'jobs'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               Job Performance
@@ -442,7 +442,7 @@ const Admin: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'sources'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               Source Performance
@@ -452,7 +452,7 @@ const Admin: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'applications'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               Applications
@@ -462,7 +462,7 @@ const Admin: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'candidates'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               Candidates
@@ -472,7 +472,7 @@ const Admin: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'subscriptions'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               Subscriptions
@@ -482,7 +482,7 @@ const Admin: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'ats'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               ATS
@@ -492,7 +492,7 @@ const Admin: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'candidate-hub'
                   ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
               Candidate Hub
@@ -510,59 +510,59 @@ const Admin: React.FC = () => {
             <DashboardCharts />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Job Type Distribution */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Job Type Distribution</h3>
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Job Type Distribution</h3>
               <div className="space-y-3">
                 {Object.entries(jobTypeStats).map(([type, count]) => (
                   <div key={type} className="flex items-center justify-between">
-                    <span className="capitalize text-gray-600">{type.replace('-', ' ')}</span>
+                    <span className="capitalize text-gray-600 dark:text-slate-400">{type.replace('-', ' ')}</span>
                     <div className="flex items-center">
-                      <div className="w-24 bg-gray-200 rounded-full h-2 mr-3">
+                      <div className="w-24 bg-gray-200 dark:bg-slate-700 rounded-full h-2 mr-3">
                         <div
                           className="bg-primary-300 h-2 rounded-full"
                           style={{ width: `${(count / totalJobs) * 100}%` }}
                         />
                       </div>
-                      <span className="text-sm font-medium text-gray-900">{count}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{count}</span>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Application Status Distribution</h3>
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Application Status Distribution</h3>
               <div className="space-y-3">
                 {Object.entries(statusCounts).map(([status, count]) => (
                   <div key={status} className="flex items-center justify-between">
-                    <span className="capitalize text-gray-600">{status}</span>
+                    <span className="capitalize text-gray-600 dark:text-slate-400">{status}</span>
                     <div className="flex items-center">
-                      <div className="w-24 bg-gray-200 rounded-full h-2 mr-3">
+                      <div className="w-24 bg-gray-200 dark:bg-slate-700 rounded-full h-2 mr-3">
                         <div
                           className="bg-primary-300 h-2 rounded-full"
                           style={{ width: `${(count / totalApplications) * 100}%` }}
                         />
                       </div>
-                      <span className="text-sm font-medium text-gray-900">{count}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{count}</span>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
               <div className="space-y-3">
                 {recentApplications.slice(0, 5).map((application) => (
-                  <div key={application.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                  <div key={application.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700 last:border-b-0">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{getUserName(application)}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{getUserName(application)}</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400">
                         Applied to {jobs.find(j => j.id === application.job_id)?.title}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-slate-400">
                         {format(new Date(application.applied_at), 'MMM d, yyyy')}
                       </p>
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
@@ -584,26 +584,26 @@ const Admin: React.FC = () => {
         )}
 
         {activeTab === 'jobs' && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Job Performance Analytics</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Job Performance Analytics</h3>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                 {/* Top Jobs by Applications */}
                 <div>
-                  <h4 className="text-md font-semibold text-gray-800 mb-4">Most Applied Jobs</h4>
+                  <h4 className="text-md font-semibold text-gray-800 dark:text-slate-200 mb-4">Most Applied Jobs</h4>
                   <div className="space-y-3">
                     {topJobs.map((job) => (
-                      <div key={job.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={job.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900/50 rounded-lg">
                         <div className="flex-1">
-                          <div className="font-medium text-gray-900 text-sm">{job.title}</div>
-                          <div className="text-xs text-gray-500">{job.company}</div>
+                          <div className="font-medium text-gray-900 dark:text-white text-sm">{job.title}</div>
+                          <div className="text-xs text-gray-500 dark:text-slate-400">{job.company}</div>
                         </div>
                         <div className="text-right">
                           <div className="font-bold text-primary-600">{job.applications || 0}</div>
-                          <div className="text-xs text-gray-500">applications</div>
+                          <div className="text-xs text-gray-500 dark:text-slate-400">applications</div>
                         </div>
                       </div>
                     ))}
@@ -612,19 +612,19 @@ const Admin: React.FC = () => {
 
                 {/* Top Jobs by Conversion Rate */}
                 <div>
-                  <h4 className="text-md font-semibold text-gray-800 mb-4">Best Conversion Rates</h4>
+                  <h4 className="text-md font-semibold text-gray-800 dark:text-slate-200 mb-4">Best Conversion Rates</h4>
                   <div className="space-y-3">
                     {topConversionJobs.map((job) => (
-                      <div key={job.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={job.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900/50 rounded-lg">
                         <div className="flex-1">
-                          <div className="font-medium text-gray-900 text-sm">{job.title}</div>
-                          <div className="text-xs text-gray-500">{job.company}</div>
+                          <div className="font-medium text-gray-900 dark:text-white text-sm">{job.title}</div>
+                          <div className="text-xs text-gray-500 dark:text-slate-400">{job.company}</div>
                         </div>
                         <div className="text-right">
                           <div className="font-bold text-secondary-600">
                             {(((job.applications || 0) / (job.views || 1)) * 100).toFixed(1)}%
                           </div>
-                          <div className="text-xs text-gray-500">conversion</div>
+                          <div className="text-xs text-gray-500 dark:text-slate-400">conversion</div>
                         </div>
                       </div>
                     ))}
@@ -632,7 +632,7 @@ const Admin: React.FC = () => {
                 </div>
               </div>
 
-              <h4 className="text-md font-semibold text-gray-800 mb-4">All Jobs Performance</h4>
+              <h4 className="text-md font-semibold text-gray-800 dark:text-slate-200 mb-4">All Jobs Performance</h4>
               <SortableTable
                 columns={[
                   {
@@ -658,7 +658,7 @@ const Admin: React.FC = () => {
                           {jobApps.length > 0 && (
                             <div className="mt-1 space-y-0.5">
                               {jobApps.slice(0, 3).map(a => (
-                                <div key={a.id} className="text-xs text-gray-400">
+                                <div key={a.id} className="text-xs text-gray-400 dark:text-slate-500">
                                   {getUserName(a)} — <span className={`${
                                     a.status === 'Applied' ? 'text-yellow-600' :
                                     a.status === 'Interview' ? 'text-indigo-600' :
@@ -667,7 +667,7 @@ const Admin: React.FC = () => {
                                   }`}>{a.status}</span>
                                 </div>
                               ))}
-                              {jobApps.length > 3 && <div className="text-xs text-gray-400">+{jobApps.length - 3} more</div>}
+                              {jobApps.length > 3 && <div className="text-xs text-gray-400 dark:text-slate-500">+{jobApps.length - 3} more</div>}
                             </div>
                           )}
                         </div>
@@ -688,9 +688,9 @@ const Admin: React.FC = () => {
         )}
 
         {activeTab === 'sources' && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Source Company Performance</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Source Company Performance</h3>
               <SortableTable
                 columns={[
                   {
@@ -700,7 +700,7 @@ const Admin: React.FC = () => {
                         <div className="p-2 bg-primary-100 rounded-lg mr-3">
                           <Building2 className="h-4 w-4 text-primary-600" />
                         </div>
-                        <span className="text-sm font-medium text-gray-900">{row.source}</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">{row.source}</span>
                       </div>
                     ),
                     getValue: (row) => row.source,
@@ -722,9 +722,9 @@ const Admin: React.FC = () => {
         )}
 
         {activeTab === 'applications' && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">All Applications</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">All Applications</h3>
               <SortableTable
                 columns={[
                   {
@@ -732,8 +732,8 @@ const Admin: React.FC = () => {
                     getValue: (app) => getUserName(app),
                     render: (app) => (
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{getUserName(app)}</div>
-                        <div className="text-sm text-gray-500">{getUserEmail(app)}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">{getUserName(app)}</div>
+                        <div className="text-sm text-gray-500 dark:text-slate-400">{getUserEmail(app)}</div>
                       </div>
                     ),
                   },
@@ -744,7 +744,7 @@ const Admin: React.FC = () => {
                       const job = jobs.find(j => j.id === app.job_id);
                       return job ? (
                         <HardLink to={`/jobs/${job.id}`} className="text-sm text-primary-700 hover:underline">{job.title}</HardLink>
-                      ) : <span className="text-gray-400">Unknown</span>;
+                      ) : <span className="text-gray-400 dark:text-slate-500">Unknown</span>;
                     },
                   },
                   {
@@ -796,47 +796,47 @@ const Admin: React.FC = () => {
           <div className="space-y-8">
             {/* Candidate Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
                 <div className="flex items-center">
                   <div className="p-2 bg-blue-100 rounded-lg">
                     <Users className="h-6 w-6 text-blue-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm text-gray-600">Total Candidates</p>
-                    <p className="text-2xl font-bold text-gray-900">{totalCandidates}</p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">Total Candidates</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalCandidates}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
                 <div className="flex items-center">
                   <div className="p-2 bg-green-100 rounded-lg">
                     <TrendingUp className="h-6 w-6 text-green-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm text-gray-600">Active (30 days)</p>
-                    <p className="text-2xl font-bold text-gray-900">{activeCandidates}</p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">Active (30 days)</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{activeCandidates}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
                 <div className="flex items-center">
                   <div className="p-2 bg-purple-100 rounded-lg">
                     <BarChart3 className="h-6 w-6 text-purple-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm text-gray-600">Multiple Applications</p>
-                    <p className="text-2xl font-bold text-gray-900">{candidatesWithMultipleApps}</p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">Multiple Applications</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{candidatesWithMultipleApps}</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Candidates Table */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Candidate List</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Candidate List</h3>
                 <SortableTable
                   columns={[
                     {
@@ -844,8 +844,8 @@ const Admin: React.FC = () => {
                       getValue: (c) => c.name,
                       render: (c) => (
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{c.name}</div>
-                          <div className="text-sm text-gray-500">{c.email}</div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">{c.name}</div>
+                          <div className="text-sm text-gray-500 dark:text-slate-400">{c.email}</div>
                         </div>
                       ),
                     },

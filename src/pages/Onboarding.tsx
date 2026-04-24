@@ -63,36 +63,36 @@ const Onboarding: React.FC = () => {
           {[1, 2, 3].map(n => (
             <React.Fragment key={n}>
               <div className={`h-2 flex-1 rounded-full transition-colors ${
-                n <= step ? 'bg-primary-500' : 'bg-gray-200'
+                n <= step ? 'bg-primary-500' : 'bg-gray-200 dark:bg-slate-700'
               }`} />
             </React.Fragment>
           ))}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-8 md:p-10 animate-fade-in">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-gray-100 dark:border-slate-700 p-8 md:p-10 animate-fade-in">
           {step === 1 && (
             <>
-              <h1 className="font-display text-3xl font-bold text-secondary-900 mb-2">Welcome to HireQuadrant, {user.name?.split(' ')[0] || 'there'}!</h1>
+              <h1 className="font-display text-3xl font-bold text-secondary-900 dark:text-white mb-2">Welcome to HireQuadrant, {user.name?.split(' ')[0] || 'there'}!</h1>
               <p className="text-secondary-600 mb-8">Let's personalize your experience in 3 quick steps.</p>
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Where are you based?</label>
+                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Where are you based?</label>
                   <input
                     type="text"
                     value={location}
                     onChange={e => setLocation(e.target.value)}
                     placeholder="e.g. Austin, TX or Remote"
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
+                    className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 mb-2">What's your professional headline?</label>
+                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">What's your professional headline?</label>
                   <input
                     type="text"
                     value={headline}
                     onChange={e => setHeadline(e.target.value)}
                     placeholder="e.g. Senior React Engineer · 7 years"
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
+                    className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
                   />
                 </div>
               </div>
@@ -101,11 +101,11 @@ const Onboarding: React.FC = () => {
 
           {step === 2 && (
             <>
-              <h1 className="font-display text-3xl font-bold text-secondary-900 mb-2">Tell us about your experience</h1>
+              <h1 className="font-display text-3xl font-bold text-secondary-900 dark:text-white mb-2">Tell us about your experience</h1>
               <p className="text-secondary-600 mb-8">This helps us match you with the right roles.</p>
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Years of experience</label>
+                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Years of experience</label>
                   <div className="grid grid-cols-4 gap-2">
                     {[0, 1, 3, 5, 7, 10, 15, 20].map(y => (
                       <button
@@ -113,7 +113,7 @@ const Onboarding: React.FC = () => {
                         type="button"
                         onClick={() => setYears(y)}
                         className={`py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
-                          years === y ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                          years === y ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:border-slate-600'
                         }`}
                       >
                         {y === 0 ? '< 1 yr' : `${y}+ yrs`}
@@ -122,13 +122,13 @@ const Onboarding: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Top skills (comma-separated)</label>
+                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Top skills (comma-separated)</label>
                   <input
                     type="text"
                     value={skills}
                     onChange={e => setSkills(e.target.value)}
                     placeholder="e.g. React, TypeScript, Python, AWS"
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
+                    className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
                   />
                 </div>
               </div>
@@ -137,7 +137,7 @@ const Onboarding: React.FC = () => {
 
           {step === 3 && (
             <>
-              <h1 className="font-display text-3xl font-bold text-secondary-900 mb-2">Upload your resume</h1>
+              <h1 className="font-display text-3xl font-bold text-secondary-900 dark:text-white mb-2">Upload your resume</h1>
               <p className="text-secondary-600 mb-8">PDF or DOCX works best. You can update it anytime.</p>
 
               {resumeUploaded ? (
@@ -151,12 +151,12 @@ const Onboarding: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <label className="block border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center cursor-pointer hover:border-primary-300 hover:bg-primary-50/30 transition-colors">
-                  <Upload className="h-10 w-10 text-gray-400 mx-auto mb-3" />
-                  <div className="font-semibold text-secondary-800">
+                <label className="block border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-2xl p-10 text-center cursor-pointer hover:border-primary-300 hover:bg-primary-50/30 transition-colors">
+                  <Upload className="h-10 w-10 text-gray-400 dark:text-slate-500 mx-auto mb-3" />
+                  <div className="font-semibold text-secondary-800 dark:text-slate-200">
                     {uploading ? 'Uploading…' : 'Click to upload resume'}
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">PDF or DOCX, up to 5MB</div>
+                  <div className="text-sm text-gray-500 dark:text-slate-400 mt-1">PDF or DOCX, up to 5MB</div>
                   <input
                     type="file"
                     accept=".pdf,.doc,.docx"
@@ -173,7 +173,7 @@ const Onboarding: React.FC = () => {
             {step > 1 ? (
               <button
                 onClick={() => setStep(s => s - 1)}
-                className="inline-flex items-center gap-1 text-secondary-600 hover:text-secondary-800 font-semibold"
+                className="inline-flex items-center gap-1 text-secondary-600 hover:text-secondary-800 dark:text-slate-200 font-semibold"
               >
                 <ArrowLeft className="h-4 w-4" /> Back
               </button>
@@ -181,7 +181,7 @@ const Onboarding: React.FC = () => {
 
             <div className="flex items-center gap-2">
               {step < 3 && (
-                <button onClick={() => navigate('/')} className="text-sm text-gray-400 hover:text-gray-600">
+                <button onClick={() => navigate('/')} className="text-sm text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400">
                   Skip for now
                 </button>
               )}
@@ -198,7 +198,7 @@ const Onboarding: React.FC = () => {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-sm text-gray-400">Step {step} of {totalSteps}</p>
+        <p className="mt-6 text-center text-sm text-gray-400 dark:text-slate-500">Step {step} of {totalSteps}</p>
       </div>
     </div>
   );

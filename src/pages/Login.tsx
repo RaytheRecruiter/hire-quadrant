@@ -80,10 +80,10 @@ const Login: React.FC = () => {
               Sign in to finish submitting your application. New here? <HardLink to={registerHref} className="font-semibold underline">Create an account</HardLink> — it takes under a minute.
             </div>
           )}
-          <h2 className="mt-6 text-center text-4xl font-bold text-secondary-900">
+          <h2 className="mt-6 text-center text-4xl font-bold text-secondary-900 dark:text-white">
             Sign in to your account
           </h2>
-          <p className="mt-4 text-center text-gray-600">
+          <p className="mt-4 text-center text-gray-600 dark:text-slate-400">
             Or{' '}
             <HardLink
               to={registerHref}
@@ -98,9 +98,9 @@ const Login: React.FC = () => {
           <GoogleSignInButton label="Continue with Google" />
 
           <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs uppercase tracking-wide text-gray-400">or</span>
-            <div className="flex-1 h-px bg-gray-200" />
+            <div className="flex-1 h-px bg-gray-200 dark:bg-slate-700" />
+            <span className="text-xs uppercase tracking-wide text-gray-400 dark:text-slate-500">or</span>
+            <div className="flex-1 h-px bg-gray-200 dark:bg-slate-700" />
           </div>
 
           <form className="space-y-8" onSubmit={handleSubmit}>
@@ -111,11 +111,11 @@ const Login: React.FC = () => {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-secondary-800 mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">
                 Email address
               </label>
               <div className="mt-1 relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
                 <input
                   id="email"
                   name="email"
@@ -124,7 +124,7 @@ const Login: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-gray-200 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white focus:bg-white sm:text-sm"
+                  className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
                   placeholder="Enter your email"
                 />
               </div>
@@ -132,7 +132,7 @@ const Login: React.FC = () => {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="password" className="block text-sm font-semibold text-secondary-800">
+                <label htmlFor="password" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200">
                   Password
                 </label>
                 <HardLink
@@ -143,7 +143,7 @@ const Login: React.FC = () => {
                 </HardLink>
               </div>
               <div className="mt-1 relative">
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
                 <input
                   id="password"
                   name="password"
@@ -152,13 +152,13 @@ const Login: React.FC = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full pl-12 pr-12 py-4 border border-gray-200 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white focus:bg-white sm:text-sm"
+                  className="appearance-none relative block w-full pl-12 pr-12 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-300"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400 transition-colors duration-300"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
