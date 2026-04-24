@@ -12,7 +12,7 @@ import CompanyQAPanel from '../components/company/CompanyQAPanel';
 import WhyJoinUsPanel from '../components/company/WhyJoinUsPanel';
 import PendingApprovalBanner from '../components/company/PendingApprovalBanner';
 import AIJobDescriptionGenerator from '../components/AIJobDescriptionGenerator';
-import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, MessageCircleQuestion, Heart } from 'lucide-react';
+import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, HelpCircle, Heart } from 'lucide-react';
 
 const TABS = [
   { id: 'jobs', label: 'My Jobs', icon: Briefcase },
@@ -20,7 +20,7 @@ const TABS = [
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   { id: 'reviews', label: 'Reviews', icon: Star },
   { id: 'updates', label: 'Updates', icon: Megaphone },
-  { id: 'qa', label: 'Q&A', icon: MessageCircleQuestion },
+  { id: 'qa', label: 'Q&A', icon: HelpCircle },
   { id: 'why-join', label: 'Why Join Us', icon: Heart },
   { id: 'ai-tools', label: 'AI Assistant', icon: Sparkles },
   { id: 'profile', label: 'Company Profile', icon: Building2 },

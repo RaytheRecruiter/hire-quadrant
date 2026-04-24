@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { formatDistanceToNow } from 'date-fns';
-import { MessageCircleQuestion, Loader2, Check, Edit2, X } from 'lucide-react';
+import { HelpCircle, Loader2, Check, Edit2, X } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -121,7 +121,7 @@ const CompanyQAPanel: React.FC<Props> = ({ companyId }) => {
         </div>
       ) : (
         <button type="button" onClick={() => openEdit(q)} className="inline-flex items-center gap-1.5 text-sm text-primary-700 dark:text-primary-300 hover:underline">
-          <MessageCircleQuestion className="h-4 w-4" /> Answer this question
+          <HelpCircle className="h-4 w-4" /> Answer this question
         </button>
       )}
     </article>
