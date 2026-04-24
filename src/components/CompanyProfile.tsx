@@ -22,6 +22,7 @@ import RatingStars from './companies/RatingStars';
 import ReviewForm from './companies/ReviewForm';
 import ReviewList from './companies/ReviewList';
 import FollowButton from './companies/FollowButton';
+import ClaimBanner from './companies/ClaimBanner';
 import JobCard from './JobCard';
 import { buildAggregateRatingLd, buildOrganizationLd } from '../utils/structuredData';
 
@@ -118,6 +119,16 @@ const CompanyProfile: React.FC = () => {
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Companies
         </button>
+
+        {!company.claimed_at && (
+          <div className="mb-6">
+            <ClaimBanner
+              companySlug={company.slug}
+              companyName={company.display_name || company.name}
+              emailDomain={company.email_domain}
+            />
+          </div>
+        )}
 
         {/* Header */}
         <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden mb-8">
