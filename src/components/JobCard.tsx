@@ -53,8 +53,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         e.preventDefault();
         e.stopPropagation();
         if (!user) {
-            toast.error('Sign in to apply');
-            navigate('/login');
+            navigate(`/login?returnTo=${encodeURIComponent(`/jobs/${job.id}#apply-form`)}&intent=apply`);
             return;
         }
         setApplying(true);

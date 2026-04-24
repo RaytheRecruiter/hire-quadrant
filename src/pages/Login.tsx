@@ -22,6 +22,10 @@ const Login: React.FC = () => {
   const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')
     ? returnTo
     : null;
+  const intent = searchParams.get('intent');
+  const registerHref = safeReturnTo
+    ? `/register?returnTo=${encodeURIComponent(safeReturnTo)}${intent ? `&intent=${intent}` : ''}`
+    : '/register';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,13 +75,18 @@ const Login: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
+          {intent === 'apply' && (
+            <div className="mb-4 mx-auto max-w-sm bg-primary-50 border border-primary-200 text-primary-900 text-sm rounded-xl px-4 py-3 text-center">
+              Sign in to finish submitting your application. New here? <HardLink to={registerHref} className="font-semibold underline">Create an account</HardLink> — it takes under a minute.
+            </div>
+          )}
           <h2 className="mt-6 text-center text-4xl font-bold text-secondary-900">
             Sign in to your account
           </h2>
           <p className="mt-4 text-center text-gray-600">
             Or{' '}
             <HardLink
-              to="/register"
+              to={registerHref}
               className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
             >
               create a new account

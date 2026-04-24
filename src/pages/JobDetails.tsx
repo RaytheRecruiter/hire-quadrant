@@ -307,8 +307,7 @@ const JobDetails: React.FC = () => {
     // silently submitting. Preserves the old login-redirect behavior.
     const handleApply = () => {
         if (!user) {
-            toast.error('Sign in to apply');
-            navigate(`/login?returnTo=${encodeURIComponent(`/jobs/${job.id}#apply-form`)}`);
+            navigate(`/login?returnTo=${encodeURIComponent(`/jobs/${job.id}#apply-form`)}&intent=apply`);
             return;
         }
         const el = document.getElementById('apply-form');

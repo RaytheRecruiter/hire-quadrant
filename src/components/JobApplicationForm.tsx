@@ -238,16 +238,24 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
       {!isAuthenticated ? (
         <div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 p-5 text-sm text-primary-900 dark:text-primary-100">
-          <p className="font-semibold mb-1">Sign in to apply</p>
-          <p className="mb-3">
-            You need an account to submit an application for <span className="font-semibold">{jobTitle}</span>.
+          <p className="font-semibold mb-1">Sign in or create an account to apply</p>
+          <p className="mb-4">
+            You need an account to submit an application for <span className="font-semibold">{jobTitle}</span>. It takes less than a minute.
           </p>
-          <a
-            href={`/login?returnTo=${encodeURIComponent(`/jobs/${jobId}#apply-form`)}`}
-            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-semibold"
-          >
-            Sign in to continue
-          </a>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href={`/login?returnTo=${encodeURIComponent(`/jobs/${jobId}#apply-form`)}&intent=apply`}
+              className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-semibold"
+            >
+              Sign in
+            </a>
+            <a
+              href={`/register?returnTo=${encodeURIComponent(`/jobs/${jobId}#apply-form`)}&intent=apply`}
+              className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-primary-700 border border-primary-200 dark:bg-slate-800 dark:text-primary-300 dark:border-primary-700 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold"
+            >
+              Create an account
+            </a>
+          </div>
         </div>
       ) : applied ? (
         <div className="flex items-center gap-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-5 text-emerald-900 dark:text-emerald-100">
