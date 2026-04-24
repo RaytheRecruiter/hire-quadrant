@@ -20,6 +20,10 @@ const staticPages = [
   { path: '/pricing', priority: '0.6', changefreq: 'monthly' },
   { path: '/blog', priority: '0.7', changefreq: 'weekly' },
   { path: '/career', priority: '0.6', changefreq: 'weekly' },
+  { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
+  { path: '/terms', priority: '0.3', changefreq: 'yearly' },
+  { path: '/content-policy', priority: '0.3', changefreq: 'yearly' },
+  { path: '/cookies', priority: '0.3', changefreq: 'yearly' },
 ];
 
 function toSeoSlug(value: string | null | undefined): string {

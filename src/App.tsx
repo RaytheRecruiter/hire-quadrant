@@ -23,6 +23,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import ContentPolicy from './pages/ContentPolicy';
+import Cookies from './pages/Cookies';
 import Support from './pages/Support';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
@@ -115,6 +117,8 @@ function App() {
                 <Route path="/support" element={<Support />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/content-policy" element={<ContentPolicy />} />
+                <Route path="/cookies" element={<Cookies />} />
                 <Route path="*" element={<NotFound />} />
                       </Routes>
                     </Suspense>

@@ -48,6 +48,8 @@ const Footer: React.FC = () => {
               <li><HardLink to="/contact" className="hover:text-white transition">Contact</HardLink></li>
               <li><HardLink to="/privacy" className="hover:text-white transition">Privacy</HardLink></li>
               <li><HardLink to="/terms" className="hover:text-white transition">Terms</HardLink></li>
+              <li><HardLink to="/content-policy" className="hover:text-white transition">Content Policy</HardLink></li>
+              <li><HardLink to="/cookies" className="hover:text-white transition">Cookies</HardLink></li>
             </ul>
           </div>
         </div>
