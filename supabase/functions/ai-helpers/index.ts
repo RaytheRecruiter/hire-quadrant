@@ -192,6 +192,47 @@ Suggest 3-5 realistic next career steps for someone in this role.`;
       });
     }
 
+    if (path === 'review-summary') {
+      const body = await req.json();
+      const { companyName, reviews } = body;
+      if (!companyName || !Array.isArray(reviews) || reviews.length === 0) {
+        return new Response('companyName and non-empty reviews array required', { status: 400, headers: corsHeaders });
+      }
+
+      const system = `You summarize employee reviews into a neutral, evidence-grounded digest.
+Return JSON only, no preamble, no code fences. Output shape:
+{
+  "summary": "2-3 sentence objective overview (max 80 words)",
+  "pros_themes": ["theme 1", "theme 2", "theme 3"],
+  "cons_themes": ["theme 1", "theme 2"],
+  "recommended_for": ["audience 1", "audience 2"],
+  "based_on_count": <integer>
+}
+Rules:
+- Quote no one. Synthesize themes from recurring language.
+- Do not invent sentiment not present in the reviews.
+- Keep tone neutral — avoid superlatives unless overwhelmingly present.
+- based_on_count must equal the number of reviews provided.`;
+
+      const capped = reviews.slice(0, 40).map((r: { title?: string; pros?: string; cons?: string; rating?: number }, i: number) =>
+        `Review ${i + 1}${r.rating ? ` (${r.rating}/5)` : ''}${r.title ? ` — ${r.title}` : ''}\nPros: ${r.pros || ''}\nCons: ${r.cons || ''}`,
+      ).join('\n\n');
+
+      const userMsg = `Company: ${companyName}\nReviews (${reviews.length} total, up to 40 shown):\n\n${capped}`;
+
+      const raw = await callClaude(system, userMsg);
+      const cleaned = raw.replace(/^```(?:json)?\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        parsed = { summary: raw.slice(0, 300), pros_themes: [], cons_themes: [], recommended_for: [], based_on_count: reviews.length };
+      }
+      return new Response(JSON.stringify(parsed), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     return new Response('Not Found', { status: 404, headers: corsHeaders });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {
