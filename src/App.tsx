@@ -53,6 +53,7 @@ const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
 const MyReviews = lazy(() => import('./pages/MyReviews'));
 const Demographics = lazy(() => import('./pages/Demographics'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const CompanyPortal = lazy(() => import('./pages/CompanyPortal'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -97,6 +98,7 @@ function App() {
                 <Route path="/company-sources" element={<CompanySourceManager />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/company-dashboard" element={<CompanyDashboard />} />
+                <Route path="/company-portal" element={<CompanyPortal />} />
                 <Route path="/saved" element={<SavedJobs />} />
                 <Route path="/alerts" element={<JobAlerts />} />
                 <Route path="/my-jobs" element={<MyJobs />} />
