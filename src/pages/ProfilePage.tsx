@@ -7,6 +7,10 @@ import { useAuth } from '../contexts/AuthContext';
 import { getInitials, colorFromString } from '../utils/companyLogo';
 import toast from 'react-hot-toast';
 import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle, Sparkles, Camera, User as UserIcon } from 'lucide-react';
+import ExperienceSection from '../components/profile/ExperienceSection';
+import EducationSection from '../components/profile/EducationSection';
+import SkillsSection from '../components/profile/SkillsSection';
+import JobPreferencesSection from '../components/profile/JobPreferencesSection';
 import { formatDistanceToNow } from 'date-fns';
 
 interface CandidateProfile {
@@ -594,6 +598,11 @@ const ProfilePage = () => {
                         </button>
                     </form>
                 </div>
+
+                <ExperienceSection />
+                <EducationSection />
+                <SkillsSection />
+                <JobPreferencesSection />
 
                 {/* Resume */}
                 <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
