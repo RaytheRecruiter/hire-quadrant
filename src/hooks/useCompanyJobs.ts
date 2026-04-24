@@ -2,6 +2,21 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import type { Job } from '../contexts/JobContext';
 
+// Supabase returns raw snake_case column names, but the Job type (and
+// downstream JobCard consumers like formatDistanceToNow(new Date(job.postedDate)))
+// expect the camelCase aliases JobContext is also cast-typed with.
+// Map here so JobCard can render without crashing.
+function mapRow(row: Record<string, unknown>): Job {
+  return {
+    ...row,
+    postedDate: (row.posted_date as string) ?? (row.postedDate as string) ?? new Date().toISOString(),
+    externalJobId: (row.external_job_id as string) ?? (row.externalJobId as string) ?? (row.id as string),
+    externalUrl: (row.external_url as string | undefined) ?? (row.externalUrl as string | undefined),
+    sourceCompany: (row.source_company as string) ?? (row.sourceCompany as string) ?? '',
+    sourceXmlFile: (row.source_xml_file as string | undefined) ?? (row.sourceXmlFile as string | undefined),
+  } as Job;
+}
+
 // Fetches every job for a specific company directly (bypasses the
 // paginated JobContext, which only holds the current directory page
 // and would make CompanyProfile miss most of an employer's roles).
@@ -44,7 +59,7 @@ export function useCompanyJobs(
             .order('posted_date', { ascending: false })
             .limit(limit);
           if (err) throw err;
-          rows = (data ?? []) as Job[];
+          rows = ((data ?? []) as Array<Record<string, unknown>>).map(mapRow);
         }
 
         // Fallback: name match. Covers legacy rows the backfill missed
@@ -63,7 +78,7 @@ export function useCompanyJobs(
               .order('posted_date', { ascending: false })
               .limit(limit);
             if (err) continue; // soft-fail; keep any rows we already have
-            const found = (data ?? []) as Job[];
+            const found = ((data ?? []) as Array<Record<string, unknown>>).map(mapRow);
             if (found.length > 0) {
               rows = found;
               break;
