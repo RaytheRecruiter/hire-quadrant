@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { formatDistanceToNow } from 'date-fns';
-import { Star, Loader2, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { Star, Loader2, Clock, CheckCircle2, XCircle, MessageCircleWarning } from 'lucide-react';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
@@ -15,6 +16,9 @@ interface Row {
   status: 'pending' | 'approved' | 'rejected';
   rejected_reason: string | null;
   created_at: string;
+  appeal_status?: 'none' | 'pending' | 'approved' | 'rejected';
+  appeal_text?: string | null;
+  appeal_submitted_at?: string | null;
   company?: { name: string; slug: string } | null;
 }
 
@@ -29,19 +33,51 @@ const MyReviews: React.FC = () => {
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     if (!user?.id) return;
-    (async () => {
-      setLoading(true);
-      const { data } = await supabase
-        .from('company_reviews')
-        .select('id, rating_overall, title, status, rejected_reason, created_at, company:companies(name, slug)')
-        .eq('author_id', user.id)
-        .order('created_at', { ascending: false });
-      setRows((data as any) ?? []);
-      setLoading(false);
-    })();
+    setLoading(true);
+    const { data } = await supabase
+      .from('company_reviews')
+      .select('id, rating_overall, title, status, rejected_reason, created_at, appeal_status, appeal_text, appeal_submitted_at, company:companies(name, slug)')
+      .eq('author_id', user.id)
+      .order('created_at', { ascending: false });
+    setRows((data as any) ?? []);
+    setLoading(false);
   }, [user?.id]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const [appealingId, setAppealingId] = useState<string | null>(null);
+  const [appealText, setAppealText] = useState('');
+  const [submittingAppeal, setSubmittingAppeal] = useState(false);
+
+  const submitAppeal = async (reviewId: string) => {
+    const text = appealText.trim();
+    if (text.length < 20) {
+      toast.error('Please provide at least 20 characters explaining your appeal');
+      return;
+    }
+    setSubmittingAppeal(true);
+    const { error } = await supabase
+      .from('company_reviews')
+      .update({
+        appeal_text: text,
+        appeal_submitted_at: new Date().toISOString(),
+        appeal_status: 'pending',
+      })
+      .eq('id', reviewId);
+    setSubmittingAppeal(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success('Appeal submitted — a moderator will review it');
+    setAppealingId(null);
+    setAppealText('');
+    load();
+  };
 
   if (authLoading) return null;
   if (!isAuthenticated) return <Navigate to="/login?returnTo=/my-reviews" replace />;
@@ -100,6 +136,53 @@ const MyReviews: React.FC = () => {
                     {r.rejected_reason && (
                       <p className="text-xs text-rose-700 dark:text-rose-400 mt-1">
                         Moderator note: {r.rejected_reason}
+                      </p>
+                    )}
+
+                    {r.status === 'rejected' && r.appeal_status === 'none' && appealingId !== r.id && (
+                      <button
+                        type="button"
+                        onClick={() => { setAppealingId(r.id); setAppealText(''); }}
+                        className="mt-2 inline-flex items-center gap-1.5 text-xs text-primary-700 dark:text-primary-300 hover:underline"
+                      >
+                        <MessageCircleWarning className="h-3.5 w-3.5" />
+                        Appeal this decision
+                      </button>
+                    )}
+                    {r.status === 'rejected' && appealingId === r.id && (
+                      <div className="mt-3 bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg p-3 space-y-2">
+                        <textarea
+                          rows={3}
+                          value={appealText}
+                          onChange={(e) => setAppealText(e.target.value)}
+                          placeholder="Explain why you think this review meets our content policy (min 20 chars)"
+                          maxLength={1500}
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                        <div className="flex justify-end gap-2">
+                          <button type="button" onClick={() => setAppealingId(null)} className="px-3 py-1.5 text-xs rounded border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700">
+                            Cancel
+                          </button>
+                          <button type="button" onClick={() => submitAppeal(r.id)} disabled={submittingAppeal} className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60">
+                            {submittingAppeal && <Loader2 className="h-3 w-3 animate-spin" />}
+                            Submit appeal
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    {r.appeal_status === 'pending' && (
+                      <p className="text-xs text-amber-700 dark:text-amber-400 mt-2 inline-flex items-center gap-1">
+                        <Clock className="h-3.5 w-3.5" /> Appeal pending review
+                      </p>
+                    )}
+                    {r.appeal_status === 'approved' && (
+                      <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-2 inline-flex items-center gap-1">
+                        <CheckCircle2 className="h-3.5 w-3.5" /> Appeal granted
+                      </p>
+                    )}
+                    {r.appeal_status === 'rejected' && (
+                      <p className="text-xs text-rose-700 dark:text-rose-400 mt-2 inline-flex items-center gap-1">
+                        <XCircle className="h-3.5 w-3.5" /> Appeal denied
                       </p>
                     )}
                   </article>
