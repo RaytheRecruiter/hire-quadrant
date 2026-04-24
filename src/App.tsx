@@ -46,6 +46,7 @@ const IndustryPage = lazy(() => import('./pages/IndustryPage'));
 const LocationPage = lazy(() => import('./pages/LocationPage'));
 const ReviewModeration = lazy(() => import('./pages/ReviewModeration'));
 const ReviewReports = lazy(() => import('./pages/ReviewReports'));
+const ReviewAppeals = lazy(() => import('./pages/ReviewAppeals'));
 const MyJobs = lazy(() => import('./pages/MyJobs'));
 const MessagesPage = lazy(() => import('./pages/MessagesPage'));
 const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
@@ -91,6 +92,7 @@ function App() {
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/admin/reviews" element={<ReviewModeration />} />
                 <Route path="/admin/reports" element={<ReviewReports />} />
+                <Route path="/admin/appeals" element={<ReviewAppeals />} />
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />
                 <Route path="/company-sources" element={<CompanySourceManager />} />
                 <Route path="/profile" element={<ProfilePage />} />
