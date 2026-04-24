@@ -3,6 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { ThumbsUp, ThumbsDown, MessageSquare } from 'lucide-react';
 import RatingStars from './RatingStars';
 import ReportReviewButton from './ReportReviewButton';
+import ReviewVoteButtons from './ReviewVoteButtons';
 import type { CompanyReview } from '../../hooks/useCompanyReviews';
 
 interface Props {
@@ -85,7 +86,13 @@ const ReviewCard: React.FC<Props> = ({ review, companyName, companySlug }) => {
       )}
 
       {companySlug && (
-        <div className="flex justify-end">
+        <div className="flex items-center justify-between gap-3 pt-2 border-t border-gray-100 dark:border-slate-700 mt-3">
+          <ReviewVoteButtons
+            reviewId={review.id}
+            initialHelpful={review.helpful_count ?? 0}
+            initialUnhelpful={review.unhelpful_count ?? 0}
+            returnTo={`/companies/${companySlug}`}
+          />
           <ReportReviewButton reviewId={review.id} returnTo={`/companies/${companySlug}`} />
         </div>
       )}

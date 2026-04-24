@@ -20,6 +20,8 @@ export interface CompanyReview {
   is_anonymous: boolean;
   status: 'pending' | 'approved' | 'rejected';
   rejected_reason: string | null;
+  helpful_count?: number;
+  unhelpful_count?: number;
   created_at: string;
   updated_at: string;
   response?: {
