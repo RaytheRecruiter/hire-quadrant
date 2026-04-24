@@ -55,6 +55,8 @@ const MyReviews = lazy(() => import('./pages/MyReviews'));
 const Demographics = lazy(() => import('./pages/Demographics'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const CompanyPortal = lazy(() => import('./pages/CompanyPortal'));
+const SalaryInsightsPage = lazy(() => import('./pages/SalaryInsightsPage'));
+const BestCompaniesPage = lazy(() => import('./pages/BestCompaniesPage'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -114,6 +116,8 @@ function App() {
                 <Route path="/companies" element={<Companies />} />
                 <Route path="/companies/industry/:industrySlug" element={<IndustryPage />} />
                 <Route path="/jobs/location/:locationSlug" element={<LocationPage />} />
+                <Route path="/salaries/:titleSlug" element={<SalaryInsightsPage />} />
+                <Route path="/best/:categorySlug" element={<BestCompaniesPage />} />
                 <Route path="/talent-search" element={<ResumeSearch />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
