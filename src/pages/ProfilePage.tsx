@@ -11,6 +11,8 @@ import ExperienceSection from '../components/profile/ExperienceSection';
 import EducationSection from '../components/profile/EducationSection';
 import SkillsSection from '../components/profile/SkillsSection';
 import JobPreferencesSection from '../components/profile/JobPreferencesSection';
+import ProfileCompletenessScore from '../components/profile/ProfileCompletenessScore';
+import { useProfileCompleteness } from '../hooks/useProfileCompleteness';
 import { formatDistanceToNow } from 'date-fns';
 
 interface CandidateProfile {
@@ -599,6 +601,8 @@ const ProfilePage = () => {
                     </form>
                 </div>
 
+                <ProfileCompletenessBar />
+
                 <ExperienceSection />
                 <EducationSection />
                 <SkillsSection />
@@ -790,6 +794,11 @@ const ProfilePage = () => {
             </div>
         </div>
     );
+};
+
+const ProfileCompletenessBar: React.FC = () => {
+    const inputs = useProfileCompleteness();
+    return <ProfileCompletenessScore inputs={inputs} />;
 };
 
 export default ProfilePage;

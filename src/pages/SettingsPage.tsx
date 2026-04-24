@@ -6,6 +6,7 @@ import { Mail, Key, LogOut, Trash2, Loader2 } from 'lucide-react';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
+import NotificationPreferencesPanel from '../components/profile/NotificationPreferencesPanel';
 
 const SettingsPage: React.FC = () => {
   const { user, isAuthenticated, logout, loading: authLoading } = useAuth();
@@ -81,6 +82,8 @@ const SettingsPage: React.FC = () => {
               <h2 className="font-semibold text-secondary-900 dark:text-white mb-0.5">Demographics</h2>
               <p className="text-sm text-gray-600 dark:text-slate-400">Optional EEO information</p>
             </HardLink>
+
+            <NotificationPreferencesPanel />
 
             <section className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
