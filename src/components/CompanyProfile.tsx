@@ -23,6 +23,7 @@ import ReviewForm from './companies/ReviewForm';
 import ReviewList from './companies/ReviewList';
 import FollowButton from './companies/FollowButton';
 import ClaimBanner from './companies/ClaimBanner';
+import CompanyUpdatesFeed from './companies/CompanyUpdatesFeed';
 import JobCard from './JobCard';
 import { buildAggregateRatingLd, buildOrganizationLd } from '../utils/structuredData';
 
@@ -227,6 +228,7 @@ const CompanyProfile: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
+            <CompanyUpdatesFeed companyId={company.id} />
             {company.description && (
               <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
                 <h2 className="text-xl font-bold text-secondary-900 dark:text-white mb-3">
