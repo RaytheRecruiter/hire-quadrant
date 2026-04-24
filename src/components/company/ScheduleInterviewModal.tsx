@@ -70,7 +70,7 @@ const ScheduleInterviewModal: React.FC<Props> = ({
       (notes ? `\nNotes:\n${notes}` : '');
     try {
       const applicantId = (
-        await supabase.from('applications').select('user_id').eq('id', applicationId).maybeSingle()
+        await supabase.from('job_applications').select('user_id').eq('id', applicationId).maybeSingle()
       ).data?.user_id;
       if (applicantId) {
         const { data: convo } = await supabase

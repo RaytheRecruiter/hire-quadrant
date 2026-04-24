@@ -70,7 +70,7 @@ begin
     'experience',  coalesce((select jsonb_agg(to_jsonb(e)) from user_experience e where e.user_id = uid), '[]'::jsonb),
     'education',   coalesce((select jsonb_agg(to_jsonb(ed)) from user_education ed where ed.user_id = uid), '[]'::jsonb),
     'preferences', (select to_jsonb(jp) from user_job_preferences jp where jp.user_id = uid),
-    'applications', coalesce((select jsonb_agg(to_jsonb(a)) from applications a where a.user_id = uid), '[]'::jsonb),
+    'applications', coalesce((select jsonb_agg(to_jsonb(a)) from job_applications a where a.user_id = uid), '[]'::jsonb),
     'saved_jobs',  coalesce((select jsonb_agg(to_jsonb(s)) from saved_jobs s where s.user_id = uid), '[]'::jsonb),
     'reviews',     coalesce((select jsonb_agg(to_jsonb(r)) from company_reviews r where r.user_id = uid), '[]'::jsonb),
     'notifications', coalesce((select jsonb_agg(to_jsonb(n)) from notifications n where n.user_id = uid), '[]'::jsonb),
@@ -108,7 +108,7 @@ begin
    where user_id = uid;
 
   -- Anonymize applications for employer audit trail continuity.
-  update applications
+  update job_applications
      set user_name = 'Deleted user',
          user_email = null,
          applicant_phone = null,
