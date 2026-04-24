@@ -35,7 +35,17 @@ export const parseJobsXml = (xmlContent: string, sourceCompany?: string, sourceX
         // Extract basic job information - handle both formats
         const id = getTextContent(jobElement, 'id') || getTextContent(jobElement, 'ID') || getTextContent(jobElement, 'jobdivaid');
         const title = getTextContent(jobElement, 'title');
-        const company = getTextContent(jobElement, 'company') || sourceCompany || 'Unknown Company';
+        // JobDiva feeds don't populate <company> for agency-placed jobs; fall
+        // back through common client-name fields before defaulting to the
+        // platform name. Never fall back to `sourceCompany`, which is the
+        // feed filename (e.g. "hirequadrant.xml") and would leak into the UI.
+        const company =
+          getTextContent(jobElement, 'company') ||
+          getTextContent(jobElement, 'customer') ||
+          getTextContent(jobElement, 'client') ||
+          getTextContent(jobElement, 'clientname') ||
+          getTextContent(jobElement, 'companyname') ||
+          'Quadrant, Inc.';
        
         // Handle location - combine city and state if available
         let location = getTextContent(jobElement, 'location');
