@@ -8,9 +8,10 @@ import CompanyProfileEditor from '../components/company/CompanyProfileEditor';
 import CompanyUpdatesEditor from '../components/company/CompanyUpdatesEditor';
 import CompanyReviewsPanel from '../components/company/CompanyReviewsPanel';
 import CompanyAnalyticsPanel from '../components/company/CompanyAnalyticsPanel';
+import CompanyQAPanel from '../components/company/CompanyQAPanel';
 import PendingApprovalBanner from '../components/company/PendingApprovalBanner';
 import AIJobDescriptionGenerator from '../components/AIJobDescriptionGenerator';
-import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star } from 'lucide-react';
+import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, MessageCircleQuestion } from 'lucide-react';
 
 const TABS = [
   { id: 'jobs', label: 'My Jobs', icon: Briefcase },
@@ -18,6 +19,7 @@ const TABS = [
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   { id: 'reviews', label: 'Reviews', icon: Star },
   { id: 'updates', label: 'Updates', icon: Megaphone },
+  { id: 'qa', label: 'Q&A', icon: MessageCircleQuestion },
   { id: 'ai-tools', label: 'AI Assistant', icon: Sparkles },
   { id: 'profile', label: 'Company Profile', icon: Building2 },
   { id: 'subscription', label: 'Subscription', icon: CreditCard },
@@ -127,6 +129,9 @@ const CompanyDashboard: React.FC = () => {
               )}
               {activeTab === 'updates' && company?.id && (
                 <CompanyUpdatesEditor companyId={company.id} />
+              )}
+              {activeTab === 'qa' && company?.id && (
+                <CompanyQAPanel companyId={company.id} />
               )}
               {activeTab === 'ai-tools' && (
                 <AIJobDescriptionGenerator company={company?.displayName || company?.name} />

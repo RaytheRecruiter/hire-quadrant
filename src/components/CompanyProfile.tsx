@@ -24,6 +24,7 @@ import ReviewList from './companies/ReviewList';
 import FollowButton from './companies/FollowButton';
 import ClaimBanner from './companies/ClaimBanner';
 import CompanyUpdatesFeed from './companies/CompanyUpdatesFeed';
+import CompanyQASection from './companies/CompanyQASection';
 import JobCard from './JobCard';
 import { buildAggregateRatingLd, buildOrganizationLd } from '../utils/structuredData';
 
@@ -274,6 +275,12 @@ const CompanyProfile: React.FC = () => {
                 companySlug={company.slug}
               />
             </section>
+
+            <CompanyQASection
+              companyId={company.id}
+              companySlug={company.slug}
+              companyName={company.display_name || company.name}
+            />
 
             <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
               <div className="flex items-center gap-2 mb-4">
