@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Star, Save, Loader2, Tag, Bookmark, Sparkles } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import { screenCandidate, CandidateScreening } from '../../utils/aiClient';
+import ApplicantNotesAndTags from './ApplicantNotesAndTags';
 
 interface Props {
   open: boolean;
@@ -139,6 +140,13 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
               className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-400"
             />
           </div>
+
+          {/* CRM notes + tags (team-wide) */}
+          {application?.id && (
+            <div className="border border-gray-200 dark:border-slate-700 rounded-2xl p-4">
+              <ApplicantNotesAndTags applicationId={application.id} />
+            </div>
+          )}
 
           {/* AI Screening */}
           <div className="border border-primary-200 rounded-2xl p-4 bg-primary-50/30">

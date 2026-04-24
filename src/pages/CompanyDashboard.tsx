@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useCompanyDashboard } from '../hooks/useCompanyDashboard';
 import CompanyJobsList from '../components/company/CompanyJobsList';
 import CompanyApplicants from '../components/company/CompanyApplicants';
-import CompanyProfileEditor from '../components/company/CompanyProfileEditor';
+import CompanyProfileEditor, { TeamInvitesPanel } from '../components/company/CompanyProfileEditor';
 import CompanyUpdatesEditor from '../components/company/CompanyUpdatesEditor';
 import CompanyReviewsPanel from '../components/company/CompanyReviewsPanel';
 import CompanyAnalyticsPanel from '../components/company/CompanyAnalyticsPanel';
@@ -142,10 +142,13 @@ const CompanyDashboard: React.FC = () => {
                 <AIJobDescriptionGenerator company={company?.displayName || company?.name} />
               )}
               {activeTab === 'profile' && (
-                <CompanyProfileEditor
-                  company={company}
-                  onSave={updateCompanyProfile}
-                />
+                <>
+                  <CompanyProfileEditor
+                    company={company}
+                    onSave={updateCompanyProfile}
+                  />
+                  {company?.id && <div className="mt-6"><TeamInvitesPanel companyId={company.id} /></div>}
+                </>
               )}
               {activeTab === 'subscription' && (
                 <div className="text-center py-16">
