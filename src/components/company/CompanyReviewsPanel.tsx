@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { formatDistanceToNow } from 'date-fns';
-import { Loader2, MessageSquare, ThumbsUp, ThumbsDown, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { Loader2, MessageSquare, ThumbsUp, ThumbsDown, Clock, CheckCircle2, XCircle, Search } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCompanyDashboardReviews } from '../../hooks/useCompanyDashboardReviews';
@@ -138,6 +138,22 @@ const ResponseEditor: React.FC<{
 
 const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
   const { reviews, loading, error, refresh } = useCompanyDashboardReviews(companyId);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return reviews.filter((r) => {
+      if (statusFilter !== 'all' && r.status !== statusFilter) return false;
+      if (!q) return true;
+      return (
+        r.title.toLowerCase().includes(q) ||
+        (r.pros ?? '').toLowerCase().includes(q) ||
+        (r.cons ?? '').toLowerCase().includes(q) ||
+        (r.job_title ?? '').toLowerCase().includes(q)
+      );
+    });
+  }, [reviews, search, statusFilter]);
 
   if (loading) {
     return (
@@ -165,7 +181,43 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
 
   return (
     <div className="space-y-4">
-      {reviews.map((r) => {
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 dark:text-slate-500" />
+          <input
+            type="text"
+            placeholder="Search reviews — title, pros, cons, job title"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          />
+        </div>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+          aria-label="Status filter"
+          className="text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        >
+          <option value="all">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+
+      <p className="text-xs text-gray-500 dark:text-slate-400">
+        Showing {filtered.length} of {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
+      </p>
+
+      {filtered.length === 0 ? (
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-10 text-center">
+          <p className="text-sm text-gray-500 dark:text-slate-400">
+            No reviews match the current filters.
+          </p>
+        </div>
+      ) : null}
+
+      {filtered.map((r) => {
         const s = STATUS_STYLE[r.status];
         const StatusIcon = s.icon;
         return (
