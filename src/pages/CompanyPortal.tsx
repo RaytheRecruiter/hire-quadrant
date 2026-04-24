@@ -88,6 +88,13 @@ const CompanyPortal: React.FC = () => {
       accent: 'bg-violet-100 text-violet-700',
     },
     {
+      title: 'Cron Health',
+      description: 'Last 24h of scheduled job runs — ingest, cleanup, digests.',
+      to: '/admin/cron',
+      icon: ClipboardList,
+      accent: 'bg-emerald-100 text-emerald-700',
+    },
+    {
       title: 'Messages',
       description: 'Your personal inbox — support reach-outs, internal coordination.',
       to: '/messages',
