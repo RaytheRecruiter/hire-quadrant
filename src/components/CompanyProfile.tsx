@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -14,11 +14,14 @@ import {
   Briefcase,
   Star,
 } from 'lucide-react';
-import { supabase } from '../utils/supabaseClient';
 import { useJobs } from '../contexts/JobContext';
 import { useBulkJobMatchScores } from '../hooks/useBulkJobMatchScores';
 import { useCompanyProfile } from '../hooks/useCompanyProfile';
+import { useCompanyReviews } from '../hooks/useCompanyReviews';
 import RatingStars from './companies/RatingStars';
+import ReviewForm from './companies/ReviewForm';
+import ReviewList from './companies/ReviewList';
+import FollowButton from './companies/FollowButton';
 import JobCard from './JobCard';
 import { buildAggregateRatingLd, buildOrganizationLd } from '../utils/structuredData';
 
@@ -46,6 +49,10 @@ const CompanyProfile: React.FC = () => {
 
   const companyJobIds = useMemo(() => companyJobs.map((j) => j.id), [companyJobs]);
   useBulkJobMatchScores(companyJobIds);
+
+  const { approved: approvedReviews, own: ownReview, refresh: refreshReviews } = useCompanyReviews(
+    company?.id,
+  );
 
   if (loading) {
     return (
@@ -196,11 +203,14 @@ const CompanyProfile: React.FC = () => {
               </div>
             </div>
 
-            {company.review_count > 0 && (
-              <div className="mt-4">
+            <div className="mt-5 flex items-center justify-between gap-4 flex-wrap">
+              {company.review_count > 0 ? (
                 <RatingStars value={company.avg_rating} size="md" />
-              </div>
-            )}
+              ) : (
+                <span />
+              )}
+              <FollowButton companyId={company.id} companySlug={company.slug} />
+            </div>
           </div>
         </div>
 
@@ -229,22 +239,28 @@ const CompanyProfile: React.FC = () => {
               </section>
             )}
 
-            {/* Reviews list + form ship in PR #19. Placeholder keeps the
-                section visible so users know reviews exist on this surface. */}
-            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
-              <h2 className="text-xl font-bold text-secondary-900 dark:text-white mb-2">Employee Reviews</h2>
-              {company.review_count > 0 ? (
-                <div className="flex items-center gap-3">
-                  <RatingStars value={company.avg_rating} size="md" />
-                  <span className="text-sm text-gray-600 dark:text-slate-400">
-                    {company.avg_rating.toFixed(1)} average across {company.review_count} reviews
-                  </span>
-                </div>
-              ) : (
-                <p className="text-sm text-gray-500 dark:text-slate-400">
-                  No reviews yet. Review submission coming soon.
-                </p>
-              )}
+            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 space-y-5">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <h2 className="text-xl font-bold text-secondary-900 dark:text-white">Employee Reviews</h2>
+                {company.review_count > 0 && (
+                  <div className="flex items-center gap-2">
+                    <RatingStars value={company.avg_rating} size="md" />
+                    <span className="text-sm text-gray-600 dark:text-slate-400">
+                      {company.avg_rating.toFixed(1)} · {company.review_count}{' '}
+                      {company.review_count === 1 ? 'review' : 'reviews'}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <ReviewForm
+                companyId={company.id}
+                companySlug={company.slug}
+                existing={ownReview}
+                onSaved={refreshReviews}
+              />
+
+              <ReviewList reviews={approvedReviews} companyName={company.display_name || company.name} />
             </section>
 
             <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
