@@ -8,6 +8,7 @@ interface User {
   name: string;
   role: 'candidate' | 'admin' | 'company';
   companyId?: string;
+  avatarUrl?: string | null;
   isApproved: boolean;
   createdAt: Date;
 }
@@ -24,7 +25,7 @@ interface AuthContextType {
   isApproved: boolean;
   isCompany: boolean;
   loading: boolean;
-  updateProfile: (updates: Partial<Pick<User, 'name' | 'role' | 'companyId'>>) => Promise<boolean>;
+  updateProfile: (updates: Partial<Pick<User, 'name' | 'role' | 'companyId' | 'avatarUrl'>>) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -72,6 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         name: profile.name,
         role: profile.role,
         companyId: profile.company_id,
+        avatarUrl: profile.avatar_url ?? null,
         isApproved: profile.is_approved ?? true,
         createdAt: new Date(profile.created_at)
       };
@@ -259,7 +261,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const updateProfile = useCallback(async (updates: Partial<Pick<User, 'name' | 'role' | 'companyId'>>): Promise<boolean> => {
+  const updateProfile = useCallback(async (updates: Partial<Pick<User, 'name' | 'role' | 'companyId' | 'avatarUrl'>>): Promise<boolean> => {
     if (!user) {
       return false;
     }
@@ -269,6 +271,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (updates.name !== undefined) updateData.name = updates.name;
       if (updates.role !== undefined) updateData.role = updates.role;
       if (updates.companyId !== undefined) updateData.company_id = updates.companyId;
+      if (updates.avatarUrl !== undefined) updateData.avatar_url = updates.avatarUrl;
 
       const { error } = await supabase
         .from('user_profiles')

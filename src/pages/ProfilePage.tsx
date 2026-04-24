@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
-import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle, Sparkles } from 'lucide-react';
+import { getInitials, colorFromString } from '../utils/companyLogo';
+import toast from 'react-hot-toast';
+import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle, Sparkles, Camera, User as UserIcon } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface CandidateProfile {
@@ -41,7 +43,69 @@ interface JobInfo {
 }
 
 const ProfilePage = () => {
-    const { user } = useAuth();
+    const { user, updateProfile } = useAuth();
+    const [nameValue, setNameValue] = useState('');
+    const [savingName, setSavingName] = useState(false);
+    const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+    useEffect(() => {
+        if (user?.name) setNameValue(user.name);
+    }, [user?.name]);
+
+    const handleSaveName = async () => {
+        const trimmed = nameValue.trim();
+        if (trimmed.length < 2) {
+            toast.error('Name must be at least 2 characters');
+            return;
+        }
+        setSavingName(true);
+        const ok = await updateProfile({ name: trimmed });
+        setSavingName(false);
+        if (ok) toast.success('Name updated');
+        else toast.error('Could not update name');
+    };
+
+    const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        e.target.value = '';
+        if (!file || !user) return;
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please upload an image file');
+            return;
+        }
+        if (file.size > 3 * 1024 * 1024) {
+            toast.error('Image must be under 3 MB');
+            return;
+        }
+        setUploadingAvatar(true);
+        try {
+            const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+            const filePath = `${user.id}/avatar-${Date.now()}.${ext}`;
+            const { error: upErr } = await supabase.storage
+                .from('avatars')
+                .upload(filePath, file, { upsert: true, contentType: file.type });
+            if (upErr) throw upErr;
+            const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+            const publicUrl = data.publicUrl;
+            const ok = await updateProfile({ avatarUrl: publicUrl });
+            if (!ok) throw new Error('Failed to save avatar URL to profile');
+            toast.success('Photo updated');
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Upload failed');
+        } finally {
+            setUploadingAvatar(false);
+        }
+    };
+
+    const handleRemoveAvatar = async () => {
+        if (!user) return;
+        setUploadingAvatar(true);
+        const ok = await updateProfile({ avatarUrl: null });
+        setUploadingAvatar(false);
+        if (ok) toast.success('Photo removed');
+        else toast.error('Could not remove photo');
+    };
+
     const [profile, setProfile] = useState<CandidateProfile | null>(null);
     const [applications, setApplications] = useState<(JobApplication & { job?: JobInfo })[]>([]);
     const [loading, setLoading] = useState(true);
@@ -378,18 +442,78 @@ const ProfilePage = () => {
             <div className="max-w-3xl mx-auto px-4">
                 {/* Header */}
                 <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
-                    <div className="flex items-center gap-4">
-                        <div className="h-16 w-16 rounded-full bg-primary-100 flex items-center justify-center">
-                            <span className="text-2xl font-bold text-primary-600">
-                                {user.name?.charAt(0)?.toUpperCase() || user.email.charAt(0).toUpperCase()}
-                            </span>
+                    <div className="flex items-start gap-5">
+                        <div className="relative">
+                            <label
+                                htmlFor="avatar-upload"
+                                className={`h-20 w-20 rounded-full overflow-hidden flex items-center justify-center cursor-pointer group ${
+                                    user.avatarUrl ? 'bg-gray-100' : colorFromString(user.name || user.email)
+                                }`}
+                                title="Click to upload a photo"
+                            >
+                                {user.avatarUrl ? (
+                                    <img
+                                        src={user.avatarUrl}
+                                        alt={user.name || 'Profile'}
+                                        className="h-full w-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-3xl font-bold">
+                                        {getInitials(user.name) || user.email.charAt(0).toUpperCase()}
+                                    </span>
+                                )}
+                                <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    {uploadingAvatar ? (
+                                        <Loader2 className="h-6 w-6 text-white animate-spin" />
+                                    ) : (
+                                        <Camera className="h-6 w-6 text-white" />
+                                    )}
+                                </div>
+                            </label>
+                            <input
+                                id="avatar-upload"
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={handleAvatarUpload}
+                                disabled={uploadingAvatar}
+                            />
                         </div>
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+                        <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                <input
+                                    type="text"
+                                    value={nameValue}
+                                    onChange={(e) => setNameValue(e.target.value)}
+                                    onBlur={handleSaveName}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            (e.target as HTMLInputElement).blur();
+                                        }
+                                    }}
+                                    placeholder="Your full name"
+                                    className="text-2xl font-bold text-gray-900 bg-transparent border-b border-transparent hover:border-gray-200 focus:border-primary-400 focus:outline-none min-w-0 flex-1 max-w-md"
+                                />
+                                {savingName && <Loader2 className="h-4 w-4 text-gray-400 animate-spin" />}
+                            </div>
                             <p className="text-gray-500">{user.email}</p>
-                            <span className="inline-block mt-1 px-2 py-0.5 bg-primary-50 text-primary-700 text-xs font-medium rounded-full capitalize">
-                                {user.role}
-                            </span>
+                            <div className="mt-2 flex items-center gap-2 flex-wrap">
+                                <span className="inline-block px-2 py-0.5 bg-primary-50 text-primary-700 text-xs font-medium rounded-full capitalize">
+                                    {user.role}
+                                </span>
+                                {user.avatarUrl && (
+                                    <button
+                                        type="button"
+                                        onClick={handleRemoveAvatar}
+                                        disabled={uploadingAvatar}
+                                        className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-rose-600"
+                                    >
+                                        <Trash2 className="h-3 w-3" />
+                                        Remove photo
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

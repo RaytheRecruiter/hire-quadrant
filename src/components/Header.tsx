@@ -128,9 +128,18 @@ const Header: React.FC = () => {
                 <div className="relative" ref={userMenuRef}>
                   <button
                     onClick={() => setUserMenuOpen(v => !v)}
-                    className={`h-9 w-9 rounded-full ${avatarColor} flex items-center justify-center font-display font-bold text-sm hover:ring-2 hover:ring-primary-300 transition-all`}
+                    className={`h-9 w-9 rounded-full overflow-hidden flex items-center justify-center font-display font-bold text-sm hover:ring-2 hover:ring-primary-300 transition-all ${user?.avatarUrl ? 'bg-gray-100' : avatarColor}`}
+                    aria-label="Account menu"
                   >
-                    {initials}
+                    {user?.avatarUrl ? (
+                      <img
+                        src={user.avatarUrl}
+                        alt={user.name || 'Account'}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      initials
+                    )}
                   </button>
                   {userMenuOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-card-hover border border-gray-100 dark:border-slate-700 py-1 animate-fade-in">
