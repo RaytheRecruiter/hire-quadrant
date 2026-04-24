@@ -14,10 +14,27 @@ interface Post {
   excerpt: string;
   body: string;
   category: string;
+  job_trade: string | null;
   cover_image_url: string | null;
   author_name: string;
   published_at: string;
 }
+
+const jobTradeLabels: Record<string, string> = {
+  'software-engineer': 'Software Engineer',
+  'data-science': 'Data Science',
+  'product-management': 'Product Manager',
+  'design': 'Designer',
+  'devops-sre': 'DevOps / SRE',
+  'sales': 'Sales',
+  'marketing': 'Marketing',
+  'customer-success': 'Customer Success',
+  'engineering-management': 'Engineering Manager',
+  'cybersecurity': 'Cybersecurity',
+  'healthcare-tech': 'Healthcare Tech',
+  'fintech': 'Fintech',
+  'hiring-manager': 'Hiring Manager',
+};
 
 // Simple markdown-ish renderer for post body (H2, bullets, paragraphs)
 const renderBody = (body: string) => {
@@ -101,10 +118,15 @@ const BlogPost: React.FC = () => {
         )}
 
         <article className="bg-white/90 dark:bg-slate-800 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 dark:border-slate-700 p-8 md:p-12">
-          <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400 mb-4">
+          <div className="flex items-center flex-wrap gap-3 text-sm text-gray-500 dark:text-slate-400 mb-4">
             <span className="px-3 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-semibold uppercase tracking-wide">
               {post.category}
             </span>
+            {post.job_trade && (
+              <span className="px-3 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 font-medium">
+                For: {jobTradeLabels[post.job_trade] || post.job_trade}
+              </span>
+            )}
             <span>{post.author_name}</span>
             <span>•</span>
             <span className="flex items-center gap-1">
