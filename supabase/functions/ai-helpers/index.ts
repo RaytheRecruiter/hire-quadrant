@@ -192,6 +192,60 @@ Suggest 3-5 realistic next career steps for someone in this role.`;
       });
     }
 
+    if (path === 'jd-score') {
+      const body = await req.json();
+      const { title, description } = body;
+      if (!title || !description) {
+        return new Response('title and description required', { status: 400, headers: corsHeaders });
+      }
+
+      const system = `You are an expert recruiter and technical writer scoring job descriptions.
+Return JSON only, no preamble, no code fences. Output shape:
+{
+  "overall_score": <0-100 integer>,
+  "specificity": <0-100>,
+  "inclusivity": <0-100>,
+  "clarity": <0-100>,
+  "completeness": <0-100>,
+  "strengths": ["bullet 1", "bullet 2"],
+  "improvements": ["actionable 1", "actionable 2", "actionable 3"],
+  "missing_sections": ["What You'll Do", "What We're Looking For", ...]
+}
+Scoring rubric:
+- specificity: penalize "rockstar", "ninja", "passionate"; reward concrete outcomes
+- inclusivity: penalize gendered/age-coded/ableist language, pedigree filters
+- clarity: penalize jargon, long sentences, corporate-speak
+- completeness: expect role summary, responsibilities, requirements, preferred qualifications, benefits
+- overall_score: weighted avg rounded to integer
+Be tough but fair. Most JDs score 55-75. Only exceptional ones cross 85.`;
+
+      const userMsg = `Title: ${title}
+
+Description:
+${description.slice(0, 6000)}`;
+
+      const raw = await callClaude(system, userMsg);
+      const cleaned = raw.replace(/^```(?:json)?\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        parsed = {
+          overall_score: 0,
+          specificity: 0,
+          inclusivity: 0,
+          clarity: 0,
+          completeness: 0,
+          strengths: [],
+          improvements: [raw.slice(0, 200)],
+          missing_sections: [],
+        };
+      }
+      return new Response(JSON.stringify(parsed), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     if (path === 'review-summary') {
       const body = await req.json();
       const { companyName, reviews } = body;
