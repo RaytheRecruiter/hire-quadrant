@@ -14,9 +14,9 @@ import {
   Briefcase,
   Star,
 } from 'lucide-react';
-import { useJobs } from '../contexts/JobContext';
 import { useBulkJobMatchScores } from '../hooks/useBulkJobMatchScores';
 import { useCompanyProfile } from '../hooks/useCompanyProfile';
+import { useCompanyJobs } from '../hooks/useCompanyJobs';
 import { useCompanyReviews } from '../hooks/useCompanyReviews';
 import RatingStars from './companies/RatingStars';
 import ReviewForm from './companies/ReviewForm';
@@ -34,20 +34,15 @@ const CompanyProfile: React.FC = () => {
   const { id: slugOrId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { company, loading, error } = useCompanyProfile(slugOrId);
-  const { jobs } = useJobs();
 
-  const companyJobs = useMemo(() => {
-    if (!company) return [];
-    return jobs.filter((job) => {
-      if ((job as any).company_id && (job as any).company_id === company.id) return true;
-      return (
-        job.company === company.name ||
-        job.company === company.display_name ||
-        job.sourceCompany === company.name ||
-        job.sourceCompany === company.display_name
-      );
-    });
-  }, [jobs, company]);
+  // Fetch every job for this specific company directly — don't filter the
+  // paginated JobContext, which only holds the current directory page and
+  // would miss most of an employer's roles (e.g. Quadrant has 180).
+  const { jobs: companyJobs } = useCompanyJobs({
+    companyId: company?.id,
+    companyName: company?.name,
+    companyDisplayName: company?.display_name,
+  });
 
   const companyJobIds = useMemo(() => companyJobs.map((j) => j.id), [companyJobs]);
   useBulkJobMatchScores(companyJobIds);
