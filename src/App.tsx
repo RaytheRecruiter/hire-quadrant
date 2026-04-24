@@ -63,6 +63,7 @@ const InterviewPrepPage = lazy(() => import('./pages/InterviewPrepPage'));
 const IndustryGuidePage = lazy(() => import('./pages/IndustryGuidePage'));
 const CareerTransitionPage = lazy(() => import('./pages/CareerTransitionPage'));
 const CronHealth = lazy(() => import('./pages/CronHealth'));
+const SavedSearches = lazy(() => import('./pages/SavedSearches'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -106,6 +107,7 @@ function App() {
                 <Route path="/admin/appeals" element={<ReviewAppeals />} />
                 <Route path="/admin/audit" element={<AdminAuditLog />} />
                 <Route path="/admin/cron" element={<CronHealth />} />
+                <Route path="/saved-searches" element={<SavedSearches />} />
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />
                 <Route path="/company-sources" element={<CompanySourceManager />} />
                 <Route path="/profile" element={<ProfilePage />} />

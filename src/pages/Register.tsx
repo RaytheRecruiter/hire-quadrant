@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { User, Lock, Mail, Eye, EyeOff, CheckCircle, Briefcase, Building2 } from 'lucide-react';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+import { checkPasswordBreach } from '../utils/hibp';
 
 const Register: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -43,6 +44,15 @@ const Register: React.FC = () => {
 
     if (password.length < 8) {
       setError('Password must be at least 8 characters long');
+      return;
+    }
+
+    // Have I Been Pwned k-anonymity check — blocks known-breached passwords.
+    const breach = await checkPasswordBreach(password);
+    if (breach.breached) {
+      setError(
+        `This password has appeared in ${breach.count.toLocaleString()} known data breaches. Please choose a different one.`,
+      );
       return;
     }
 
