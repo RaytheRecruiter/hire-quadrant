@@ -720,7 +720,7 @@ Two years from now, the right role might open at their company. Graceful decline
 
 ('negotiating-non-compete-clauses',
  'Negotiating Non-Compete Clauses',
- 'What's enforceable, what's not, and what to ask for.',
+ 'What''s enforceable, what''s not, and what to ask for.',
  $body$## The legal landscape is shifting
 Federal non-compete ban was partially struck down, but state-level enforcement varies wildly. California: near-zero enforceable. New York, Washington: tightening. Texas, Florida: strong.
 
