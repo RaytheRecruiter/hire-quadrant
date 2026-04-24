@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabaseClient';
-import { Users, Download, Filter, Star, Bookmark, Eye } from 'lucide-react';
+import { Users, Download, Filter, Star, Bookmark, Eye, LayoutGrid, List, MessageSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
 import ApplicantDetailModal from './ApplicantDetailModal';
+import ApplicantKanban from './ApplicantKanban';
+import BulkMessageComposer from './BulkMessageComposer';
 
 interface CompanyApplicantsProps {
   applications: any[];
@@ -32,6 +34,8 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   const [showShortlistedOnly, setShowShortlistedOnly] = useState(false);
   const [detailApp, setDetailApp] = useState<any | null>(null);
   const [refreshTick, setRefreshTick] = useState(0);
+  const [view, setView] = useState<'list' | 'kanban'>('list');
+  const [showBulk, setShowBulk] = useState(false);
 
   // Fetch candidate info for resume URLs
   useEffect(() => {
@@ -112,6 +116,61 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
 
   return (
     <div>
+      {/* View toggle + bulk */}
+      <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
+        <div className="inline-flex rounded-lg border border-gray-200 dark:border-slate-700 p-0.5">
+          <button
+            type="button"
+            onClick={() => setView('list')}
+            className={`inline-flex items-center gap-1 px-3 py-1 text-xs rounded ${
+              view === 'list'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-700'
+            }`}
+          >
+            <List className="h-3.5 w-3.5" />
+            List
+          </button>
+          <button
+            type="button"
+            onClick={() => setView('kanban')}
+            className={`inline-flex items-center gap-1 px-3 py-1 text-xs rounded ${
+              view === 'kanban'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-700'
+            }`}
+          >
+            <LayoutGrid className="h-3.5 w-3.5" />
+            Pipeline
+          </button>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowBulk(true)}
+          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+        >
+          <MessageSquare className="h-3.5 w-3.5" />
+          Bulk message
+        </button>
+      </div>
+
+      {view === 'kanban' ? (
+        <ApplicantKanban
+          applications={filteredApplications.map((a) => ({
+            id: a.id,
+            status: a.status,
+            user_id: a.user_id,
+            applied_at: a.applied_at,
+            user_name: a.user_name ?? candidateInfo[a.user_id]?.name ?? null,
+            user_email: a.user_email ?? candidateInfo[a.user_id]?.email ?? null,
+            job_id: a.job_id,
+          }))}
+          jobs={jobs.map((j) => ({ id: j.id, title: j.title }))}
+          onStatusUpdate={(id, status) => onStatusUpdate(id, status)}
+          onOpen={(a) => setDetailApp(applications.find((app) => app.id === a.id) ?? null)}
+        />
+      ) : (
+      <>
       {/* Filters */}
       <div className="flex flex-wrap gap-4 mb-6">
         <div className="flex items-center gap-2">
@@ -271,6 +330,8 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
           No applicants match the selected filters.
         </div>
       )}
+      </>
+      )}
 
       <ApplicantDetailModal
         open={!!detailApp}
@@ -280,6 +341,19 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
         onClose={() => setDetailApp(null)}
         onSaved={() => setRefreshTick(t => t + 1)}
       />
+
+      {showBulk && (
+        <BulkMessageComposer
+          applicants={filteredApplications.map((a) => ({
+            id: a.id,
+            user_id: a.user_id,
+            user_name: a.user_name ?? candidateInfo[a.user_id]?.name ?? null,
+            user_email: a.user_email ?? candidateInfo[a.user_id]?.email ?? null,
+            status: a.status,
+          }))}
+          onClose={() => setShowBulk(false)}
+        />
+      )}
     </div>
   );
 };

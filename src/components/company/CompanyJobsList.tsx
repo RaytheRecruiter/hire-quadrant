@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import ScreeningQuestionsEditor from '../ScreeningQuestionsEditor';
+import CustomFieldsEditor from './CustomFieldsEditor';
 import type { ScreeningQuestion } from '../../types/screening';
 
 interface CompanyJobsListProps {
@@ -190,11 +191,14 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto px-6 py-6">
+            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
               <ScreeningQuestionsEditor value={questions} onChange={setQuestions} />
               {error && (
                 <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>
               )}
+              <div className="pt-4 border-t border-gray-100 dark:border-slate-700">
+                <CustomFieldsEditor jobId={editingJobId} />
+              </div>
             </div>
             <div className="border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex items-center justify-end gap-3">
               <button
