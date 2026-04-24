@@ -44,6 +44,12 @@ const IndustryPage = lazy(() => import('./pages/IndustryPage'));
 const LocationPage = lazy(() => import('./pages/LocationPage'));
 const ReviewModeration = lazy(() => import('./pages/ReviewModeration'));
 const ReviewReports = lazy(() => import('./pages/ReviewReports'));
+const MyJobs = lazy(() => import('./pages/MyJobs'));
+const MessagesPage = lazy(() => import('./pages/MessagesPage'));
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
+const MyReviews = lazy(() => import('./pages/MyReviews'));
+const Demographics = lazy(() => import('./pages/Demographics'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -89,6 +95,13 @@ function App() {
                 <Route path="/company-dashboard" element={<CompanyDashboard />} />
                 <Route path="/saved" element={<SavedJobs />} />
                 <Route path="/alerts" element={<JobAlerts />} />
+                <Route path="/my-jobs" element={<MyJobs />} />
+                <Route path="/messages" element={<MessagesPage />} />
+                <Route path="/notifications" element={<NotificationsPage />} />
+                <Route path="/my-reviews" element={<MyReviews />} />
+                <Route path="/demographics" element={<Demographics />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/help" element={<Support />} />
                 <Route path="/advanced-search" element={<AdvancedSearch />} />
                 <Route path="/career" element={<CareerPath />} />
                 <Route path="/companies" element={<Companies />} />
