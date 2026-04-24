@@ -20,55 +20,42 @@ import JobApplicationForm, { SubmittedApplicationDetails } from '../components/J
 import { extractTags } from '../utils/skillExtractor';
 import { useSEO } from '../hooks/useSEO';
 import { generateSlug } from '../utils/slugGenerator';
+import { parseJobDescription } from '../utils/jobDescriptionFormatter';
 import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
 
 const viewedJobIds = new Set<string>();
 
 const formatJobDescription = (description: string) => {
-    if (!description) return <p>No description available</p>;
-    const sections = description.split(/\n\s*\n/);
-    return sections.map((section, sectionIndex) => {
-        const lines = section.split('\n').filter(line => line.trim());
-        const elements: React.ReactElement[] = [];
-        let currentParagraph: string[] = [];
-        const flushParagraph = () => {
-            if (currentParagraph.length > 0) {
-                elements.push(
-                    <p key={`p-${elements.length}`} className="text-secondary-700 dark:text-slate-300 mb-3 leading-relaxed">
-                        {currentParagraph.join(' ')}
-                    </p>
-                );
-                currentParagraph = [];
-            }
-        };
-        lines.forEach((line) => {
-            const trimmedLine = line.trim();
-            if (!trimmedLine) return;
-            const isHeader = (trimmedLine.endsWith(':') && trimmedLine.length < 100) ||
-                (trimmedLine === trimmedLine.toUpperCase() && trimmedLine.length < 80 && !trimmedLine.includes('$'));
-            const isBullet = /^[\u2022\u2023\u25E6\u2043\u2219•\-\*]\s/.test(trimmedLine) ||
-                /^\d+[\.\)]\s/.test(trimmedLine);
-            if (isHeader) {
-                flushParagraph();
-                elements.push(
-                    <h3 key={`h-${elements.length}`} className="font-display font-bold text-secondary-900 dark:text-white mt-6 mb-2 text-lg">
-                        {trimmedLine.replace(/:$/, '')}
+    if (!description) return <p className="text-secondary-700 dark:text-slate-300">No description available</p>;
+    const sections = parseJobDescription(description);
+    if (sections.length === 0) {
+        return <p className="text-secondary-700 dark:text-slate-300">{description}</p>;
+    }
+    return (
+        <div className="space-y-6">
+            {sections.map((section, i) => (
+                <section key={`${section.kind}-${i}`}>
+                    <h3 className="font-display font-bold text-secondary-900 dark:text-white text-lg mb-2">
+                        {section.heading}
                     </h3>
-                );
-            } else if (isBullet) {
-                flushParagraph();
-                elements.push(
-                    <li key={`b-${elements.length}`} className="text-secondary-700 dark:text-slate-300 ml-4 mb-1.5 list-disc list-outside">
-                        {trimmedLine.replace(/^[\u2022\u2023\u25E6\u2043\u2219•\-\*]\s*/, '').replace(/^\d+[\.\)]\s*/, '')}
-                    </li>
-                );
-            } else {
-                currentParagraph.push(trimmedLine);
-            }
-        });
-        flushParagraph();
-        return <div key={sectionIndex} className="mb-5 last:mb-0">{elements}</div>;
-    });
+                    {section.paragraphs.map((p, pi) => (
+                        <p key={pi} className="text-secondary-700 dark:text-slate-300 mb-3 leading-relaxed">
+                            {p}
+                        </p>
+                    ))}
+                    {section.bullets.length > 0 && (
+                        <ul className="list-disc list-outside ml-5 space-y-1">
+                            {section.bullets.map((b, bi) => (
+                                <li key={bi} className="text-secondary-700 dark:text-slate-300 leading-relaxed">
+                                    {b}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </section>
+            ))}
+        </div>
+    );
 };
 
 const buildJobSchema = (job: any, url: string) => {
