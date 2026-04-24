@@ -260,7 +260,11 @@ const CompanyProfile: React.FC = () => {
                 onSaved={refreshReviews}
               />
 
-              <ReviewList reviews={approvedReviews} companyName={company.display_name || company.name} />
+              <ReviewList
+                reviews={approvedReviews}
+                companyName={company.display_name || company.name}
+                companySlug={company.slug}
+              />
             </section>
 
             <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">

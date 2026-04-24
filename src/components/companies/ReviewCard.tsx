@@ -2,11 +2,13 @@ import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { ThumbsUp, ThumbsDown, MessageSquare } from 'lucide-react';
 import RatingStars from './RatingStars';
+import ReportReviewButton from './ReportReviewButton';
 import type { CompanyReview } from '../../hooks/useCompanyReviews';
 
 interface Props {
   review: CompanyReview;
   companyName?: string;
+  companySlug?: string;
 }
 
 const DIMENSIONS: Array<{ key: keyof CompanyReview; label: string }> = [
@@ -17,7 +19,7 @@ const DIMENSIONS: Array<{ key: keyof CompanyReview; label: string }> = [
   { key: 'rating_career_growth', label: 'Career Growth' },
 ];
 
-const ReviewCard: React.FC<Props> = ({ review, companyName }) => {
+const ReviewCard: React.FC<Props> = ({ review, companyName, companySlug }) => {
   const authorLine = review.is_anonymous
     ? 'Anonymous employee'
     : `Reviewed by an employee`;
@@ -79,6 +81,12 @@ const ReviewCard: React.FC<Props> = ({ review, companyName }) => {
             Cons
           </div>
           <p className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-line">{review.cons}</p>
+        </div>
+      )}
+
+      {companySlug && (
+        <div className="flex justify-end">
+          <ReportReviewButton reviewId={review.id} returnTo={`/companies/${companySlug}`} />
         </div>
       )}
 

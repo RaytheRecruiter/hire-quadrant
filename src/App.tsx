@@ -41,6 +41,7 @@ const CareerPath = lazy(() => import('./pages/CareerPath'));
 const AdvancedSearch = lazy(() => import('./pages/AdvancedSearch'));
 const Companies = lazy(() => import('./pages/Companies'));
 const ReviewModeration = lazy(() => import('./pages/ReviewModeration'));
+const ReviewReports = lazy(() => import('./pages/ReviewReports'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -79,6 +80,7 @@ function App() {
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/admin/reviews" element={<ReviewModeration />} />
+                <Route path="/admin/reports" element={<ReviewReports />} />
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />
                 <Route path="/company-sources" element={<CompanySourceManager />} />
                 <Route path="/profile" element={<ProfilePage />} />

@@ -5,10 +5,11 @@ import type { CompanyReview } from '../../hooks/useCompanyReviews';
 interface Props {
   reviews: CompanyReview[];
   companyName?: string;
+  companySlug?: string;
   emptyLabel?: string;
 }
 
-const ReviewList: React.FC<Props> = ({ reviews, companyName, emptyLabel }) => {
+const ReviewList: React.FC<Props> = ({ reviews, companyName, companySlug, emptyLabel }) => {
   if (reviews.length === 0) {
     return (
       <p className="text-sm text-gray-500 dark:text-slate-400">
@@ -19,7 +20,7 @@ const ReviewList: React.FC<Props> = ({ reviews, companyName, emptyLabel }) => {
   return (
     <div className="space-y-4">
       {reviews.map((r) => (
-        <ReviewCard key={r.id} review={r} companyName={companyName} />
+        <ReviewCard key={r.id} review={r} companyName={companyName} companySlug={companySlug} />
       ))}
     </div>
   );
