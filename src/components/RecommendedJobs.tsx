@@ -39,7 +39,7 @@ const RecommendedJobs: React.FC = () => {
             className="group relative bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
           >
             <HardLink
-              to={`/job/${generateSlug(job.title, job.company)}`}
+              to={`/job/${generateSlug(job.title, job.company, job.id)}`}
               className="block p-5"
             >
               <div className="flex items-start justify-between gap-3 mb-3">

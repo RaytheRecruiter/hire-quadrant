@@ -61,7 +61,7 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
         {jobs.map(j => (
           <HardLink
             key={j.id}
-            to={`/job/${generateSlug(j.title, j.company)}`}
+            to={`/job/${generateSlug(j.title, j.company, j.id)}`}
             className="block p-4 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
           >
             <div className="flex items-start justify-between gap-4">

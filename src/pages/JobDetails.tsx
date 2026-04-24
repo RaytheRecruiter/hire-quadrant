@@ -108,7 +108,11 @@ const buildJobSchema = (job: any, url: string) => {
 };
 
 const JobDetails: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    // Two mounted routes point here: /jobs/:id (primary) and /job/:slug
+    // (pretty URL). When the slug route fires, resolve the id out of
+    // the trailing 8-char suffix that generateSlug(title, company, id) appends.
+    const { id: idParam, slug: slugParam } = useParams<{ id?: string; slug?: string }>();
+    const id = idParam || (slugParam ? extractIdFromSlug(slugParam) : undefined);
     const { getJobById, applyToJob, hasApplied } = useJobs();
     const { user } = useAuth();
     const { getCompanyByName, getCompanyById } = useCompanies();
