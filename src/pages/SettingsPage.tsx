@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import toast from 'react-hot-toast';
-import { Mail, Key, LogOut, Trash2, Loader2 } from 'lucide-react';
+import { Mail, Key, LogOut, Loader2 } from 'lucide-react';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
 import NotificationPreferencesPanel from '../components/profile/NotificationPreferencesPanel';
+import TwoFactorPanel from '../components/security/TwoFactorPanel';
+import SessionsPanel from '../components/security/SessionsPanel';
+import GDPRPanel from '../components/security/GDPRPanel';
 
 const SettingsPage: React.FC = () => {
   const { user, isAuthenticated, logout, loading: authLoading } = useAuth();
@@ -85,6 +88,12 @@ const SettingsPage: React.FC = () => {
 
             <NotificationPreferencesPanel />
 
+            <TwoFactorPanel />
+
+            <SessionsPanel />
+
+            <GDPRPanel />
+
             <section className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
@@ -102,23 +111,6 @@ const SettingsPage: React.FC = () => {
               </button>
             </section>
 
-            <section className="bg-white dark:bg-slate-800 rounded-xl border border-rose-200 dark:border-rose-900/40 p-5 flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <Trash2 className="h-4 w-4 text-rose-500" />
-                  <h2 className="font-semibold text-rose-700 dark:text-rose-400">Delete account</h2>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-slate-400">
-                  Contact support to permanently delete your account and data.
-                </p>
-              </div>
-              <HardLink
-                to="/support"
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 whitespace-nowrap"
-              >
-                Contact support
-              </HardLink>
-            </section>
           </div>
         </div>
       </div>

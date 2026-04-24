@@ -33,7 +33,19 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
+      // Brute-force rate limit (8 failed attempts per 10 min per email).
+      const { data: ok } = await supabase.rpc('check_auth_rate_limit', { p_email: email });
+      if (ok === false) {
+        setError('Too many failed attempts. Please wait a few minutes.');
+        setLoading(false);
+        return;
+      }
       const result = await login(email, password);
+      // Record attempt for rate-limiter window
+      supabase.from('auth_attempts').insert({
+        email: email.toLowerCase(),
+        success: result.success,
+      }).then(() => undefined);
       if (result.success) {
         if (safeReturnTo) {
           // Hard nav so the target page loads fresh with the new session
