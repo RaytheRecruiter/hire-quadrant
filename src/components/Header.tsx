@@ -79,49 +79,24 @@ const Header: React.FC = () => {
             <HardLink to="/blog" className={navClass('/blog')}>Blog</HardLink>
             <HardLink to="/pricing" className={navClass('/pricing')}>Pricing</HardLink>
             {isCompany && (
-              <div className="relative" ref={adminMenuRef}>
-                <button
-                  onClick={() => setAdminMenuOpen(v => !v)}
-                  className={`flex items-center gap-1 ${navClass('/company-portal')}`}
-                >
-                  <Briefcase className="h-4 w-4" />
-                  Company Portal
-                  <ChevronDown className="h-3.5 w-3.5" />
-                </button>
-                {adminMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-60 bg-white dark:bg-slate-800 rounded-xl shadow-card-hover border border-gray-100 dark:border-slate-700 py-1 animate-fade-in">
-                    <HardLink to="/company-portal" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-b border-gray-100" onClick={() => setAdminMenuOpen(false)}>
-                      <Grid3X3 className="h-4 w-4 text-gray-400" /> Portal Home
-                    </HardLink>
-                    <HardLink to="/company-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
-                      <BarChart3 className="h-4 w-4 text-gray-400" /> Dashboard
-                    </HardLink>
-                    <HardLink to="/talent-search" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
-                      <Search className="h-4 w-4 text-gray-400" /> Talent Search
-                    </HardLink>
-                    <HardLink to="/messages" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
-                      <MessageSquare className="h-4 w-4 text-gray-400" /> Messages
-                    </HardLink>
-                    <HardLink to="/notifications" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setAdminMenuOpen(false)}>
-                      <Bell className="h-4 w-4 text-gray-400" /> Notifications
-                    </HardLink>
-                    <HardLink to="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-t border-gray-100" onClick={() => setAdminMenuOpen(false)}>
-                      <Settings className="h-4 w-4 text-gray-400" /> Account Settings
-                    </HardLink>
-                  </div>
-                )}
-              </div>
+              <HardLink to="/company-dashboard" className={navClass('/company-dashboard')}>
+                <Briefcase className="h-4 w-4 inline mr-1" />
+                Dashboard
+              </HardLink>
+            )}
+            {isCompany && (
+              <HardLink to="/talent-search" className={navClass('/talent-search')}>
+                Talent Search
+              </HardLink>
             )}
             {isAdmin && (
-              <div className="relative">
-                <HardLink
-                  to="/admin"
-                  className={`flex items-center gap-1 ${navClass('/admin')}`}
-                >
-                  <Settings className="h-4 w-4" />
-                  Admin
-                </HardLink>
-              </div>
+              <HardLink
+                to="/company-portal"
+                className={`flex items-center gap-1 ${navClass('/company-portal')}`}
+              >
+                <Settings className="h-4 w-4" />
+                Portal
+              </HardLink>
             )}
           </nav>
 
