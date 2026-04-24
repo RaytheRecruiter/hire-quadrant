@@ -19,7 +19,7 @@ import ShareJobBox from '../components/ShareJobBox';
 import JobApplicationForm, { SubmittedApplicationDetails } from '../components/JobApplicationForm';
 import { extractTags } from '../utils/skillExtractor';
 import { useSEO } from '../hooks/useSEO';
-import { generateSlug, extractIdFromSlug, isUuid } from '../utils/slugGenerator';
+import { generateSlug } from '../utils/slugGenerator';
 import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
 
 const viewedJobIds = new Set<string>();
@@ -109,10 +109,10 @@ const buildJobSchema = (job: any, url: string) => {
 
 const JobDetails: React.FC = () => {
     // Two mounted routes point here: /jobs/:id (primary) and /job/:slug
-    // (pretty URL). When the slug route fires, resolve the id out of
-    // the trailing 8-char suffix that generateSlug(title, company, id) appends.
+    // (pretty URL). For the slug route we try multiple candidate IDs
+    // (last 1 segment, last 2, etc.) to handle both simple numeric IDs
+    // ("28082768") and hyphenated IDs ("job-002") emitted by generateSlug.
     const { id: idParam, slug: slugParam } = useParams<{ id?: string; slug?: string }>();
-    const id = idParam || (slugParam ? extractIdFromSlug(slugParam) : undefined);
     const { getJobById, applyToJob, hasApplied } = useJobs();
     const { user } = useAuth();
     const { getCompanyByName, getCompanyById } = useCompanies();
@@ -124,29 +124,61 @@ const JobDetails: React.FC = () => {
     const [job, setJob] = React.useState<Job | null>(null);
     const [loading, setLoading] = React.useState(true);
 
-    // Single fetch from Supabase
+    // Cascade lookup: try the direct id param first, else try progressively
+    // longer trailing slug segments as candidate IDs. First DB hit wins.
     React.useEffect(() => {
-      if (!id) {
+      if (!idParam && !slugParam) {
         setLoading(false);
         return;
       }
 
       setLoading(true);
+      let cancelled = false;
 
-      supabase
-        .from('jobs')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle()
-        .then(({ data, error }) => {
-          if (error) {
-            console.error('Error fetching job:', error);
-          } else if (data) {
-            setJob(data as Job);
+      const candidates: string[] = [];
+      if (idParam) {
+        candidates.push(idParam);
+      } else if (slugParam) {
+        const parts = slugParam.split('-');
+        // Last 1, last 2, ..., last 6 segments (covers IDs like "job-002"
+        // through multi-hyphenated ones) — longest candidates last so the
+        // cheapest match fires first.
+        for (let i = 1; i <= Math.min(parts.length, 6); i++) {
+          candidates.push(parts.slice(-i).join('-'));
+        }
+        // Legacy fallback: full slug as a literal id (very old links).
+        candidates.push(slugParam);
+      }
+      const unique = Array.from(new Set(candidates));
+
+      (async () => {
+        for (const candidate of unique) {
+          const { data, error: err } = await supabase
+            .from('jobs')
+            .select('*')
+            .eq('id', candidate)
+            .maybeSingle();
+          if (cancelled) return;
+          if (err) {
+            console.error('Error fetching job:', err);
+            continue;
           }
-        })
-        .finally(() => setLoading(false));
-    }, [id]);
+          if (data) {
+            setJob(data as Job);
+            setLoading(false);
+            return;
+          }
+        }
+        if (!cancelled) setLoading(false);
+      })();
+
+      return () => {
+        cancelled = true;
+      };
+    }, [idParam, slugParam]);
+
+    // Resolved id for downstream effects/links (match score, view tracking)
+    const id = job?.id;
     const companyProfile = job ? (getCompanyByName(job.company) || getCompanyById(job.company)) : null;
     const saved = job ? isSaved(job.id) : false;
 
