@@ -24,6 +24,12 @@ const staticPages = [
   { path: '/terms', priority: '0.3', changefreq: 'yearly' },
   { path: '/content-policy', priority: '0.3', changefreq: 'yearly' },
   { path: '/cookies', priority: '0.3', changefreq: 'yearly' },
+  { path: '/best/technology', priority: '0.6', changefreq: 'weekly' },
+  { path: '/best/healthcare', priority: '0.6', changefreq: 'weekly' },
+  { path: '/best/finance', priority: '0.6', changefreq: 'weekly' },
+  { path: '/best/remote-first', priority: '0.6', changefreq: 'weekly' },
+  { path: '/best/startups', priority: '0.6', changefreq: 'weekly' },
+  { path: '/best/enterprise', priority: '0.6', changefreq: 'weekly' },
 ];
 
 function toSeoSlug(value: string | null | undefined): string {
