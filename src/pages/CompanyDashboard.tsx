@@ -5,13 +5,15 @@ import { useCompanyDashboard } from '../hooks/useCompanyDashboard';
 import CompanyJobsList from '../components/company/CompanyJobsList';
 import CompanyApplicants from '../components/company/CompanyApplicants';
 import CompanyProfileEditor from '../components/company/CompanyProfileEditor';
+import CompanyUpdatesEditor from '../components/company/CompanyUpdatesEditor';
 import PendingApprovalBanner from '../components/company/PendingApprovalBanner';
 import AIJobDescriptionGenerator from '../components/AIJobDescriptionGenerator';
-import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles } from 'lucide-react';
+import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone } from 'lucide-react';
 
 const TABS = [
   { id: 'jobs', label: 'My Jobs', icon: Briefcase },
   { id: 'applicants', label: 'Applicants', icon: Users },
+  { id: 'updates', label: 'Updates', icon: Megaphone },
   { id: 'ai-tools', label: 'AI Assistant', icon: Sparkles },
   { id: 'profile', label: 'Company Profile', icon: Building2 },
   { id: 'subscription', label: 'Subscription', icon: CreditCard },
@@ -112,6 +114,9 @@ const CompanyDashboard: React.FC = () => {
                   jobs={jobs}
                   onStatusUpdate={updateApplicationStatus}
                 />
+              )}
+              {activeTab === 'updates' && company?.id && (
+                <CompanyUpdatesEditor companyId={company.id} />
               )}
               {activeTab === 'ai-tools' && (
                 <AIJobDescriptionGenerator company={company?.displayName || company?.name} />
