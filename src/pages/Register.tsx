@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { User, Lock, Mail, Eye, EyeOff, CheckCircle, Briefcase, Building2 } from 'lucide-react';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 
 const Register: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const returnTo = searchParams.get('returnTo');
+  const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : null;
+  const intent = searchParams.get('intent');
+  const loginHref = safeReturnTo
+    ? `/login?returnTo=${encodeURIComponent(safeReturnTo)}${intent ? `&intent=${intent}` : ''}`
+    : '/login';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -67,7 +74,7 @@ const Register: React.FC = () => {
               Didn't receive the email? Check your spam folder or try registering again.
             </p>
             <HardLink
-              to="/login"
+              to={loginHref}
               className="inline-block bg-gradient-to-r from-primary-400 to-primary-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary-500 hover:to-primary-600 transition-all duration-300 shadow-lg"
             >
               Go to Login
@@ -88,7 +95,7 @@ const Register: React.FC = () => {
           <p className="mt-4 text-center text-gray-600">
             Or{' '}
             <HardLink
-              to="/login"
+              to={loginHref}
               className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
             >
               sign in to your existing account
