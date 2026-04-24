@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { User, Lock, Mail, Eye, EyeOff, CheckCircle, Briefcase, Building2 } from 'lucide-react';
+import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 
 const Register: React.FC = () => {
@@ -23,19 +24,25 @@ const Register: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [registered, setRegistered] = useState(false);
+  const [honeypot, setHoneypot] = useState(''); // bots auto-fill; humans never see it
+  const formMountedAt = React.useRef(Date.now());
   const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
+    // Anti-spam gates — silent reject so bots don't adapt
+    if (honeypot.trim() !== '') return;
+    if (Date.now() - formMountedAt.current < 2500) return;
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters long');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
       return;
     }
 
@@ -218,7 +225,20 @@ const Register: React.FC = () => {
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
+              <PasswordStrengthMeter password={password} />
             </div>
+
+            {/* Honeypot — hidden from humans, bots auto-fill and get silently dropped */}
+            <input
+              type="text"
+              name="website"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute left-[-9999px] opacity-0 pointer-events-none"
+            />
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">
