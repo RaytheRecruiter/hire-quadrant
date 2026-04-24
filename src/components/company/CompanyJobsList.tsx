@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from '../HardLink';
-import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import ScreeningQuestionsEditor from '../ScreeningQuestionsEditor';
 import type { ScreeningQuestion } from '../../types/screening';
@@ -15,6 +16,29 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
   const [questions, setQuestions] = useState<ScreeningQuestion[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [sponsorBusyId, setSponsorBusyId] = useState<string | null>(null);
+  // Local override so the select reflects saved state without a full refresh
+  const [sponsorTiers, setSponsorTiers] = useState<Record<string, number>>({});
+
+  const getTier = (job: any): number => {
+    if (job.id in sponsorTiers) return sponsorTiers[job.id];
+    return job.is_sponsored ? job.sponsor_tier ?? 1 : 0;
+  };
+
+  const updateSponsor = async (jobId: string, tier: number) => {
+    setSponsorBusyId(jobId);
+    const { error: updateError } = await supabase
+      .from('jobs')
+      .update({ is_sponsored: tier > 0, sponsor_tier: tier })
+      .eq('id', jobId);
+    setSponsorBusyId(null);
+    if (updateError) {
+      toast.error(updateError.message);
+      return;
+    }
+    setSponsorTiers((m) => ({ ...m, [jobId]: tier }));
+    toast.success(tier === 0 ? 'Listing unsponsored' : `Promoted to tier ${tier}`);
+  };
 
   const openEditor = (job: any) => {
     setEditingJobId(job.id);
@@ -67,6 +91,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posted</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apps</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Screening</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sponsor</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -120,6 +145,25 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
                     ) : (
                       <span className="text-xs text-gray-400">None</span>
                     )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={getTier(job)}
+                        onChange={(e) => updateSponsor(job.id, Number(e.target.value))}
+                        disabled={sponsorBusyId === job.id}
+                        aria-label="Sponsor tier"
+                        className="text-xs rounded-md border border-gray-200 bg-white text-gray-700 px-2 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-60"
+                      >
+                        <option value={0}>Off</option>
+                        <option value={1}>Tier 1</option>
+                        <option value={2}>Tier 2</option>
+                        <option value={3}>Tier 3</option>
+                      </select>
+                      {getTier(job) > 0 && (
+                        <Sparkles className="h-3.5 w-3.5 text-amber-500" aria-label="Sponsored" />
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
