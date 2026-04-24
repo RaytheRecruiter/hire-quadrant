@@ -4,7 +4,8 @@ import HardLink from './HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import {
   Grid3X3, User, LogOut, BarChart3, FileText, Building2, Bookmark, Bell, Search, BookOpen,
-  ChevronDown, Menu, X, Settings, Briefcase, Sparkles, GraduationCap
+  ChevronDown, Menu, X, Settings, Briefcase, Sparkles, GraduationCap,
+  MessageSquare, Star, Users as UsersIcon, HelpCircle, Key
 } from 'lucide-react';
 import { getInitials, colorFromString } from '../utils/companyLogo';
 import DarkModeToggle from './DarkModeToggle';
@@ -116,10 +117,14 @@ const Header: React.FC = () => {
               <div className="flex items-center gap-1">
                 {!isAdmin && !isCompany && (
                   <>
-                    <HardLink to="/saved" title="Saved jobs" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
-                      <Bookmark className="h-5 w-5" />
+                    <HardLink to="/my-jobs" title="My jobs" className="hidden md:flex items-center gap-1.5 h-9 px-3 rounded-lg text-sm font-medium text-secondary-700 hover:bg-gray-50 transition-colors">
+                      <Briefcase className="h-4 w-4" />
+                      My jobs
                     </HardLink>
-                    <HardLink to="/alerts" title="Job alerts" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
+                    <HardLink to="/messages" title="Messages" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
+                      <MessageSquare className="h-5 w-5" />
+                    </HardLink>
+                    <HardLink to="/notifications" title="Notifications" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
                       <Bell className="h-5 w-5" />
                     </HardLink>
                   </>
@@ -152,6 +157,12 @@ const Header: React.FC = () => {
                       </HardLink>
                       {!isAdmin && !isCompany && (
                         <>
+                          <HardLink to="/my-reviews" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                            <Star className="h-4 w-4 text-gray-400" /> My Reviews
+                          </HardLink>
+                          <HardLink to="/demographics" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                            <UsersIcon className="h-4 w-4 text-gray-400" /> My Demographics
+                          </HardLink>
                           <HardLink to="/saved" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
                             <Bookmark className="h-4 w-4 text-gray-400" /> Saved Jobs
                           </HardLink>
@@ -165,6 +176,15 @@ const Header: React.FC = () => {
                           <Briefcase className="h-4 w-4 text-gray-400" /> Company Dashboard
                         </HardLink>
                       )}
+                      <HardLink to="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-t border-gray-100" onClick={() => setUserMenuOpen(false)}>
+                        <Settings className="h-4 w-4 text-gray-400" /> Settings
+                      </HardLink>
+                      <HardLink to="/help" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                        <HelpCircle className="h-4 w-4 text-gray-400" /> Help
+                      </HardLink>
+                      <HardLink to="/reset-password" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                        <Key className="h-4 w-4 text-gray-400" /> Reset Password
+                      </HardLink>
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-gray-100"
