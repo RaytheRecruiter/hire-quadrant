@@ -154,6 +154,23 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
 
     setSaving(true);
     try {
+      // Rate-limit pre-check (skip for edits — we're only capping new reviews)
+      if (!existing) {
+        const { data: gate, error: gateErr } = await supabase.rpc('can_submit_review');
+        if (!gateErr && gate && gate.allowed === false) {
+          if (gate.reason === 'rate_limited') {
+            toast.error(
+              `You've submitted ${gate.recent_count}/${gate.cap} reviews in the last 24 hours. Try again later.`,
+              { duration: 6000 },
+            );
+          } else {
+            toast.error('Unable to submit right now.');
+          }
+          setSaving(false);
+          return;
+        }
+      }
+
       const payload = {
         company_id: companyId,
         author_id: user.id,
