@@ -8,6 +8,7 @@ import HardLink from '../components/HardLink';
 import TrendingSection from '../components/TrendingSection';
 import NewsletterSignup from '../components/NewsletterSignup';
 import RecommendedJobs from '../components/RecommendedJobs';
+import CandidateHomeDashboard from '../components/CandidateHomeDashboard';
 import { useSEO } from '../hooks/useSEO';
 import CompanyLogo from '../components/CompanyLogo';
 
@@ -248,6 +249,7 @@ const Home: React.FC = () => {
     <>
       {helmet}
       <div className="min-h-screen">
+      {user && <CandidateHomeDashboard />}
       {/* Hero */}
       <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50/60 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 pt-16 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,53,148,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(61,107,175,0.18),transparent_60%)] pointer-events-none" />
