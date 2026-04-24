@@ -184,7 +184,7 @@ insert into help_articles (slug, question, answer, audience, section, sort_index
  $body$Monthly plans: no refunds for the current month, but you can cancel to prevent the next renewal. Annual plans: pro-rated refund within the first 30 days. Email support@hirequadrant.com for refund requests.$body$,
  'everyone', 'Account & Billing', 3),
 
-('billing-tax-exempt', 'We're tax-exempt. How do I apply that to my account?',
+('billing-tax-exempt', 'We''re tax-exempt. How do I apply that to my account?',
  $body$Email your resale or tax-exempt certificate to billing@hirequadrant.com. We'll flag your account; future invoices exclude applicable sales tax.$body$,
  'everyone', 'Account & Billing', 4),
 
@@ -197,7 +197,7 @@ insert into help_articles (slug, question, answer, audience, section, sort_index
  $body$Your display name is not shown on reviews by default — only the reviewer's role and time-with-company. Your account must still be a real one (no throwaways), so we can enforce rate limits and investigate abuse.$body$,
  'everyone', 'Trust & Safety', 2),
 
-('trust-review-rate-limit', 'Why can't I post a 4th review today?',
+('trust-review-rate-limit', 'Why can''t I post a 4th review today?',
  $body$We limit reviews to 3 per user per 24 hours to prevent spam and brigading. The limit resets on a rolling basis.$body$,
  'everyone', 'Trust & Safety', 3),
 
@@ -205,7 +205,7 @@ insert into help_articles (slug, question, answer, audience, section, sort_index
  $body$/settings → Two-factor authentication. Scan the QR in your authenticator app (Google Authenticator, 1Password, Authy), enter the 6-digit code, save the recovery codes somewhere safe.$body$,
  'everyone', 'Trust & Safety', 4),
 
-('trust-sessions', 'How do I see where I'm signed in?',
+('trust-sessions', 'How do I see where I''m signed in?',
  $body$/settings → Active sessions. View every active session with device type + last active time. Click "Sign out all others" to end sessions except the current one.$body$,
  'everyone', 'Trust & Safety', 5),
 
@@ -214,7 +214,7 @@ insert into help_articles (slug, question, answer, audience, section, sort_index
  'everyone', 'Trust & Safety', 6),
 
 -- ===== TECHNICAL (5) =====
-('technical-why-white-page', 'I'm seeing a white page. What do I do?',
+('technical-why-white-page', 'I''m seeing a white page. What do I do?',
  $body$Hard-refresh (Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows/Linux). If the problem persists in a fresh incognito window, report at /support — include your browser version and the exact URL.$body$,
  'everyone', 'Technical', 1),
 
@@ -226,7 +226,7 @@ insert into help_articles (slug, question, answer, audience, section, sort_index
  $body$Not yet. The site is fully responsive — install it to your home screen for an app-like experience. A native app is on the roadmap.$body$,
  'everyone', 'Technical', 3),
 
-('technical-notifications-not-arriving', 'I'm not getting email notifications. Why?',
+('technical-notifications-not-arriving', 'I''m not getting email notifications. Why?',
  $body$Check /settings → Notification preferences to confirm the category is enabled. Then check your spam folder for mail from notify@hirequadrant.com. Gmail sometimes categorizes as Promotions.$body$,
  'everyone', 'Technical', 4),
 
