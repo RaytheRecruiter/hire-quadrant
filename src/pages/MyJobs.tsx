@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Bookmark, Inbox, Briefcase, CalendarClock, Archive, Loader2 } from 'lucide-react';
+import { Bookmark, Inbox, Briefcase, CalendarClock, Archive, Loader2, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
@@ -14,6 +15,7 @@ interface JobRow {
   company: string;
   location: string | null;
   posted_date?: string | null;
+  application_id?: string | null; // populated when viewing the Applied tab
 }
 
 const TABS: Array<{ id: Tab; label: string; icon: React.ComponentType<{ className?: string }> }> = [
@@ -45,9 +47,13 @@ const MyJobs: React.FC = () => {
       } else if (active === 'applied') {
         const { data } = await supabase
           .from('applications')
-          .select('job:jobs(id, title, company, location, posted_date)')
+          .select('id, job:jobs(id, title, company, location, posted_date)')
           .eq('user_id', user.id);
-        setJobs(((data ?? []).map((r: any) => r.job).filter(Boolean)) as JobRow[]);
+        setJobs(
+          ((data ?? [])
+            .filter((r: any) => r.job)
+            .map((r: any) => ({ ...r.job, application_id: r.id }))) as JobRow[],
+        );
       } else if (active === 'archived') {
         const { data } = await supabase
           .from('job_skips')
@@ -68,6 +74,14 @@ const MyJobs: React.FC = () => {
   useEffect(() => {
     load();
   }, [load]);
+
+  const withdraw = async (applicationId: string) => {
+    if (!window.confirm('Withdraw this application?')) return;
+    const { error } = await supabase.from('applications').delete().eq('id', applicationId);
+    if (error) { toast.error(error.message); return; }
+    toast.success('Application withdrawn');
+    load();
+  };
 
   if (authLoading) return null;
   if (!isAuthenticated) return <Navigate to="/login?returnTo=/my-jobs" replace />;
@@ -141,19 +155,35 @@ const MyJobs: React.FC = () => {
             ) : (
               <ul className="divide-y divide-gray-100 dark:divide-slate-700">
                 {jobs.map((j) => (
-                  <li key={j.id} className="py-3">
-                    <HardLink
-                      to={`/jobs/${j.id}`}
-                      className="flex items-start justify-between gap-3 hover:bg-gray-50 dark:hover:bg-slate-700/50 -mx-3 px-3 py-2 rounded-lg"
-                    >
-                      <div className="min-w-0">
+                  <li key={`${j.id}-${j.application_id ?? 'x'}`} className="py-3">
+                    <div className="flex items-start justify-between gap-3 hover:bg-gray-50 dark:hover:bg-slate-700/50 -mx-3 px-3 py-2 rounded-lg">
+                      <HardLink to={`/jobs/${j.id}`} className="min-w-0 flex-1">
                         <p className="font-medium text-secondary-900 dark:text-white truncate">{j.title}</p>
                         <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
                           {j.company}
                           {j.location ? ` · ${j.location}` : ''}
                         </p>
-                      </div>
-                    </HardLink>
+                      </HardLink>
+                      {active === 'applied' && j.application_id && (
+                        <button
+                          type="button"
+                          onClick={() => withdraw(j.application_id!)}
+                          title="Withdraw application"
+                          className="inline-flex items-center gap-1 text-xs text-rose-600 hover:text-rose-700 px-2 py-1 rounded hover:bg-rose-50 dark:hover:bg-rose-900/20 flex-shrink-0"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                          Withdraw
+                        </button>
+                      )}
+                      {active === 'saved' && (
+                        <HardLink
+                          to={`/jobs/${j.id}#apply-form`}
+                          className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20 flex-shrink-0"
+                        >
+                          Apply
+                        </HardLink>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>

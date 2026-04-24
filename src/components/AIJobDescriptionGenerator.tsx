@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Sparkles, Loader2, Copy, Check } from 'lucide-react';
 import { generateJobDescription } from '../utils/aiClient';
+import InclusiveLanguageLinter from './InclusiveLanguageLinter';
 
 interface Props {
   title?: string;
@@ -106,6 +107,9 @@ Competitive equity + health benefits"
             </button>
           </div>
           <pre className="whitespace-pre-wrap text-sm text-gray-800 dark:text-slate-200 font-sans">{description}</pre>
+          <div className="mt-3">
+            <InclusiveLanguageLinter text={description} />
+          </div>
         </div>
       )}
     </div>

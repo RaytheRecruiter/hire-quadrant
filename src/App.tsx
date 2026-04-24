@@ -28,6 +28,7 @@ import Cookies from './pages/Cookies';
 import Support from './pages/Support';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
+import CookieConsent from './components/CookieConsent';
 
 // Heavier / less-visited routes are lazy-loaded to keep the main bundle small.
 const CompanyProfile = lazy(() => import('./components/CompanyProfile'));
@@ -127,6 +128,7 @@ function App() {
                       </Routes>
                     </Suspense>
                     <Footer />
+                    <CookieConsent />
                   </div>
                 </PageTracker>
               </Router>
