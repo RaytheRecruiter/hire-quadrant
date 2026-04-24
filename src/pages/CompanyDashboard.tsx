@@ -9,6 +9,7 @@ import TeamInvitesPanel from '../components/company/TeamInvites';
 import CompanyUpdatesEditor from '../components/company/CompanyUpdatesEditor';
 import CompanyReviewsPanel from '../components/company/CompanyReviewsPanel';
 import CompanyAnalyticsPanel from '../components/company/CompanyAnalyticsPanel';
+import EmployerBenchmarkPanel from '../components/company/EmployerBenchmarkPanel';
 import CompanyQAPanel from '../components/company/CompanyQAPanel';
 import WhyJoinUsPanel from '../components/company/WhyJoinUsPanel';
 import PendingApprovalBanner from '../components/company/PendingApprovalBanner';
@@ -19,6 +20,7 @@ const TABS = [
   { id: 'jobs', label: 'My Jobs', icon: Briefcase },
   { id: 'applicants', label: 'Applicants', icon: Users },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'benchmarks', label: 'Benchmarks', icon: BarChart3 },
   { id: 'reviews', label: 'Reviews', icon: Star },
   { id: 'updates', label: 'Updates', icon: Megaphone },
   { id: 'qa', label: 'Q&A', icon: HelpCircle },
@@ -126,6 +128,9 @@ const CompanyDashboard: React.FC = () => {
               )}
               {activeTab === 'analytics' && company?.id && (
                 <CompanyAnalyticsPanel companyId={company.id} />
+              )}
+              {activeTab === 'benchmarks' && company?.id && (
+                <EmployerBenchmarkPanel companyId={company.id} />
               )}
               {activeTab === 'reviews' && company?.id && (
                 <CompanyReviewsPanel companyId={company.id} />
