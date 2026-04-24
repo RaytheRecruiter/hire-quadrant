@@ -50,8 +50,7 @@ create policy saved_searches_self
   with check (auth.uid() = user_id);
 
 -- 3. Application status history ---------------------------------------------
--- NOTE: job_applications.id is TEXT (format `app-{user}-{job}-{ts}`),
--- so application_id here must also be text.
+-- NOTE: job_applications.id is TEXT, so application_id must also be text.
 create table if not exists application_status_history (
   id uuid primary key default gen_random_uuid(),
   application_id text not null,
@@ -61,7 +60,10 @@ create table if not exists application_status_history (
   note text,
   created_at timestamptz not null default now()
 );
--- Heal partial runs that created the column as uuid.
+
+-- Heal partial runs that created the column as uuid. Policies that
+-- reference application_id block ALTER COLUMN, so drop them first.
+drop policy if exists app_status_history_read on application_status_history;
 alter table application_status_history
   alter column application_id type text using application_id::text;
 
@@ -70,7 +72,6 @@ create index if not exists app_status_history_app_idx
 
 alter table application_status_history enable row level security;
 
-drop policy if exists app_status_history_read on application_status_history;
 create policy app_status_history_read
   on application_status_history for select
   using (
