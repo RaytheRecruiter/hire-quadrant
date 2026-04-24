@@ -68,24 +68,24 @@ const BlogPost: React.FC = () => {
     fetchPost();
   }, [slug]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
 
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-center">
+      <div className="min-h-screen flex items-center justify-center text-center bg-gray-50 dark:bg-slate-950">
         <div>
-          <BookOpen className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-          <h2 className="text-xl font-bold mb-2">Post not found</h2>
-          <HardLink to="/blog" className="text-primary-600 hover:underline">← Back to blog</HardLink>
+          <BookOpen className="mx-auto h-12 w-12 text-gray-300 dark:text-slate-600 mb-3" />
+          <h2 className="text-xl font-bold mb-2 text-secondary-900 dark:text-white">Post not found</h2>
+          <HardLink to="/blog" className="text-primary-600 dark:text-primary-400 hover:underline">← Back to blog</HardLink>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <HardLink to="/blog" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 font-medium mb-6">
+        <HardLink to="/blog" className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium mb-6">
           <ArrowLeft className="h-4 w-4" /> Back to Career Resources
         </HardLink>
 
@@ -100,9 +100,9 @@ const BlogPost: React.FC = () => {
           />
         )}
 
-        <article className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 md:p-12">
+        <article className="bg-white/90 dark:bg-slate-800 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 dark:border-slate-700 p-8 md:p-12">
           <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400 mb-4">
-            <span className="px-3 py-0.5 rounded-full bg-primary-50 text-primary-700 font-semibold uppercase tracking-wide">
+            <span className="px-3 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-semibold uppercase tracking-wide">
               {post.category}
             </span>
             <span>{post.author_name}</span>
@@ -114,7 +114,7 @@ const BlogPost: React.FC = () => {
           </div>
           <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-6 leading-tight">{post.title}</h1>
           {post.excerpt && <p className="text-xl text-gray-600 dark:text-slate-400 mb-8 leading-relaxed">{post.excerpt}</p>}
-          <div className="prose max-w-none mb-8">{renderBody(post.body)}</div>
+          <div className="prose dark:prose-invert max-w-none mb-8">{renderBody(post.body)}</div>
           <div className="border-t border-gray-200 dark:border-slate-700 pt-8">
             <p className="text-sm text-gray-600 dark:text-slate-400 mb-4">Share this article:</p>
             <ShareButtons title={post.title} url={window.location.href} />
