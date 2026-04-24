@@ -3,6 +3,8 @@ import { X, Star, Save, Loader2, Tag, Bookmark, Sparkles } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import { screenCandidate, CandidateScreening } from '../../utils/aiClient';
 import ApplicantNotesAndTags from './ApplicantNotesAndTags';
+import ScheduleInterviewModal from './ScheduleInterviewModal';
+import { CalendarClock } from 'lucide-react';
 
 interface Props {
   open: boolean;
@@ -14,6 +16,7 @@ interface Props {
 }
 
 const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, job, onClose, onSaved }) => {
+  const [showSchedule, setShowSchedule] = useState(false);
   const [rating, setRating] = useState<number>(application?.employer_rating || 0);
   const [notes, setNotes] = useState<string>(application?.employer_notes || '');
   const [tagsInput, setTagsInput] = useState<string>((application?.employer_tags || []).join(', '));
@@ -209,6 +212,14 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
         </div>
 
         <div className="border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => setShowSchedule(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+          >
+            <CalendarClock className="h-4 w-4" />
+            Schedule interview
+          </button>
           <button onClick={onClose} className="px-5 py-2.5 rounded-xl text-gray-600 dark:text-slate-400 font-medium hover:bg-gray-100 dark:hover:bg-slate-700 dark:bg-slate-700">
             Cancel
           </button>
@@ -222,6 +233,15 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
           </button>
         </div>
       </div>
+      {showSchedule && application?.id && (
+        <ScheduleInterviewModal
+          applicationId={application.id}
+          candidateName={candidate?.name ?? application.user_name ?? null}
+          candidateEmail={candidate?.email ?? application.user_email ?? null}
+          jobTitle={job?.title ?? null}
+          onClose={() => setShowSchedule(false)}
+        />
+      )}
     </div>
   );
 };

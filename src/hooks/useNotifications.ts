@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
+import { useRealtimeNotifications } from './useRealtimeNotifications';
 
 export interface Notification {
   id: string;
@@ -33,11 +34,13 @@ export function useNotifications() {
   useEffect(() => {
     load();
     if (!user?.id) return;
-    // Poll once a minute while the tab is open — cheap and covers us until
-    // realtime subscriptions are wired.
-    const t = window.setInterval(load, 60_000);
+    // Realtime handles hot inserts; the poll is a safety net for
+    // connection drops.
+    const t = window.setInterval(load, 120_000);
     return () => window.clearInterval(t);
   }, [load, user?.id]);
+
+  useRealtimeNotifications(user?.id ?? null, load);
 
   const unreadCount = items.filter((n) => !n.read_at).length;
 
