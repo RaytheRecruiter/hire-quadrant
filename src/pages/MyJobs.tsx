@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Bookmark, Inbox, Briefcase, CalendarClock, Archive, Loader2, X } from 'lucide-react';
+import { Bookmark, Inbox, Briefcase, CalendarClock, Archive, Loader2, X, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
+import ApplicationStatusTimeline from '../components/ApplicationStatusTimeline';
 
 type Tab = 'saved' | 'invitations' | 'applied' | 'interviews' | 'archived';
 
@@ -31,6 +32,7 @@ const MyJobs: React.FC = () => {
   const [active, setActive] = useState<Tab>('saved');
   const [jobs, setJobs] = useState<JobRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [expandedAppId, setExpandedAppId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (!user?.id) return;
@@ -154,38 +156,69 @@ const MyJobs: React.FC = () => {
               </div>
             ) : (
               <ul className="divide-y divide-gray-100 dark:divide-slate-700">
-                {jobs.map((j) => (
-                  <li key={`${j.id}-${j.application_id ?? 'x'}`} className="py-3">
-                    <div className="flex items-start justify-between gap-3 hover:bg-gray-50 dark:hover:bg-slate-700/50 -mx-3 px-3 py-2 rounded-lg">
-                      <HardLink to={`/jobs/${j.id}`} className="min-w-0 flex-1">
-                        <p className="font-medium text-secondary-900 dark:text-white truncate">{j.title}</p>
-                        <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
-                          {j.company}
-                          {j.location ? ` · ${j.location}` : ''}
-                        </p>
-                      </HardLink>
-                      {active === 'applied' && j.application_id && (
-                        <button
-                          type="button"
-                          onClick={() => withdraw(j.application_id!)}
-                          title="Withdraw application"
-                          className="inline-flex items-center gap-1 text-xs text-rose-600 hover:text-rose-700 px-2 py-1 rounded hover:bg-rose-50 dark:hover:bg-rose-900/20 flex-shrink-0"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                          Withdraw
-                        </button>
-                      )}
-                      {active === 'saved' && (
-                        <HardLink
-                          to={`/jobs/${j.id}#apply-form`}
-                          className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20 flex-shrink-0"
-                        >
-                          Apply
+                {jobs.map((j) => {
+                  const appId = j.application_id ?? null;
+                  const isOpen = appId && expandedAppId === appId;
+                  return (
+                    <li key={`${j.id}-${appId ?? 'x'}`} className="py-3">
+                      <div className="flex items-start justify-between gap-3 hover:bg-gray-50 dark:hover:bg-slate-700/50 -mx-3 px-3 py-2 rounded-lg">
+                        <HardLink to={`/jobs/${j.id}`} className="min-w-0 flex-1">
+                          <p className="font-medium text-secondary-900 dark:text-white truncate">{j.title}</p>
+                          <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
+                            {j.company}
+                            {j.location ? ` · ${j.location}` : ''}
+                          </p>
                         </HardLink>
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                          {active === 'applied' && appId && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => setExpandedAppId(isOpen ? null : appId)}
+                                title="View status timeline"
+                                className="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-gray-800 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-slate-700"
+                              >
+                                {isOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                                Status
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => withdraw(appId)}
+                                title="Withdraw application"
+                                className="inline-flex items-center gap-1 text-xs text-rose-600 hover:text-rose-700 px-2 py-1 rounded hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                              >
+                                <X className="h-3.5 w-3.5" />
+                                Withdraw
+                              </button>
+                            </>
+                          )}
+                          {active === 'saved' && (
+                            <HardLink
+                              to={`/jobs/${j.id}#apply-form`}
+                              className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20"
+                            >
+                              Apply
+                            </HardLink>
+                          )}
+                          {active === 'archived' && (
+                            <HardLink
+                              to={`/jobs/${j.id}#apply-form`}
+                              className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20"
+                            >
+                              <RotateCcw className="h-3.5 w-3.5" />
+                              Apply again
+                            </HardLink>
+                          )}
+                        </div>
+                      </div>
+                      {isOpen && appId && (
+                        <div className="ml-2 mt-2 pl-4 border-l-2 border-primary-100 dark:border-primary-900/40">
+                          <ApplicationStatusTimeline applicationId={appId} />
+                        </div>
                       )}
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

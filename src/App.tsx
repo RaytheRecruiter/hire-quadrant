@@ -57,6 +57,7 @@ const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const CompanyPortal = lazy(() => import('./pages/CompanyPortal'));
 const SalaryInsightsPage = lazy(() => import('./pages/SalaryInsightsPage'));
 const BestCompaniesPage = lazy(() => import('./pages/BestCompaniesPage'));
+const BrowseJobs = lazy(() => import('./pages/BrowseJobs'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -85,6 +86,7 @@ function App() {
                     <Suspense fallback={<RouteFallback />}>
                       <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/jobs" element={<BrowseJobs />} />
                 <Route path="/jobs/:id" element={<JobDetails />} />
                 <Route path="/job/:slug" element={<JobDetails />} />
                 <Route path="/companies/:id" element={<CompanyProfile />} />
