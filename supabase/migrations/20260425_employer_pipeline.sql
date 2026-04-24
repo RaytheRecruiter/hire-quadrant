@@ -6,11 +6,13 @@
 -- 1. Applicant notes --------------------------------------------------------
 create table if not exists applicant_notes (
   id uuid primary key default gen_random_uuid(),
-  application_id uuid not null,
+  application_id text not null, -- matches job_applications.id (text)
   author_id uuid not null references auth.users(id) on delete cascade,
   body text not null check (length(body) between 1 and 2000),
   created_at timestamptz not null default now()
 );
+alter table applicant_notes
+  alter column application_id type text using application_id::text;
 
 create index if not exists applicant_notes_app_idx
   on applicant_notes(application_id, created_at desc);
@@ -46,12 +48,14 @@ create policy applicant_notes_delete
 -- 2. Applicant tags ---------------------------------------------------------
 create table if not exists applicant_tags (
   id uuid primary key default gen_random_uuid(),
-  application_id uuid not null,
+  application_id text not null,
   tag text not null check (length(tag) between 1 and 40),
   author_id uuid not null references auth.users(id) on delete cascade,
   created_at timestamptz not null default now(),
   unique(application_id, tag)
 );
+alter table applicant_tags
+  alter column application_id type text using application_id::text;
 
 create index if not exists applicant_tags_app_idx on applicant_tags(application_id);
 
@@ -145,7 +149,7 @@ create policy company_team_invites_write
 -- 5. Scheduled interviews ---------------------------------------------------
 create table if not exists scheduled_interviews (
   id uuid primary key default gen_random_uuid(),
-  application_id uuid not null,
+  application_id text not null,
   scheduled_for timestamptz not null,
   duration_minutes int not null default 30,
   location text,
@@ -155,6 +159,9 @@ create table if not exists scheduled_interviews (
   created_by uuid not null references auth.users(id) on delete cascade,
   created_at timestamptz not null default now()
 );
+
+alter table scheduled_interviews
+  alter column application_id type text using application_id::text;
 
 create index if not exists scheduled_interviews_app_idx
   on scheduled_interviews(application_id, scheduled_for);
