@@ -54,6 +54,62 @@ const INDUSTRIES: Array<{ name: string; sizes: string[]; titles: string[] }> = [
 
 const DEFAULT_PASSWORD = 'TestPass123!';
 
+// Curated US-English strings — replaces faker.lorem (which emits Latin).
+const EN_DESCRIPTIONS = [
+  'A growing team focused on delivering practical software that solves real problems for customers. We believe in craft, transparency, and sustainable pace.',
+  'We build tools that help businesses operate more efficiently. Our culture prioritizes clear communication, deep work, and respect for each other\'s time.',
+  'A product-led organization that invests in engineering excellence and healthy team dynamics. We ship regularly and iterate based on customer feedback.',
+  'Mission-driven company dedicated to improving outcomes through technology. We partner closely with customers and treat feedback as a gift.',
+  'We combine domain expertise with modern engineering to deliver reliable products. Our team is distributed, inclusive, and proud of what we ship.',
+  'An established player in our space, known for rigorous quality standards and long-term customer relationships. We invest in our people and our infrastructure.',
+];
+const EN_TITLES = [
+  'Great place to grow early in your career', 'Solid compensation, rigid management',
+  'Steady work, decent benefits, slow pace', 'Real impact, real long hours',
+  'Good team, bureaucratic process', 'Healthy culture but flat career path',
+  'Strong mentorship from senior engineers', 'Fun product, disorganized execution',
+  'Excellent leadership, thin staffing', 'Fair pay, great work-life balance',
+  'Mission-driven team but tight budgets', 'Interesting problems, limited upward mobility',
+  'Friendly coworkers, inconsistent management', 'Fast-paced, supportive, worth the ride',
+  'Respectful environment, outdated tooling', 'Remote-friendly with real ownership',
+  'High expectations, high rewards', 'Decent starting role, limited long-term growth',
+  'Steep learning curve, real investment in people', 'Fair review cycles, good benefits package',
+];
+const EN_PROS = [
+  'Competitive pay and strong benefits. Health, dental, and 401(k) match are all above market.',
+  'Flexible hours and legitimate remote work. Core hours are respected and the culture trusts you to manage your own time.',
+  'Smart, supportive coworkers. Most problems get solved by a quick Slack ping and the team genuinely celebrates wins.',
+  'Real learning and growth opportunities, including a generous education stipend and paid conferences.',
+  'Great leadership that communicates clearly. Leadership shares strategy openly in all-hands and actually answers tough questions.',
+  'Meaningful work that helps real customers. You can see the impact of what you ship in user feedback.',
+  'Modern tech stack and the budget to upgrade tooling as needed.',
+  'Reasonable workload, PTO is respected, and on-call is handled fairly.',
+  'Inclusive culture with active ERGs and visible investment in DEI.',
+  'Strong onboarding — buddy system, shadowing, and clear 30/60/90 goals.',
+  'Healthy feedback culture. Performance reviews are specific and actionable, not a surprise.',
+  'Generous parental leave and family support.',
+  'Transparent compensation bands — levels and salaries are documented internally.',
+  'Good balance of autonomy and support. You drive your own work but never feel abandoned.',
+  'Reasonable meeting load — async-first where it makes sense.',
+];
+const EN_CONS = [
+  'Salary bands compress after a few years — raises do not keep up with promotions.',
+  'Legacy systems still running in production; migrations get deprioritized each quarter.',
+  'Promotion criteria can feel opaque and vary by manager.',
+  'Some teams are understaffed; on-call rotation feels heavy.',
+  'Reorgs happen frequently and can disrupt momentum mid-project.',
+  'Cross-team communication is slower than it should be at this size.',
+  'Benefits are good but office perks have been trimmed post-pandemic.',
+  'Performance reviews are thorough but time-consuming.',
+  'Tight deadlines occasionally lead to late nights near launches.',
+  'Remote employees sometimes feel out of the loop on decisions made in the office.',
+  'Documentation is inconsistent — tribal knowledge still dominates.',
+  'Hiring bar is high which slows team growth.',
+  'Some tooling investments trail industry peers.',
+  'Office locations are limited for hybrid employees.',
+  'Career ladders for specialists are less developed than for generalists.',
+];
+
 function getClient(): SupabaseClient {
   const url = process.env.VITE_SUPABASE_URL;
   const serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
@@ -164,7 +220,7 @@ async function seedCompanies(supabase: SupabaseClient): Promise<Array<{ id: stri
           name,
           display_name: name,
           slug,
-          description: faker.company.catchPhrase() + '. ' + faker.lorem.paragraph(),
+          description: pick(EN_DESCRIPTIONS),
           industry: industry.name,
           size: pick(industry.sizes),
           location: `${faker.location.city()}, ${faker.location.state({ abbreviated: true })}`,
@@ -250,9 +306,9 @@ async function seedReviewsFor(
       rating_management: within(overall),
       rating_culture: within(overall),
       rating_career_growth: within(overall),
-      title: faker.lorem.sentence({ min: 4, max: 8 }).replace(/\.$/, ''),
-      pros: faker.lorem.sentences({ min: 1, max: 3 }),
-      cons: faker.lorem.sentences({ min: 1, max: 3 }),
+      title: pick(EN_TITLES),
+      pros: pick(EN_PROS),
+      cons: pick(EN_CONS),
       employment_status: pick(['current', 'former']),
       job_title: pick(industry.titles),
       is_anonymous: Math.random() < 0.35,
