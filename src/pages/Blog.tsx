@@ -12,10 +12,43 @@ interface Post {
   title: string;
   excerpt: string;
   category: string;
+  job_trade: string | null;
   cover_image_url: string | null;
   author_name: string;
   published_at: string;
 }
+
+const jobTradeLabels: Record<string, string> = {
+  'software-engineer': 'Software Engineer',
+  'data-science': 'Data Science',
+  'product-management': 'Product Manager',
+  'design': 'Designer',
+  'devops-sre': 'DevOps / SRE',
+  'sales': 'Sales',
+  'marketing': 'Marketing',
+  'customer-success': 'Customer Success',
+  'engineering-management': 'Engineering Manager',
+  'cybersecurity': 'Cybersecurity',
+  'healthcare-tech': 'Healthcare Tech',
+  'fintech': 'Fintech',
+  'hiring-manager': 'Hiring Manager',
+};
+
+const jobTradeColors: Record<string, string> = {
+  'software-engineer': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+  'data-science': 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
+  'product-management': 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',
+  'design': 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
+  'devops-sre': 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  'sales': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+  'marketing': 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300',
+  'customer-success': 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300',
+  'engineering-management': 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200',
+  'cybersecurity': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  'healthcare-tech': 'bg-lime-100 text-lime-700 dark:bg-lime-900/30 dark:text-lime-300',
+  'fintech': 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300',
+  'hiring-manager': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
+};
 
 const categoryColors: Record<string, string> = {
   career: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
@@ -35,6 +68,7 @@ const Blog: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState<string>('all');
+  const [jobTrade, setJobTrade] = useState<string>('all');
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -43,10 +77,14 @@ const Blog: React.FC = () => {
         setError(null);
         let q = supabase
           .from('blog_posts')
-          .select('id, slug, title, excerpt, category, cover_image_url, author_name, published_at')
+          .select('id, slug, title, excerpt, category, job_trade, cover_image_url, author_name, published_at')
           .eq('published', true)
           .order('published_at', { ascending: false });
         if (category !== 'all') q = q.eq('category', category);
+        if (jobTrade !== 'all') {
+          if (jobTrade === 'general') q = q.is('job_trade', null);
+          else q = q.eq('job_trade', jobTrade);
+        }
         const { data, error: queryError } = await q;
         if (queryError) throw queryError;
         setPosts(data || []);
@@ -58,7 +96,7 @@ const Blog: React.FC = () => {
       }
     };
     fetchPosts();
-  }, [category]);
+  }, [category, jobTrade]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
@@ -71,20 +109,62 @@ const Blog: React.FC = () => {
           <p className="mt-2 text-gray-600 dark:text-slate-400 text-lg">Expert advice on resumes, interviews, and job hunting.</p>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-8">
-          {['all', 'career', 'resume', 'interview', 'hiring', 'industry'].map(c => (
+        <div className="mb-3">
+          <p className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-2">Topic</p>
+          <div className="flex flex-wrap gap-2">
+            {['all', 'career', 'resume', 'interview', 'hiring', 'industry'].map(c => (
+              <button
+                key={c}
+                onClick={() => setCategory(c)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  category === c
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
+                }`}
+              >
+                {c.charAt(0).toUpperCase() + c.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <p className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-2">For your role</p>
+          <div className="flex flex-wrap gap-2">
             <button
-              key={c}
-              onClick={() => setCategory(c)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                category === c
+              onClick={() => setJobTrade('all')}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                jobTrade === 'all'
                   ? 'bg-primary-500 text-white'
                   : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
               }`}
             >
-              {c.charAt(0).toUpperCase() + c.slice(1)}
+              All roles
             </button>
-          ))}
+            <button
+              onClick={() => setJobTrade('general')}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                jobTrade === 'general'
+                  ? 'bg-primary-500 text-white'
+                  : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
+              }`}
+            >
+              Universal
+            </button>
+            {Object.entries(jobTradeLabels).map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setJobTrade(key)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  jobTrade === key
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {loading ? (
@@ -127,9 +207,16 @@ const Blog: React.FC = () => {
                   </div>
                 )}
                 <div className="p-6">
-                  <span className={`inline-block px-3 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide mb-3 ${categoryColors[p.category] || 'bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-300'}`}>
-                    {p.category}
-                  </span>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    <span className={`inline-block px-3 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide ${categoryColors[p.category] || 'bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-300'}`}>
+                      {p.category}
+                    </span>
+                    {p.job_trade && (
+                      <span className={`inline-block px-3 py-0.5 rounded-full text-xs font-medium ${jobTradeColors[p.job_trade] || 'bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-300'}`}>
+                        {jobTradeLabels[p.job_trade] || p.job_trade}
+                      </span>
+                    )}
+                  </div>
                   <h2 className="text-xl font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors mb-2">
                     {p.title}
                   </h2>
