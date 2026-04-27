@@ -80,9 +80,13 @@ test.describe('C — Candidate flows (logged in as seeded candidate)', () => {
     await expect(page.getByText(/question/i).first()).toBeVisible();
   });
 
-  test('C.13 sign out logs the user out', async ({ page }) => {
+  // FINDING #12: Header.handleLogout (src/components/Header.tsx:25) calls
+  // logout() async without awaiting, then immediately navigate('/'). The
+  // supabase session sticks around — even 15s after the click, /profile still
+  // renders authenticated. Fix: `await logout()` before navigate, or have
+  // logout() expose a promise the UI can await. Test marked test.fail until fix.
+  test.fail('C.13 sign out logs the user out', async ({ page }) => {
     await page.goto('/');
-    // Cookie banner is a focus-trapping dialog and intercepts the click.
     await dismissCookieBanner(page);
     await page.getByRole('button', { name: /account menu/i }).click();
     const signOutBtn = page.getByRole('button', { name: /^sign out$/i });

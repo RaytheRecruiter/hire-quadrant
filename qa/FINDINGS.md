@@ -17,6 +17,7 @@ Discovered while building the Playwright suite against live `https://hirequadran
 | 9 | Employer dashboard has no "+ New Job" UI (QA doc references nonexistent button) | 📄 Documented |
 | 10 | `/reset-password` `<label>` tags not linked to inputs (no `htmlFor`) | 📄 a11y bug, documented |
 | 11 | **CSP `connect-src` blocks `api.pwnedpasswords.com` — HIBP silently fails** | ✅ **Fixed (`public/_headers`)** |
+| 12 | `Header.handleLogout` doesn't await `logout()` — supabase session lingers after sign-out (15s+ in test) | 📄 Documented; needs `await logout()` |
 
 Pending deploy: tests in this branch assert post-deploy behavior, so 3 smoke tests will fail against live until merged + deployed:
 - `/profile redirects to /login?returnTo=/profile`
