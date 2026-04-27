@@ -82,9 +82,9 @@ test.describe('C — Candidate flows (logged in as seeded candidate)', () => {
 
   test('C.13 sign out logs the user out', async ({ page }) => {
     await page.goto('/');
-    const avatar = page.getByRole('button', { name: /account|profile|avatar|menu/i }).first();
-    await avatar.click();
-    await page.getByRole('menuitem', { name: /sign out|log out/i }).click();
+    await page.getByRole('button', { name: /account menu/i }).click();
+    // Sign-out is a plain <button>, not menuitem (src/components/Header.tsx:201).
+    await page.getByRole('button', { name: /sign out/i }).click();
     await page.goto('/profile');
     await expect(page).toHaveURL(/\/login/);
   });

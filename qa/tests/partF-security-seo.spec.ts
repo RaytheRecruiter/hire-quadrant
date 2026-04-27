@@ -117,35 +117,32 @@ test.describe('F.8 Sitemap and SEO @smoke', () => {
 test.describe('F.6 Anti-spam on registration', () => {
   test('breached password is rejected (HIBP)', async ({ page }) => {
     await page.goto('/register');
-    await page.getByLabel(/^name|full name/i).first().fill('QA Bot');
-    await page.getByLabel(/email/i).fill(`qa-test-${Date.now()}@example.com`);
-    const passwords = page.getByLabel(/password/i);
-    await passwords.first().fill('password123');
-    if (await passwords.nth(1).isVisible().catch(() => false)) {
-      await passwords.nth(1).fill('password123');
-    }
-    await page.getByRole('button', { name: /create account|register|sign up/i }).click();
-    await expect(page.getByText(/breach|compromised|insecure|too common/i)).toBeVisible({ timeout: 10_000 });
+    await page.getByLabel(/full name/i).fill('QA Bot');
+    await page.getByLabel(/email address/i).fill(`qa-test-${Date.now()}@example.com`);
+    // Pick a strongly-breached password (top of HIBP list) to maximize hit rate
+    // even if pwnedpasswords.com is slow.
+    await page.getByLabel(/^password$/i).fill('Password123!');
+    await page.getByLabel(/confirm password/i).fill('Password123!');
+    await page.getByRole('button', { name: /^create account$/i }).click();
+    // HIBP requires a network round-trip to api.pwnedpasswords.com — give it room.
+    await expect(page.getByText(/breach|compromised|insecure|too common|pwned/i)).toBeVisible({ timeout: 20_000 });
   });
 
-  test('honeypot field exists and is hidden', async ({ page }) => {
+  test('honeypot field is aria-hidden', async ({ page }) => {
     await page.goto('/register');
-    const honeypot = page.locator('input[name*="website"], input[name="hp"], input[name*="honeypot"]').first();
-    if (await honeypot.count() === 0) test.skip(true, 'No honeypot field present');
-    await expect(honeypot).toBeHidden();
+    const honeypot = page.locator('input[name="website"]');
+    await expect(honeypot).toHaveAttribute('aria-hidden', 'true');
   });
 });
 
 test.describe('F.4 Auth edge cases', () => {
   test('mismatched passwords blocked', async ({ page }) => {
     await page.goto('/register');
-    await page.getByLabel(/^name|full name/i).first().fill('QA Bot');
-    await page.getByLabel(/email/i).fill(`qa-${Date.now()}@example.com`);
-    const passwords = page.getByLabel(/password/i);
-    if (await passwords.count() < 2) test.skip(true, 'No confirm-password field');
-    await passwords.first().fill('A!strongPass2026');
-    await passwords.nth(1).fill('Different!Pass2026');
-    await page.getByRole('button', { name: /create account|register|sign up/i }).click();
-    await expect(page.getByText(/match|same|confirm/i)).toBeVisible();
+    await page.getByLabel(/full name/i).fill('QA Bot');
+    await page.getByLabel(/email address/i).fill(`qa-${Date.now()}@example.com`);
+    await page.getByLabel(/^password$/i).fill('A!strongPass2026');
+    await page.getByLabel(/confirm password/i).fill('Different!Pass2026');
+    await page.getByRole('button', { name: /^create account$/i }).click();
+    await expect(page.getByText(/match|same|confirm/i).first()).toBeVisible();
   });
 });

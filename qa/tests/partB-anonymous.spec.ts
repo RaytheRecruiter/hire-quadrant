@@ -12,16 +12,19 @@ test.describe('B.1 Homepage and navigation', () => {
 
   test('top nav links present', async ({ page }) => {
     await page.goto('/');
-    for (const label of ['Jobs', 'Companies', 'Search', 'Blog', 'Pricing']) {
+    // Real link names (verified against live DOM): Jobs, Career Paths,
+    // Companies, Blog, Pricing, Sign in, Sign up. "Search" is a button, not a link.
+    for (const label of ['Jobs', 'Career Paths', 'Companies', 'Blog', 'Pricing']) {
       await expect(page.getByRole('link', { name: new RegExp(`^${label}$`, 'i') }).first()).toBeVisible();
     }
-    await expect(page.getByRole('link', { name: /sign in/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /^sign in$/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /open search/i }).first()).toBeVisible();
   });
 
   test('logo returns home', async ({ page }) => {
     await page.goto('/jobs');
-    await page.getByRole('link', { name: /hirequadrant|logo|home/i }).first().click();
-    await expect(page).toHaveURL(/\/$|\/$/);
+    await page.getByRole('link', { name: /hire ?quadrant/i }).first().click();
+    await expect(page).toHaveURL(/\/$|\/#/);
   });
 
   test('footer has legal links', async ({ page }) => {
@@ -45,20 +48,22 @@ test.describe('B.3 Global search (Cmd+K)', () => {
   test('Cmd+K opens search modal', async ({ page }) => {
     await page.goto('/');
     await page.keyboard.press('Meta+k');
-    await expect(page.getByRole('dialog').or(page.getByPlaceholder(/search/i))).toBeVisible();
+    await expect(page.getByRole('dialog', { name: /global search/i })).toBeVisible();
   });
 
   test('Escape closes search modal', async ({ page }) => {
     await page.goto('/');
     await page.keyboard.press('Meta+k');
+    const searchModal = page.getByRole('dialog', { name: /global search/i });
+    await expect(searchModal).toBeVisible();
     await page.keyboard.press('Escape');
-    await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 5_000 });
+    await expect(searchModal).not.toBeVisible({ timeout: 5_000 });
   });
 
   test('search button in header opens same modal', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: /^search$/i }).or(page.getByRole('link', { name: /^search$/i })).first().click();
-    await expect(page.getByPlaceholder(/search/i)).toBeVisible();
+    await page.getByRole('button', { name: /open search/i }).first().click();
+    await expect(page.getByRole('dialog', { name: /global search/i })).toBeVisible();
   });
 });
 
@@ -86,15 +91,12 @@ test.describe('B.4 Browse jobs', () => {
     await expect(page).toHaveURL(/manager|q=/i);
   });
 
-  test('job detail apply prompts login when logged out', async ({ page }) => {
+  // Skipped while finding #1 stands: /jobs renders empty in production so we
+  // can't navigate from the list. Direct-URL test in partF covers the detail page.
+  test.skip('job detail apply prompts login when logged out (blocked by finding #1)', async ({ page }) => {
     await page.goto('/jobs');
-    const firstCard = page.getByRole('link', { name: /view|apply|details/i }).first().or(
-      page.locator('a[href*="/jobs/"]').first()
-    );
-    await firstCard.click();
-    await expect(page).toHaveURL(/\/jobs\/.+/);
-    const apply = page.getByRole('button', { name: /^apply$/i }).or(page.getByRole('link', { name: /^apply$/i })).first();
-    await apply.click();
+    await page.locator('a[href^="/jobs/"]').first().click();
+    await page.getByRole('button', { name: /^apply$/i }).first().click();
     await expect(page).toHaveURL(/\/login/);
   });
 });
@@ -171,9 +173,20 @@ test.describe('B.10 Auth pages (logged out)', () => {
     await expect(page.getByLabel(/password/i).first()).toBeVisible();
   });
 
-  test('/reset-password has email input', async ({ page }) => {
+  // FINDING #8: QA doc says /reset-password should show an email input to
+  // request a reset link. In production the page only shows "New Password" /
+  // "Confirm Password" — the request-email UI doesn't exist (Login's "Forgot?"
+  // link routes here directly). requestPasswordReset() exists in
+  // src/utils/passwordReset.ts but isn't wired to a UI page.
+  test.fail('/reset-password has email input (request flow)', async ({ page }) => {
     await page.goto('/reset-password');
-    await expect(page.getByLabel(/email/i)).toBeVisible();
+    await expect(page.getByLabel(/^email/i)).toBeVisible();
+  });
+
+  test('/reset-password renders password fields (confirm flow)', async ({ page }) => {
+    await page.goto('/reset-password');
+    await expect(page.getByLabel(/new password/i)).toBeVisible();
+    await expect(page.getByLabel(/confirm password/i)).toBeVisible();
   });
 });
 

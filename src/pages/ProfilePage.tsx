@@ -49,7 +49,7 @@ interface JobInfo {
 }
 
 const ProfilePage = () => {
-    const { user, updateProfile } = useAuth();
+    const { user, updateProfile, loading: authLoading } = useAuth();
     const [nameValue, setNameValue] = useState('');
     const [savingName, setSavingName] = useState(false);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -395,8 +395,16 @@ const ProfilePage = () => {
         }
     };
 
+    // Wait for the auth context to settle before deciding — otherwise the
+    // initial render (user=null, authLoading=true) bounces logged-in users to /login.
+    if (authLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500" />
+            </div>
+        );
+    }
     if (!user) {
-        // Redirect to login with returnTo so post-login lands back here.
         return <Navigate to="/login?returnTo=/profile" replace />;
     }
 
