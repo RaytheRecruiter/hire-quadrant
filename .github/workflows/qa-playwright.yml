@@ -1,0 +1,94 @@
+name: QA — Playwright suite
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'supabase/functions/**'
+      - 'qa/**'
+      - '.github/workflows/qa-playwright.yml'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Target URL (defaults to live prod)'
+        required: false
+        default: 'https://hirequadrant.com'
+
+concurrency:
+  group: qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Smoke (chromium)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: qa
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: qa/package-lock.json
+
+      - name: Install QA deps
+        run: npm ci || npm install
+
+      - name: Install Playwright (chromium only)
+        run: npx playwright install --with-deps chromium
+
+      - name: Run smoke
+        env:
+          QA_BASE_URL: ${{ inputs.base_url || 'https://hirequadrant.com' }}
+          # Admin tests skip when these are absent (configured intentionally).
+          QA_ADMIN_EMAIL: ${{ secrets.QA_ADMIN_EMAIL }}
+          QA_ADMIN_PASSWORD: ${{ secrets.QA_ADMIN_PASSWORD }}
+        run: npx playwright test --project=chromium-desktop --grep @smoke
+
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-smoke
+          path: qa/playwright-report
+          retention-days: 7
+
+  full:
+    name: Full suite (chromium + webkit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: smoke
+    if: github.event_name == 'workflow_dispatch'
+    defaults:
+      run:
+        working-directory: qa
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: qa/package-lock.json
+
+      - run: npm ci || npm install
+
+      - run: npx playwright install --with-deps chromium webkit
+
+      - env:
+          QA_BASE_URL: ${{ inputs.base_url || 'https://hirequadrant.com' }}
+          QA_ADMIN_EMAIL: ${{ secrets.QA_ADMIN_EMAIL }}
+          QA_ADMIN_PASSWORD: ${{ secrets.QA_ADMIN_PASSWORD }}
+        run: npx playwright test --project=chromium-desktop --project=webkit-desktop
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-full
+          path: qa/playwright-report
+          retention-days: 14

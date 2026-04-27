@@ -1,6 +1,6 @@
 // src/pages/ProfilePage.tsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
@@ -396,16 +396,8 @@ const ProfilePage = () => {
     };
 
     if (!user) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-gray-600 dark:text-slate-400 mb-4">Please log in to view your profile.</p>
-                    <HardLink to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
-                        Go to Login
-                    </HardLink>
-                </div>
-            </div>
-        );
+        // Redirect to login with returnTo so post-login lands back here.
+        return <Navigate to="/login?returnTo=/profile" replace />;
     }
 
     if (loading) {

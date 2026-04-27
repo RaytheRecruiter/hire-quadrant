@@ -5,6 +5,7 @@ import { ArrowLeft, Clock, Loader2, BookOpen } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useSEO } from '../hooks/useSEO';
 import ShareButtons from '../components/ShareButtons';
+import { buildArticleLd } from '../utils/structuredData';
 import { format } from 'date-fns';
 
 interface Post {
@@ -99,8 +100,18 @@ const BlogPost: React.FC = () => {
     );
   }
 
+  const articleLd = buildArticleLd({
+    headline: post.title,
+    url: `https://hirequadrant.com/blog/${post.slug}`,
+    description: post.excerpt,
+    image: post.cover_image_url,
+    datePublished: post.published_at,
+    authorName: post.author_name,
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
+      <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <HardLink to="/blog" className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium mb-6">
           <ArrowLeft className="h-4 w-4" /> Back to Career Resources

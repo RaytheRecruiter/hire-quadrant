@@ -42,6 +42,7 @@ const BrowseJobs: React.FC = () => {
   });
   const [rows, setRows] = useState<JobRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
 
@@ -100,8 +101,14 @@ const BrowseJobs: React.FC = () => {
         .range(from, to);
 
       if (cancelled) return;
-      if (!error && data) {
-        setRows(data as JobRow[]);
+      if (error) {
+        console.error('[BrowseJobs] supabase query failed:', error);
+        setError(error.message ?? 'Failed to load jobs');
+        setRows([]);
+        setTotal(0);
+      } else {
+        setError(null);
+        setRows((data ?? []) as JobRow[]);
         setTotal(count ?? 0);
       }
       setLoading(false);
@@ -115,9 +122,10 @@ const BrowseJobs: React.FC = () => {
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const resultsCopy = useMemo(() => {
     if (loading) return 'Searching…';
+    if (error) return `Error loading jobs: ${error}`;
     if (total === 0) return 'No jobs match your filters';
     return `${total.toLocaleString()} ${total === 1 ? 'job' : 'jobs'}`;
-  }, [loading, total]);
+  }, [loading, error, total]);
 
   return (
     <>

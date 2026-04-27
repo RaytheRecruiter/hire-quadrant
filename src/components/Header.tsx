@@ -222,6 +222,8 @@ const Header: React.FC = () => {
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileOpen(v => !v)}
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
               className="lg:hidden h-9 w-9 flex items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
