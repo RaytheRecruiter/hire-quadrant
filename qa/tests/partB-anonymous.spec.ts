@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { dismissCookieBanner } from '../helpers/auth';
 
 // Mirrors HireQuadrant-QA-Walkthrough.docx Part B: Anonymous / Public.
 // Run on chromium-desktop only by default; use --project=mobile-chrome for Part F.2.
@@ -45,14 +46,17 @@ test.describe('B.1 Homepage and navigation', () => {
 });
 
 test.describe('B.3 Global search (Cmd+K)', () => {
-  test('Cmd+K opens search modal', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await dismissCookieBanner(page);
+  });
+
+  test('Cmd+K opens search modal', async ({ page }) => {
     await page.keyboard.press('Meta+k');
     await expect(page.getByRole('dialog', { name: /global search/i })).toBeVisible();
   });
 
   test('Escape closes search modal', async ({ page }) => {
-    await page.goto('/');
     await page.keyboard.press('Meta+k');
     const searchModal = page.getByRole('dialog', { name: /global search/i });
     await expect(searchModal).toBeVisible();
@@ -61,7 +65,6 @@ test.describe('B.3 Global search (Cmd+K)', () => {
   });
 
   test('search button in header opens same modal', async ({ page }) => {
-    await page.goto('/');
     await page.getByRole('button', { name: /open search/i }).first().click();
     await expect(page.getByRole('dialog', { name: /global search/i })).toBeVisible();
   });
@@ -183,10 +186,17 @@ test.describe('B.10 Auth pages (logged out)', () => {
     await expect(page.getByLabel(/^email/i)).toBeVisible();
   });
 
-  test('/reset-password renders password fields (confirm flow)', async ({ page }) => {
+  // FINDING #10: <label>New Password</label> and <label>Confirm Password</label>
+  // exist in src/pages/PasswordReset.tsx but lack `htmlFor` linking them to the
+  // inputs. Screen readers can't associate them; getByLabel() can't find them.
+  // Tested via input[type=password] count instead.
+  test('/reset-password renders two password fields (confirm flow)', async ({ page }) => {
     await page.goto('/reset-password');
-    await expect(page.getByLabel(/new password/i)).toBeVisible();
-    await expect(page.getByLabel(/confirm password/i)).toBeVisible();
+    await expect(page.locator('input[type="password"]')).toHaveCount(2);
+    // .first() — "New Password" and the heading "Create New Password" both
+    // match (strict mode would otherwise reject the multi-element match).
+    await expect(page.getByText(/new password/i).first()).toBeVisible();
+    await expect(page.getByText(/confirm password/i).first()).toBeVisible();
   });
 });
 

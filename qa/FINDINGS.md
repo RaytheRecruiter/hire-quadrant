@@ -13,6 +13,10 @@ Discovered while building the Playwright suite against live `https://hirequadran
 | 5 | Sitemap `<loc>` leading whitespace | ✅ Fixed (`sitemap-jobs/index.ts`) — needs `supabase functions deploy` |
 | 6 | Mobile hamburger missing aria-label | ✅ Fixed (`Header.tsx`) |
 | 7 | Test-employer role may be unset | 📄 Documented; helper now throws clear error |
+| 8 | Login "Forgot?" routes to set-new-password page (no request-email UI) | 📄 Documented |
+| 9 | Employer dashboard has no "+ New Job" UI (QA doc references nonexistent button) | 📄 Documented |
+| 10 | `/reset-password` `<label>` tags not linked to inputs (no `htmlFor`) | 📄 a11y bug, documented |
+| 11 | **CSP `connect-src` blocks `api.pwnedpasswords.com` — HIBP silently fails** | ✅ **Fixed (`public/_headers`)** |
 
 Pending deploy: tests in this branch assert post-deploy behavior, so 3 smoke tests will fail against live until merged + deployed:
 - `/profile redirects to /login?returnTo=/profile`

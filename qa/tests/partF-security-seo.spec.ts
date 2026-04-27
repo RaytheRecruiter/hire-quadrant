@@ -117,14 +117,14 @@ test.describe('F.8 Sitemap and SEO @smoke', () => {
 test.describe('F.6 Anti-spam on registration', () => {
   test('breached password is rejected (HIBP)', async ({ page }) => {
     await page.goto('/register');
+    // Anti-spam gate (Register.tsx:38): silently rejects submissions within
+    // 2.5s of mount. Wait it out before submitting.
+    await page.waitForTimeout(3000);
     await page.getByLabel(/full name/i).fill('QA Bot');
     await page.getByLabel(/email address/i).fill(`qa-test-${Date.now()}@example.com`);
-    // Pick a strongly-breached password (top of HIBP list) to maximize hit rate
-    // even if pwnedpasswords.com is slow.
     await page.getByLabel(/^password$/i).fill('Password123!');
     await page.getByLabel(/confirm password/i).fill('Password123!');
     await page.getByRole('button', { name: /^create account$/i }).click();
-    // HIBP requires a network round-trip to api.pwnedpasswords.com — give it room.
     await expect(page.getByText(/breach|compromised|insecure|too common|pwned/i)).toBeVisible({ timeout: 20_000 });
   });
 
@@ -138,6 +138,7 @@ test.describe('F.6 Anti-spam on registration', () => {
 test.describe('F.4 Auth edge cases', () => {
   test('mismatched passwords blocked', async ({ page }) => {
     await page.goto('/register');
+    await page.waitForTimeout(3000); // anti-spam timing gate
     await page.getByLabel(/full name/i).fill('QA Bot');
     await page.getByLabel(/email address/i).fill(`qa-${Date.now()}@example.com`);
     await page.getByLabel(/^password$/i).fill('A!strongPass2026');

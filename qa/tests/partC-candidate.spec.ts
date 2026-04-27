@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { signIn } from '../helpers/auth';
+import { signIn, dismissCookieBanner } from '../helpers/auth';
 
 test.describe('C — Candidate flows (logged in as seeded candidate)', () => {
   test.beforeEach(async ({ page }) => {
@@ -82,9 +82,12 @@ test.describe('C — Candidate flows (logged in as seeded candidate)', () => {
 
   test('C.13 sign out logs the user out', async ({ page }) => {
     await page.goto('/');
+    // Cookie banner is a focus-trapping dialog and intercepts the click.
+    await dismissCookieBanner(page);
     await page.getByRole('button', { name: /account menu/i }).click();
-    // Sign-out is a plain <button>, not menuitem (src/components/Header.tsx:201).
-    await page.getByRole('button', { name: /sign out/i }).click();
+    const signOutBtn = page.getByRole('button', { name: /^sign out$/i });
+    await expect(signOutBtn).toBeVisible();
+    await signOutBtn.click();
     await page.goto('/profile');
     await expect(page).toHaveURL(/\/login/);
   });
