@@ -1,6 +1,6 @@
 // src/pages/ProfilePage.tsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
@@ -49,7 +49,7 @@ interface JobInfo {
 }
 
 const ProfilePage = () => {
-    const { user, updateProfile } = useAuth();
+    const { user, updateProfile, loading: authLoading } = useAuth();
     const [nameValue, setNameValue] = useState('');
     const [savingName, setSavingName] = useState(false);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -395,17 +395,17 @@ const ProfilePage = () => {
         }
     };
 
-    if (!user) {
+    // Wait for the auth context to settle before deciding — otherwise the
+    // initial render (user=null, authLoading=true) bounces logged-in users to /login.
+    if (authLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-gray-600 dark:text-slate-400 mb-4">Please log in to view your profile.</p>
-                    <HardLink to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
-                        Go to Login
-                    </HardLink>
-                </div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500" />
             </div>
         );
+    }
+    if (!user) {
+        return <Navigate to="/login?returnTo=/profile" replace />;
     }
 
     if (loading) {

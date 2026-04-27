@@ -54,7 +54,10 @@ const CompanyDashboard: React.FC = () => {
     );
   }
 
-  if (!isAuthenticated || user?.role !== 'company') {
+  if (!isAuthenticated) {
+    return <Navigate to="/login?returnTo=/company-dashboard" replace />;
+  }
+  if (user?.role !== 'company') {
     return <Navigate to="/" replace />;
   }
 

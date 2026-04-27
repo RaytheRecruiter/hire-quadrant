@@ -20,6 +20,35 @@ export function buildOrganizationLd(params: {
   };
 }
 
+export function buildArticleLd(params: {
+  headline: string;
+  url: string;
+  description?: string | null;
+  image?: string | null;
+  datePublished?: string | null;
+  dateModified?: string | null;
+  authorName?: string | null;
+}) {
+  const { headline, url, description, image, datePublished, dateModified, authorName } = params;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    url,
+    ...(description ? { description } : {}),
+    ...(image ? { image } : {}),
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ? { dateModified } : datePublished ? { dateModified: datePublished } : {}),
+    author: { '@type': authorName ? 'Person' : 'Organization', name: authorName ?? 'HireQuadrant' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'HireQuadrant',
+      logo: { '@type': 'ImageObject', url: 'https://hirequadrant.com/favicon.svg' },
+    },
+  };
+}
+
 export function buildAggregateRatingLd(params: {
   itemName: string;
   ratingValue: number;
