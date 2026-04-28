@@ -717,8 +717,17 @@ const ProfilePage = () => {
                         <div className="text-center py-8">
                             <Briefcase className="h-10 w-10 text-gray-300 mx-auto mb-3" />
                             <p className="text-gray-500 dark:text-slate-400 mb-2">You haven't applied to any jobs yet.</p>
+                            {/* Per Scott 2026-04-28: pass profile preferences as
+                                filters so the Browse Jobs button lands on
+                                pre-filtered results, not a fresh /jobs page. */}
                             <HardLink
-                                to="/"
+                                to={(() => {
+                                  const params = new URLSearchParams();
+                                  const q = (targetRoleValue || currentRoleValue || '').trim();
+                                  if (q) params.set('q', q);
+                                  if (locationValue.trim()) params.set('loc', locationValue.trim());
+                                  return params.toString() ? `/jobs?${params}` : '/jobs';
+                                })()}
                                 className="text-primary-600 hover:text-primary-700 font-medium text-sm"
                             >
                                 Browse Jobs
