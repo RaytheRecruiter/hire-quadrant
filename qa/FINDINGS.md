@@ -12,12 +12,12 @@ Discovered while building the Playwright suite against live `https://hirequadran
 | 4 | QA doc references wrong sitemap paths | 📄 Documented; doc unchanged |
 | 5 | Sitemap `<loc>` leading whitespace | ✅ Fixed (`sitemap-jobs/index.ts`) — needs `supabase functions deploy` |
 | 6 | Mobile hamburger missing aria-label | ✅ Fixed (`Header.tsx`) |
-| 7 | Test-employer role may be unset | 📄 Documented; helper now throws clear error |
+| 7 | ~~Test-employer role may be unset~~ | ✅ **Closed 2026-04-28**: verified via SQL — both test-employer-1 and -2 have `role='company'` and `is_approved=true`. Caveat was unfounded. |
 | 8 | Login "Forgot?" routes to set-new-password page (no request-email UI) | 📄 Documented |
 | 9 | Employer dashboard has no "+ New Job" UI (QA doc references nonexistent button) | 📄 Documented |
-| 10 | `/reset-password` `<label>` tags not linked to inputs (no `htmlFor`) | 📄 a11y bug, documented |
+| 10 | ~~`/reset-password` `<label>` tags not linked to inputs~~ | ✅ **Closed 2026-04-28**: added `htmlFor` + `id` + `autoComplete` on both fields in `PasswordReset.tsx`. |
 | 11 | **CSP `connect-src` blocks `api.pwnedpasswords.com` — HIBP silently fails** | ✅ **Fixed (`public/_headers`)** |
-| 12 | `Header.handleLogout` doesn't await `logout()` — supabase session lingers after sign-out (15s+ in test) | 📄 Documented; needs `await logout()` |
+| 12 | ~~`Header.handleLogout` doesn't await `logout()`~~ | ✅ **Closed 2026-04-28**: handler now `async`; `await logout()` runs before `navigate('/')`. C.13 sign-out test un-failed. |
 
 Pending deploy: tests in this branch assert post-deploy behavior, so 3 smoke tests will fail against live until merged + deployed:
 - `/profile redirects to /login?returnTo=/profile`

@@ -22,10 +22,10 @@ const Header: React.FC = () => {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const adminMenuRef = useRef<HTMLDivElement>(null);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
     setUserMenuOpen(false);
     setMobileOpen(false);
+    await logout();
     navigate('/');
   };
 
