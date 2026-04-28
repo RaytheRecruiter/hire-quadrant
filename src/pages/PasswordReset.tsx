@@ -81,11 +81,14 @@ const PasswordReset: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
+                <label htmlFor="new-password" className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
                   New Password
                 </label>
                 <div className="relative">
                   <input
+                    id="new-password"
+                    name="new-password"
+                    autoComplete="new-password"
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => handlePasswordChange(e.target.value)}
@@ -126,11 +129,14 @@ const PasswordReset: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
+                <label htmlFor="confirm-password" className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
                   Confirm Password
                 </label>
                 <div className="relative">
                   <input
+                    id="confirm-password"
+                    name="confirm-password"
+                    autoComplete="new-password"
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}

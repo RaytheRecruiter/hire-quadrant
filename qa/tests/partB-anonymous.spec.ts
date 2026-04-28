@@ -188,17 +188,12 @@ test.describe('B.10 Auth pages (logged out)', () => {
     await expect(page.getByLabel(/^email/i)).toBeVisible();
   });
 
-  // FINDING #10: <label>New Password</label> and <label>Confirm Password</label>
-  // exist in src/pages/PasswordReset.tsx but lack `htmlFor` linking them to the
-  // inputs. Screen readers can't associate them; getByLabel() can't find them.
-  // Tested via input[type=password] count instead.
+  // Finding #10 closed 2026-04-28: labels now have htmlFor linking them to
+  // their inputs. getByLabel works; screen readers can associate them.
   test('/reset-password renders two password fields (confirm flow)', async ({ page }) => {
     await page.goto('/reset-password');
-    await expect(page.locator('input[type="password"]')).toHaveCount(2);
-    // .first() — "New Password" and the heading "Create New Password" both
-    // match (strict mode would otherwise reject the multi-element match).
-    await expect(page.getByText(/new password/i).first()).toBeVisible();
-    await expect(page.getByText(/confirm password/i).first()).toBeVisible();
+    await expect(page.getByLabel('New Password')).toBeVisible();
+    await expect(page.getByLabel('Confirm Password')).toBeVisible();
   });
 });
 
