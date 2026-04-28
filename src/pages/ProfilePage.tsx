@@ -542,17 +542,6 @@ const ProfilePage = () => {
                     </h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Professional Headline</label>
-                            <input
-                                type="text"
-                                value={headlineValue}
-                                onChange={(e) => setHeadlineValue(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
-                                placeholder="e.g. Senior React Developer | 5+ years experience"
-                            />
-                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">A short headline that helps employers find you</p>
-                        </div>
-                        <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Location</label>
                             <input
                                 type="text"

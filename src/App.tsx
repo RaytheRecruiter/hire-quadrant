@@ -52,7 +52,6 @@ const MyJobs = lazy(() => import('./pages/MyJobs'));
 const MessagesPage = lazy(() => import('./pages/MessagesPage'));
 const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
 const MyReviews = lazy(() => import('./pages/MyReviews'));
-const Demographics = lazy(() => import('./pages/Demographics'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const CompanyPortal = lazy(() => import('./pages/CompanyPortal'));
 const SalaryInsightsPage = lazy(() => import('./pages/SalaryInsightsPage'));
@@ -125,7 +124,6 @@ function App() {
                 <Route path="/messages" element={<MessagesPage />} />
                 <Route path="/notifications" element={<NotificationsPage />} />
                 <Route path="/my-reviews" element={<MyReviews />} />
-                <Route path="/demographics" element={<Demographics />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/help" element={<Support />} />
                 <Route path="/advanced-search" element={<AdvancedSearch />} />

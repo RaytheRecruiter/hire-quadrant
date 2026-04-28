@@ -150,18 +150,19 @@ const ResumeSearch: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {candidates.map(c => (
+            {/* PII (name / phone / email) hidden in the overview per Scott
+                2026-04-28 — only skills + role + location surface here.
+                Full candidate identity is revealed only when an employer
+                opens the detail / downloads the resume. */}
+            {candidates.map((c, idx) => (
               <div key={c.user_id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
-                      <span className="font-bold text-primary-600">
-                        {(c.name || c.email || 'C').charAt(0).toUpperCase()}
-                      </span>
+                      <span className="font-bold text-primary-600">#</span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-secondary-900 dark:text-white">{c.name || 'Candidate'}</h3>
-                      {c.headline && <p className="text-sm text-gray-600 dark:text-slate-400">{c.headline}</p>}
+                      <h3 className="font-bold text-secondary-900 dark:text-white">Candidate {idx + 1}</h3>
                       {c.current_role && (
                         <p className="text-xs font-semibold text-amber-600 mt-1">
                           Current: {c.current_role}

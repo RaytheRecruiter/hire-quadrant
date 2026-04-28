@@ -172,22 +172,8 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
       ) : (
       <>
       {/* Filters */}
+      {/* Status filter removed per Scott 2026-04-28: HQ is not a CRM. */}
       <div className="flex flex-wrap gap-4 mb-6">
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-gray-500 dark:text-slate-400" />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg border border-gray-200 dark:border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
-          >
-            <option value="all">All Statuses</option>
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s}>
-                {s.charAt(0).toUpperCase() + s.slice(1)}
-              </option>
-            ))}
-          </select>
-        </div>
         <div>
           <select
             value={jobFilter}
@@ -223,7 +209,6 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Job</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Applied</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Rating</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Resume</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
             </tr>
@@ -272,17 +257,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        statusColors[app.status] || 'bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-200'
-                      }`}
-                    >
-                      {app.status
-                        ? app.status.charAt(0).toUpperCase() + app.status.slice(1)
-                        : 'Pending'}
-                    </span>
-                  </td>
+                  {/* Status badge column removed per Scott 2026-04-28: not a CRM. */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => handleResumeDownload(app.user_id, app.id)}
@@ -292,7 +267,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       <Download className="h-4 w-4" />
                     </button>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap flex items-center gap-2">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => {
                         supabase.rpc('record_application_view', { app_id: app.id });
@@ -303,20 +278,6 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       <Eye className="h-4 w-4" />
                       Review
                     </button>
-                    <select
-                      value={app.status || 'pending'}
-                      onChange={(e) => {
-                        supabase.rpc('record_application_view', { app_id: app.id });
-                        onStatusUpdate(app.id, e.target.value);
-                      }}
-                      className="rounded-lg border border-gray-200 dark:border-slate-700 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
-                    >
-                      {STATUS_OPTIONS.map((s) => (
-                        <option key={s} value={s}>
-                          {s.charAt(0).toUpperCase() + s.slice(1)}
-                        </option>
-                      ))}
-                    </select>
                   </td>
                 </tr>
               );
