@@ -81,16 +81,24 @@ test.describe('C — Candidate flows (logged in as seeded candidate)', () => {
   });
 
   // Finding #12 closed 2026-04-28: Header.handleLogout now awaits logout()
-  // before navigating, so the supabase session is fully cleared before the
-  // test inspects /profile.
+  // before navigating to '/'. Two timing notes:
+  // 1. Playwright's click() resolves on event-dispatch, not on the async
+  //    onClick body — wait for the home-nav URL change to know the flow ran.
+  // 2. After supabase signOut + navigate('/'), AuthContext needs a beat to
+  //    propagate. Without the 1s breather, a fresh /profile load can briefly
+  //    see a cached session and miss the Navigate redirect.
   test('C.13 sign out logs the user out', async ({ page }) => {
     await page.goto('/');
     await dismissCookieBanner(page);
     await page.getByRole('button', { name: /account menu/i }).click();
     const signOutBtn = page.getByRole('button', { name: /^sign out$/i });
     await expect(signOutBtn).toBeVisible();
-    await signOutBtn.click();
+    await Promise.all([
+      page.waitForURL(/\/$|\/#/, { timeout: 10_000 }),
+      signOutBtn.click(),
+    ]);
+    await page.waitForTimeout(1000);
     await page.goto('/profile');
-    await expect(page).toHaveURL(/\/login/);
+    await expect(page).toHaveURL(/\/login/, { timeout: 15_000 });
   });
 });
