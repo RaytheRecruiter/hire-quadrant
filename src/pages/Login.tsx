@@ -3,7 +3,8 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
-import { User, Lock, Eye, EyeOff } from 'lucide-react';
+import { requestPasswordReset } from '../utils/passwordReset';
+import { User, Lock, Eye, EyeOff, Mail } from 'lucide-react';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 
 const Login: React.FC = () => {
@@ -23,9 +24,29 @@ const Login: React.FC = () => {
     ? returnTo
     : null;
   const intent = searchParams.get('intent');
+  const tab = searchParams.get('tab');
+  const isForgotMode = tab === 'forgot';
   const registerHref = safeReturnTo
     ? `/register?returnTo=${encodeURIComponent(safeReturnTo)}${intent ? `&intent=${intent}` : ''}`
     : '/register';
+
+  // Forgot-password (request-email) state — separate from sign-in form.
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotSent, setForgotSent] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
+
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setForgotLoading(true);
+    const result = await requestPasswordReset(forgotEmail);
+    setForgotLoading(false);
+    if (result.success) {
+      setForgotSent(true);
+    } else {
+      setError(result.error || 'Failed to send reset email');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,20 +114,78 @@ const Login: React.FC = () => {
             </div>
           )}
           <h2 className="mt-6 text-center text-4xl font-bold text-secondary-900 dark:text-white">
-            Sign in to your account
+            {isForgotMode ? 'Reset your password' : 'Sign in to your account'}
           </h2>
           <p className="mt-4 text-center text-gray-600 dark:text-slate-400">
-            Or{' '}
-            <HardLink
-              to={registerHref}
-              className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
-            >
-              create a new account
-            </HardLink>
+            {isForgotMode ? (
+              <>
+                Remembered it?{' '}
+                <HardLink to="/login" className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300">
+                  Back to sign in
+                </HardLink>
+              </>
+            ) : (
+              <>
+                Or{' '}
+                <HardLink to={registerHref} className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300">
+                  create a new account
+                </HardLink>
+              </>
+            )}
           </p>
         </div>
 
         <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-10 rounded-3xl shadow-2xl border border-white/20 dark:border-slate-700">
+          {isForgotMode ? (
+            forgotSent ? (
+              <div className="text-center space-y-4">
+                <Mail className="mx-auto h-12 w-12 text-primary-500" />
+                <h3 className="text-xl font-semibold text-secondary-900 dark:text-white">Check your email</h3>
+                <p className="text-gray-600 dark:text-slate-400">
+                  We sent a password reset link to <span className="font-semibold">{forgotEmail}</span>. The link expires in 1 hour.
+                </p>
+                <HardLink to="/login" className="inline-block mt-4 font-semibold text-primary-500 hover:text-primary-600">
+                  Back to sign in
+                </HardLink>
+              </div>
+            ) : (
+              <form className="space-y-6" onSubmit={handleForgotSubmit}>
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl font-medium">{error}</div>
+                )}
+                <p className="text-sm text-gray-600 dark:text-slate-400">
+                  Enter your account email and we'll send you a link to set a new password.
+                </p>
+                <div>
+                  <label htmlFor="forgot-email" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">
+                    Email address
+                  </label>
+                  <div className="mt-1 relative">
+                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+                    <input
+                      id="forgot-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
+                      placeholder="you@example.com"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  disabled={forgotLoading}
+                  className="group relative w-full flex justify-center py-4 px-6 border border-transparent font-semibold rounded-xl text-white bg-gradient-to-r from-primary-400 to-primary-500 hover:from-primary-500 hover:to-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                >
+                  {forgotLoading ? 'Sending...' : 'Send reset link'}
+                </button>
+              </form>
+            )
+          ) : (
+          <>
           <GoogleSignInButton label="Continue with Google" />
 
           <div className="my-6 flex items-center gap-3">
@@ -148,7 +227,7 @@ const Login: React.FC = () => {
                   Password
                 </label>
                 <HardLink
-                  to="/reset-password"
+                  to="/login?tab=forgot"
                   className="text-sm font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
                 >
                   Forgot?
@@ -187,6 +266,8 @@ const Login: React.FC = () => {
               </button>
             </div>
           </form>
+          </>
+          )}
         </div>
       </div>
     </div>

@@ -178,14 +178,12 @@ test.describe('B.10 Auth pages (logged out)', () => {
     await expect(page.getByLabel(/password/i).first()).toBeVisible();
   });
 
-  // FINDING #8: QA doc says /reset-password should show an email input to
-  // request a reset link. In production the page only shows "New Password" /
-  // "Confirm Password" — the request-email UI doesn't exist (Login's "Forgot?"
-  // link routes here directly). requestPasswordReset() exists in
-  // src/utils/passwordReset.ts but isn't wired to a UI page.
-  test.fail('/reset-password has email input (request flow)', async ({ page }) => {
-    await page.goto('/reset-password');
-    await expect(page.getByLabel(/^email/i)).toBeVisible();
+  // Finding #8 closed 2026-04-28: Login's "Forgot?" link now routes to
+  // /login?tab=forgot which renders an email-only request form.
+  test('/login?tab=forgot renders email input (request flow)', async ({ page }) => {
+    await page.goto('/login?tab=forgot');
+    await expect(page.getByLabel(/email/i)).toBeVisible();
+    await expect(page.getByRole('button', { name: /send reset link/i })).toBeVisible();
   });
 
   // Finding #10 closed 2026-04-28: labels now have htmlFor linking them to

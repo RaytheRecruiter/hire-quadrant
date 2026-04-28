@@ -13,8 +13,8 @@ Discovered while building the Playwright suite against live `https://hirequadran
 | 5 | Sitemap `<loc>` leading whitespace | ✅ Fixed (`sitemap-jobs/index.ts`) — needs `supabase functions deploy` |
 | 6 | Mobile hamburger missing aria-label | ✅ Fixed (`Header.tsx`) |
 | 7 | ~~Test-employer role may be unset~~ | ✅ **Closed 2026-04-28**: verified via SQL — both test-employer-1 and -2 have `role='company'` and `is_approved=true`. Caveat was unfounded. |
-| 8 | Login "Forgot?" routes to set-new-password page (no request-email UI) | 📄 Documented |
-| 9 | Employer dashboard has no "+ New Job" UI (QA doc references nonexistent button) | 📄 Documented |
+| 8 | ~~Login "Forgot?" routes to set-new-password page~~ | ✅ **Closed 2026-04-28**: `/login?tab=forgot` mode added. Renders an email-only form that calls existing `requestPasswordReset()`. "Forgot?" link in Login now routes there. |
+| 9 | ~~Employer dashboard has no "+ New Job" UI~~ | ✅ **Closed 2026-04-28**: New job button + `NewJobModal` in `CompanyJobsList`. Insert-path requires `supabase/migrations/20260428_employer_jobs_rls.sql` to run on prod. |
 | 10 | ~~`/reset-password` `<label>` tags not linked to inputs~~ | ✅ **Closed 2026-04-28**: added `htmlFor` + `id` + `autoComplete` on both fields in `PasswordReset.tsx`. |
 | 11 | **CSP `connect-src` blocks `api.pwnedpasswords.com` — HIBP silently fails** | ✅ **Fixed (`public/_headers`)** |
 | 12 | ~~`Header.handleLogout` doesn't await `logout()`~~ | ✅ **Closed 2026-04-28**: handler now `async`; `await logout()` runs before `navigate('/')`. C.13 sign-out test un-failed. |
