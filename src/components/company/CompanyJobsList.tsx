@@ -2,24 +2,32 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from '../HardLink';
 import toast from 'react-hot-toast';
-import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles } from 'lucide-react';
+import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles, Plus } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import ScreeningQuestionsEditor from '../ScreeningQuestionsEditor';
 import CustomFieldsEditor from './CustomFieldsEditor';
+import NewJobModal from './NewJobModal';
 import type { ScreeningQuestion } from '../../types/screening';
 
 interface CompanyJobsListProps {
   jobs: any[];
+  onJobCreated?: () => void;
 }
 
-const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
+const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated }) => {
   const [editingJobId, setEditingJobId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<ScreeningQuestion[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [sponsorBusyId, setSponsorBusyId] = useState<string | null>(null);
+  const [newJobOpen, setNewJobOpen] = useState(false);
   // Local override so the select reflects saved state without a full refresh
   const [sponsorTiers, setSponsorTiers] = useState<Record<string, number>>({});
+
+  const handleJobCreated = () => {
+    if (onJobCreated) onJobCreated();
+    else window.location.reload();
+  };
 
   const getTier = (job: any): number => {
     if (job.id in sponsorTiers) return sponsorTiers[job.id];
@@ -71,16 +79,36 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs }) => {
 
   if (jobs.length === 0) {
     return (
-      <div className="text-center py-16">
-        <Briefcase className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">No Jobs Posted Yet</h3>
-        <p className="text-gray-500 dark:text-slate-400">Your posted jobs will appear here.</p>
-      </div>
+      <>
+        <div className="text-center py-16">
+          <Briefcase className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+          <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">No Jobs Posted Yet</h3>
+          <p className="text-gray-500 dark:text-slate-400 mb-6">Your posted jobs will appear here.</p>
+          <button
+            type="button"
+            onClick={() => setNewJobOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold"
+          >
+            <Plus className="h-4 w-4" /> Post your first job
+          </button>
+        </div>
+        <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} />
+      </>
     );
   }
 
   return (
     <>
+      <div className="flex items-center justify-end mb-4">
+        <button
+          type="button"
+          onClick={() => setNewJobOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold"
+        >
+          <Plus className="h-4 w-4" /> New job
+        </button>
+      </div>
+      <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} />
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
           <thead className="bg-gray-50 dark:bg-slate-900/50">
