@@ -447,16 +447,10 @@ const Admin: React.FC = () => {
             >
               Source Performance
             </button>
-            <button
-              onClick={() => setActiveTab('applications')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'applications'
-                  ? 'border-primary-300 text-primary-300'
-                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
-              }`}
-            >
-              Applications
-            </button>
+            {/* Per Scott 2026-04-28: merged Applications + Candidates into a
+                single "Applicants" tab (deduped by email). The Candidates
+                reducer at the top of this file already does the dedup; the
+                "Applications" flat list was redundant and is gone. */}
             <button
               onClick={() => setActiveTab('candidates')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -465,7 +459,7 @@ const Admin: React.FC = () => {
                   : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
               }`}
             >
-              Candidates
+              Applicants
             </button>
             <button
               onClick={() => setActiveTab('subscriptions')}
@@ -721,76 +715,8 @@ const Admin: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'applications' && (
-          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">All Applications</h3>
-              <SortableTable
-                columns={[
-                  {
-                    key: 'applicant', label: 'Applicant',
-                    getValue: (app) => getUserName(app),
-                    render: (app) => (
-                      <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">{getUserName(app)}</div>
-                        <div className="text-sm text-gray-500 dark:text-slate-400">{getUserEmail(app)}</div>
-                      </div>
-                    ),
-                  },
-                  {
-                    key: 'job', label: 'Job',
-                    getValue: (app) => jobs.find(j => j.id === app.job_id)?.title || '',
-                    render: (app) => {
-                      const job = jobs.find(j => j.id === app.job_id);
-                      return job ? (
-                        <HardLink to={`/jobs/${job.id}`} className="text-sm text-primary-700 hover:underline">{job.title}</HardLink>
-                      ) : <span className="text-gray-400 dark:text-slate-500">Unknown</span>;
-                    },
-                  },
-                  {
-                    key: 'company', label: 'Company',
-                    getValue: (app) => jobs.find(j => j.id === app.job_id)?.company || '',
-                  },
-                  {
-                    key: 'source', label: 'Source Company',
-                    getValue: (app) => jobs.find(j => j.id === app.job_id)?.source_company || 'Direct',
-                  },
-                  {
-                    key: 'date', label: 'Applied Date',
-                    getValue: (app) => new Date(app.applied_at).getTime(),
-                    render: (app) => <>{format(new Date(app.applied_at), 'MMM d, yyyy h:mm a')}</>,
-                  },
-                  {
-                    key: 'status', label: 'Status',
-                    sortable: true, filterable: true,
-                    getValue: (app) => app.status,
-                    render: (app) => (
-                      <select
-                        value={app.status}
-                        onChange={(e) => handleStatusChange(app.id, e.target.value)}
-                        className={`text-xs font-medium rounded-full px-3 py-1 border-0 cursor-pointer ${
-                          app.status === 'pending' || app.status === 'Applied' ? 'bg-yellow-100 text-yellow-800' :
-                          app.status === 'reviewed' || app.status === 'Screening' ? 'bg-blue-100 text-blue-800' :
-                          app.status === 'accepted' || app.status === 'Offer' ? 'bg-green-100 text-green-800' :
-                          app.status === 'Interview' ? 'bg-indigo-100 text-indigo-800' :
-                          'bg-red-100 text-red-800'
-                        }`}
-                      >
-                        <option value="Applied">Applied</option>
-                        <option value="Screening">Screening</option>
-                        <option value="Interview">Interview</option>
-                        <option value="Offer">Offer</option>
-                        <option value="Rejected">Rejected</option>
-                      </select>
-                    ),
-                  },
-                ] as Column<typeof applications[0]>[]}
-                data={applications}
-                rowKey={(app) => app.id}
-              />
-            </div>
-          </div>
-        )}
+        {/* "Applications" flat tab removed per Scott 2026-04-28; deduped
+            view lives under the "Applicants" tab below (key: 'candidates'). */}
 
         {activeTab === 'candidates' && (
           <div className="space-y-8">
