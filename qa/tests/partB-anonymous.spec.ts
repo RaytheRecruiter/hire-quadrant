@@ -77,10 +77,11 @@ test.describe('B.4 Browse jobs', () => {
     await expect(page.getByRole('heading', { name: /browse jobs/i })).toBeVisible();
   });
 
-  // FINDING: /jobs renders empty state in production although the supabase
-  // sitemap-jobs edge function lists 100+ active jobs. BrowseJobs query is
-  // either filtered too narrowly or is failing silently. Direct job URLs work.
-  test.fail('jobs list shows at least one job card', async ({ page }) => {
+  // Finding #1 closed 2026-04-28: BrowseJobs selected min_salary/max_salary
+  // columns that hadn't been added in prod (migration 20260416000001 line 152
+  // never ran). `alter table jobs add column if not exists min_salary int;`
+  // (and max_salary) restored the page. 184 jobs now render.
+  test('jobs list shows at least one job card', async ({ page }) => {
     await page.goto('/jobs');
     await expect(page.locator('a[href^="/jobs/"]').first()).toBeVisible({ timeout: 10_000 });
   });
@@ -94,12 +95,13 @@ test.describe('B.4 Browse jobs', () => {
     await expect(page).toHaveURL(/manager|q=/i);
   });
 
-  // Skipped while finding #1 stands: /jobs renders empty in production so we
-  // can't navigate from the list. Direct-URL test in partF covers the detail page.
-  test.skip('job detail apply prompts login when logged out (blocked by finding #1)', async ({ page }) => {
+  // Finding #1 was blocking this — now unblocked.
+  test('job detail apply prompts login when logged out', async ({ page }) => {
     await page.goto('/jobs');
     await page.locator('a[href^="/jobs/"]').first().click();
-    await page.getByRole('button', { name: /^apply$/i }).first().click();
+    await expect(page).toHaveURL(/\/jobs\/.+/);
+    // Real button label is "Apply now" (or "Apply for this role" further down).
+    await page.getByRole('button', { name: /apply now|apply for this role/i }).first().click();
     await expect(page).toHaveURL(/\/login/);
   });
 });

@@ -6,7 +6,7 @@ Discovered while building the Playwright suite against live `https://hirequadran
 
 | # | Finding | Status |
 |---|---|---|
-| 1 | `/jobs` empty in production | 🟡 Surfaced (error now visible to users); root cause needs DB check |
+| 1 | ~~`/jobs` empty in production~~ | ✅ **Closed 2026-04-28**: missing `min_salary`/`max_salary` columns. Migration `20260416000001_phase3_full_scope.sql` lines 152–153 never ran in prod; ran them manually via SQL editor. 184 jobs now render. |
 | 2 | Auth-redirect inconsistency | ✅ Fixed (`ProfilePage`, `CompanyDashboard`) |
 | 3 | Blog Article JSON-LD missing | ✅ Fixed (`buildArticleLd` + injection in `BlogPost`) |
 | 4 | QA doc references wrong sitemap paths | 📄 Documented; doc unchanged |
