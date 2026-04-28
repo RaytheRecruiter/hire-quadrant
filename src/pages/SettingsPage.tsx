@@ -78,14 +78,6 @@ const SettingsPage: React.FC = () => {
               <p className="text-sm text-gray-600 dark:text-slate-400">Name, photo, resume, and more</p>
             </HardLink>
 
-            <HardLink
-              to="/demographics"
-              className="block bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-5 hover:bg-gray-50 dark:hover:bg-slate-700/50"
-            >
-              <h2 className="font-semibold text-secondary-900 dark:text-white mb-0.5">Demographics</h2>
-              <p className="text-sm text-gray-600 dark:text-slate-400">Optional EEO information</p>
-            </HardLink>
-
             <NotificationPreferencesPanel />
 
             <TwoFactorPanel />

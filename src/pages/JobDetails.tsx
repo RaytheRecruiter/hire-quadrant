@@ -15,7 +15,6 @@ import RecentlyViewedJobs from '../components/RecentlyViewedJobs';
 import { CareerGrowthPaths } from '../components/CareerGrowthPaths';
 import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
-import ShareJobBox from '../components/ShareJobBox';
 import JobApplicationForm, { SubmittedApplicationDetails } from '../components/JobApplicationForm';
 import JobReferralShare from '../components/JobReferralShare';
 import { useReferralTracking, attachStoredReferral } from '../hooks/useReferralTracking';
@@ -394,6 +393,10 @@ const JobDetails: React.FC = () => {
                         <div className="flex items-start gap-4">
                             <CompanyLogo company={job.company} logoUrl={(companyProfile as any)?.logo_url} size="lg" />
                             <div className="flex-1 min-w-0">
+                                {/* Per Scott 2026-04-28: Share moved from bottom to top-left, above the title. */}
+                                <div className="mb-2">
+                                    <ShareButtons title={job.title} url={window.location.href} />
+                                </div>
                                 <h1 className="font-display text-2xl md:text-3xl font-bold text-secondary-900 dark:text-white leading-tight text-balance">
                                     {job.title}
                                 </h1>
@@ -459,18 +462,15 @@ const JobDetails: React.FC = () => {
                                 >
                                     {applied ? (<><CheckCircle className="h-4 w-4" /> Applied</>) : applying ? 'Applying…' : 'Apply now'}
                                 </button>
-                                <div className="flex items-center gap-1">
-                                    <button
-                                        onClick={handleSave}
-                                        title={saved ? 'Saved' : 'Save'}
-                                        className={`h-9 w-9 flex items-center justify-center rounded-lg transition-colors ${
-                                            saved ? 'bg-primary-50 text-primary-600' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
-                                        }`}
-                                    >
-                                        {saved ? <BookmarkCheck className="h-4.5 w-4.5 fill-primary-500" /> : <Bookmark className="h-4.5 w-4.5" />}
-                                    </button>
-                                    <ShareButtons title={job.title} url={window.location.href} />
-                                </div>
+                                <button
+                                    onClick={handleSave}
+                                    title={saved ? 'Saved' : 'Save'}
+                                    className={`h-9 w-9 flex items-center justify-center rounded-lg transition-colors ${
+                                        saved ? 'bg-primary-50 text-primary-600' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
+                                    }`}
+                                >
+                                    {saved ? <BookmarkCheck className="h-4.5 w-4.5 fill-primary-500" /> : <Bookmark className="h-4.5 w-4.5" />}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -492,10 +492,7 @@ const JobDetails: React.FC = () => {
                         />
                     </div>
 
-                    {/* Share this job */}
-                    <div className="px-6 md:px-10 pb-6">
-                        <ShareJobBox title={job.title} company={job.company} url={window.location.href} />
-                    </div>
+                    {/* Share moved to top-left of header per Scott 2026-04-28. */}
 
                     {/* Referral share (attributed) */}
                     <div className="px-6 md:px-10 pb-10">
