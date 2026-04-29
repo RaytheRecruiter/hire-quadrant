@@ -10,18 +10,20 @@ import CompanyUpdatesEditor from '../components/company/CompanyUpdatesEditor';
 import CompanyReviewsPanel from '../components/company/CompanyReviewsPanel';
 import CompanyAnalyticsPanel from '../components/company/CompanyAnalyticsPanel';
 import CompanyBillingPanel from '../components/company/CompanyBillingPanel';
+import RecruiterActivityPanel from '../components/company/RecruiterActivityPanel';
 import EmployerBenchmarkPanel from '../components/company/EmployerBenchmarkPanel';
 import CompanyQAPanel from '../components/company/CompanyQAPanel';
 import WhyJoinUsPanel from '../components/company/WhyJoinUsPanel';
 import PendingApprovalBanner from '../components/company/PendingApprovalBanner';
 import AIJobDescriptionGenerator from '../components/AIJobDescriptionGenerator';
-import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, HelpCircle, Heart, Shield } from 'lucide-react';
+import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, HelpCircle, Heart, Shield, Activity } from 'lucide-react';
 import HardLink from '../components/HardLink';
 
 const TABS = [
   { id: 'jobs', label: 'My Jobs', icon: Briefcase },
   { id: 'applicants', label: 'Applicants', icon: Users },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'recruiter-activity', label: 'Recruiter Activity', icon: Activity },
   { id: 'benchmarks', label: 'Benchmarks', icon: BarChart3 },
   { id: 'reviews', label: 'Reviews', icon: Star },
   { id: 'updates', label: 'Updates', icon: Megaphone },
@@ -142,6 +144,9 @@ const CompanyDashboard: React.FC = () => {
               )}
               {activeTab === 'analytics' && company?.id && (
                 <CompanyAnalyticsPanel companyId={company.id} />
+              )}
+              {activeTab === 'recruiter-activity' && company?.id && (
+                <RecruiterActivityPanel companyId={company.id} />
               )}
               {activeTab === 'benchmarks' && company?.id && (
                 <EmployerBenchmarkPanel companyId={company.id} />
