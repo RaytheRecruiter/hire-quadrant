@@ -7,6 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 interface Prefs {
   desired_titles: string[];
   desired_locations: string[];
+  zip_code: string;
   desired_salary_min: number | null;
   desired_salary_max: number | null;
   work_types: string[];
@@ -30,6 +31,7 @@ const AUTH_OPTIONS = [
 const empty: Prefs = {
   desired_titles: [],
   desired_locations: [],
+  zip_code: '',
   desired_salary_min: null,
   desired_salary_max: null,
   work_types: [],
@@ -39,6 +41,8 @@ const empty: Prefs = {
   work_authorization: '',
   ready_to_interview: false,
 };
+
+const ZIP_REGEX = /^\d{5}(-\d{4})?$/;
 
 const JobPreferencesSection: React.FC = () => {
   const { user } = useAuth();
@@ -60,6 +64,7 @@ const JobPreferencesSection: React.FC = () => {
         setPrefs({
           desired_titles: data.desired_titles ?? [],
           desired_locations: data.desired_locations ?? [],
+          zip_code: data.zip_code ?? '',
           desired_salary_min: data.desired_salary_min,
           desired_salary_max: data.desired_salary_max,
           work_types: data.work_types ?? [],
@@ -85,6 +90,16 @@ const JobPreferencesSection: React.FC = () => {
 
   const save = async () => {
     if (!user?.id) return;
+    // Per Scott 2026-04-28: zip code is now mandatory.
+    const zip = prefs.zip_code.trim();
+    if (!zip) {
+      toast.error('ZIP code is required.');
+      return;
+    }
+    if (!ZIP_REGEX.test(zip)) {
+      toast.error('Enter a valid US ZIP code (5 digits or 5+4).');
+      return;
+    }
     setSaving(true);
     const titles = titlesInput.split(',').map((s) => s.trim()).filter(Boolean);
     const locations = locationsInput.split(',').map((s) => s.trim()).filter(Boolean);
@@ -93,6 +108,7 @@ const JobPreferencesSection: React.FC = () => {
         user_id: user.id,
         desired_titles: titles,
         desired_locations: locations,
+        zip_code: zip,
         desired_salary_min: prefs.desired_salary_min,
         desired_salary_max: prefs.desired_salary_max,
         work_types: prefs.work_types,
@@ -135,6 +151,29 @@ const JobPreferencesSection: React.FC = () => {
             placeholder="Comma-separated (e.g. Software Engineer, Product Manager)"
             className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
           />
+        </div>
+
+        <div>
+          <label htmlFor="pref-zip" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+            ZIP code <span className="text-red-500">*</span>
+          </label>
+          <input
+            id="pref-zip"
+            name="zip_code"
+            type="text"
+            inputMode="numeric"
+            autoComplete="postal-code"
+            required
+            maxLength={10}
+            pattern="\d{5}(-\d{4})?"
+            value={prefs.zip_code}
+            onChange={(e) => setPrefs((p) => ({ ...p, zip_code: e.target.value }))}
+            placeholder="e.g. 22030"
+            className="w-full max-w-xs px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+          />
+          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+            Used for distance-based job matching.
+          </p>
         </div>
 
         <div>
