@@ -7,6 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useCompanyDashboardReviews } from '../../hooks/useCompanyDashboardReviews';
 import type { CompanyReview } from '../../hooks/useCompanyReviews';
 import RatingStars from '../companies/RatingStars';
+import { usePermissions } from '../../hooks/usePermissions';
 
 interface Props {
   companyId: string;
@@ -36,6 +37,8 @@ const ResponseEditor: React.FC<{
   onSaved: () => void;
 }> = ({ review, companyId, onSaved }) => {
   const { user } = useAuth();
+  const { isOwner, isAdmin, can, member } = usePermissions();
+  const canRespond = !member || isOwner || isAdmin || can('respond_to_reviews');
   const [body, setBody] = useState(review.response?.body ?? '');
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -70,6 +73,7 @@ const ResponseEditor: React.FC<{
   };
 
   if (!open && !review.response) {
+    if (!canRespond) return null;
     return (
       <button
         type="button"
@@ -89,13 +93,15 @@ const ResponseEditor: React.FC<{
           <span className="text-xs font-semibold text-primary-700 dark:text-primary-300">
             Your response · {formatDistanceToNow(new Date(review.response.created_at), { addSuffix: true })}
           </span>
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="text-xs text-primary-700 dark:text-primary-300 hover:underline"
-          >
-            Edit
-          </button>
+          {canRespond && (
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="text-xs text-primary-700 dark:text-primary-300 hover:underline"
+            >
+              Edit
+            </button>
+          )}
         </div>
         <p className="text-sm text-secondary-900 dark:text-white whitespace-pre-line">
           {review.response.body}

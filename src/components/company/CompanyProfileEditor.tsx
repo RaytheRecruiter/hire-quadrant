@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, CheckCircle, AlertCircle } from 'lucide-react';
+import { Save, CheckCircle, AlertCircle, Lock } from 'lucide-react';
+import { usePermissions } from '../../hooks/usePermissions';
 
 interface CompanyProfileEditorProps {
   company: any;
@@ -7,6 +8,9 @@ interface CompanyProfileEditorProps {
 }
 
 const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, onSave }) => {
+  const { isOwner, isAdmin, can, member } = usePermissions();
+  const noMember = !member;
+  const canEdit = noMember || isOwner || isAdmin || can('edit_company_page');
   const [formData, setFormData] = useState({
     display_name: '',
     description: '',
@@ -51,6 +55,10 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!canEdit) {
+      setMessage({ type: 'error', text: "You don't have permission to edit the Company Page." });
+      return;
+    }
     setSaving(true);
     setMessage(null);
 
@@ -68,6 +76,15 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+      {!canEdit && (
+        <div className="flex items-start gap-2 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
+          <Lock className="h-4 w-4 mt-0.5 flex-shrink-0" />
+          <span>
+            You can view the Company Page but not edit it. Ask your Owner or Admin
+            to grant you the "Edit Company Page" permission.
+          </span>
+        </div>
+      )}
       {message && (
         <div
           className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium ${
@@ -85,6 +102,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         </div>
       )}
 
+      <fieldset disabled={!canEdit} className={`space-y-6 ${!canEdit ? 'opacity-70' : ''}`}>
       <div>
         <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Display Name</label>
         <input
@@ -92,7 +110,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
           name="display_name"
           value={formData.display_name}
           onChange={handleChange}
-          className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+          className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all disabled:cursor-not-allowed"
         />
       </div>
 
@@ -194,16 +212,19 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         />
       </div>
 
-      <div>
-        <button
-          type="submit"
-          disabled={saving}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-400 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-500 hover:to-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl"
-        >
-          <Save className="h-4 w-4" />
-          {saving ? 'Saving...' : 'Save Changes'}
-        </button>
-      </div>
+      </fieldset>
+      {canEdit && (
+        <div>
+          <button
+            type="submit"
+            disabled={saving}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-400 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-500 hover:to-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl"
+          >
+            <Save className="h-4 w-4" />
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      )}
     </form>
   );
 };
