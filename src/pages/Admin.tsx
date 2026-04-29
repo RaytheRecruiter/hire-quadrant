@@ -14,7 +14,11 @@ import { SortableTable, Column } from '../components/admin/SortableTable';
 import { TrackingService } from '../utils/trackingService';
 
 const Admin: React.FC = () => {
-  const { isAdmin } = useAuth();
+  // Per Scott 2026-04-28 (#22 SSO real fix): wait for AuthContext to finish
+  // loading before checking isAdmin. Previously this page bounced authenticated
+  // admins back to "/" because the !isAdmin guard fired while user was still
+  // null. CompanyPortal.tsx and AdminAuditLog.tsx already do this correctly.
+  const { isAdmin, isAuthenticated, loading: authLoading } = useAuth();
   const { jobs, applications, userProfiles, loading, error, updateApplicationStatus, refreshData } = useAdminData();
   const [activeTab, setActiveTab] = useState('overview');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -25,6 +29,16 @@ const Admin: React.FC = () => {
     return () => TrackingService.cleanup();
   }, []);
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 text-primary-300 animate-spin" />
+      </div>
+    );
+  }
+  if (!isAuthenticated) {
+    return <Navigate to="/login?returnTo=/admin" replace />;
+  }
   if (!isAdmin) {
     return <Navigate to="/" replace />;
   }
@@ -96,29 +110,10 @@ const Admin: React.FC = () => {
     return app.user_email || profilesByUserId[app.user_id]?.email || '';
   };
 
-  // Get unique candidates from applications
-  const candidatesFromApps = applications.reduce((acc, app) => {
-    const email = getUserEmail(app);
-    const existingCandidate = acc.find(c => c.email === email);
-    if (existingCandidate) {
-      existingCandidate.applications.push(app);
-      existingCandidate.totalApplications++;
-      if (new Date(app.applied_at) > new Date(existingCandidate.lastActivity)) {
-        existingCandidate.lastActivity = app.applied_at;
-      }
-    } else {
-      acc.push({
-        id: app.user_id,
-        name: getUserName(app),
-        email: email,
-        applications: [app],
-        totalApplications: 1,
-        lastActivity: app.applied_at,
-        status: app.status
-      });
-    }
-    return acc;
-  }, [] as Array<{
+  // Per Scott 2026-04-28: Candidate Hub tracks every profile created, not
+  // just applicants. Build the full candidate list from user_profiles, then
+  // merge in application data for the subset who have applied.
+  type CandidateRow = {
     id: string;
     name: string;
     email: string;
@@ -126,7 +121,56 @@ const Admin: React.FC = () => {
     totalApplications: number;
     lastActivity: string;
     status: string;
-  }>);
+  };
+
+  const candidatesByUserId = new Map<string, CandidateRow>();
+
+  // 1. Seed from every candidate-role profile (everyone who signed up).
+  userProfiles.forEach((p) => {
+    const userId = (p as any).user_id || (p as any).id || p.id;
+    if (!userId) return;
+    // Treat null/undefined role as candidate; explicitly skip company + admin.
+    if (p.role === 'company' || p.role === 'admin') return;
+    candidatesByUserId.set(userId, {
+      id: userId,
+      name: p.name || 'Candidate',
+      email: (p as any).email || '',
+      applications: [],
+      totalApplications: 0,
+      lastActivity: p.created_at,
+      status: 'No applications yet',
+    });
+  });
+
+  // 2. Layer in application data for profiles that have applied.
+  applications.forEach((app) => {
+    const userId = app.user_id;
+    const email = getUserEmail(app);
+    let row = candidatesByUserId.get(userId);
+    if (!row) {
+      // Application without a matching user_profile (legacy / external) —
+      // surface them too so admins still see the activity.
+      row = {
+        id: userId,
+        name: getUserName(app),
+        email,
+        applications: [],
+        totalApplications: 0,
+        lastActivity: app.applied_at,
+        status: 'No applications yet',
+      };
+      candidatesByUserId.set(userId, row);
+    }
+    row.applications.push(app);
+    row.totalApplications += 1;
+    row.email = row.email || email;
+    if (new Date(app.applied_at) > new Date(row.lastActivity)) {
+      row.lastActivity = app.applied_at;
+    }
+    row.status = app.status;
+  });
+
+  const candidatesFromApps = Array.from(candidatesByUserId.values());
 
   // Sort candidates by last activity
   const sortedCandidates = candidatesFromApps.sort((a, b) =>
