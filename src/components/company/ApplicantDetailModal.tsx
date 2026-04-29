@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { X, Star, Save, Loader2, Tag, Bookmark, Sparkles } from 'lucide-react';
+import { X, Star, Save, Loader2, Tag, Bookmark, Sparkles, Lock } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import { screenCandidate, CandidateScreening } from '../../utils/aiClient';
 import ApplicantNotesAndTags from './ApplicantNotesAndTags';
 import ScheduleInterviewModal from './ScheduleInterviewModal';
 import { CalendarClock } from 'lucide-react';
+import { usePermissions } from '../../hooks/usePermissions';
 
 interface Props {
   open: boolean;
@@ -16,6 +17,9 @@ interface Props {
 }
 
 const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, job, onClose, onSaved }) => {
+  const { isOwner, isAdmin, can, member } = usePermissions();
+  const noMember = !member;
+  const canSeeMatchScores = noMember || isOwner || isAdmin || can('view_match_scores');
   const [showSchedule, setShowSchedule] = useState(false);
   const [rating, setRating] = useState<number>(application?.employer_rating || 0);
   const [notes, setNotes] = useState<string>(application?.employer_notes || '');
@@ -151,49 +155,59 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
             </div>
           )}
 
-          {/* AI Screening */}
-          <div className="border border-primary-200 rounded-2xl p-4 bg-primary-50/30">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-primary-600" />
-                <span className="font-semibold text-secondary-800 dark:text-slate-200">AI Candidate Screening</span>
-              </div>
-              <button
-                onClick={runAIScreening}
-                disabled={aiLoading}
-                className="flex items-center gap-2 bg-primary-500 text-white px-3 py-1.5 rounded-lg text-sm font-semibold hover:bg-primary-600 disabled:opacity-50"
-              >
-                {aiLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
-                {aiLoading ? 'Analyzing...' : aiResult ? 'Re-run' : 'Run AI Screening'}
-              </button>
-            </div>
-            {aiError && <p className="mt-2 text-sm text-red-600">{aiError}</p>}
-            {aiResult && (
-              <div className="mt-4 space-y-3 text-sm">
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl font-bold text-primary-600">{aiResult.fit_score}</div>
-                  <div className="text-gray-500 dark:text-slate-400">Fit score /100</div>
+          {/* AI Screening — gated on view_match_scores per Scott Phase 2 */}
+          {canSeeMatchScores ? (
+            <div className="border border-primary-200 rounded-2xl p-4 bg-primary-50/30">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary-600" />
+                  <span className="font-semibold text-secondary-800 dark:text-slate-200">AI Candidate Screening</span>
                 </div>
-                <p className="text-gray-800 dark:text-slate-200">{aiResult.summary}</p>
-                {aiResult.strengths?.length > 0 && (
-                  <div>
-                    <div className="font-semibold text-green-700 mb-1">Strengths</div>
-                    <ul className="list-disc list-inside space-y-0.5 text-gray-700 dark:text-slate-300">
-                      {aiResult.strengths.map((s, i) => <li key={i}>{s}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {aiResult.concerns?.length > 0 && (
-                  <div>
-                    <div className="font-semibold text-amber-700 mb-1">Concerns</div>
-                    <ul className="list-disc list-inside space-y-0.5 text-gray-700 dark:text-slate-300">
-                      {aiResult.concerns.map((s, i) => <li key={i}>{s}</li>)}
-                    </ul>
-                  </div>
-                )}
+                <button
+                  onClick={runAIScreening}
+                  disabled={aiLoading}
+                  className="flex items-center gap-2 bg-primary-500 text-white px-3 py-1.5 rounded-lg text-sm font-semibold hover:bg-primary-600 disabled:opacity-50"
+                >
+                  {aiLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                  {aiLoading ? 'Analyzing...' : aiResult ? 'Re-run' : 'Run AI Screening'}
+                </button>
               </div>
-            )}
-          </div>
+              {aiError && <p className="mt-2 text-sm text-red-600">{aiError}</p>}
+              {aiResult && (
+                <div className="mt-4 space-y-3 text-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="text-3xl font-bold text-primary-600">{aiResult.fit_score}</div>
+                    <div className="text-gray-500 dark:text-slate-400">Fit score /100</div>
+                  </div>
+                  <p className="text-gray-800 dark:text-slate-200">{aiResult.summary}</p>
+                  {aiResult.strengths?.length > 0 && (
+                    <div>
+                      <div className="font-semibold text-green-700 mb-1">Strengths</div>
+                      <ul className="list-disc list-inside space-y-0.5 text-gray-700 dark:text-slate-300">
+                        {aiResult.strengths.map((s, i) => <li key={i}>{s}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                  {aiResult.concerns?.length > 0 && (
+                    <div>
+                      <div className="font-semibold text-amber-700 mb-1">Concerns</div>
+                      <ul className="list-disc list-inside space-y-0.5 text-gray-700 dark:text-slate-300">
+                        {aiResult.concerns.map((s, i) => <li key={i}>{s}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="border border-amber-200 rounded-2xl p-4 bg-amber-50 flex items-start gap-2 text-sm text-amber-900">
+              <Lock className="h-4 w-4 mt-0.5 flex-shrink-0" />
+              <span>
+                AI candidate screening and match scores require the
+                "View AI match scores" permission. Ask your Owner or Admin.
+              </span>
+            </div>
+          )}
 
           {/* Screening answers if any */}
           {application.screening_answers && application.screening_answers.length > 0 && (
