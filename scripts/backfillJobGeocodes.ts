@@ -59,12 +59,30 @@ interface GeocodeResult {
   lng: number;
 }
 
+// Normalize the JobDiva-style "STATE - City" format to "City, STATE, USA"
+// so Mapbox doesn't grab a same-named city in another state. Saw cases
+// like "VA - Sterling" matching Michigan and "VA - Henrico" matching the
+// SF Bay Area. Falls back to the original string if it doesn't match.
+const STATE_CITY_RE = /^([A-Z]{2})\s*-\s*(.+)$/;
+function normalizeLocation(raw: string): string {
+  const m = STATE_CITY_RE.exec(raw.trim());
+  if (m) return `${m[2].trim()}, ${m[1]}, USA`;
+  return raw;
+}
+
 async function geocode(query: string): Promise<GeocodeResult | null> {
+  const normalized = normalizeLocation(query);
   const url =
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json` +
+    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(normalized)}.json` +
     `?country=us&limit=1&access_token=${MAPBOX_TOKEN}`;
   try {
-    const res = await fetch(url);
+    // Mapbox URL-restricted tokens check the Referer header. Without one,
+    // they reject the request with 403. Send hirequadrant.com so the
+    // request looks like it came from the production site (the token is
+    // already restricted to that origin in the Mapbox dashboard).
+    const res = await fetch(url, {
+      headers: { Referer: 'https://hirequadrant.com/' },
+    });
     if (!res.ok) {
       console.warn(`  ! Mapbox ${res.status} for "${query}"`);
       return null;
@@ -86,14 +104,15 @@ async function run() {
   console.log('Backfilling job geocodes...');
   console.log(`MAX_PER_RUN = ${MAX_PER_RUN}, RPS = ${REQUESTS_PER_SECOND}`);
 
-  // Pull every job missing coords, that has a location text and isn't
-  // marked Remote. Order by created_at so newest jobs get coords first.
+  // Pull every job missing coords that has a location text. We can't
+  // filter Remote at the SQL layer because workplace_type is often NULL
+  // and PostgREST's .neq excludes NULLs — instead we skip Remote-ish
+  // rows in the loop below by inspecting the location text.
   const { data, error } = await supabase
     .from('jobs')
     .select('id, location, workplace_type')
     .is('lat', null)
     .not('location', 'is', null)
-    .neq('workplace_type', 'Remote')
     .order('created_at', { ascending: false })
     .limit(MAX_PER_RUN);
 
@@ -114,6 +133,18 @@ async function run() {
     const job = jobs[i];
     const loc = (job.location || '').trim();
     if (!loc) {
+      skipped++;
+      continue;
+    }
+    // Skip remote-only jobs since they don't participate in radius search.
+    // We catch both workplace_type='Remote' and "Remote" hard-coded in the
+    // location text.
+    if (
+      job.workplace_type === 'Remote' ||
+      /^remote$/i.test(loc) ||
+      /^(remote|wfh|work[- ]from[- ]home)\b/i.test(loc)
+    ) {
+      console.log(`[${i + 1}/${jobs.length}] ${job.id} → skip remote`);
       skipped++;
       continue;
     }
