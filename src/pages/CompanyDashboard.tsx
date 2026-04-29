@@ -9,6 +9,7 @@ import TeamInvitesPanel from '../components/company/TeamInvites';
 import CompanyUpdatesEditor from '../components/company/CompanyUpdatesEditor';
 import CompanyReviewsPanel from '../components/company/CompanyReviewsPanel';
 import CompanyAnalyticsPanel from '../components/company/CompanyAnalyticsPanel';
+import CompanyBillingPanel from '../components/company/CompanyBillingPanel';
 import EmployerBenchmarkPanel from '../components/company/EmployerBenchmarkPanel';
 import CompanyQAPanel from '../components/company/CompanyQAPanel';
 import WhyJoinUsPanel from '../components/company/WhyJoinUsPanel';
@@ -169,12 +170,8 @@ const CompanyDashboard: React.FC = () => {
                   {company?.id && <div className="mt-6"><TeamInvitesPanel companyId={company.id} /></div>}
                 </>
               )}
-              {activeTab === 'subscription' && (
-                <div className="text-center py-16">
-                  <CreditCard className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">Subscription Management</h3>
-                  <p className="text-gray-500 dark:text-slate-400">Coming soon. Subscription plans and billing will be available here.</p>
-                </div>
+              {activeTab === 'subscription' && company?.id && (
+                <CompanyBillingPanel companyId={company.id} />
               )}
             </>
           )}
