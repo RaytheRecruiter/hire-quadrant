@@ -14,7 +14,8 @@ import CompanyQAPanel from '../components/company/CompanyQAPanel';
 import WhyJoinUsPanel from '../components/company/WhyJoinUsPanel';
 import PendingApprovalBanner from '../components/company/PendingApprovalBanner';
 import AIJobDescriptionGenerator from '../components/AIJobDescriptionGenerator';
-import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, HelpCircle, Heart } from 'lucide-react';
+import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, HelpCircle, Heart, Shield } from 'lucide-react';
+import HardLink from '../components/HardLink';
 
 const TABS = [
   { id: 'jobs', label: 'My Jobs', icon: Briefcase },
@@ -67,13 +68,22 @@ const CompanyDashboard: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
-            Company Dashboard
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-slate-400">
-            Manage your jobs, applicants, and company profile.
-          </p>
+        <div className="mb-8 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
+              Company Dashboard
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-slate-400">
+              Manage your jobs, applicants, and company profile.
+            </p>
+          </div>
+          <HardLink
+            to="/company-dashboard/team"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:text-primary-600 transition"
+          >
+            <Shield className="h-4 w-4" />
+            Team Members
+          </HardLink>
         </div>
 
         {/* Pending Approval Banner */}
