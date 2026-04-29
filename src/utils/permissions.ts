@@ -23,7 +23,12 @@ export type PermissionKey =
   | 'view_analytics_basic'
   | 'view_analytics_full'
   | 'manage_users'
-  | 'manage_billing';
+  | 'manage_billing'
+  // Phase 2 keys (per Scott 2026-04-29). Stored alongside the rest in the
+  // company_members.permissions JSONB; defaults handled in code so no
+  // migration is needed.
+  | 'search_candidates'
+  | 'view_match_scores';
 
 export type Permissions = Record<PermissionKey, boolean>;
 
@@ -55,6 +60,10 @@ export const STANDARD_DEFAULT_PERMISSIONS: Permissions = {
   view_analytics_full: false,
   manage_users: false,
   manage_billing: false,
+  // Phase 2 — paid features gated to false by default. Owner/Admin still
+  // get them via effectivePermissions() role override.
+  search_candidates: false,
+  view_match_scores: true,
 };
 
 const ALL_TRUE: Permissions = Object.keys(STANDARD_DEFAULT_PERMISSIONS).reduce(
@@ -113,7 +122,12 @@ export const PERMISSION_GROUPS: {
   },
   {
     title: 'Candidates',
-    keys: ['view_applicants', 'message_applicants', 'view_resume_contact', 'download_resumes'],
+    keys: ['view_applicants', 'message_applicants', 'view_resume_contact', 'download_resumes', 'view_match_scores'],
+  },
+  {
+    title: 'Database Search',
+    description: 'Paid feature — usage may affect billing depending on the company plan.',
+    keys: ['search_candidates'],
   },
   {
     title: 'Company Page',
@@ -142,4 +156,6 @@ export const PERMISSION_LABEL: Record<PermissionKey, string> = {
   view_analytics_full: 'View full analytics',
   manage_users: 'Manage team members',
   manage_billing: 'Manage billing',
+  search_candidates: 'Search the candidate database',
+  view_match_scores: 'View AI match scores',
 };

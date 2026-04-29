@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Search, MapPin, User, Loader2, Download, Filter } from 'lucide-react';
+import { Search, MapPin, User, Loader2, Download, Filter, Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
+import { usePermissions } from '../hooks/usePermissions';
 
 interface Candidate {
   user_id: string;
@@ -21,6 +22,13 @@ interface Candidate {
 
 const ResumeSearch: React.FC = () => {
   const { isCompany, isAdmin, loading: authLoading } = useAuth();
+  const { isOwner, isAdmin: isCompanyAdmin, can, member, loading: permLoading } = usePermissions();
+  // Per Scott 2026-04-29 Phase 2: Database Search is a paid feature. Owner +
+  // Company Admin always have it; Standard users need search_candidates
+  // explicitly granted. Legacy single-tenant users (no member row) keep
+  // access via the noMember fallback.
+  const noMember = !member;
+  const canSearch = noMember || isOwner || isCompanyAdmin || can('search_candidates');
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
@@ -76,12 +84,34 @@ const ResumeSearch: React.FC = () => {
     window.open(data.signedUrl, '_blank');
   };
 
-  if (authLoading) {
+  if (authLoading || permLoading) {
     return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
   }
 
   if (!isCompany && !isAdmin) {
     return <Navigate to="/" replace />;
+  }
+
+  if (!canSearch) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-xl border border-amber-200 shadow-md p-8">
+          <div className="flex items-start gap-3 mb-4">
+            <div className="p-2 bg-amber-100 rounded-lg">
+              <Lock className="h-5 w-5 text-amber-600" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">Database Search restricted</h1>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Resume Database is a paid feature on your company plan. Ask your
+                Owner or Admin to grant you the "Search the candidate database"
+                permission, or upgrade your subscription.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

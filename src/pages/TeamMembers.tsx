@@ -634,9 +634,12 @@ const InviteModal: React.FC<{
 
               {PERMISSION_GROUPS.map((g) => (
                 <div key={g.title}>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                     {g.title}
                   </label>
+                  {g.description && (
+                    <p className="text-xs text-gray-500 dark:text-slate-400 mb-2">{g.description}</p>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {g.keys.map((k) => (
                       <label key={k} className="flex items-center gap-2 cursor-pointer text-sm">
