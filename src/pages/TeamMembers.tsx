@@ -20,6 +20,7 @@ import {
   X,
   Mail,
   ChevronRight,
+  Lock,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { supabase } from '../utils/supabaseClient';
@@ -45,6 +46,8 @@ interface MemberWithProfile extends CompanyMember {
 interface InvitationRow {
   id: string;
   email: string;
+  first_name: string | null;
+  last_name: string | null;
   role: CompanyRole;
   scope: AccessScope;
   permissions: Permissions;
@@ -153,7 +156,7 @@ const TeamMembers: React.FC = () => {
       toast.error('You cannot remove yourself.');
       return;
     }
-    if (!confirm(`Remove ${m.profile?.name || m.profile?.email || 'this user'} from the company?`)) {
+    if (!confirm(`Remove ${m.profile?.name || m.profile?.email || 'this user'} from the company? This deletes the membership entirely.`)) {
       return;
     }
     const { error } = await supabase.from('company_members').delete().eq('id', m.id);
@@ -162,6 +165,91 @@ const TeamMembers: React.FC = () => {
       return;
     }
     toast.success('Member removed');
+    load();
+  };
+
+  // Deactivate / Reactivate (per Scott's spec: distinct from full removal).
+  // Inactive members keep their record + permissions but the
+  // effectivePermissions() helper returns all-false until reactivated.
+  const handleSetStatus = async (m: MemberWithProfile, status: 'active' | 'inactive') => {
+    if (m.role === 'owner' && status === 'inactive') {
+      toast.error('Cannot deactivate the Owner. Transfer ownership first.');
+      return;
+    }
+    if (m.user_id === user.id) {
+      toast.error('You cannot change your own status.');
+      return;
+    }
+    const { error } = await supabase
+      .from('company_members')
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq('id', m.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(status === 'inactive' ? 'Member deactivated' : 'Member reactivated');
+    load();
+  };
+
+  const handleResendInvite = async (inv: InvitationRow) => {
+    if (!user || !member) return;
+    // Bump expiry forward by 14 days from now so the email's date is fresh.
+    const newExpiry = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+    const { error: updateError } = await supabase
+      .from('company_invitations')
+      .update({ invited_at: new Date().toISOString(), expires_at: newExpiry.toISOString() })
+      .eq('id', inv.id);
+    if (updateError) {
+      toast.error(updateError.message);
+      return;
+    }
+    // Re-fire the email. Failure is non-fatal.
+    const inviteUrl = `${window.location.origin}/accept-invite?token=${inv.token}`;
+    const expiresOn = newExpiry.toLocaleDateString(undefined, {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+    const roleLabel = inv.role === 'admin' ? 'Admin' : 'Standard User';
+    const scopeLabel = inv.role === 'standard'
+      ? inv.scope === 'all' ? 'All Jobs' : 'Assigned Jobs Only'
+      : '';
+    const inviterName = user.name || user.email || 'Your teammate';
+    const cName = company?.display_name || company?.name || 'your company';
+    const recipientFirstName = inv.first_name || '';
+    try {
+      const url = import.meta.env.VITE_SUPABASE_URL as string;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+      const res = await fetch(`${url}/functions/v1/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${anonKey}`,
+          apikey: anonKey,
+        },
+        body: JSON.stringify({
+          to: inv.email,
+          subject: recipientFirstName
+            ? `${recipientFirstName}, reminder: ${inviterName} invited you to join ${cName}`
+            : `Reminder: ${inviterName} invited you to join ${cName} on HireQuadrant`,
+          template: 'team_invitation',
+          variables: {
+            companyName: cName,
+            inviterName,
+            recipientFirstName,
+            roleLabel,
+            scopeLabel,
+            inviteUrl,
+            expiresOn,
+          },
+        }),
+      });
+      if (res.ok) toast.success(`Re-sent invitation to ${inv.email}`);
+      else toast.success('Invitation refreshed — copy the link to share manually');
+    } catch {
+      toast.success('Invitation refreshed — copy the link to share manually');
+    }
     load();
   };
 
@@ -247,7 +335,7 @@ const TeamMembers: React.FC = () => {
                         <StatusBadge status={m.status} />
                       </td>
                       {canManageUsers && (
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-6 py-4 text-right whitespace-nowrap">
                           <button
                             onClick={() => setEditing(m)}
                             className="inline-flex items-center gap-1 px-2 py-1 text-xs text-primary-600 hover:bg-primary-50 rounded"
@@ -255,6 +343,24 @@ const TeamMembers: React.FC = () => {
                           >
                             <SettingsIcon className="h-3 w-3" /> Edit
                           </button>
+                          {m.status === 'active' ? (
+                            <button
+                              onClick={() => handleSetStatus(m, 'inactive')}
+                              className="inline-flex items-center gap-1 px-2 py-1 text-xs text-amber-700 hover:bg-amber-50 rounded ml-2"
+                              disabled={m.role === 'owner' || m.user_id === user.id}
+                              title="Deactivate keeps the membership but blocks access. Use Remove to delete entirely."
+                            >
+                              <Lock className="h-3 w-3" /> Deactivate
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleSetStatus(m, 'active')}
+                              className="inline-flex items-center gap-1 px-2 py-1 text-xs text-emerald-700 hover:bg-emerald-50 rounded ml-2"
+                              title="Restore this member's access"
+                            >
+                              <Check className="h-3 w-3" /> Reactivate
+                            </button>
+                          )}
                           <button
                             onClick={() => handleRemove(m)}
                             className="inline-flex items-center gap-1 px-2 py-1 text-xs text-rose-600 hover:bg-rose-50 rounded ml-2"
@@ -296,8 +402,13 @@ const TeamMembers: React.FC = () => {
               {invitations.map((inv) => (
                 <li key={inv.id} className="p-6 flex items-center justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-900 dark:text-white">{inv.email}</span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {(inv.first_name || inv.last_name) && (
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {[inv.first_name, inv.last_name].filter(Boolean).join(' ')}
+                        </span>
+                      )}
+                      <span className={`text-${(inv.first_name || inv.last_name) ? 'sm text-gray-500 dark:text-slate-400' : 'sm font-medium text-gray-900 dark:text-white'}`}>{inv.email}</span>
                       <RoleBadge role={inv.role} />
                       <span className="text-xs text-gray-400 dark:text-slate-500">
                         {inv.scope === 'all' ? 'All Jobs' : 'Assigned Jobs Only'}
@@ -331,12 +442,20 @@ const TeamMembers: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleRevokeInvite(inv.id)}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-lg border border-rose-200"
-                  >
-                    <X className="h-3 w-3" /> Revoke
-                  </button>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                      onClick={() => handleResendInvite(inv)}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-primary-600 hover:bg-primary-50 rounded-lg border border-primary-200"
+                    >
+                      <Mail className="h-3 w-3" /> Resend
+                    </button>
+                    <button
+                      onClick={() => handleRevokeInvite(inv.id)}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-lg border border-rose-200"
+                    >
+                      <X className="h-3 w-3" /> Revoke
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -461,6 +580,8 @@ const InviteModal: React.FC<{
   onClose: () => void;
   onCreated: () => void;
 }> = ({ companyId, inviterRole, inviterName, companyName, onClose, onCreated }) => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<'admin' | 'standard'>('standard');
   const [scope, setScope] = useState<AccessScope>('assigned');
@@ -484,10 +605,14 @@ const InviteModal: React.FC<{
 
     const finalScope = role === 'admin' ? 'all' : scope;
     const finalPerms = role === 'admin' ? {} : permissions;
+    const cleanFirst = firstName.trim() || null;
+    const cleanLast = lastName.trim() || null;
 
     const { error } = await supabase.from('company_invitations').insert({
       company_id: companyId,
       email: cleanEmail,
+      first_name: cleanFirst,
+      last_name: cleanLast,
       role,
       scope: finalScope,
       permissions: finalPerms,
@@ -516,6 +641,7 @@ const InviteModal: React.FC<{
     try {
       const url = import.meta.env.VITE_SUPABASE_URL as string;
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+      const recipientFirstName = cleanFirst || '';
       const res = await fetch(`${url}/functions/v1/send-email`, {
         method: 'POST',
         headers: {
@@ -525,11 +651,14 @@ const InviteModal: React.FC<{
         },
         body: JSON.stringify({
           to: cleanEmail,
-          subject: `${inviterName} invited you to join ${companyName} on HireQuadrant`,
+          subject: recipientFirstName
+            ? `${recipientFirstName}, ${inviterName} invited you to join ${companyName}`
+            : `${inviterName} invited you to join ${companyName} on HireQuadrant`,
           template: 'team_invitation',
           variables: {
             companyName,
             inviterName,
+            recipientFirstName,
             roleLabel,
             scopeLabel,
             inviteUrl,
@@ -563,8 +692,30 @@ const InviteModal: React.FC<{
           </button>
         </div>
         <div className="p-6 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">First Name</label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400"
+                placeholder="Sarah"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400"
+                placeholder="Lee"
+              />
+            </div>
+          </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Email <span className="text-red-500">*</span></label>
             <input
               type="email"
               value={email}

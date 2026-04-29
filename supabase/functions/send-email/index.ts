@@ -72,7 +72,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
       <html>
         <head><meta charset="utf-8"></head>
         <body style="font-family: sans-serif; color: #333; max-width: 560px; margin: 0 auto;">
-          <h1>You've been invited to join ${v.companyName} on HireQuadrant</h1>
+          <h1>${v.recipientFirstName ? `Hi ${v.recipientFirstName}, you've` : "You've"} been invited to join ${v.companyName} on HireQuadrant</h1>
           <p>${v.inviterName ? `${v.inviterName}` : 'Your team'} invited you as a <strong>${v.roleLabel}</strong>${v.scopeLabel ? ` (${v.scopeLabel})` : ''}.</p>
           <p>Click below to accept the invitation. The link expires on ${v.expiresOn}.</p>
           <p style="margin: 24px 0;">
