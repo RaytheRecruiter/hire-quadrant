@@ -1,23 +1,22 @@
-import React, { useState, useMemo } from 'react';
-import { 
-  Users, 
-  Search, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Calendar, 
-  Briefcase, 
-  Eye,
-  MessageSquare,
+import React, { useState, useMemo, useEffect } from 'react';
+import {
+  Users,
+  Search,
+  Calendar,
+  Briefcase,
   UserCheck,
   Clock,
   TrendingUp,
   Award,
   FileText,
-  Send
+  Sparkles,
+  Star,
+  Shield,
+  Loader2
 } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
 import { Job, JobApplication } from '../contexts/JobContext';
+import { supabase } from '../utils/supabaseClient';
 
 interface Candidate {
   id: string;
@@ -35,6 +34,21 @@ interface CandidateHubProps {
   jobs: Job[];
 }
 
+// Per Scott 2026-04-29 (#19): the candidate click-through view is privacy-first.
+// We hide name/email/phone behind an anonymized handle and lead with skills /
+// top skills / certifications so HQ can review candidates on merit before
+// deciding to reveal contact info.
+type CandidateProfile = {
+  skills: string[];
+  top_skills: string[];
+  certifications: string[];
+  current_title: string | null;
+  years_experience: number | null;
+  resume_parsed_at: string | null;
+};
+
+const anonHandle = (id: string) => `Candidate #${id.slice(-6).toUpperCase()}`;
+
 const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, jobs }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -42,6 +56,32 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [showCandidateModal, setShowCandidateModal] = useState(false);
+  const [profile, setProfile] = useState<CandidateProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+
+  useEffect(() => {
+    if (!selectedCandidate?.id) {
+      setProfile(null);
+      return;
+    }
+    setProfileLoading(true);
+    (async () => {
+      const { data } = await supabase
+        .from('candidates')
+        .select('skills, top_skills, certifications, current_title, years_experience, resume_parsed_at')
+        .eq('user_id', selectedCandidate.id)
+        .maybeSingle();
+      setProfile({
+        skills: Array.isArray(data?.skills) ? (data!.skills as string[]) : [],
+        top_skills: Array.isArray(data?.top_skills) ? (data!.top_skills as string[]) : [],
+        certifications: Array.isArray(data?.certifications) ? (data!.certifications as string[]) : [],
+        current_title: (data?.current_title as string | null) ?? null,
+        years_experience: (data?.years_experience as number | null) ?? null,
+        resume_parsed_at: (data?.resume_parsed_at as string | null) ?? null,
+      });
+      setProfileLoading(false);
+    })();
+  }, [selectedCandidate?.id]);
 
   // Filter and sort candidates
   const filteredAndSortedCandidates = useMemo(() => {
@@ -117,16 +157,6 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
     }
   };
 
-  const getJobTitle = (job_id: string) => {
-    const job = jobs.find(j => j.id === job_id);
-    return job ? job.title : 'Unknown Job';
-  };
-
-  const getJobCompany = (job_id: string) => {
-    const job = jobs.find(j => j.id === job_id);
-    return job ? job.company : 'Unknown Company';
-  };
-
   return (
     <div className="space-y-6">
       {/* Statistics Cards */}
@@ -200,7 +230,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
               <input
                 type="text"
-                placeholder="Search candidates by name or email..."
+                placeholder="Search candidates (admin only — searches name/email behind the scenes)"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
@@ -232,8 +262,6 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
             >
               <option value="lastActivity-desc">Latest Activity</option>
               <option value="lastActivity-asc">Oldest Activity</option>
-              <option value="name-asc">Name A-Z</option>
-              <option value="name-desc">Name Z-A</option>
               <option value="applications-desc">Most Applications</option>
               <option value="applications-asc">Fewest Applications</option>
             </select>
@@ -241,7 +269,9 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
         </div>
       </div>
 
-      {/* Candidates Grid */}
+      {/* Candidates Grid — anonymized cards. Click a card to open the detail
+          modal with skills / certifications / top skills. Names and emails
+          are intentionally hidden here per Scott 2026-04-29 (#19). */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredAndSortedCandidates.map((candidate) => (
           <div
@@ -253,14 +283,14 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
               <div className="flex items-center">
                 <div className="flex-shrink-0 h-12 w-12">
                   <div className="h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
-                    <span className="text-lg font-medium text-primary-600">
-                      {candidate.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                    </span>
+                    <Shield className="h-5 w-5 text-primary-600" />
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{candidate.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">{candidate.email}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    {anonHandle(candidate.id)}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">Anonymized profile</p>
                 </div>
               </div>
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(candidate.status)}`}>
@@ -273,45 +303,16 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                 <Briefcase className="h-4 w-4 mr-2" />
                 <span>{candidate.totalApplications} application{candidate.totalApplications !== 1 ? 's' : ''}</span>
               </div>
-              
+
               <div className="flex items-center text-sm text-gray-600 dark:text-slate-400">
                 <Calendar className="h-4 w-4 mr-2" />
                 <span>Last active {formatDistanceToNow(new Date(candidate.lastActivity), { addSuffix: true })}</span>
               </div>
-
-              {candidate.applications.length > 0 && (
-                <div className="text-sm text-gray-600 dark:text-slate-400">
-                  <p className="font-medium">Recent applications:</p>
-                  <ul className="mt-1 space-y-1">
-                    {candidate.applications.slice(0, 2).map((app) => (
-                      <li key={app.id} className="text-xs">
-                        • {getJobTitle(app.job_id)} at {getJobCompany(app.job_id)}
-                      </li>
-                    ))}
-                    {candidate.applications.length > 2 && (
-                      <li className="text-xs text-gray-500 dark:text-slate-400">
-                        +{candidate.applications.length - 2} more
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
             </div>
 
-            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center">
-              <div className="flex space-x-2">
-                <button className="p-2 text-gray-400 dark:text-slate-500 hover:text-primary-600 transition-colors duration-300">
-                  <Mail className="h-4 w-4" />
-                </button>
-                <button className="p-2 text-gray-400 dark:text-slate-500 hover:text-primary-600 transition-colors duration-300">
-                  <Eye className="h-4 w-4" />
-                </button>
-                <button className="p-2 text-gray-400 dark:text-slate-500 hover:text-primary-600 transition-colors duration-300">
-                  <MessageSquare className="h-4 w-4" />
-                </button>
-              </div>
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-end">
               <button className="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                View Details
+                View skills →
               </button>
             </div>
           </div>
@@ -326,7 +327,9 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
         </div>
       )}
 
-      {/* Candidate Detail Modal */}
+      {/* Candidate Detail Modal — anonymized per Scott 2026-04-29 (#19).
+          Reviewers see only skills, top skills, certifications, and high-level
+          metadata. Name, email, and phone are intentionally hidden. */}
       {showCandidateModal && selectedCandidate && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-slate-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -335,14 +338,23 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                 <div className="flex items-center">
                   <div className="flex-shrink-0 h-16 w-16">
                     <div className="h-16 w-16 rounded-full bg-primary-100 flex items-center justify-center">
-                      <span className="text-2xl font-medium text-primary-600">
-                        {selectedCandidate.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                      </span>
+                      <Shield className="h-7 w-7 text-primary-600" />
                     </div>
                   </div>
                   <div className="ml-6">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedCandidate.name}</h2>
-                    <p className="text-gray-600 dark:text-slate-400">{selectedCandidate.email}</p>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {anonHandle(selectedCandidate.id)}
+                    </h2>
+                    <p className="text-xs text-gray-500 dark:text-slate-400 inline-flex items-center gap-1">
+                      <Shield className="h-3 w-3" />
+                      Anonymized review — name, email, and phone are hidden until you message this candidate.
+                    </p>
+                    {profile?.current_title && (
+                      <p className="text-sm text-gray-700 dark:text-slate-300 mt-2 font-medium">
+                        {profile.current_title}
+                        {profile.years_experience != null && ` · ${profile.years_experience} yrs`}
+                      </p>
+                    )}
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mt-2 ${getStatusColor(selectedCandidate.status)}`}>
                       {selectedCandidate.status}
                     </span>
@@ -360,91 +372,132 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
             </div>
 
             <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Candidate Stats */}
-                <div className="lg:col-span-1">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Candidate Overview</h3>
-                  <div className="space-y-4">
+              {profileLoading ? (
+                <div className="text-center py-12">
+                  <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="lg:col-span-2 space-y-6">
+                    {/* Top Skills */}
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                        <Star className="h-5 w-5 text-amber-400" />
+                        Top Skills
+                      </h3>
+                      {profile?.top_skills.length ? (
+                        <div className="flex flex-wrap gap-2">
+                          {profile.top_skills.map((s) => (
+                            <span key={s} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-sm font-medium">
+                              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                              {s}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-500 dark:text-slate-400">No top skills listed.</p>
+                      )}
+                    </div>
+
+                    {/* Skills */}
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                        <Sparkles className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+                        Skills
+                      </h3>
+                      {profile?.skills.length ? (
+                        <div className="flex flex-wrap gap-2">
+                          {profile.skills.map((s) => (
+                            <span key={s} className="inline-flex items-center px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-sm">
+                              {s}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-500 dark:text-slate-400">No skills listed.</p>
+                      )}
+                    </div>
+
+                    {/* Certifications */}
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                        <Award className="h-5 w-5 text-violet-500" />
+                        Certifications
+                      </h3>
+                      {profile?.certifications.length ? (
+                        <div className="flex flex-wrap gap-2">
+                          {profile.certifications.map((c) => (
+                            <span key={c} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-violet-50 text-violet-800 border border-violet-200 text-sm">
+                              <Award className="h-3 w-3" />
+                              {c}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-500 dark:text-slate-400">No certifications listed.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-1 space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Activity</h3>
                     <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 dark:text-slate-400">Total Applications</span>
+                        <span className="text-sm text-gray-600 dark:text-slate-400">Applications</span>
                         <span className="text-lg font-bold text-gray-900 dark:text-white">{selectedCandidate.totalApplications}</span>
                       </div>
                     </div>
                     <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 dark:text-slate-400">Last Activity</span>
+                        <span className="text-sm text-gray-600 dark:text-slate-400">Last activity</span>
                         <span className="text-sm font-medium text-gray-900 dark:text-white">
                           {format(new Date(selectedCandidate.lastActivity), 'MMM d, yyyy')}
                         </span>
                       </div>
                     </div>
-                    <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 dark:text-slate-400">Status</span>
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(selectedCandidate.status)}`}>
-                          {selectedCandidate.status}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6">
-                    <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-3">Quick Actions</h4>
-                    <div className="space-y-2">
-                      <button className="w-full flex items-center justify-center px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors duration-300">
-                        <Mail className="h-4 w-4 mr-2" />
-                        Send Email
-                      </button>
-                      <button className="w-full flex items-center justify-center px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-300">
-                        <FileText className="h-4 w-4 mr-2" />
-                        View Resume
-                      </button>
-                      <button className="w-full flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        Add Note
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Application History */}
-                <div className="lg:col-span-2">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Application History</h3>
-                  <div className="space-y-4">
-                    {selectedCandidate.applications.map((application) => {
-                      const job = jobs.find(j => j.id === application.job_id);
-                      return (
-                        <div key={application.id} className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-gray-900 dark:text-white">
-                                {job ? job.title : 'Unknown Job'}
-                              </h4>
-                              <p className="text-sm text-gray-600 dark:text-slate-400">
-                                {job ? job.company : 'Unknown Company'}
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
-                                Applied {format(new Date(application.applied_at), 'MMM d, yyyy h:mm a')}
-                              </p>
-                            </div>
-                            <div className="flex flex-col items-end">
-                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(application.status)}`}>
-                                {application.status}
-                              </span>
-                              {application.source_company && (
-                                <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
-                                  via {application.source_company}
-                                </p>
-                              )}
-                            </div>
-                          </div>
+                    {profile?.resume_parsed_at && (
+                      <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600 dark:text-slate-400 inline-flex items-center gap-1">
+                            <FileText className="h-3.5 w-3.5" /> Resume parsed
+                          </span>
+                          <span className="text-sm text-gray-900 dark:text-white">
+                            {formatDistanceToNow(new Date(profile.resume_parsed_at), { addSuffix: true })}
+                          </span>
                         </div>
-                      );
-                    })}
+                      </div>
+                    )}
+
+                    {selectedCandidate.applications.length > 0 && (
+                      <div className="pt-4 border-t border-gray-200 dark:border-slate-700">
+                        <h4 className="text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2 flex items-center gap-1">
+                          <Briefcase className="h-4 w-4" />
+                          Applications
+                        </h4>
+                        <ul className="space-y-2">
+                          {selectedCandidate.applications.slice(0, 5).map((app) => {
+                            const job = jobs.find(j => j.id === app.job_id);
+                            return (
+                              <li key={app.id} className="text-xs text-gray-600 dark:text-slate-400">
+                                <div className="font-medium text-gray-800 dark:text-slate-200">{job ? job.title : 'Unknown Job'}</div>
+                                <div className="flex items-center justify-between">
+                                  <span>{job ? job.company : ''}</span>
+                                  <span>{format(new Date(app.applied_at), 'MMM d')}</span>
+                                </div>
+                              </li>
+                            );
+                          })}
+                          {selectedCandidate.applications.length > 5 && (
+                            <li className="text-xs text-gray-500 dark:text-slate-400">
+                              +{selectedCandidate.applications.length - 5} more
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
