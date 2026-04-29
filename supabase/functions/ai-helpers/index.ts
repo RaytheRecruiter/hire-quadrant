@@ -336,6 +336,57 @@ Rules:
       });
     }
 
+    if (path === 'parse-resume') {
+      // Per Scott 2026-04-29: extract structured fields from a resume text dump
+      // so we can auto-fill skills / certifications / top skills on the
+      // candidate's profile and drive AI matching.
+      const body = await req.json();
+      const { resumeText } = body;
+      if (typeof resumeText !== 'string' || resumeText.trim().length < 20) {
+        return new Response('resumeText (string, ≥20 chars) required', { status: 400, headers: corsHeaders });
+      }
+
+      const system = `You extract structured data from a candidate's resume.
+Return JSON only — no preamble, no markdown, no code fences. Output shape:
+{
+  "skills": ["skill 1", "skill 2", ...],
+  "certifications": ["cert 1", ...],
+  "top_skills": ["top 1", "top 2", "top 3"],
+  "years_experience": <integer or null>,
+  "current_title": "<string or null>"
+}
+Rules:
+- skills: technical and domain skills the candidate clearly demonstrates. Cap at 30. No soft-skill fluff ("teamwork", "communication") unless explicitly listed.
+- certifications: industry-standard certs (AWS, PMP, CISSP, RN, etc.). Skip course completions and informal training. Cap at 15.
+- top_skills: 3 to 5 of the most prominent / load-bearing items from skills. These appear first on the candidate's profile.
+- years_experience: total professional years inferable from work history. null if not derivable.
+- current_title: the candidate's most recent job title, exactly as written. null if no work history.
+- Never invent. Only emit what's in the text.
+- Deduplicate case-insensitively; preserve original casing of the first occurrence.`;
+
+      // Cap at ~10k chars (~2.5k tokens) to keep calls fast and cheap.
+      const truncated = resumeText.length > 10_000 ? resumeText.slice(0, 10_000) : resumeText;
+      const raw = await callClaude(system, truncated);
+      const cleaned = raw.replace(/^```(?:json)?\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        parsed = { skills: [], certifications: [], top_skills: [], years_experience: null, current_title: null };
+      }
+      // Normalize / defensive coercion.
+      const out = {
+        skills: Array.isArray(parsed.skills) ? parsed.skills.filter((s: unknown) => typeof s === 'string').slice(0, 30) : [],
+        certifications: Array.isArray(parsed.certifications) ? parsed.certifications.filter((s: unknown) => typeof s === 'string').slice(0, 15) : [],
+        top_skills: Array.isArray(parsed.top_skills) ? parsed.top_skills.filter((s: unknown) => typeof s === 'string').slice(0, 5) : [],
+        years_experience: typeof parsed.years_experience === 'number' ? Math.max(0, Math.min(60, Math.round(parsed.years_experience))) : null,
+        current_title: typeof parsed.current_title === 'string' ? parsed.current_title.slice(0, 120) : null,
+      };
+      return new Response(JSON.stringify(out), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     return new Response('Not Found', { status: 404, headers: corsHeaders });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {

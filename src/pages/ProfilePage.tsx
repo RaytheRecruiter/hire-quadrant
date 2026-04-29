@@ -10,6 +10,8 @@ import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Tr
 import ExperienceSection from '../components/profile/ExperienceSection';
 import EducationSection from '../components/profile/EducationSection';
 import SkillsSection from '../components/profile/SkillsSection';
+import TopSkillsSection from '../components/profile/TopSkillsSection';
+import CertificationsSection from '../components/profile/CertificationsSection';
 import JobPreferencesSection from '../components/profile/JobPreferencesSection';
 import ProfileCompletenessScore from '../components/profile/ProfileCompletenessScore';
 import { useProfileCompleteness } from '../hooks/useProfileCompleteness';
@@ -302,7 +304,20 @@ const ProfilePage = () => {
                     if (insertError) throw insertError;
                 }
 
-                setMessage({ type: 'success', text: 'Resume uploaded successfully!' });
+                // Per Scott 2026-04-29 (#11 + #12): extract text from the
+                // uploaded resume, save to candidates.resume_text, and call
+                // Claude Haiku to populate skills / certifications / top skills
+                // / years experience / current title. Don't fail the upload
+                // itself if parsing errors out — the file is already saved.
+                setMessage({ type: 'success', text: 'Resume uploaded — analyzing…' });
+                try {
+                    const { extractParseAndStore } = await import('../utils/resumeParser');
+                    await extractParseAndStore(file, user.id);
+                    setMessage({ type: 'success', text: 'Resume uploaded and parsed. Skills + Top Skills + Certifications auto-filled below.' });
+                } catch (parseErr: any) {
+                    console.error('Resume parse failed:', parseErr);
+                    setMessage({ type: 'success', text: 'Resume uploaded. Auto-parsing failed — fill skills/certifications manually.' });
+                }
                 await fetchProfile();
                 window.dispatchEvent(new CustomEvent('profile-updated'));
             } catch (err: any) {
@@ -594,7 +609,9 @@ const ProfilePage = () => {
 
                 <ExperienceSection />
                 <EducationSection />
+                <TopSkillsSection />
                 <SkillsSection />
+                <CertificationsSection />
                 <JobPreferencesSection />
 
                 {/* Resume */}
