@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "migrate-jobs": "tsx scripts/migrateJobs.ts",
     "seed:companies": "tsx scripts/seedCompanies.ts",
-    "seed:test-employers": "tsx scripts/seedTestEmployers.ts"
+    "seed:test-employers": "tsx scripts/seedTestEmployers.ts",
+    "backfill:geocodes": "tsx scripts/backfillJobGeocodes.ts"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
