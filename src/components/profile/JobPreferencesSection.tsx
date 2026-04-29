@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Target, Save, Loader2 } from 'lucide-react';
+import { Target, Save, Loader2, MapPin } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
+import { geocodeZip } from '../../utils/geocode';
+
+const RADIUS_OPTIONS = [
+  { value: 0, label: 'No radius (any location)' },
+  { value: 5, label: 'Within 5 miles' },
+  { value: 10, label: 'Within 10 miles' },
+  { value: 25, label: 'Within 25 miles' },
+  { value: 50, label: 'Within 50 miles' },
+  { value: 100, label: 'Within 100 miles' },
+];
 
 interface Prefs {
   desired_titles: string[];
   desired_locations: string[];
   zip_code: string;
+  zip_lat: number | null;
+  zip_lng: number | null;
+  mile_radius: number;
   desired_salary_min: number | null;
   desired_salary_max: number | null;
   work_types: string[];
@@ -32,6 +45,9 @@ const empty: Prefs = {
   desired_titles: [],
   desired_locations: [],
   zip_code: '',
+  zip_lat: null,
+  zip_lng: null,
+  mile_radius: 0,
   desired_salary_min: null,
   desired_salary_max: null,
   work_types: [],
@@ -65,6 +81,9 @@ const JobPreferencesSection: React.FC = () => {
           desired_titles: data.desired_titles ?? [],
           desired_locations: data.desired_locations ?? [],
           zip_code: data.zip_code ?? '',
+          zip_lat: data.zip_lat ?? null,
+          zip_lng: data.zip_lng ?? null,
+          mile_radius: data.mile_radius ?? 0,
           desired_salary_min: data.desired_salary_min,
           desired_salary_max: data.desired_salary_max,
           work_types: data.work_types ?? [],
@@ -103,12 +122,31 @@ const JobPreferencesSection: React.FC = () => {
     setSaving(true);
     const titles = titlesInput.split(',').map((s) => s.trim()).filter(Boolean);
     const locations = locationsInput.split(',').map((s) => s.trim()).filter(Boolean);
+
+    // Geocode the ZIP if it changed (or if we don't have coords yet). Cached
+    // in localStorage so resaving with the same ZIP is free.
+    let lat = prefs.zip_lat;
+    let lng = prefs.zip_lng;
+    const zipChanged = zip.split('-')[0] !== (prefs.zip_code || '').split('-')[0];
+    if (!lat || !lng || zipChanged) {
+      const result = await geocodeZip(zip);
+      if (result) {
+        lat = result.lat;
+        lng = result.lng;
+      } else if (prefs.mile_radius > 0) {
+        toast.error('Could not geocode that ZIP — radius search disabled.');
+      }
+    }
+
     const { error } = await supabase.from('user_job_preferences').upsert(
       {
         user_id: user.id,
         desired_titles: titles,
         desired_locations: locations,
         zip_code: zip,
+        zip_lat: lat,
+        zip_lng: lng,
+        mile_radius: prefs.mile_radius,
         desired_salary_min: prefs.desired_salary_min,
         desired_salary_max: prefs.desired_salary_max,
         work_types: prefs.work_types,
@@ -122,7 +160,10 @@ const JobPreferencesSection: React.FC = () => {
     );
     setSaving(false);
     if (error) toast.error(error.message);
-    else toast.success('Preferences saved');
+    else {
+      setPrefs((p) => ({ ...p, zip_lat: lat, zip_lng: lng }));
+      toast.success('Preferences saved');
+    }
   };
 
   if (loading) {
@@ -173,6 +214,26 @@ const JobPreferencesSection: React.FC = () => {
           />
           <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
             Used for distance-based job matching.
+          </p>
+        </div>
+
+        <div>
+          <label htmlFor="pref-radius" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 flex items-center gap-1">
+            <MapPin className="h-4 w-4 text-gray-400 dark:text-slate-500" />
+            Search radius
+          </label>
+          <select
+            id="pref-radius"
+            value={prefs.mile_radius}
+            onChange={(e) => setPrefs((p) => ({ ...p, mile_radius: Number(e.target.value) }))}
+            className="w-full max-w-xs px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+          >
+            {RADIUS_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+            Filter the Jobs page to roles within this distance from your ZIP.
           </p>
         </div>
 

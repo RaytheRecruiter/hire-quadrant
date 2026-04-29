@@ -3,6 +3,7 @@ import { X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
+import { geocode } from '../../utils/geocode';
 
 interface NewJobModalProps {
   open: boolean;
@@ -51,11 +52,26 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated }) =
     // jobs.id is text — generate a UI-prefixed UUID so it never collides with
     // the "26-XXXXX" external feed format.
     const newId = `ui-${crypto.randomUUID()}`;
+
+    // Geocode the location (best-effort) so the job participates in
+    // mile-radius search. Failure here is non-fatal — the job still posts.
+    let lat: number | null = null;
+    let lng: number | null = null;
+    if (location.trim() && workplaceType !== 'Remote') {
+      const result = await geocode(location.trim());
+      if (result) {
+        lat = result.lat;
+        lng = result.lng;
+      }
+    }
+
     const { error } = await supabase.from('jobs').insert({
       id: newId,
       title: title.trim(),
       company_id: user.companyId,
       location: location.trim() || null,
+      lat,
+      lng,
       type,
       workplace_type: workplaceType,
       experience_level: experienceLevel,

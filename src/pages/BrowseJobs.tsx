@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
-import { MapPin, Search as SearchIcon, Briefcase, Loader2 } from 'lucide-react';
+import { MapPin, Search as SearchIcon, Briefcase, Loader2, X } from 'lucide-react';
 import HardLink from '../components/HardLink';
 import JobFilterSidebar, { AdvancedFilters, DEFAULT_ADVANCED_FILTERS } from '../components/JobFilterSidebar';
 import AutocompleteField from '../components/AutocompleteField';
 import { supabase } from '../utils/supabaseClient';
 import { formatDistanceToNow } from 'date-fns';
+import { useAuth } from '../contexts/AuthContext';
 
 interface JobRow {
   id: string;
@@ -27,10 +28,48 @@ interface JobRow {
 
 const PAGE_SIZE = 20;
 
+// Radius filter state. Loaded once from the signed-in user's saved
+// preferences; users can dismiss it for the current session via the
+// chip × button. Per Scott 2026-04-29 (#6).
+type RadiusPref = {
+  miles: number;
+  lat: number;
+  lng: number;
+  zip: string;
+} | null;
+
 const BrowseJobs: React.FC = () => {
+  const { user } = useAuth();
   const [params, setParams] = useSearchParams();
   const [q, setQ] = useState(params.get('q') ?? '');
   const [loc, setLoc] = useState(params.get('loc') ?? '');
+  const [radiusPref, setRadiusPref] = useState<RadiusPref>(null);
+  const [radiusActive, setRadiusActive] = useState(true);
+
+  // Load the user's saved radius preference once. If they have lat/lng +
+  // a non-zero radius, we'll apply it by default; the chip can be dismissed.
+  useEffect(() => {
+    if (!user?.id) {
+      setRadiusPref(null);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from('user_job_preferences')
+        .select('mile_radius, zip_lat, zip_lng, zip_code')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (data?.mile_radius && data.zip_lat && data.zip_lng) {
+        setRadiusPref({
+          miles: data.mile_radius as number,
+          lat: data.zip_lat as number,
+          lng: data.zip_lng as number,
+          zip: (data.zip_code as string) || '',
+        });
+      }
+    })();
+  }, [user?.id]);
+
   const [filters, setFilters] = useState<AdvancedFilters>({
     ...DEFAULT_ADVANCED_FILTERS,
     minSalary: parseInt(params.get('salary') ?? '0', 10) || 0,
@@ -70,6 +109,23 @@ const BrowseJobs: React.FC = () => {
     let cancelled = false;
     const fetchJobs = async () => {
       setLoading(true);
+
+      // Resolve the radius filter first if active. Returns the set of job
+      // ids within range; we then narrow the main query with .in('id', …).
+      let nearbyIds: string[] | null = null;
+      if (radiusActive && radiusPref && radiusPref.miles > 0) {
+        const { data: nearby, error: nearbyError } = await supabase.rpc('nearby_job_ids', {
+          p_lat: radiusPref.lat,
+          p_lng: radiusPref.lng,
+          p_miles: radiusPref.miles,
+        });
+        if (nearbyError) {
+          console.warn('[BrowseJobs] nearby_job_ids failed, ignoring radius:', nearbyError);
+        } else {
+          nearbyIds = (nearby || []).map((r: { id: string }) => r.id);
+        }
+      }
+
       let query = supabase
         .from('jobs')
         .select(
@@ -91,6 +147,10 @@ const BrowseJobs: React.FC = () => {
       if (filters.postedWithinDays > 0) {
         const since = new Date(Date.now() - filters.postedWithinDays * 24 * 60 * 60 * 1000).toISOString();
         query = query.gte('posted_date', since);
+      }
+      if (nearbyIds !== null) {
+        // Empty array → zero results (Supabase handles this fine).
+        query = query.in('id', nearbyIds);
       }
 
       const from = page * PAGE_SIZE;
@@ -117,7 +177,7 @@ const BrowseJobs: React.FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [q, loc, filters, page]);
+  }, [q, loc, filters, page, radiusActive, radiusPref]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const resultsCopy = useMemo(() => {
@@ -173,6 +233,40 @@ const BrowseJobs: React.FC = () => {
               Search
             </button>
           </form>
+
+          {radiusPref && radiusPref.miles > 0 && (
+            <div className="mb-4 flex items-center gap-2 flex-wrap">
+              {radiusActive ? (
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 text-xs font-medium border border-primary-200 dark:border-primary-800">
+                  <MapPin className="h-3.5 w-3.5" />
+                  Within {radiusPref.miles} mi of {radiusPref.zip || 'your ZIP'}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRadiusActive(false);
+                      setPage(0);
+                    }}
+                    className="ml-1 hover:text-rose-600"
+                    aria-label="Remove radius filter"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRadiusActive(true);
+                    setPage(0);
+                  }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-primary-300 hover:text-primary-600"
+                >
+                  <MapPin className="h-3.5 w-3.5" />
+                  Filter to within {radiusPref.miles} mi of {radiusPref.zip || 'your ZIP'}
+                </button>
+              )}
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5">
             <JobFilterSidebar
