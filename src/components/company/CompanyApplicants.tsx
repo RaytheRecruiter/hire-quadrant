@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import ApplicantDetailModal from './ApplicantDetailModal';
 import ApplicantKanban from './ApplicantKanban';
 import BulkMessageComposer from './BulkMessageComposer';
+import { usePermissions } from '../../hooks/usePermissions';
 
 interface CompanyApplicantsProps {
   applications: any[];
@@ -28,6 +29,15 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   jobs,
   onStatusUpdate,
 }) => {
+  const { isOwner, isAdmin, can, member } = usePermissions();
+  // No member row → legacy single-tenant flow → grant everything (the
+  // backfill migration covers established companies; this is a safety net
+  // for users who haven't been mapped yet).
+  const noMember = !member;
+  const canViewApplicants = noMember || isOwner || isAdmin || can('view_applicants');
+  const canMessage = noMember || isOwner || isAdmin || can('message_applicants');
+  const canViewContact = noMember || isOwner || isAdmin || can('view_resume_contact');
+  const canDownloadResumes = noMember || isOwner || isAdmin || can('download_resumes');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [jobFilter, setJobFilter] = useState<string>('all');
   const [candidateInfo, setCandidateInfo] = useState<Record<string, any>>({});
@@ -64,6 +74,10 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   }, [applications]);
 
   const handleResumeDownload = async (userId: string, appId: string) => {
+    if (!canDownloadResumes) {
+      toast.error("You don't have permission to download resumes. Ask your Owner.");
+      return;
+    }
     const candidate = candidateInfo[userId];
     if (!candidate?.resume_url) {
       toast.error('No resume available for this candidate.');
@@ -103,6 +117,16 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
     if (showShortlistedOnly && !app.is_shortlisted) return false;
     return true;
   });
+
+  if (!canViewApplicants) {
+    return (
+      <div className="text-center py-16">
+        <Users className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">Applicants are restricted</h3>
+        <p className="text-gray-500 dark:text-slate-400">Ask your company Owner or Admin to grant you the "View applicants" permission.</p>
+      </div>
+    );
+  }
 
   if (applications.length === 0) {
     return (
@@ -144,14 +168,16 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
             Pipeline
           </button>
         </div>
-        <button
-          type="button"
-          onClick={() => setShowBulk(true)}
-          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
-        >
-          <MessageSquare className="h-3.5 w-3.5" />
-          Bulk message
-        </button>
+        {canMessage && (
+          <button
+            type="button"
+            onClick={() => setShowBulk(true)}
+            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+          >
+            <MessageSquare className="h-3.5 w-3.5" />
+            Bulk message
+          </button>
+        )}
       </div>
 
       {view === 'kanban' ? (
@@ -224,7 +250,9 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                         {candidate?.name || app.candidate_name || 'Unknown'}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-slate-400">
-                        {candidate?.email || app.candidate_email || ''}
+                        {canViewContact
+                          ? (candidate?.email || app.candidate_email || '')
+                          : <span className="italic text-gray-400 dark:text-slate-500">Contact info hidden</span>}
                       </div>
                     </div>
                   </td>
@@ -259,13 +287,17 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                   </td>
                   {/* Status badge column removed per Scott 2026-04-28: not a CRM. */}
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => handleResumeDownload(app.user_id, app.id)}
-                      className="text-primary-500 hover:text-primary-700 transition-colors"
-                      title="Download Resume"
-                    >
-                      <Download className="h-4 w-4" />
-                    </button>
+                    {canDownloadResumes ? (
+                      <button
+                        onClick={() => handleResumeDownload(app.user_id, app.id)}
+                        className="text-primary-500 hover:text-primary-700 transition-colors"
+                        title="Download Resume"
+                      >
+                        <Download className="h-4 w-4" />
+                      </button>
+                    ) : (
+                      <span className="text-gray-300 dark:text-slate-600 text-xs italic" title="Restricted">—</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Eye, MessageSquare, Star, Heart, Loader2, AlertCircle } from 'lucide-react';
+import { Eye, MessageSquare, Star, Heart, Loader2, AlertCircle, Lock } from 'lucide-react';
+import { usePermissions } from '../../hooks/usePermissions';
 import {
   AreaChart,
   Area,
@@ -41,8 +42,28 @@ const shortDate = (iso: string) => {
 };
 
 const CompanyAnalyticsPanel: React.FC<Props> = ({ companyId }) => {
+  const { isOwner, isAdmin, can, member } = usePermissions();
+  const noMember = !member;
+  const canViewBasic = noMember || isOwner || isAdmin || can('view_analytics_basic');
+  const canViewFull = noMember || isOwner || isAdmin || can('view_analytics_full');
   const { stats, loading, error } = useCompanyAnalytics(companyId);
   const { series, loading: seriesLoading } = useCompanyAnalyticsTimeseries(companyId, 30);
+
+  if (!canViewBasic) {
+    return (
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+        <div className="flex items-start gap-3">
+          <Lock className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-semibold text-amber-900">Analytics restricted</p>
+            <p className="text-sm text-amber-800 mt-1">
+              Ask your Owner or Admin to grant you the "View basic analytics" permission.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -94,6 +115,13 @@ const CompanyAnalyticsPanel: React.FC<Props> = ({ companyId }) => {
         />
       </div>
 
+      {!canViewFull && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-2 text-sm text-amber-900">
+          <Lock className="h-4 w-4 mt-0.5 flex-shrink-0" />
+          <span>Charts and detailed breakdowns require the "View full analytics" permission.</span>
+        </div>
+      )}
+      {canViewFull && (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
           <h3 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
@@ -149,6 +177,7 @@ const CompanyAnalyticsPanel: React.FC<Props> = ({ companyId }) => {
           )}
         </section>
       </div>
+      )}
     </div>
   );
 };

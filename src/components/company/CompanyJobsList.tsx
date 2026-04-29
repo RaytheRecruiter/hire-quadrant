@@ -21,7 +21,10 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated })
   // If a user has no membership row at all (legacy single-tenant company),
   // fall back to allowing — the backfill migration creates an Owner row, but
   // we don't want to lock users out if backfill hasn't run for some reason.
-  const canPostJobs = !permLoading && (!member || isOwner || isAdmin || can('post_jobs'));
+  const noMember = !member;
+  const canPostJobs = !permLoading && (noMember || isOwner || isAdmin || can('post_jobs'));
+  const canEditJobs = !permLoading && (noMember || isOwner || isAdmin || can('edit_jobs'));
+  const canSponsorJobs = !permLoading && (noMember || isOwner || isAdmin || can('sponsor_jobs'));
   const [editingJobId, setEditingJobId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<ScreeningQuestion[]>([]);
   const [saving, setSaving] = useState(false);
@@ -191,32 +194,42 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated })
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-2">
-                      <select
-                        value={getTier(job)}
-                        onChange={(e) => updateSponsor(job.id, Number(e.target.value))}
-                        disabled={sponsorBusyId === job.id}
-                        aria-label="Sponsor tier"
-                        className="text-xs rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-2 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-60"
-                      >
-                        <option value={0}>Off</option>
-                        <option value={1}>Tier 1</option>
-                        <option value={2}>Tier 2</option>
-                        <option value={3}>Tier 3</option>
-                      </select>
-                      {getTier(job) > 0 && (
-                        <Sparkles className="h-3.5 w-3.5 text-amber-500" aria-label="Sponsored" />
-                      )}
-                    </div>
+                    {canSponsorJobs ? (
+                      <div className="flex items-center gap-2">
+                        <select
+                          value={getTier(job)}
+                          onChange={(e) => updateSponsor(job.id, Number(e.target.value))}
+                          disabled={sponsorBusyId === job.id}
+                          aria-label="Sponsor tier"
+                          className="text-xs rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-2 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-60"
+                        >
+                          <option value={0}>Off</option>
+                          <option value={1}>Tier 1</option>
+                          <option value={2}>Tier 2</option>
+                          <option value={3}>Tier 3</option>
+                        </select>
+                        {getTier(job) > 0 && (
+                          <Sparkles className="h-3.5 w-3.5 text-amber-500" aria-label="Sponsored" />
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-gray-400 dark:text-slate-500">
+                        {getTier(job) > 0 ? `Tier ${getTier(job)}` : '—'}
+                      </span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button
-                      onClick={() => openEditor(job)}
-                      className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium text-sm"
-                    >
-                      <Settings className="h-4 w-4" />
-                      Manage
-                    </button>
+                    {canEditJobs ? (
+                      <button
+                        onClick={() => openEditor(job)}
+                        className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium text-sm"
+                      >
+                        <Settings className="h-4 w-4" />
+                        Manage
+                      </button>
+                    ) : (
+                      <span className="text-xs text-gray-400 dark:text-slate-500 italic">View only</span>
+                    )}
                   </td>
                 </tr>
               );
