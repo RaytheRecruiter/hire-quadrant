@@ -7,7 +7,7 @@
 // now the button surfaces a mailto so Standard users can request a plan
 // change while Owners get a working contact path.
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   CreditCard,
   CheckCircle2,
@@ -18,8 +18,10 @@ import {
   Briefcase,
   Sparkles,
   Mail,
+  KeyRound,
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { supabase } from '../../utils/supabaseClient';
 import { useSubscription } from '../../hooks/useSubscription';
 import { usePermissions } from '../../hooks/usePermissions';
 
@@ -49,6 +51,25 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
   const canManageBilling = noMember || isOwner || isAdmin || can('manage_billing');
 
   const { plans, currentSubscription, jobsUsed, loading, error } = useSubscription({ companyId });
+
+  // Phase 2 #5: pull current period unlock credit usage so the panel can
+  // surface "X / Y unlocks used this period". Optional — failure here is
+  // non-fatal; the rest of the panel still renders.
+  const [unlocks, setUnlocks] = useState<{ total: number; used: number; remaining: number } | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.rpc('unlocks_remaining', { p_company_id: companyId });
+      if (cancelled) return;
+      const row = Array.isArray(data) ? data[0] : data;
+      if (row && typeof row.total === 'number') {
+        setUnlocks({ total: row.total, used: row.used, remaining: row.remaining });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [companyId]);
 
   if (loading) {
     return (
@@ -125,13 +146,21 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
               <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
                 <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
                   <Briefcase className="h-3 w-3" /> Job postings
                 </p>
                 <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
                   {jobsUsed} / {jobLimitLabel}
+                </p>
+              </div>
+              <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
+                <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
+                  <KeyRound className="h-3 w-3" /> Unlocks
+                </p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
+                  {unlocks ? `${unlocks.used} / ${unlocks.total}` : '—'}
                 </p>
               </div>
               <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
@@ -210,9 +239,15 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                       )}
                     </div>
                     <p className="text-2xl font-bold text-primary-600 mb-2">{fmtPrice(plan.price_monthly)}</p>
-                    <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">
+                    <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
                       {plan.job_limit === -1 ? 'Unlimited jobs' : `${plan.job_limit} jobs`}
                     </p>
+                    {(plan as { monthly_unlock_credits?: number }).monthly_unlock_credits != null && (
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mb-3 flex items-center gap-1">
+                        <KeyRound className="h-3 w-3 text-amber-500" />
+                        {(plan as { monthly_unlock_credits?: number }).monthly_unlock_credits} unlock credits / mo
+                      </p>
+                    )}
                     {Array.isArray(plan.features) && plan.features.length > 0 && (
                       <ul className="space-y-1.5 mb-4">
                         {plan.features.slice(0, 5).map((f, i) => (

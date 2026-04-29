@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Search, MapPin, User, Loader2, Download, Filter, Lock } from 'lucide-react';
+import { Search, MapPin, User, Loader2, Download, Filter, Lock, KeyRound, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
@@ -20,6 +20,13 @@ interface Candidate {
   target_role?: string;
 }
 
+interface UnlocksInfo {
+  total: number;
+  used: number;
+  remaining: number;
+  period_start: string;
+}
+
 const ResumeSearch: React.FC = () => {
   const { isCompany, isAdmin, loading: authLoading } = useAuth();
   const { isOwner, isAdmin: isCompanyAdmin, can, member, loading: permLoading } = usePermissions();
@@ -34,6 +41,12 @@ const ResumeSearch: React.FC = () => {
   const [query, setQuery] = useState('');
   const [location, setLocation] = useState('');
   const [minYears, setMinYears] = useState<number>(0);
+  // Unlock credit state. Phase 2 #5: candidate contact + resume download
+  // are gated by per-period credits. Already-unlocked candidates stay
+  // visible to the whole company for the rest of the period.
+  const [unlocks, setUnlocks] = useState<UnlocksInfo | null>(null);
+  const [unlockedSet, setUnlockedSet] = useState<Set<string>>(new Set());
+  const [unlockingId, setUnlockingId] = useState<string | null>(null);
 
   const fetchCandidates = async () => {
     setLoading(true);
@@ -75,6 +88,44 @@ const ResumeSearch: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Pull credit allowance + already-unlocked candidate ids whenever the
+  // member's company changes. Both queries are scoped by RLS.
+  const refreshUnlocks = async () => {
+    if (!member?.company_id) {
+      setUnlocks(null);
+      setUnlockedSet(new Set());
+      return;
+    }
+    const [{ data: remaining }, { data: rows }] = await Promise.all([
+      supabase.rpc('unlocks_remaining', { p_company_id: member.company_id }),
+      supabase
+        .from('candidate_unlocks')
+        .select('candidate_user_id, period_start')
+        .eq('company_id', member.company_id)
+        .order('period_start', { ascending: false }),
+    ]);
+    if (Array.isArray(remaining) && remaining.length > 0) {
+      setUnlocks(remaining[0] as UnlocksInfo);
+    } else if (remaining && typeof remaining === 'object') {
+      setUnlocks(remaining as unknown as UnlocksInfo);
+    }
+    // Filter unlocks to those in the current period (RLS+RPC use the same
+    // logic but the table is unfiltered).
+    const periodStart =
+      Array.isArray(remaining) && remaining.length > 0
+        ? new Date((remaining[0] as UnlocksInfo).period_start)
+        : null;
+    const ids = (rows || [])
+      .filter((r) => !periodStart || new Date(r.period_start) >= periodStart)
+      .map((r) => r.candidate_user_id as string);
+    setUnlockedSet(new Set(ids));
+  };
+
+  useEffect(() => {
+    refreshUnlocks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [member?.company_id]);
+
   const handleResumeDownload = async (candidate: Candidate) => {
     if (!candidate.resume_url) return toast.error('No resume uploaded.');
     const { data, error } = await supabase.storage
@@ -82,6 +133,27 @@ const ResumeSearch: React.FC = () => {
       .createSignedUrl(candidate.resume_url, 3600);
     if (error) return toast.error('Could not generate download link.');
     window.open(data.signedUrl, '_blank');
+  };
+
+  const handleUnlock = async (candidate: Candidate) => {
+    if (!candidate.user_id) return;
+    setUnlockingId(candidate.user_id);
+    const { data, error } = await supabase.rpc('unlock_candidate', {
+      p_candidate_user_id: candidate.user_id,
+    });
+    setUnlockingId(null);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const result = Array.isArray(data) ? data[0] : data;
+    setUnlockedSet((s) => new Set([...s, candidate.user_id!]));
+    if (result?.already_unlocked) {
+      toast.success('Already unlocked this period');
+    } else {
+      toast.success('Contact info unlocked');
+    }
+    refreshUnlocks();
   };
 
   if (authLoading || permLoading) {
@@ -117,11 +189,25 @@ const ResumeSearch: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
-            Resume Database
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-slate-400">Search candidates open to new opportunities.</p>
+        <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
+              Resume Database
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-slate-400">Search candidates open to new opportunities.</p>
+          </div>
+          {unlocks && (
+            <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm">
+              <div className="flex items-center gap-2 text-gray-600 dark:text-slate-400">
+                <KeyRound className="h-4 w-4 text-amber-500" />
+                <span>Unlock credits</span>
+              </div>
+              <div className="mt-1 text-base font-semibold text-secondary-900 dark:text-white">
+                {unlocks.remaining} <span className="text-gray-400 dark:text-slate-500 font-normal">/ {unlocks.total} remaining</span>
+              </div>
+              <div className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">Resets each billing period</div>
+            </div>
+          )}
         </div>
 
         <div className="bg-white/90 backdrop-blur-sm shadow-lg border border-white/20 rounded-2xl p-6 mb-8">
@@ -184,49 +270,84 @@ const ResumeSearch: React.FC = () => {
                 2026-04-28 — only skills + role + location surface here.
                 Full candidate identity is revealed only when an employer
                 opens the detail / downloads the resume. */}
-            {candidates.map((c, idx) => (
-              <div key={c.user_id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
-                      <span className="font-bold text-primary-600">#</span>
+            {candidates.map((c, idx) => {
+              const isUnlocked = c.user_id ? unlockedSet.has(c.user_id) : false;
+              const noCredits = unlocks ? unlocks.remaining <= 0 : false;
+              return (
+                <div key={c.user_id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={`h-12 w-12 rounded-full flex items-center justify-center ${
+                        isUnlocked ? 'bg-emerald-100' : 'bg-primary-100'
+                      }`}>
+                        {isUnlocked ? (
+                          <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                        ) : (
+                          <span className="font-bold text-primary-600">#</span>
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-secondary-900 dark:text-white">
+                          {isUnlocked && c.name ? c.name : `Candidate ${idx + 1}`}
+                        </h3>
+                        {isUnlocked && c.email && (
+                          <p className="text-xs text-gray-500 dark:text-slate-400">{c.email}</p>
+                        )}
+                        {c.current_role && (
+                          <p className="text-xs font-semibold text-amber-600 mt-1">
+                            Current: {c.current_role}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-secondary-900 dark:text-white">Candidate {idx + 1}</h3>
-                      {c.current_role && (
-                        <p className="text-xs font-semibold text-amber-600 mt-1">
-                          Current: {c.current_role}
-                        </p>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-slate-400 mt-2">
+                      {c.location && (
+                        <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{c.location}</span>
+                      )}
+                      {c.years_experience !== undefined && c.years_experience !== null && (
+                        <span>{c.years_experience}+ yrs experience</span>
                       )}
                     </div>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-slate-400 mt-2">
-                    {c.location && (
-                      <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{c.location}</span>
+                    {c.skills && c.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {c.skills.slice(0, 8).map(s => (
+                          <span key={s} className="px-2.5 py-0.5 bg-primary-50 text-primary-700 rounded-full text-xs">{s}</span>
+                        ))}
+                      </div>
                     )}
-                    {c.years_experience !== undefined && c.years_experience !== null && (
-                      <span>{c.years_experience}+ yrs experience</span>
+                  </div>
+                  <div className="flex-shrink-0 flex flex-col gap-2">
+                    {isUnlocked ? (
+                      c.resume_url ? (
+                        <button
+                          onClick={() => handleResumeDownload(c)}
+                          className="flex items-center gap-2 bg-gradient-to-r from-primary-400 to-primary-500 text-white px-4 py-2 rounded-xl font-semibold hover:from-primary-500 hover:to-primary-600 transition-all"
+                        >
+                          <Download className="h-4 w-4" />
+                          Resume
+                        </button>
+                      ) : (
+                        <span className="text-xs text-gray-400 dark:text-slate-500 italic">No resume</span>
+                      )
+                    ) : (
+                      <button
+                        onClick={() => handleUnlock(c)}
+                        disabled={unlockingId === c.user_id || (noCredits && !isUnlocked)}
+                        className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                        title={noCredits ? 'No unlock credits remaining this period' : 'Unlock contact info + resume (1 credit)'}
+                      >
+                        {unlockingId === c.user_id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <KeyRound className="h-4 w-4" />
+                        )}
+                        {noCredits ? 'No credits' : 'Unlock'}
+                      </button>
                     )}
                   </div>
-                  {c.skills && c.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-3">
-                      {c.skills.slice(0, 8).map(s => (
-                        <span key={s} className="px-2.5 py-0.5 bg-primary-50 text-primary-700 rounded-full text-xs">{s}</span>
-                      ))}
-                    </div>
-                  )}
                 </div>
-                {c.resume_url && (
-                  <button
-                    onClick={() => handleResumeDownload(c)}
-                    className="flex items-center gap-2 bg-gradient-to-r from-primary-400 to-primary-500 text-white px-4 py-2 rounded-xl font-semibold hover:from-primary-500 hover:to-primary-600 transition-all flex-shrink-0"
-                  >
-                    <Download className="h-4 w-4" />
-                    Resume
-                  </button>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
