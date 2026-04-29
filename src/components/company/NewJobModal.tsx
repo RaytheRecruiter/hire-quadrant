@@ -69,6 +69,9 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated }) =
       id: newId,
       title: title.trim(),
       company_id: user.companyId,
+      // Per Scott Phase 2 #4: track who posted each job for the
+      // Recruiter Activity panel.
+      posted_by: user.id,
       location: location.trim() || null,
       lat,
       lng,
