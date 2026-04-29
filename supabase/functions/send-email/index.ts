@@ -67,6 +67,32 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
       </html>
     `,
 
+    team_invitation: (v) => `
+      <!DOCTYPE html>
+      <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: sans-serif; color: #333; max-width: 560px; margin: 0 auto;">
+          <h1>You've been invited to join ${v.companyName} on HireQuadrant</h1>
+          <p>${v.inviterName ? `${v.inviterName}` : 'Your team'} invited you as a <strong>${v.roleLabel}</strong>${v.scopeLabel ? ` (${v.scopeLabel})` : ''}.</p>
+          <p>Click below to accept the invitation. The link expires on ${v.expiresOn}.</p>
+          <p style="margin: 24px 0;">
+            <a href="${v.inviteUrl}" style="background: #0035ff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+              Accept invitation
+            </a>
+          </p>
+          <p style="color: #666; font-size: 13px;">
+            Or copy and paste this URL into your browser:<br>
+            <a href="${v.inviteUrl}" style="color: #0035ff; word-break: break-all;">${v.inviteUrl}</a>
+          </p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 24px 0;">
+          <p style="font-size: 12px; color: #666;">
+            If you weren't expecting this, you can safely ignore the email.
+          </p>
+          <p style="font-size: 12px; color: #666;">© 2026 HireQuadrant</p>
+        </body>
+      </html>
+    `,
+
     weekly_digest: (v) => `
       <!DOCTYPE html>
       <html>

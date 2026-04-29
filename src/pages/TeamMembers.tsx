@@ -54,11 +54,18 @@ interface InvitationRow {
   status: 'pending' | 'accepted' | 'expired' | 'revoked';
 }
 
+interface CompanyInfo {
+  id: string;
+  display_name: string | null;
+  name: string;
+}
+
 const TeamMembers: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
   const { member, loading: permLoading, can, isOwner, isAdmin } = usePermissions();
   const [members, setMembers] = useState<MemberWithProfile[]>([]);
   const [invitations, setInvitations] = useState<InvitationRow[]>([]);
+  const [company, setCompany] = useState<CompanyInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [showInvite, setShowInvite] = useState(false);
   const [editing, setEditing] = useState<MemberWithProfile | null>(null);
@@ -72,7 +79,7 @@ const TeamMembers: React.FC = () => {
       return;
     }
     setLoading(true);
-    const [membersRes, invitesRes] = await Promise.all([
+    const [membersRes, invitesRes, companyRes] = await Promise.all([
       supabase
         .from('company_members')
         .select('*')
@@ -84,7 +91,13 @@ const TeamMembers: React.FC = () => {
         .eq('company_id', member.company_id)
         .eq('status', 'pending')
         .order('invited_at', { ascending: false }),
+      supabase
+        .from('companies')
+        .select('id, display_name, name')
+        .eq('id', member.company_id)
+        .maybeSingle(),
     ]);
+    if (companyRes.data) setCompany(companyRes.data as CompanyInfo);
 
     const memberRows = (membersRes.data || []) as CompanyMember[];
     const userIds = memberRows.map((m) => m.user_id);
@@ -275,8 +288,8 @@ const TeamMembers: React.FC = () => {
                 Pending Invitations
               </h2>
               <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
-                Phase 1 MVP — copy the invite link and send it manually. Auto-email
-                coming in Phase 1.5.
+                Invitations are emailed automatically. You can also copy the
+                link below to share it manually.
               </p>
             </div>
             <ul className="divide-y divide-gray-100 dark:divide-slate-700">
@@ -346,6 +359,8 @@ const TeamMembers: React.FC = () => {
         <InviteModal
           companyId={member.company_id}
           inviterRole={member.role}
+          inviterName={user.name || user.email || 'Your teammate'}
+          companyName={company?.display_name || company?.name || 'your company'}
           onClose={() => setShowInvite(false)}
           onCreated={() => {
             setShowInvite(false);
@@ -441,9 +456,11 @@ const PermissionSummary: React.FC<{ member: CompanyMember }> = ({ member }) => {
 const InviteModal: React.FC<{
   companyId: string;
   inviterRole: CompanyRole;
+  inviterName: string;
+  companyName: string;
   onClose: () => void;
   onCreated: () => void;
-}> = ({ companyId, inviterRole, onClose, onCreated }) => {
+}> = ({ companyId, inviterRole, inviterName, companyName, onClose, onCreated }) => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<'admin' | 'standard'>('standard');
   const [scope, setScope] = useState<AccessScope>('assigned');
@@ -451,33 +468,85 @@ const InviteModal: React.FC<{
   const [saving, setSaving] = useState(false);
 
   const submit = async () => {
-    if (!email.includes('@')) {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail.includes('@')) {
       toast.error('Enter a valid email');
       return;
     }
     setSaving(true);
-    // Generate a 32-byte URL-safe token client-side. Phase 2 may move this
-    // server-side via an edge function so we can also send the email there.
+
+    // Generate a 32-byte URL-safe token client-side.
     const tokenBytes = new Uint8Array(32);
     crypto.getRandomValues(tokenBytes);
     const token = Array.from(tokenBytes)
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
 
+    const finalScope = role === 'admin' ? 'all' : scope;
+    const finalPerms = role === 'admin' ? {} : permissions;
+
     const { error } = await supabase.from('company_invitations').insert({
       company_id: companyId,
-      email: email.trim().toLowerCase(),
+      email: cleanEmail,
       role,
-      scope: role === 'admin' ? 'all' : scope,
-      permissions: role === 'admin' ? {} : permissions,
+      scope: finalScope,
+      permissions: finalPerms,
       token,
     });
-    setSaving(false);
+
     if (error) {
+      setSaving(false);
       toast.error(error.message);
       return;
     }
-    toast.success('Invitation created');
+
+    // Per Scott 2026-04-29 (#4) Phase 1.5: send the invitation by email.
+    // Failure is non-fatal — the row exists and the link can still be
+    // copy-pasted from the Pending Invitations panel.
+    const inviteUrl = `${window.location.origin}/accept-invite?token=${token}`;
+    const expiresOn = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(
+      undefined,
+      { month: 'long', day: 'numeric', year: 'numeric' },
+    );
+    const roleLabel = role === 'admin' ? 'Admin' : 'Standard User';
+    const scopeLabel = role === 'standard'
+      ? finalScope === 'all' ? 'All Jobs' : 'Assigned Jobs Only'
+      : '';
+
+    try {
+      const url = import.meta.env.VITE_SUPABASE_URL as string;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+      const res = await fetch(`${url}/functions/v1/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${anonKey}`,
+          apikey: anonKey,
+        },
+        body: JSON.stringify({
+          to: cleanEmail,
+          subject: `${inviterName} invited you to join ${companyName} on HireQuadrant`,
+          template: 'team_invitation',
+          variables: {
+            companyName,
+            inviterName,
+            roleLabel,
+            scopeLabel,
+            inviteUrl,
+            expiresOn,
+          },
+        }),
+      });
+      if (res.ok) {
+        toast.success(`Invitation sent to ${cleanEmail}`);
+      } else {
+        toast.success('Invitation created — copy the link from the table to share it');
+      }
+    } catch {
+      toast.success('Invitation created — copy the link from the table to share it');
+    } finally {
+      setSaving(false);
+    }
     onCreated();
   };
 
