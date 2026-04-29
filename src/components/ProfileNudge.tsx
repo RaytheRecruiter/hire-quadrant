@@ -3,7 +3,7 @@ import { Sparkles, X } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 
-// Shows a banner if a candidate is missing key profile fields (resume, location, headline).
+// Shows a banner if a candidate is missing key profile fields (resume, location, top skills).
 // Dismissal is persisted per session via sessionStorage. Re-checks fire on user change
 // or when a 'profile-updated' event is dispatched by ProfilePage after a save.
 const ProfileNudge: React.FC = () => {
@@ -18,14 +18,15 @@ const ProfileNudge: React.FC = () => {
     }
     const { data } = await supabase
       .from('candidates')
-      .select('resume_url, location, phone_number, headline')
+      .select('resume_url, location, phone_number, top_skills')
       .eq('user_id', user.id)
       .maybeSingle();
 
+    const topSkillsArr = Array.isArray(data?.top_skills) ? (data!.top_skills as unknown[]) : [];
     const gaps: string[] = [];
     if (!data?.resume_url) gaps.push('resume');
     if (!data?.location) gaps.push('location');
-    if (!data?.headline) gaps.push('headline');
+    if (!topSkillsArr.length) gaps.push('top skills');
     setMissing(gaps);
   }, [user, isCompany, isAdmin, dismissed]);
 

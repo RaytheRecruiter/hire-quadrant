@@ -3,7 +3,7 @@ import { CheckCircle2, Circle, Sparkles } from 'lucide-react';
 
 export interface ProfileCompletenessInputs {
   hasName: boolean;
-  hasHeadline: boolean;
+  hasTopSkills: boolean;
   hasAvatar: boolean;
   hasResume: boolean;
   hasExperience: boolean;
@@ -12,9 +12,11 @@ export interface ProfileCompletenessInputs {
   hasPreferences: boolean;
 }
 
+// Per Scott 2026-04-29: "Professional headline" is gone; "Top Skills" took
+// its slot in profile completeness as the primary discoverability signal.
 const CRITERIA: Array<{ key: keyof ProfileCompletenessInputs; label: string; weight: number }> = [
   { key: 'hasName', label: 'Full name', weight: 5 },
-  { key: 'hasHeadline', label: 'Professional headline', weight: 10 },
+  { key: 'hasTopSkills', label: 'Top skills', weight: 10 },
   { key: 'hasAvatar', label: 'Profile photo', weight: 10 },
   { key: 'hasResume', label: 'Resume uploaded', weight: 20 },
   { key: 'hasExperience', label: 'Work experience', weight: 20 },

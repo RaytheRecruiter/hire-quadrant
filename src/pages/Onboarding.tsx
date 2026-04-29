@@ -10,7 +10,6 @@ const Onboarding: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [location, setLocation] = useState('');
-  const [headline, setHeadline] = useState('');
   const [years, setYears] = useState<number>(0);
   const [skills, setSkills] = useState('');
   const [saving, setSaving] = useState(false);
@@ -43,7 +42,7 @@ const Onboarding: React.FC = () => {
   const saveStepAndAdvance = async () => {
     setSaving(true);
     const updates: any = { user_id: user.id, email: user.email };
-    if (step === 1) { updates.location = location; updates.headline = headline; }
+    if (step === 1) { updates.location = location; }
     if (step === 2) {
       updates.years_experience = years || null;
       updates.skills = skills.split(',').map(s => s.trim()).filter(Boolean);
@@ -82,16 +81,6 @@ const Onboarding: React.FC = () => {
                     value={location}
                     onChange={e => setLocation(e.target.value)}
                     placeholder="e.g. Austin, TX or Remote"
-                    className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">What's your professional headline?</label>
-                  <input
-                    type="text"
-                    value={headline}
-                    onChange={e => setHeadline(e.target.value)}
-                    placeholder="e.g. Senior React Engineer · 7 years"
                     className="w-full border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-400"
                   />
                 </div>
