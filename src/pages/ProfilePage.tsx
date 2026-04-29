@@ -21,7 +21,6 @@ interface CandidateProfile {
     user_id: string;
     location: string;
     phone_number: string;
-    headline: string;
     resume_url: string;
     resume_text: string;
     email: string;
@@ -120,7 +119,6 @@ const ProfilePage = () => {
     const [error, setError] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-    const [headlineValue, setHeadlineValue] = useState('');
     const [locationValue, setLocationValue] = useState('');
     const [phoneValue, setPhoneValue] = useState('');
     const [resumeTextValue, setResumeTextValue] = useState('');
@@ -156,7 +154,6 @@ const ProfilePage = () => {
 
             if (candRes.data) {
                 setProfile(candRes.data);
-                setHeadlineValue(candRes.data.headline || '');
                 setLocationValue(candRes.data.location || '');
                 setPhoneValue(candRes.data.phone_number || '');
                 setResumeTextValue(candRes.data.resume_text || '');
@@ -226,7 +223,6 @@ const ProfilePage = () => {
                 const { error } = await supabase
                     .from('candidates')
                     .update({
-                        headline: headlineValue || null,
                         location: locationValue,
                         phone_number: phoneValue,
                         resume_text: resumeTextValue || null,
@@ -241,7 +237,6 @@ const ProfilePage = () => {
                     .from('candidates')
                     .insert({
                         user_id: user.id,
-                        headline: headlineValue || null,
                         location: locationValue,
                         phone_number: phoneValue,
                         resume_text: resumeTextValue || null,

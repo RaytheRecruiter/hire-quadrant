@@ -85,10 +85,11 @@ const Login: React.FC = () => {
           if (userId) {
             const { data: candidate } = await supabase
               .from('candidates')
-              .select('location, headline, resume_url')
+              .select('location, top_skills, resume_url')
               .eq('user_id', userId)
               .maybeSingle();
-            const hasBasics = candidate && (candidate.location || candidate.headline || candidate.resume_url);
+            const topSkillsArr = Array.isArray(candidate?.top_skills) ? (candidate!.top_skills as unknown[]) : [];
+            const hasBasics = candidate && (candidate.location || topSkillsArr.length > 0 || candidate.resume_url);
             navigate(hasBasics ? '/' : '/onboarding');
           } else {
             navigate('/');

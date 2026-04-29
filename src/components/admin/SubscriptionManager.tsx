@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabaseClient';
 import { useSubscription, SubscriptionPlan } from '../../hooks/useSubscription';
 import SubscriptionBadge from '../SubscriptionBadge';
-import { Save, AlertCircle, CheckCircle, Building2 } from 'lucide-react';
+import { Save, AlertCircle, CheckCircle, Building2, Shield } from 'lucide-react';
 
 interface CompanyRow {
   id: string;
@@ -13,6 +13,10 @@ interface CompanyRow {
   jobsPosted: number;
   selectedPlanId: string;
   saving: boolean;
+  // Per Scott 2026-04-29 (#16): every company should surface its primary user
+  // (the Owner from company_members). Loaded alongside the row.
+  ownerName: string | null;
+  ownerEmail: string | null;
 }
 
 const SubscriptionManager: React.FC = () => {
@@ -33,9 +37,33 @@ const SubscriptionManager: React.FC = () => {
 
         if (companiesError) throw companiesError;
 
+        // Pull every Owner row alongside the basic profile so we can show
+        // the primary user inline. One query, then mapped by company_id.
+        const { data: ownerRows } = await supabase
+          .from('company_members')
+          .select('company_id, user_id')
+          .eq('role', 'owner')
+          .eq('status', 'active');
+        const ownerUserIds = (ownerRows || []).map((r) => r.user_id);
+        const { data: ownerProfiles } = ownerUserIds.length
+          ? await supabase
+              .from('user_profiles')
+              .select('id, name, email')
+              .in('id', ownerUserIds)
+          : { data: [] as Array<{ id: string; name: string | null; email: string | null }> };
+        const profileById = new Map(
+          (ownerProfiles || []).map((p) => [p.id, { name: p.name, email: p.email }]),
+        );
+        const ownerByCompany = new Map<string, { name: string | null; email: string | null }>();
+        for (const row of ownerRows || []) {
+          const profile = profileById.get(row.user_id);
+          if (profile) ownerByCompany.set(row.company_id, profile);
+        }
+
         // Build company rows with subscription info
         const rows: CompanyRow[] = (companiesData || []).map(company => {
           const sub = allSubscriptions.find(s => s.company_id === company.id);
+          const owner = ownerByCompany.get(company.id);
           return {
             id: company.id,
             name: company.name,
@@ -45,6 +73,8 @@ const SubscriptionManager: React.FC = () => {
             jobsPosted: 0, // Will be populated if needed
             selectedPlanId: sub?.plan_id || '',
             saving: false,
+            ownerName: owner?.name || null,
+            ownerEmail: owner?.email || null,
           };
         });
 
@@ -159,6 +189,9 @@ const SubscriptionManager: React.FC = () => {
                     Company
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                    Primary User (Owner)
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Current Plan
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
@@ -179,6 +212,23 @@ const SubscriptionManager: React.FC = () => {
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {company.display_name || company.name}
                       </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {company.ownerName || company.ownerEmail ? (
+                        <div className="flex items-center gap-1.5">
+                          <Shield className="w-3.5 h-3.5 text-amber-500" />
+                          <div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                              {company.ownerName || company.ownerEmail}
+                            </div>
+                            {company.ownerName && company.ownerEmail && (
+                              <div className="text-xs text-gray-500 dark:text-slate-400">{company.ownerEmail}</div>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-gray-400 dark:text-slate-500">No primary user</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       {company.currentPlanName ? (

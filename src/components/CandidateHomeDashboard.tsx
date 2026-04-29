@@ -87,7 +87,7 @@ const CandidateHomeDashboard: React.FC = () => {
 
   const completenessScore = (() => {
     const weights: Record<string, number> = {
-      hasName: 5, hasHeadline: 10, hasAvatar: 10, hasResume: 20,
+      hasName: 5, hasTopSkills: 10, hasAvatar: 10, hasResume: 20,
       hasExperience: 20, hasEducation: 10, hasSkills: 15, hasPreferences: 10,
     };
     let earned = 0;

@@ -5,7 +5,7 @@ import type { ProfileCompletenessInputs } from '../components/profile/ProfileCom
 
 const EMPTY: ProfileCompletenessInputs = {
   hasName: false,
-  hasHeadline: false,
+  hasTopSkills: false,
   hasAvatar: false,
   hasResume: false,
   hasExperience: false,
@@ -28,7 +28,7 @@ export function useProfileCompleteness(refreshToken: number = 0) {
       const [candRes, expRes, eduRes, prefRes] = await Promise.all([
         supabase
           .from('candidates')
-          .select('headline, resume_url, skills')
+          .select('top_skills, resume_url, skills')
           .eq('user_id', user.id)
           .maybeSingle(),
         supabase
@@ -46,11 +46,12 @@ export function useProfileCompleteness(refreshToken: number = 0) {
           .maybeSingle(),
       ]);
       if (cancelled) return;
-      const cand = candRes.data as { headline?: string | null; resume_url?: string | null; skills?: unknown } | null;
+      const cand = candRes.data as { top_skills?: unknown; resume_url?: string | null; skills?: unknown } | null;
       const skillsArr = Array.isArray(cand?.skills) ? (cand!.skills as unknown[]) : [];
+      const topSkillsArr = Array.isArray(cand?.top_skills) ? (cand!.top_skills as unknown[]) : [];
       setInputs({
         hasName: Boolean(user.name && user.name.trim().length >= 2),
-        hasHeadline: Boolean(cand?.headline && cand.headline.trim().length > 0),
+        hasTopSkills: topSkillsArr.length > 0,
         hasAvatar: Boolean((user as { avatarUrl?: string | null }).avatarUrl),
         hasResume: Boolean(cand?.resume_url),
         hasExperience: (expRes.count ?? 0) > 0,
