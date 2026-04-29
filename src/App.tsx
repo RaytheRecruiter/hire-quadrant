@@ -66,6 +66,8 @@ const SavedSearches = lazy(() => import('./pages/SavedSearches'));
 const CompareCompanies = lazy(() => import('./pages/CompareCompanies'));
 const HelpCenter = lazy(() => import('./pages/HelpCenter'));
 const InterviewPractice = lazy(() => import('./pages/InterviewPractice'));
+const TeamMembers = lazy(() => import('./pages/TeamMembers'));
+const AcceptInvite = lazy(() => import('./pages/AcceptInvite'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -118,6 +120,8 @@ function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/company-dashboard" element={<CompanyDashboard />} />
                 <Route path="/company-portal" element={<CompanyPortal />} />
+                <Route path="/company-dashboard/team" element={<TeamMembers />} />
+                <Route path="/accept-invite" element={<AcceptInvite />} />
                 <Route path="/saved" element={<SavedJobs />} />
                 <Route path="/alerts" element={<JobAlerts />} />
                 <Route path="/my-jobs" element={<MyJobs />} />

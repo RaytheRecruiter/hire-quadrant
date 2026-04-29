@@ -8,6 +8,7 @@ import ScreeningQuestionsEditor from '../ScreeningQuestionsEditor';
 import CustomFieldsEditor from './CustomFieldsEditor';
 import NewJobModal from './NewJobModal';
 import type { ScreeningQuestion } from '../../types/screening';
+import { usePermissions } from '../../hooks/usePermissions';
 
 interface CompanyJobsListProps {
   jobs: any[];
@@ -15,6 +16,12 @@ interface CompanyJobsListProps {
 }
 
 const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated }) => {
+  const { isOwner, isAdmin, can, member, loading: permLoading } = usePermissions();
+  // Owner/Admin can always post; Standard users need the explicit toggle.
+  // If a user has no membership row at all (legacy single-tenant company),
+  // fall back to allowing — the backfill migration creates an Owner row, but
+  // we don't want to lock users out if backfill hasn't run for some reason.
+  const canPostJobs = !permLoading && (!member || isOwner || isAdmin || can('post_jobs'));
   const [editingJobId, setEditingJobId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<ScreeningQuestion[]>([]);
   const [saving, setSaving] = useState(false);
@@ -84,13 +91,19 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated })
           <Briefcase className="mx-auto h-12 w-12 text-gray-300 mb-4" />
           <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">No Jobs Posted Yet</h3>
           <p className="text-gray-500 dark:text-slate-400 mb-6">Your posted jobs will appear here.</p>
-          <button
-            type="button"
-            onClick={() => setNewJobOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold"
-          >
-            <Plus className="h-4 w-4" /> Post your first job
-          </button>
+          {canPostJobs ? (
+            <button
+              type="button"
+              onClick={() => setNewJobOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold"
+            >
+              <Plus className="h-4 w-4" /> Post your first job
+            </button>
+          ) : (
+            <p className="text-sm text-gray-400 dark:text-slate-500">
+              Ask your company Owner or Admin to grant you "Post jobs" permission.
+            </p>
+          )}
         </div>
         <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} />
       </>
@@ -99,15 +112,17 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated })
 
   return (
     <>
-      <div className="flex items-center justify-end mb-4">
-        <button
-          type="button"
-          onClick={() => setNewJobOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold"
-        >
-          <Plus className="h-4 w-4" /> New job
-        </button>
-      </div>
+      {canPostJobs && (
+        <div className="flex items-center justify-end mb-4">
+          <button
+            type="button"
+            onClick={() => setNewJobOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold"
+          >
+            <Plus className="h-4 w-4" /> New job
+          </button>
+        </div>
+      )}
       <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} />
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
