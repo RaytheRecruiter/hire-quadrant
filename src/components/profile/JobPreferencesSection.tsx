@@ -163,6 +163,7 @@ const JobPreferencesSection: React.FC = () => {
     else {
       setPrefs((p) => ({ ...p, zip_lat: lat, zip_lng: lng }));
       toast.success('Preferences saved');
+      window.dispatchEvent(new CustomEvent('profile-updated'));
     }
   };
 

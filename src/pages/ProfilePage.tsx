@@ -363,7 +363,10 @@ const ProfilePage = () => {
         }
     };
 
-    // Generate a signed URL to view the resume
+    // Generate a signed URL to view the resume.
+    // Always open in the in-page modal — Ray's QA pass on 2026-04-30 caught
+    // that window.open() for PDFs gets popup-blocked silently. The modal
+    // works for both PDF (native <object>) and DOCX (Google Docs viewer).
     const handleViewResume = async () => {
         if (!profile?.resume_url) return;
 
@@ -378,13 +381,8 @@ const ProfilePage = () => {
         }
 
         if (data?.signedUrl) {
-            const fileName = profile.resume_url.toLowerCase();
-            if (fileName.endsWith('.pdf')) {
-                window.open(data.signedUrl, '_blank');
-            } else {
-                setResumeViewUrl(data.signedUrl);
-                setShowResumeViewer(true);
-            }
+            setResumeViewUrl(data.signedUrl);
+            setShowResumeViewer(true);
         }
     };
 
@@ -688,35 +686,72 @@ const ProfilePage = () => {
                         />
                     </div>
 
-                    {showResumeViewer && resumeViewUrl && (
-                        <div className="mt-6">
-                            <div className="flex items-center justify-between mb-3">
-                                <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-200">Resume Preview</h3>
-                                <div className="flex gap-3">
-                                    <a
-                                        href={resumeViewUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-sm text-primary-600 hover:text-primary-700 font-medium"
-                                    >
-                                        Download
-                                    </a>
-                                    <button
-                                        onClick={() => setShowResumeViewer(false)}
-                                        className="text-sm text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300 font-medium"
-                                    >
-                                        Close
-                                    </button>
+                    {showResumeViewer && resumeViewUrl && (() => {
+                        // Per Ray 2026-04-30: Resume preview must open in a modal
+                        // for both PDF and DOCX (PDF was opening in a new tab and
+                        // getting popup-blocked). PDFs use a native <object> which
+                        // every browser handles in-page; DOCX falls back to the
+                        // Google Docs viewer which only works for non-PDF formats.
+                        const fileName = (profile?.resume_url || '').toLowerCase();
+                        const isPdf = fileName.endsWith('.pdf');
+                        return (
+                            <div
+                                className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+                                onClick={() => setShowResumeViewer(false)}
+                                role="dialog"
+                                aria-modal="true"
+                                aria-label="Resume preview"
+                            >
+                                <div
+                                    className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+                                        <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-200">Resume Preview</h3>
+                                        <div className="flex items-center gap-3">
+                                            <a
+                                                href={resumeViewUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                                            >
+                                                Download
+                                            </a>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowResumeViewer(false)}
+                                                className="text-sm text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 font-medium"
+                                            >
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 overflow-hidden p-2 bg-gray-50 dark:bg-slate-900">
+                                        {isPdf ? (
+                                            <object
+                                                data={resumeViewUrl}
+                                                type="application/pdf"
+                                                className="w-full h-full rounded"
+                                                aria-label="Resume PDF"
+                                            >
+                                                <iframe
+                                                    src={resumeViewUrl}
+                                                    className="w-full h-full rounded"
+                                                    title="Resume PDF"
+                                                />
+                                            </object>
+                                        ) : (
+                                            <iframe
+                                                src={`https://docs.google.com/gview?url=${encodeURIComponent(resumeViewUrl)}&embedded=true`}
+                                                className="w-full h-full rounded"
+                                                title="Resume Preview"
+                                            />
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                            <iframe
-                                src={`https://docs.google.com/gview?url=${encodeURIComponent(resumeViewUrl)}&embedded=true`}
-                                className="w-full border border-gray-200 dark:border-slate-700 rounded-lg"
-                                style={{ height: '600px' }}
-                                title="Resume Preview"
-                            />
-                        </div>
-                    )}
+                        );
+                    })()}
                 </div>
 
                 {/* Applied Jobs */}

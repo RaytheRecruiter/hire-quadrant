@@ -62,14 +62,21 @@ const ExperienceSection: React.FC = () => {
     setEditing('new');
   };
 
+  // <input type="month"> only accepts YYYY-MM; legacy rows saved as
+  // YYYY-MM-DD need to be trimmed before populating the form.
+  const toMonthInput = (d: string | null): string => {
+    if (!d) return '';
+    return d.length >= 7 ? d.slice(0, 7) : d;
+  };
+
   const openEdit = (r: Experience) => {
     setForm({
       title: r.title,
       company: r.company,
       location: r.location ?? '',
       is_current: r.is_current,
-      start_date: r.start_date ?? '',
-      end_date: r.end_date ?? '',
+      start_date: toMonthInput(r.start_date),
+      end_date: toMonthInput(r.end_date),
       description: r.description ?? '',
     });
     setEditing(r.id);
@@ -82,14 +89,26 @@ const ExperienceSection: React.FC = () => {
       return;
     }
     setSaving(true);
+    // Inputs are <input type="month"> which produce YYYY-MM. Normalize to
+    // YYYY-MM-01 so the date column accepts the value. Existing rows
+    // saved as full dates still load correctly because fmtMonth() and the
+    // <input type="month"> happily accept YYYY-MM-DD trimmed to YYYY-MM.
+    const normalizeMonth = (v: string): string | null => {
+      if (!v) return null;
+      // Already a full YYYY-MM-DD (e.g. legacy data) — pass through.
+      if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+      // YYYY-MM from the month picker — anchor to the 1st of the month.
+      if (/^\d{4}-\d{2}$/.test(v)) return `${v}-01`;
+      return null;
+    };
     const payload = {
       user_id: user.id,
       title: form.title.trim(),
       company: form.company.trim(),
       location: form.location.trim() || null,
       is_current: form.is_current,
-      start_date: form.start_date || null,
-      end_date: form.is_current ? null : form.end_date || null,
+      start_date: normalizeMonth(form.start_date),
+      end_date: form.is_current ? null : normalizeMonth(form.end_date),
       description: form.description.trim() || null,
     };
     const { error } =
@@ -101,6 +120,8 @@ const ExperienceSection: React.FC = () => {
     toast.success(editing === 'new' ? 'Experience added' : 'Experience saved');
     setEditing(null);
     load();
+    // Refreshes the profile completeness bar at the top of /profile.
+    window.dispatchEvent(new CustomEvent('profile-updated'));
   };
 
   const remove = async (id: string) => {
@@ -109,6 +130,7 @@ const ExperienceSection: React.FC = () => {
     if (error) return toast.error(error.message);
     toast.success('Deleted');
     load();
+    window.dispatchEvent(new CustomEvent('profile-updated'));
   };
 
   return (
@@ -223,7 +245,7 @@ const ExperienceForm: React.FC<FormProps> = ({ form, setForm, onCancel, onSave, 
       <div>
         <label className="block text-xs text-gray-500 dark:text-slate-400 mb-0.5">Start</label>
         <input
-          type="date"
+          type="month"
           value={form.start_date}
           onChange={(e) => setForm((f) => ({ ...f, start_date: e.target.value }))}
           className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
@@ -232,7 +254,7 @@ const ExperienceForm: React.FC<FormProps> = ({ form, setForm, onCancel, onSave, 
       <div>
         <label className="block text-xs text-gray-500 dark:text-slate-400 mb-0.5">End</label>
         <input
-          type="date"
+          type="month"
           value={form.end_date}
           disabled={form.is_current}
           onChange={(e) => setForm((f) => ({ ...f, end_date: e.target.value }))}

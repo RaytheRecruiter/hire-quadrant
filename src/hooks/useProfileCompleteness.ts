@@ -17,6 +17,16 @@ const EMPTY: ProfileCompletenessInputs = {
 export function useProfileCompleteness(refreshToken: number = 0) {
   const { user } = useAuth();
   const [inputs, setInputs] = useState<ProfileCompletenessInputs>(EMPTY);
+  // Re-fetch when ProfilePage dispatches 'profile-updated' (any save:
+  // name/avatar/resume/experience/education/skills/preferences). Without
+  // this, the completeness bar never advanced past its initial load —
+  // Ray's QA on 2026-04-30 caught it as #28 ("score never reached 90%").
+  const [eventTick, setEventTick] = useState(0);
+  useEffect(() => {
+    const handler = () => setEventTick((t) => t + 1);
+    window.addEventListener('profile-updated', handler);
+    return () => window.removeEventListener('profile-updated', handler);
+  }, []);
 
   useEffect(() => {
     if (!user?.id) {
@@ -63,7 +73,7 @@ export function useProfileCompleteness(refreshToken: number = 0) {
     return () => {
       cancelled = true;
     };
-  }, [user?.id, user?.name, refreshToken]);
+  }, [user?.id, user?.name, refreshToken, eventTick]);
 
   return inputs;
 }

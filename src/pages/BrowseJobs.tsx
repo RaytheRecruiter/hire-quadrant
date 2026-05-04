@@ -129,7 +129,7 @@ const BrowseJobs: React.FC = () => {
       let query = supabase
         .from('jobs')
         .select(
-          'id, title, company, location, type, salary, min_salary, max_salary, posted_date, experience_level, workplace_type, visa_sponsor, security_clearance, sponsored',
+          'id, title, company, location, type, salary, min_salary, max_salary, posted_date, created_at, experience_level, workplace_type, visa_sponsor, security_clearance, sponsored, description',
           { count: 'exact' },
         );
 
@@ -139,14 +139,54 @@ const BrowseJobs: React.FC = () => {
         );
       }
       if (loc) query = query.ilike('location', `%${loc}%`);
-      if (filters.minSalary > 0) query = query.gte('min_salary', filters.minSalary);
-      if (filters.experienceLevel) query = query.eq('experience_level', filters.experienceLevel);
-      if (filters.workplaceType) query = query.eq('workplace_type', filters.workplaceType);
-      if (filters.visaSponsor) query = query.eq('visa_sponsor', true);
-      if (filters.securityClearance) query = query.eq('security_clearance', filters.securityClearance);
+
+      // Filter UX fixes — Ray's QA pass on 2026-04-30 surfaced that the
+      // dedicated columns (experience_level, workplace_type, security_clearance,
+      // visa_sponsor) are NULL on every job because the JobDiva XML feed
+      // doesn't populate them, and min_salary is stored in kilobucks
+      // (e.g. 130 for $130k) while the slider sends raw dollars. Fall back
+      // to text search on title + description for the qualitative filters,
+      // and divide the salary slider value by 1000.
+      if (filters.minSalary > 0) {
+        query = query.gte('min_salary', Math.round(filters.minSalary / 1000));
+      }
+      if (filters.experienceLevel) {
+        const term = filters.experienceLevel;
+        query = query.or(
+          `experience_level.eq.${term},title.ilike.%${term}%,description.ilike.%${term}%`,
+        );
+      }
+      if (filters.workplaceType) {
+        const term = filters.workplaceType;
+        // Hybrid is rare in titles; widen the search to location too.
+        query = query.or(
+          `workplace_type.eq.${term},title.ilike.%${term}%,location.ilike.%${term}%,description.ilike.%${term}%`,
+        );
+      }
+      if (filters.visaSponsor) {
+        query = query.or(
+          'visa_sponsor.eq.true,description.ilike.%visa sponsor%,description.ilike.%h-1b%,description.ilike.%h1b%',
+        );
+      }
+      if (filters.securityClearance) {
+        const map: Record<string, string> = {
+          public_trust: 'public trust',
+          secret: 'secret',
+          top_secret: 'top secret',
+          ts_sci: 'TS/SCI',
+          none: '',
+        };
+        const term = map[filters.securityClearance] ?? filters.securityClearance;
+        if (term) {
+          query = query.or(
+            `security_clearance.eq.${filters.securityClearance},description.ilike.%${term}%`,
+          );
+        }
+      }
       if (filters.postedWithinDays > 0) {
         const since = new Date(Date.now() - filters.postedWithinDays * 24 * 60 * 60 * 1000).toISOString();
-        query = query.gte('posted_date', since);
+        // posted_date is null on most ingested rows; fall back to created_at.
+        query = query.or(`posted_date.gte.${since},and(posted_date.is.null,created_at.gte.${since})`);
       }
       if (nearbyIds !== null) {
         // Empty array → zero results (Supabase handles this fine).
