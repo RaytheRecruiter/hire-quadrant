@@ -38,6 +38,7 @@ const CertificationsSection: React.FC = () => {
       return false;
     }
     setCerts(next);
+    window.dispatchEvent(new CustomEvent('profile-updated'));
     return true;
   };
 

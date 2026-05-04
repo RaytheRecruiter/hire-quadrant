@@ -83,6 +83,7 @@ const EducationSection: React.FC = () => {
     toast.success(editing === 'new' ? 'Education added' : 'Education saved');
     setEditing(null);
     load();
+    window.dispatchEvent(new CustomEvent('profile-updated'));
   };
 
   const remove = async (id: string) => {
@@ -91,6 +92,7 @@ const EducationSection: React.FC = () => {
     if (error) return toast.error(error.message);
     toast.success('Deleted');
     load();
+    window.dispatchEvent(new CustomEvent('profile-updated'));
   };
 
   return (

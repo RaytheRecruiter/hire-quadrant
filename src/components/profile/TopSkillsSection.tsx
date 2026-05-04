@@ -38,6 +38,7 @@ const TopSkillsSection: React.FC = () => {
       return false;
     }
     setTopSkills(next);
+    window.dispatchEvent(new CustomEvent('profile-updated'));
     return true;
   };
 

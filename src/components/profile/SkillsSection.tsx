@@ -36,6 +36,7 @@ const SkillsSection: React.FC = () => {
       return false;
     }
     setSkills(next);
+    window.dispatchEvent(new CustomEvent('profile-updated'));
     return true;
   };
 
