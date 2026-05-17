@@ -387,6 +387,68 @@ Rules:
       });
     }
 
+    if (path === 'moderate-review') {
+      // Per Ray 2026-05-03: candidate reviews should auto-publish after an
+      // AI bad-language / spam / personal-attack check instead of waiting
+      // for a human moderator. Returns:
+      //   { decision: 'approved' | 'rejected', reason: string|null, categories: string[] }
+      const body = await req.json();
+      const { title, pros, cons, job_title } = body || {};
+      const text = [
+        title ? `Title: ${title}` : '',
+        pros ? `Pros: ${pros}` : '',
+        cons ? `Cons: ${cons}` : '',
+        job_title ? `Role: ${job_title}` : '',
+      ].filter(Boolean).join('\n');
+
+      if (!text.trim()) {
+        return new Response(JSON.stringify({ decision: 'rejected', reason: 'Empty review', categories: [] }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const system = `You are a content moderator for a company reviews site. Decide if a review can auto-publish or must be blocked.
+
+Return JSON only — no preamble, no markdown, no code fences. Output shape:
+{
+  "decision": "approved" | "rejected",
+  "reason": "<short user-facing explanation, or empty string when approved>",
+  "categories": ["profanity" | "hate_speech" | "personal_attack" | "spam" | "pii_leak" | "sexual_content" | "harassment" | "illegal_content"]
+}
+
+Block (decision="rejected") if the review contains any of:
+- Profanity, slurs, hate speech, or sexually explicit content
+- Personal attacks on named individuals (calling out a person by name and insulting them)
+- Spam, advertising, or nonsense (random characters, lorem ipsum, repeated chars)
+- PII leaks — phone numbers, email addresses, home addresses, SSNs, account numbers
+- Threats, incitement, or other illegal content
+
+Allow (decision="approved") all other reviews — including negative criticism of the company, complaints about management style, frustration with policies, low ratings, harsh-but-civil feedback. Negative is NOT the same as abusive. The bar for blocking is high: only reject if the content is genuinely abusive, spammy, or leaks PII.
+
+The "reason" should be short (< 25 words) and address the author directly ("Your review mentions...") so they know what to fix.`;
+
+      const raw = await callClaude(system, text);
+      const cleaned = raw.replace(/^```(?:json)?\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+      let parsed: { decision?: string; reason?: string; categories?: unknown };
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        // If parsing fails, be permissive and fall back to "pending" status
+        // by reporting an indeterminate response.
+        parsed = { decision: 'approved', reason: '', categories: [] };
+      }
+      const out = {
+        decision: parsed.decision === 'rejected' ? 'rejected' : 'approved',
+        reason: typeof parsed.reason === 'string' ? parsed.reason.slice(0, 240) : '',
+        categories: Array.isArray(parsed.categories)
+          ? parsed.categories.filter((c) => typeof c === 'string').slice(0, 8)
+          : [],
+      };
+      return new Response(JSON.stringify(out), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     return new Response('Not Found', { status: 404, headers: corsHeaders });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {

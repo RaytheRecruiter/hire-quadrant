@@ -13,9 +13,12 @@ import { usePermissions } from '../../hooks/usePermissions';
 interface CompanyJobsListProps {
   jobs: any[];
   onJobCreated?: () => void;
+  // Needed by NewJobModal — jobs.company is a legacy NOT NULL display
+  // string predating company_id. Without it, INSERT fails silently.
+  companyName: string;
 }
 
-const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated }) => {
+const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, companyName }) => {
   const { isOwner, isAdmin, can, member, loading: permLoading } = usePermissions();
   // Owner/Admin can always post; Standard users need the explicit toggle.
   // If a user has no membership row at all (legacy single-tenant company),
@@ -108,7 +111,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated })
             </p>
           )}
         </div>
-        <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} />
+        <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} companyName={companyName} />
       </>
     );
   }
@@ -126,7 +129,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated })
           </button>
         </div>
       )}
-      <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} />
+      <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} companyName={companyName} />
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
           <thead className="bg-gray-50 dark:bg-slate-900/50">

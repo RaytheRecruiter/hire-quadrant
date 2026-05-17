@@ -9,13 +9,17 @@ interface NewJobModalProps {
   open: boolean;
   onClose: () => void;
   onCreated: () => void;
+  // Required for the jobs.company NOT NULL column (the legacy display-name
+  // string predates company_id). Without this, INSERT fails silently with
+  // a NOT NULL constraint violation — Ray's D.2 blocker on 2026-04-30.
+  companyName: string;
 }
 
 const JOB_TYPES = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Temporary'];
 const WORKPLACE_TYPES = ['Remote', 'Hybrid', 'On-site'];
 const EXPERIENCE_LEVELS = ['Entry', 'Mid', 'Senior', 'Lead', 'Executive'];
 
-const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated }) => {
+const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, companyName }) => {
   const { user } = useAuth();
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
@@ -68,7 +72,10 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated }) =
     const { error } = await supabase.from('jobs').insert({
       id: newId,
       title: title.trim(),
+      // Both company_id (FK) and company (legacy NOT NULL display string)
+      // are required. Without the latter the insert fails — Ray D.2 fix.
       company_id: user.companyId,
+      company: companyName,
       // Per Scott Phase 2 #4: track who posted each job for the
       // Recruiter Activity panel.
       posted_by: user.id,

@@ -171,6 +171,46 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
         }
       }
 
+      // Per Ray 2026-05-03: reviews auto-publish after an AI bad-language /
+      // spam / personal-attack / PII check instead of waiting for a human
+      // moderator. The Claude Haiku 4.5 endpoint returns approved/rejected.
+      // If the moderator is unreachable, fall back to status='pending' so
+      // a human can still review (fail-safe, not fail-open).
+      let moderationStatus: 'approved' | 'pending' | 'rejected' = 'pending';
+      let moderationReason = '';
+      try {
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+        const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+        const modRes = await fetch(`${supabaseUrl}/functions/v1/ai-helpers/moderate-review`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${anonKey}`,
+            apikey: anonKey,
+          },
+          body: JSON.stringify({
+            title: form.title.trim(),
+            pros: form.pros.trim(),
+            cons: form.cons.trim(),
+            job_title: form.job_title.trim(),
+          }),
+        });
+        if (modRes.ok) {
+          const json = await modRes.json();
+          if (json.decision === 'rejected') {
+            toast.error(
+              json.reason || "We couldn't auto-publish this review. Please revise the wording and try again.",
+              { duration: 8000 },
+            );
+            setSaving(false);
+            return;
+          }
+          moderationStatus = 'approved';
+        }
+      } catch (modErr) {
+        console.warn('Review moderation unavailable, falling back to pending:', modErr);
+      }
+
       const payload = {
         company_id: companyId,
         author_id: user.id,
@@ -186,8 +226,9 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
         employment_status: form.employment_status || null,
         job_title: form.job_title.trim() || null,
         is_anonymous: form.is_anonymous,
-        status: 'pending' as const,
+        status: moderationStatus,
       };
+      void moderationReason; // currently unused but kept for future audit logging
 
       let err;
       if (existing) {
@@ -201,9 +242,11 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
         err = error;
       }
       if (err) throw err;
-      toast.success(
-        existing ? 'Review updated — pending re-approval' : 'Review submitted for approval',
-      );
+      const okMsg =
+        moderationStatus === 'approved'
+          ? existing ? 'Review updated and published' : 'Review published'
+          : existing ? 'Review updated — pending re-approval' : 'Review submitted for approval';
+      toast.success(okMsg);
       setExpanded(false);
       onSaved();
     } catch (e) {
