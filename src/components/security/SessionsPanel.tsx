@@ -19,10 +19,10 @@ const SessionsPanel: React.FC = () => {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('my_auth_sessions')
-      .select('*')
-      .order('updated_at', { ascending: false });
+    // Was a SECURITY DEFINER view; now a SECURITY DEFINER RPC so the
+    // Supabase Advisor stops flagging the view. Same data shape, just
+    // ordered server-side by the function.
+    const { data, error } = await supabase.rpc('get_my_auth_sessions');
     if (!error) setRows((data as SessionRow[]) ?? []);
     setLoading(false);
   }, []);
