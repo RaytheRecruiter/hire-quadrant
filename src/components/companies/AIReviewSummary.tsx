@@ -29,7 +29,7 @@ const AIReviewSummary: React.FC<Props> = ({ companyId, companyName, minReviews =
     setError(null);
     const { data: reviews } = await supabase
       .from('company_reviews')
-      .select('title, pros, cons, rating')
+      .select('title, pros, cons, rating:rating_overall')
       .eq('company_id', companyId)
       .eq('status', 'approved')
       .is('deleted_at', null)

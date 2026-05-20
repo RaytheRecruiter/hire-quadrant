@@ -58,7 +58,7 @@ const CompareCompanies: React.FC = () => {
       const [reviewsRes, jobsRes] = await Promise.all([
         supabase
           .from('company_reviews')
-          .select('company_id, rating')
+          .select('company_id, rating:rating_overall')
           .in('company_id', ids)
           .eq('status', 'approved')
           .is('deleted_at', null),
