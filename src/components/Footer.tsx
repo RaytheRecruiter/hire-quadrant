@@ -25,7 +25,6 @@ const Footer: React.FC = () => {
               <li><HardLink to="/" className="hover:text-white transition">Browse Jobs</HardLink></li>
               <li><HardLink to="/saved" className="hover:text-white transition">Saved Jobs</HardLink></li>
               <li><HardLink to="/alerts" className="hover:text-white transition">Job Alerts</HardLink></li>
-              <li><HardLink to="/pricing" className="hover:text-white transition">Pricing</HardLink></li>
               <li><HardLink to="/blog" className="hover:text-white transition">Career Blog</HardLink></li>
             </ul>
           </div>
@@ -35,7 +34,6 @@ const Footer: React.FC = () => {
             <h4 className="font-semibold mb-4 text-white">For Employers</h4>
             <ul className="space-y-2 text-sm text-gray-300">
               <li><a href="mailto:employers@hirequadrant.com" className="hover:text-white transition">Post a Job</a></li>
-              <li><HardLink to="/pricing" className="hover:text-white transition">Plans & Pricing</HardLink></li>
               <li><a href="mailto:sales@hirequadrant.com" className="hover:text-white transition">Contact Sales</a></li>
             </ul>
           </div>
