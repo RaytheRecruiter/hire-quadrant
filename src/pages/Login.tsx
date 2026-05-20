@@ -65,7 +65,7 @@ const Login: React.FC = () => {
       // Record attempt for rate-limiter window
       supabase.from('auth_attempts').insert({
         email: email.toLowerCase(),
-        success: result.success,
+        succeeded: result.success,
       }).then(() => undefined);
       if (result.success) {
         if (safeReturnTo) {
