@@ -99,7 +99,6 @@ const Header: React.FC = () => {
               <kbd className="hidden xl:inline text-[10px] px-1 py-0.5 rounded bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 font-mono">⌘K</kbd>
             </button>
             <HardLink to="/blog" className={navClass('/blog')}>Blog</HardLink>
-            <HardLink to="/pricing" className={navClass('/pricing')}>Pricing</HardLink>
             {isCompany && (
               <HardLink to="/company-dashboard" className={navClass('/company-dashboard')}>
                 <Briefcase className="h-4 w-4 inline mr-1" />
@@ -236,7 +235,6 @@ const Header: React.FC = () => {
             <HardLink to="/companies" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Companies</HardLink>
             <HardLink to="/advanced-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Search</HardLink>
             <HardLink to="/blog" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Blog</HardLink>
-            <HardLink to="/pricing" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Pricing</HardLink>
             {isAuthenticated && !isAdmin && !isCompany && (
               <>
                 <HardLink to="/saved" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">

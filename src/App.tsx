@@ -68,7 +68,6 @@ const HelpCenter = lazy(() => import('./pages/HelpCenter'));
 const InterviewPractice = lazy(() => import('./pages/InterviewPractice'));
 const TeamMembers = lazy(() => import('./pages/TeamMembers'));
 const AcceptInvite = lazy(() => import('./pages/AcceptInvite'));
-const Pricing = lazy(() => import('./pages/Pricing'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -151,7 +150,6 @@ function App() {
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/content-policy" element={<ContentPolicy />} />
                 <Route path="/cookies" element={<Cookies />} />
-                <Route path="/pricing" element={<Pricing />} />
                 <Route path="*" element={<NotFound />} />
                       </Routes>
                     </Suspense>
