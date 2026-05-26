@@ -48,8 +48,8 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
       toast.error('Your account is not linked to a company yet.');
       return;
     }
-    if (!title.trim() || !description.trim()) {
-      toast.error('Title and description are required.');
+    if (!title.trim() || !description.trim() || !location.trim()) {
+      toast.error('Title, location, and description are required.');
       return;
     }
     setSubmitting(true);
@@ -79,7 +79,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
       // Per Scott Phase 2 #4: track who posted each job for the
       // Recruiter Activity panel.
       posted_by: user.id,
-      location: location.trim() || null,
+      location: location.trim(),
       lat,
       lng,
       type,
@@ -134,11 +134,12 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="job-location" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
-                Location
+                Location <span className="text-red-500">*</span>
               </label>
               <input
                 id="job-location"
                 type="text"
+                required
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="San Francisco, CA / Remote"
