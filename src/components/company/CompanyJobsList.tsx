@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from '../HardLink';
 import toast from 'react-hot-toast';
-import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles, Plus } from 'lucide-react';
+import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles, Plus, Trash2 } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import ScreeningQuestionsEditor from '../ScreeningQuestionsEditor';
 import CustomFieldsEditor from './CustomFieldsEditor';
@@ -33,6 +33,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [sponsorBusyId, setSponsorBusyId] = useState<string | null>(null);
+  const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
   const [newJobOpen, setNewJobOpen] = useState(false);
   // Local override so the select reflects saved state without a full refresh
   const [sponsorTiers, setSponsorTiers] = useState<Record<string, number>>({});
@@ -72,6 +73,26 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
     setEditingJobId(null);
     setQuestions([]);
     setError('');
+  };
+
+  const deleteJob = async (job: { id: string; title: string }) => {
+    const confirmed = window.confirm(
+      `Delete "${job.title}"? This removes the job posting and stops accepting new applications. Existing applications stay in the dashboard for your records.`
+    );
+    if (!confirmed) return;
+    setDeletingJobId(job.id);
+    const { error: deleteError } = await supabase
+      .from('jobs')
+      .delete()
+      .eq('id', job.id);
+    setDeletingJobId(null);
+    if (deleteError) {
+      toast.error(deleteError.message);
+      return;
+    }
+    toast.success('Job deleted');
+    if (onJobCreated) onJobCreated();
+    else window.location.reload();
   };
 
   const saveQuestions = async () => {
@@ -223,13 +244,28 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {canEditJobs ? (
-                      <button
-                        onClick={() => openEditor(job)}
-                        className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium text-sm"
-                      >
-                        <Settings className="h-4 w-4" />
-                        Manage
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => openEditor(job)}
+                          className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium text-sm"
+                        >
+                          <Settings className="h-4 w-4" />
+                          Manage
+                        </button>
+                        <button
+                          onClick={() => deleteJob(job)}
+                          disabled={deletingJobId === job.id}
+                          aria-label={`Delete ${job.title}`}
+                          className="inline-flex items-center gap-1 text-rose-600 hover:text-rose-800 font-medium text-sm disabled:opacity-50"
+                        >
+                          {deletingJobId === job.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                          Delete
+                        </button>
+                      </div>
                     ) : (
                       <span className="text-xs text-gray-400 dark:text-slate-500 italic">View only</span>
                     )}
