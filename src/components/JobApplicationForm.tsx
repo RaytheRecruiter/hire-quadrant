@@ -136,7 +136,11 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   const uploadResume = async (): Promise<string | null> => {
     if (!resumeFile || !user) return null;
     const ext = resumeFile.name.split('.').pop() || 'pdf';
-    const path = `applications/${user.id}/${jobId}/${Date.now()}.${ext}`;
+    // Path MUST start with the user's UID — the resumes-bucket RLS policy
+    // gates INSERT on (storage.foldername(name))[1] = auth.uid()::text.
+    // Previously this was 'applications/<uid>/<jobId>/…' which failed the
+    // policy and blocked all per-application uploads (Ray QA 2026-05-20).
+    const path = `${user.id}/applications/${jobId}/${Date.now()}.${ext}`;
     const { error } = await supabase.storage
       .from('resumes')
       .upload(path, resumeFile, { upsert: false, contentType: resumeFile.type || undefined });
