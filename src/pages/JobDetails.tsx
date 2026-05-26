@@ -141,6 +141,7 @@ const JobDetails: React.FC = () => {
       const unique = Array.from(new Set(candidates));
 
       (async () => {
+        // Try exact-id match across all candidates first (cheap, indexed).
         for (const candidate of unique) {
           const { data, error: err } = await supabase
             .from('jobs')
@@ -150,6 +151,33 @@ const JobDetails: React.FC = () => {
           if (cancelled) return;
           if (err) {
             console.error('Error fetching job:', err);
+            continue;
+          }
+          if (data) {
+            setJob(data as Job);
+            setLoading(false);
+            return;
+          }
+        }
+        // Fallback for UI-generated jobs whose ids look like `ui-{uuid}`:
+        // the slug only carries the first 8 chars of the id (per
+        // slugGenerator), so an exact match never resolves. Use a
+        // prefix LIKE on the longest candidate that's plausibly the
+        // start of an id (≥4 chars, alphanum+hyphen). First hit wins.
+        // Ray QA 2026-05-20.
+        for (const candidate of unique) {
+          if (candidate.length < 4) continue;
+          if (!/^[a-z0-9-]+$/i.test(candidate)) continue;
+          const escaped = candidate.replace(/[\\%_]/g, (m) => '\\' + m);
+          const { data, error: err } = await supabase
+            .from('jobs')
+            .select('*')
+            .ilike('id', `${escaped}%`)
+            .limit(1)
+            .maybeSingle();
+          if (cancelled) return;
+          if (err) {
+            console.error('Error fetching job (prefix):', err);
             continue;
           }
           if (data) {
