@@ -309,17 +309,14 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
 
             return false;
         } catch (error) {
-            console.error('Error applying to job:', error.message);
-            const fallbackApplication: JobApplication = {
-                id: `app-${Date.now()}`,
-                job_id: jobId,
-                user_id: user.id,
-                status: 'Applied',
-                applied_at: new Date().toISOString()
-            };
-            const updatedApplications = [...applications, fallbackApplication];
-            setApplications(updatedApplications);
-            localStorage.setItem('applications', JSON.stringify(updatedApplications));
+            // Surface the failure honestly — do NOT push a fake application
+            // into local state. Doing so was the root cause of Ray's QA bug
+            // (2026-05-20): the apply form would show toast.error AND the
+            // header button would flip to "Applied" because the useEffect
+            // watching `applications` ran hasApplied() and got true on the
+            // fake row. Result: the user thought they had applied but the
+            // employer never saw it.
+            console.error('Error applying to job:', (error as { message?: string })?.message);
             return false;
         }
     }, [user, jobs, applications]);
