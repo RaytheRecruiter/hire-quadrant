@@ -68,6 +68,27 @@ async function migrateJobs() {
     try {
         console.log('--- Attempting to upsert jobs to Supabase ---');
 
+        // Map job.company (string) → companies.id so Browse Companies
+        // counts include externally-ingested jobs. Without this each
+        // JobDiva job lands with company_id = NULL and is invisible to
+        // the public_company_directory view (Ray QA 2026-05-20).
+        const distinctCompanyNames = Array.from(
+            new Set(allJobs.map((j) => j.company?.trim()).filter(Boolean) as string[])
+        );
+        const companyIdByName = new Map<string, string>();
+        if (distinctCompanyNames.length > 0) {
+            const { data: companyRows, error: cErr } = await supabase
+                .from('companies')
+                .select('id, name')
+                .in('name', distinctCompanyNames);
+            if (cErr) console.error('Could not load companies for FK linkage:', cErr);
+            else if (companyRows) {
+                for (const c of companyRows as Array<{ id: string; name: string }>) {
+                    companyIdByName.set(c.name.trim().toLowerCase(), c.id);
+                }
+            }
+        }
+
         const jobsToUpsert = allJobs.map(job => ({
             id: job.externalJobId, // Use the externalJobId as the primary key
             externalJobId: job.externalJobId,
@@ -78,6 +99,7 @@ async function migrateJobs() {
             sourceCompany: job.sourceCompany,
             sourceXmlFile: job.sourceXmlFile,
             company: job.company,
+            company_id: job.company ? companyIdByName.get(job.company.trim().toLowerCase()) ?? null : null,
             location: job.location,
             type: job.type,
             salary: job.salary,
