@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Bookmark, Briefcase, Bell, MessageSquare, Sparkles, TrendingUp, ArrowRight, Loader2 } from 'lucide-react';
+import { Bookmark, Briefcase, Bell, MessageSquare, Sparkles, ArrowRight, Loader2, MapPin, Target } from 'lucide-react';
 import HardLink from './HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
 import { useProfileCompleteness } from '../hooks/useProfileCompleteness';
+import { useSkillsMatchedJobs } from '../hooks/useSkillsMatchedJobs';
 import { formatDistanceToNow } from 'date-fns';
 
 interface ApplicationRow {
@@ -13,30 +14,22 @@ interface ApplicationRow {
   job?: { id: string; title: string; company: string | null };
 }
 
-interface JobRow {
-  id: string;
-  title: string;
-  company: string | null;
-  location: string | null;
-  posted_date: string | null;
-}
-
 const CandidateHomeDashboard: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const inputs = useProfileCompleteness();
   const [savedCount, setSavedCount] = useState(0);
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
-  const [recommendedJobs, setRecommendedJobs] = useState<JobRow[]>([]);
   const [unreadNotifs, setUnreadNotifs] = useState(0);
   const [unreadMsgs, setUnreadMsgs] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { jobs: matchedJobs, loading: matchLoading, radiusMiles, hasSignals } = useSkillsMatchedJobs(6);
 
   useEffect(() => {
     if (!user?.id) return;
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const [savedRes, appsRes, notifsRes, msgsRes, jobsRes] = await Promise.all([
+      const [savedRes, appsRes, notifsRes, msgsRes] = await Promise.all([
         supabase
           .from('saved_jobs')
           .select('job_id', { count: 'exact', head: true })
@@ -58,18 +51,12 @@ const CandidateHomeDashboard: React.FC = () => {
           .or(`participant_a.eq.${user.id},participant_b.eq.${user.id}`)
           .order('last_message_at', { ascending: false })
           .limit(20),
-        supabase
-          .from('jobs')
-          .select('id, title, company, location, posted_date')
-          .order('posted_date', { ascending: false })
-          .limit(6),
       ]);
 
       if (cancelled) return;
       setSavedCount(savedRes.count ?? 0);
       setApplications((appsRes.data as ApplicationRow[]) ?? []);
       setUnreadNotifs(notifsRes.count ?? 0);
-      setRecommendedJobs((jobsRes.data as JobRow[]) ?? []);
 
       const unread = (msgsRes.data ?? []).reduce((acc: number, convo: { messages?: Array<{ read_at: string | null; sender_id: string }> }) => {
         const msgs = convo.messages ?? [];
@@ -233,14 +220,20 @@ const CandidateHomeDashboard: React.FC = () => {
           </aside>
         </div>
 
-        {/* Jobs matching */}
+        {/* Skills match */}
         <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mt-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-primary-500" />
+              <Target className="h-4 w-4 text-primary-500" />
               <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
-                Fresh jobs you might like
+                Matched to your skills
               </h3>
+              {radiusMiles != null && (
+                <span className="inline-flex items-center gap-1 text-[10px] text-gray-500 dark:text-slate-400 bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
+                  <MapPin className="h-2.5 w-2.5" />
+                  within {radiusMiles} mi
+                </span>
+              )}
             </div>
             <HardLink
               to="/jobs"
@@ -249,15 +242,23 @@ const CandidateHomeDashboard: React.FC = () => {
               Browse all →
             </HardLink>
           </div>
-          {loading ? (
+          {matchLoading ? (
             <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-          ) : recommendedJobs.length === 0 ? (
+          ) : !hasSignals ? (
             <p className="text-xs text-gray-500 dark:text-slate-400">
-              No fresh jobs right now.
+              Add your resume or top skills to your{' '}
+              <HardLink to="/profile" className="text-primary-600 hover:text-primary-700 font-medium">
+                profile
+              </HardLink>{' '}
+              to get jobs matched to you.
+            </p>
+          ) : matchedJobs.length === 0 ? (
+            <p className="text-xs text-gray-500 dark:text-slate-400">
+              No matches yet — check back as new jobs are posted.
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-              {recommendedJobs.map((j) => (
+              {matchedJobs.map((j) => (
                 <HardLink
                   key={j.id}
                   to={`/jobs/${j.id}`}
@@ -267,10 +268,25 @@ const CandidateHomeDashboard: React.FC = () => {
                     {j.title}
                   </p>
                   <p className="text-[11px] text-gray-500 dark:text-slate-400 truncate">
-                    {j.company} {j.location && `· ${j.location}`}
+                    {j.company}
+                    {j.distanceMiles != null
+                      ? ` · ${j.distanceMiles.toFixed(0)} mi away`
+                      : j.location && ` · ${j.location}`}
                   </p>
+                  {j.matchingSkills.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-1.5">
+                      {j.matchingSkills.slice(0, 3).map((s) => (
+                        <span
+                          key={s}
+                          className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   {j.posted_date && (
-                    <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-0.5">
+                    <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-1">
                       {formatDistanceToNow(new Date(j.posted_date), { addSuffix: true })}
                     </p>
                   )}
