@@ -11,7 +11,8 @@ import {
   FileText,
   Sparkles,
   Star,
-  Shield,
+  User as UserIcon,
+  ExternalLink,
   Loader2
 } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -34,10 +35,6 @@ interface CandidateHubProps {
   jobs: Job[];
 }
 
-// Per Scott 2026-04-29 (#19): the candidate click-through view is privacy-first.
-// We hide name/email/phone behind an anonymized handle and lead with skills /
-// top skills / certifications so HQ can review candidates on merit before
-// deciding to reveal contact info.
 type CandidateProfile = {
   skills: string[];
   top_skills: string[];
@@ -45,9 +42,8 @@ type CandidateProfile = {
   current_title: string | null;
   years_experience: number | null;
   resume_parsed_at: string | null;
+  resume_url: string | null;
 };
-
-const anonHandle = (id: string) => `Candidate #${id.slice(-6).toUpperCase()}`;
 
 const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, jobs }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -58,17 +54,19 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
   const [showCandidateModal, setShowCandidateModal] = useState(false);
   const [profile, setProfile] = useState<CandidateProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [resumeSignedUrl, setResumeSignedUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!selectedCandidate?.id) {
       setProfile(null);
+      setResumeSignedUrl(null);
       return;
     }
     setProfileLoading(true);
     (async () => {
       const { data } = await supabase
         .from('candidates')
-        .select('skills, top_skills, certifications, current_title, years_experience, resume_parsed_at')
+        .select('skills, top_skills, certifications, current_title, years_experience, resume_parsed_at, resume_url')
         .eq('user_id', selectedCandidate.id)
         .maybeSingle();
       setProfile({
@@ -78,8 +76,19 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
         current_title: (data?.current_title as string | null) ?? null,
         years_experience: (data?.years_experience as number | null) ?? null,
         resume_parsed_at: (data?.resume_parsed_at as string | null) ?? null,
+        resume_url: (data?.resume_url as string | null) ?? null,
       });
       setProfileLoading(false);
+      if (data?.resume_url) {
+        // Admins can read any resume — "Admins can read all resumes" storage
+        // policy (20260407000002_create_resumes_storage.sql).
+        const { data: signed } = await supabase.storage
+          .from('resumes')
+          .createSignedUrl(data.resume_url as string, 3600);
+        setResumeSignedUrl(signed?.signedUrl ?? null);
+      } else {
+        setResumeSignedUrl(null);
+      }
     })();
   }, [selectedCandidate?.id]);
 
@@ -230,7 +239,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
               <input
                 type="text"
-                placeholder="Search candidates (admin only — searches name/email behind the scenes)"
+                placeholder="Search candidates by name or email"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
@@ -269,9 +278,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
         </div>
       </div>
 
-      {/* Candidates Grid — anonymized cards. Click a card to open the detail
-          modal with skills / certifications / top skills. Names and emails
-          are intentionally hidden here per Scott 2026-04-29 (#19). */}
+      {/* Candidates Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredAndSortedCandidates.map((candidate) => (
           <div
@@ -283,14 +290,14 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
               <div className="flex items-center">
                 <div className="flex-shrink-0 h-12 w-12">
                   <div className="h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
-                    <Shield className="h-5 w-5 text-primary-600" />
+                    <UserIcon className="h-5 w-5 text-primary-600" />
                   </div>
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {anonHandle(candidate.id)}
+                    {candidate.name || candidate.email}
                   </h3>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Anonymized profile</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">{candidate.email}</p>
                 </div>
               </div>
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(candidate.status)}`}>
@@ -327,9 +334,6 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
         </div>
       )}
 
-      {/* Candidate Detail Modal — anonymized per Scott 2026-04-29 (#19).
-          Reviewers see only skills, top skills, certifications, and high-level
-          metadata. Name, email, and phone are intentionally hidden. */}
       {showCandidateModal && selectedCandidate && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-slate-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -338,17 +342,14 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                 <div className="flex items-center">
                   <div className="flex-shrink-0 h-16 w-16">
                     <div className="h-16 w-16 rounded-full bg-primary-100 flex items-center justify-center">
-                      <Shield className="h-7 w-7 text-primary-600" />
+                      <UserIcon className="h-7 w-7 text-primary-600" />
                     </div>
                   </div>
                   <div className="ml-6">
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {anonHandle(selectedCandidate.id)}
+                      {selectedCandidate.name || selectedCandidate.email}
                     </h2>
-                    <p className="text-xs text-gray-500 dark:text-slate-400 inline-flex items-center gap-1">
-                      <Shield className="h-3 w-3" />
-                      Anonymized review — name, email, and phone are hidden until you message this candidate.
-                    </p>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">{selectedCandidate.email}</p>
                     {profile?.current_title && (
                       <p className="text-sm text-gray-700 dark:text-slate-300 mt-2 font-medium">
                         {profile.current_title}
@@ -455,6 +456,27 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                         </span>
                       </div>
                     </div>
+                    {profile?.resume_url && (
+                      <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600 dark:text-slate-400 inline-flex items-center gap-1">
+                            <FileText className="h-3.5 w-3.5" /> Resume
+                          </span>
+                          {resumeSignedUrl ? (
+                            <a
+                              href={resumeSignedUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm font-medium text-primary-600 hover:text-primary-700 inline-flex items-center gap-1"
+                            >
+                              View <ExternalLink className="h-3 w-3" />
+                            </a>
+                          ) : (
+                            <span className="text-sm text-gray-400 dark:text-slate-500">Loading…</span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {profile?.resume_parsed_at && (
                       <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
                         <div className="flex items-center justify-between">

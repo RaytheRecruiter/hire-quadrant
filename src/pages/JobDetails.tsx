@@ -102,7 +102,7 @@ const JobDetails: React.FC = () => {
     // ("28082768") and hyphenated IDs ("job-002") emitted by generateSlug.
     const { id: idParam, slug: slugParam } = useParams<{ id?: string; slug?: string }>();
     const { getJobById, applyToJob, hasApplied } = useJobs();
-    const { user } = useAuth();
+    const { user, isCompany } = useAuth();
     useReferralTracking();
     const { getCompanyByName, getCompanyById } = useCompanies();
     const { isSaved, toggleSaved } = useSavedJobs();
@@ -327,6 +327,10 @@ const JobDetails: React.FC = () => {
             navigate(`/login?returnTo=${encodeURIComponent(`/jobs/${job.id}#apply-form`)}&intent=apply`);
             return;
         }
+        if (isCompany) {
+            toast.error('Company accounts cannot apply to jobs.');
+            return;
+        }
         const el = document.getElementById('apply-form');
         if (el) {
             el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -510,14 +514,20 @@ const JobDetails: React.FC = () => {
 
                     {/* Inline application form */}
                     <div className="px-6 md:px-10 pb-10">
-                        <JobApplicationForm
-                            jobId={job.id}
-                            jobTitle={job.title}
-                            company={job.company}
-                            screeningQuestions={screeningQuestions}
-                            applied={applied}
-                            onSubmit={handleInlineSubmit}
-                        />
+                        {isCompany ? (
+                            <div className="rounded-xl bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 p-5 text-sm text-gray-600 dark:text-slate-400">
+                                Company accounts can't apply to jobs. Sign in with a candidate account to apply.
+                            </div>
+                        ) : (
+                            <JobApplicationForm
+                                jobId={job.id}
+                                jobTitle={job.title}
+                                company={job.company}
+                                screeningQuestions={screeningQuestions}
+                                applied={applied}
+                                onSubmit={handleInlineSubmit}
+                            />
+                        )}
                     </div>
 
                     {/* Share moved to top-left of header per Scott 2026-04-28. */}
