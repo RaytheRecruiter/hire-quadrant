@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supabaseClient';
+import { useAuth } from '../../contexts/AuthContext';
 import { useSubscription, SubscriptionPlan } from '../../hooks/useSubscription';
 import SubscriptionBadge from '../SubscriptionBadge';
-import { Save, AlertCircle, CheckCircle, Building2, Shield, ArrowRightLeft, Loader2, X } from 'lucide-react';
+import { Save, AlertCircle, CheckCircle, Building2, Shield, ArrowRightLeft, Loader2, X, Search, UserPlus } from 'lucide-react';
 
 interface CompanyRow {
   id: string;
@@ -26,6 +28,8 @@ const SubscriptionManager: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [transferTarget, setTransferTarget] = useState<CompanyRow | null>(null);
+  const [inviteTarget, setInviteTarget] = useState<CompanyRow | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -175,13 +179,46 @@ const SubscriptionManager: React.FC = () => {
         </div>
       )}
 
+      <div className="px-6 pt-4">
+        <div className="relative max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search companies…"
+            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+          />
+        </div>
+      </div>
+
       <div className="p-6">
-        {companies.length === 0 ? (
-          <div className="text-center py-8">
-            <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-slate-400">No companies found</p>
-          </div>
-        ) : (
+        {(() => {
+          const q = searchTerm.trim().toLowerCase();
+          const filteredCompanies = q
+            ? companies.filter((c) =>
+                (c.display_name || c.name || '').toLowerCase().includes(q) ||
+                (c.ownerName || '').toLowerCase().includes(q) ||
+                (c.ownerEmail || '').toLowerCase().includes(q)
+              )
+            : companies;
+          if (companies.length === 0) {
+            return (
+              <div className="text-center py-8">
+                <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 dark:text-slate-400">No companies found</p>
+              </div>
+            );
+          }
+          if (filteredCompanies.length === 0) {
+            return (
+              <div className="text-center py-8">
+                <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 dark:text-slate-400">No companies match "{searchTerm}"</p>
+              </div>
+            );
+          }
+          return (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
               <thead>
@@ -207,7 +244,7 @@ const SubscriptionManager: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
-                {companies.map((company) => (
+                {filteredCompanies.map((company) => (
                   <tr key={company.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
                     <td className="px-4 py-3 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
@@ -217,29 +254,42 @@ const SubscriptionManager: React.FC = () => {
                     <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         {company.ownerName || company.ownerEmail ? (
-                          <div className="flex items-center gap-1.5">
-                            <Shield className="w-3.5 h-3.5 text-amber-500" />
-                            <div>
-                              <div className="text-sm font-medium text-gray-900 dark:text-white">
-                                {company.ownerName || company.ownerEmail}
+                          <>
+                            <div className="flex items-center gap-1.5">
+                              <Shield className="w-3.5 h-3.5 text-amber-500" />
+                              <div>
+                                <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                  {company.ownerName || company.ownerEmail}
+                                </div>
+                                {company.ownerName && company.ownerEmail && (
+                                  <div className="text-xs text-gray-500 dark:text-slate-400">{company.ownerEmail}</div>
+                                )}
                               </div>
-                              {company.ownerName && company.ownerEmail && (
-                                <div className="text-xs text-gray-500 dark:text-slate-400">{company.ownerEmail}</div>
-                              )}
                             </div>
-                          </div>
+                            <button
+                              type="button"
+                              onClick={() => setTransferTarget(company)}
+                              className="text-xs text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 ml-1"
+                              title="Transfer ownership to another team member"
+                            >
+                              <ArrowRightLeft className="w-3 h-3" />
+                              Change
+                            </button>
+                          </>
                         ) : (
-                          <span className="text-xs text-gray-400 dark:text-slate-500">No primary user</span>
+                          <>
+                            <span className="text-xs text-gray-400 dark:text-slate-500">No primary user</span>
+                            <button
+                              type="button"
+                              onClick={() => setInviteTarget(company)}
+                              className="text-xs text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 ml-1"
+                              title="Invite an owner by email"
+                            >
+                              <UserPlus className="w-3 h-3" />
+                              Invite owner
+                            </button>
+                          </>
                         )}
-                        <button
-                          type="button"
-                          onClick={() => setTransferTarget(company)}
-                          className="text-xs text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 ml-1"
-                          title="Transfer ownership to another team member"
-                        >
-                          <ArrowRightLeft className="w-3 h-3" />
-                          Change
-                        </button>
                       </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
@@ -287,7 +337,8 @@ const SubscriptionManager: React.FC = () => {
               </tbody>
             </table>
           </div>
-        )}
+          );
+        })()}
       </div>
 
       {transferTarget && (
@@ -299,6 +350,14 @@ const SubscriptionManager: React.FC = () => {
             // Refresh the panel so the new Owner shows in the row.
             window.location.reload();
           }}
+        />
+      )}
+
+      {inviteTarget && (
+        <InviteOwnerModal
+          company={inviteTarget}
+          onClose={() => setInviteTarget(null)}
+          onInvited={() => setInviteTarget(null)}
         />
       )}
     </div>
@@ -451,6 +510,160 @@ const TransferOwnershipModal: React.FC<TransferModalProps> = ({ company, onClose
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRightLeft className="h-4 w-4" />}
             Transfer
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Invite Owner Modal ─────────────────────────────────────────────────────
+// Companies with no primary user (never linked, or a legacy account that
+// was never backfilled) need a way to get an owner without the admin
+// creating an account by hand. Sends a company_invitations row with
+// role='owner' — same table/flow TeamMembers.tsx uses for regular invites,
+// just with the owner role that wasn't previously allowed there.
+
+interface InviteOwnerModalProps {
+  company: CompanyRow;
+  onClose: () => void;
+  onInvited: () => void;
+}
+
+const InviteOwnerModal: React.FC<InviteOwnerModalProps> = ({ company, onClose, onInvited }) => {
+  const { user } = useAuth();
+  const [email, setEmail] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const submit = async () => {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail.includes('@')) {
+      setErrorMsg('Enter a valid email address.');
+      return;
+    }
+    setSaving(true);
+    setErrorMsg(null);
+
+    const tokenBytes = new Uint8Array(32);
+    crypto.getRandomValues(tokenBytes);
+    const token = Array.from(tokenBytes).map((b) => b.toString(16).padStart(2, '0')).join('');
+
+    const { error } = await supabase.from('company_invitations').insert({
+      company_id: company.id,
+      email: cleanEmail,
+      role: 'owner',
+      scope: 'all',
+      permissions: {},
+      token,
+    });
+
+    if (error) {
+      setSaving(false);
+      setErrorMsg(error.message);
+      return;
+    }
+
+    // Best-effort email send — the invite row exists either way, so a
+    // failure here just means the admin has to relay the link manually
+    // (same fallback TeamMembers.tsx uses).
+    const inviteUrl = `${window.location.origin}/accept-invite?token=${token}`;
+    const expiresOn = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(
+      undefined,
+      { month: 'long', day: 'numeric', year: 'numeric' },
+    );
+    const inviterName = user?.name || user?.email || 'HireQuadrant';
+    const companyName = company.display_name || company.name;
+    try {
+      const url = import.meta.env.VITE_SUPABASE_URL as string;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+      const res = await fetch(`${url}/functions/v1/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${anonKey}`,
+          apikey: anonKey,
+        },
+        body: JSON.stringify({
+          to: cleanEmail,
+          subject: `${inviterName} invited you to own ${companyName} on HireQuadrant`,
+          template: 'team_invitation',
+          variables: {
+            companyName,
+            inviterName,
+            recipientFirstName: '',
+            roleLabel: 'Owner',
+            scopeLabel: 'All Jobs',
+            inviteUrl,
+            expiresOn,
+          },
+        }),
+      });
+      if (res.ok) {
+        toast.success(`Owner invitation sent to ${cleanEmail}`);
+      } else {
+        toast.success('Invite created — copy the link and send it to them directly.');
+        await navigator.clipboard.writeText(inviteUrl).catch(() => {});
+      }
+    } catch {
+      toast.success('Invite created — copy the link and send it to them directly.');
+      await navigator.clipboard.writeText(inviteUrl).catch(() => {});
+    } finally {
+      setSaving(false);
+    }
+    onInvited();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full">
+        <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Invite Owner</h2>
+            <p className="text-xs text-gray-500 dark:text-slate-400">{company.display_name || company.name}</p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="p-6 space-y-4">
+          <p className="text-sm text-gray-600 dark:text-slate-400">
+            This company has no primary user. Enter an email and we'll invite them as
+            Owner with full access — they'll get a signup link by email (or copy it
+            below if delivery fails).
+          </p>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+              Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && submit()}
+              placeholder="owner@company.com"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              autoFocus
+            />
+          </div>
+          {errorMsg && (
+            <div className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-2">{errorMsg}</div>
+          )}
+        </div>
+        <div className="p-6 border-t border-gray-200 dark:border-slate-700 flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-slate-600 hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={submit}
+            disabled={!email.trim() || saving}
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:opacity-60"
+          >
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
+            Send Invite
           </button>
         </div>
       </div>
