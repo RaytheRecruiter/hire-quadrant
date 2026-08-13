@@ -190,9 +190,17 @@ const Admin: React.FC = () => {
     return acc;
   }, {} as Record<string, number>);
 
-  // Source company statistics
+  // Source company statistics.
+  // source_company is only populated for a handful of external-feed jobs —
+  // most jobs (XML imports and UI-created postings alike) leave it null and
+  // fall through here. Falling back straight to the literal string 'Direct'
+  // lumped 96% of jobs (XML-fed AND UI-posted) into one meaningless bucket.
+  // job.company is always populated, so use that first — XML jobs group by
+  // their real company/feed name, and UI-posted jobs group by the actual
+  // company that posted them (Ray QA 2026-08-12: "Quadrant Inc job not
+  // showing" / "Direct is linked to the Quadrant XML feed").
   const sourceStats = jobs.reduce((acc, job) => {
-    const source = job.source_company || 'Direct';
+    const source = job.source_company || job.company || 'Direct';
     if (!acc[source]) {
       acc[source] = { jobs: 0, views: 0, applications: 0 };
     }
@@ -683,7 +691,7 @@ const Admin: React.FC = () => {
                     getValue: (job) => job.title,
                   },
                   { key: 'company', label: 'Company', getValue: (job) => job.company || '' },
-                  { key: 'source_company', label: 'Source Company', getValue: (job) => job.source_company || 'Direct', render: (job) => <>{job.source_company || 'Direct'}</> },
+                  { key: 'source_company', label: 'Source Company', getValue: (job) => job.source_company || job.company || 'Direct', render: (job) => <>{job.source_company || job.company || 'Direct'}</> },
                   { key: 'views', label: 'Views', getValue: (job) => job.views || 0, align: 'right' },
                   {
                     key: 'app_count', label: 'Applications',
