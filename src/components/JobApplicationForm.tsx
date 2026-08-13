@@ -36,28 +36,6 @@ const MAX_RESUME_BYTES = 50 * 1024 * 1024; // 50 MB
 const ACCEPTED_EXTS = ['.pdf', '.doc', '.docx', '.txt'];
 const ACCEPTED_MIME = '.pdf,.doc,.docx,.txt';
 
-const RACE_OPTIONS = [
-  'Hispanic or Latino',
-  'White',
-  'Black or African American',
-  'Asian',
-  'American Indian or Alaska Native',
-  'Native Hawaiian or Other Pacific Islander',
-  'Two or More Races',
-  'Prefer not to say',
-];
-const GENDER_OPTIONS = ['Male', 'Female', 'Non-binary', 'Prefer not to say'];
-const DISABILITY_OPTIONS = [
-  "Yes, I have a disability or have a record of having a disability",
-  "No, I don't have a disability or have a record of having a disability",
-  "I don't wish to answer",
-];
-const VETERAN_OPTIONS = [
-  'I identify as a protected veteran',
-  'I am not a protected veteran',
-  "I don't wish to answer",
-];
-
 const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   jobId,
   jobTitle,
@@ -75,10 +53,6 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   const [coverLetter, setCoverLetter] = useState('');
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [existingResumePath, setExistingResumePath] = useState<string | null>(null);
-  const [raceEthnicity, setRaceEthnicity] = useState('');
-  const [gender, setGender] = useState('');
-  const [disability, setDisability] = useState('');
-  const [veteran, setVeteran] = useState('');
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [screeningAnswers, setScreeningAnswers] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -170,7 +144,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
       return;
     }
     const requiredUnanswered = screeningQuestions.filter(
-      (q) => q.required && !(screeningAnswers[q.id || q.prompt]?.trim())
+      (q) => q.required && !(screeningAnswers[q.id]?.trim())
     );
     if (requiredUnanswered.length > 0) {
       toast.error('Please answer all required screening questions.');
@@ -190,9 +164,8 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
       }
 
       const answers: ScreeningAnswer[] = screeningQuestions.map((q) => ({
-        question_id: q.id || q.prompt,
-        question: q.prompt,
-        answer: (screeningAnswers[q.id || q.prompt] || '').trim(),
+        questionId: q.id,
+        answer: (screeningAnswers[q.id] || '').trim(),
       }));
 
       const ok = await onSubmit(answers, {
@@ -204,19 +177,13 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
         zip: zip.trim() || undefined,
         coverLetter: coverLetter.trim() || undefined,
         resumeUrl: resumeUrl || undefined,
-        eeo: {
-          race_ethnicity: raceEthnicity || undefined,
-          gender: gender || undefined,
-          disability: disability || undefined,
-          veteran: veteran || undefined,
-        },
+        eeo: {},
         privacyAcceptedAt: new Date().toISOString(),
       });
       if (ok) {
         toast.success('Application submitted!');
-      } else {
-        toast.error('Could not submit application. Please try again.');
       }
+      // On failure, applyToJob() already surfaces the specific error via toast.
     } finally {
       setSubmitting(false);
     }
@@ -387,77 +354,6 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
             />
           </div>
 
-          {/* EEO */}
-          <div className="border-t border-gray-200 dark:border-slate-700 pt-5">
-            <p className="text-sm text-gray-600 dark:text-slate-400 leading-relaxed">
-              We are an equal opportunity employer. We honor diversity and are committed to creating
-              an inclusive environment for everyone. Help us get to know you better by responding to
-              these optional questions.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div>
-                <label className={labelClass}>Race &amp; Ethnicity</label>
-                <select
-                  value={raceEthnicity}
-                  onChange={(e) => setRaceEthnicity(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="">Select…</option>
-                  {RACE_OPTIONS.map((o) => (
-                    <option key={o} value={o}>
-                      {o}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className={labelClass}>Gender</label>
-                <select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="">Select…</option>
-                  {GENDER_OPTIONS.map((o) => (
-                    <option key={o} value={o}>
-                      {o}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className={labelClass}>Disability</label>
-                <select
-                  value={disability}
-                  onChange={(e) => setDisability(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="">Select…</option>
-                  {DISABILITY_OPTIONS.map((o) => (
-                    <option key={o} value={o}>
-                      {o}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className={labelClass}>Protected Veteran</label>
-                <select
-                  value={veteran}
-                  onChange={(e) => setVeteran(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="">Select…</option>
-                  {VETERAN_OPTIONS.map((o) => (
-                    <option key={o} value={o}>
-                      {o}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
           {/* Screening questions */}
           {screeningQuestions.length > 0 && (
             <div className="border-t border-gray-200 dark:border-slate-700 pt-5 space-y-4">
@@ -465,11 +361,11 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                 Screening questions
               </p>
               {screeningQuestions.map((q) => {
-                const key = q.id || q.prompt;
+                const key = q.id;
                 return (
                   <div key={key}>
                     <label className="block text-sm font-medium text-secondary-800 dark:text-slate-200 mb-1">
-                      {q.prompt}
+                      {q.question}
                       {q.required && <span className="text-red-500 ml-1">*</span>}
                     </label>
                     <textarea

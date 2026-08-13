@@ -50,7 +50,7 @@ interface JobInfo {
 }
 
 const ProfilePage = () => {
-    const { user, updateProfile, loading: authLoading } = useAuth();
+    const { user, isAdmin, updateProfile, loading: authLoading } = useAuth();
     const [nameValue, setNameValue] = useState('');
     const [savingName, setSavingName] = useState(false);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -598,6 +598,10 @@ const ProfilePage = () => {
                     </form>
                 </div>
 
+                {/* Applicant-only sections: admins don't apply to jobs and
+                    shouldn't see candidate-style profile fields. */}
+                {!isAdmin && (
+                <>
                 <ProfileCompletenessBar />
 
                 <ExperienceSection />
@@ -836,6 +840,8 @@ const ProfilePage = () => {
                         </div>
                     )}
                 </div>
+                </>
+                )}
             </div>
         </div>
     );

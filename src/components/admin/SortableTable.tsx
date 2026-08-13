@@ -8,7 +8,14 @@ export interface Column<T> {
   filterable?: boolean;
   render?: (row: T) => React.ReactNode;
   getValue?: (row: T) => string | number;
+  // Numeric/currency columns should right-align so digits stack instead of
+  // sitting flush against variable-width text neighbors — the "table needs
+  // to be aligned" complaint on Job Performance.
+  align?: 'left' | 'right' | 'center';
 }
+
+const alignClass = (align?: 'left' | 'right' | 'center') =>
+  align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left';
 
 interface SortableTableProps<T> {
   columns: Column<T>[];
@@ -98,8 +105,8 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
           <thead className="bg-gray-50 dark:bg-slate-900/50">
             <tr>
               {columns.map(col => (
-                <th key={col.key} className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
-                  <div className="flex flex-col gap-1">
+                <th key={col.key} className={`px-6 py-3 ${alignClass(col.align)} text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider`}>
+                  <div className={`flex flex-col gap-1 ${col.align === 'right' ? 'items-end' : col.align === 'center' ? 'items-center' : 'items-start'}`}>
                     <div
                       className={`flex items-center gap-1 ${col.sortable !== false ? 'cursor-pointer select-none hover:text-gray-700 dark:text-slate-300' : ''}`}
                       onClick={() => col.sortable !== false && handleSort(col.key)}
@@ -161,7 +168,10 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
               processedData.map(row => (
                 <tr key={rowKey(row)} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
                   {columns.map(col => (
-                    <td key={col.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
+                    <td
+                      key={col.key}
+                      className={`px-6 py-4 align-top whitespace-nowrap text-sm text-gray-600 dark:text-slate-400 ${alignClass(col.align)} ${col.align === 'right' ? 'tabular-nums' : ''}`}
+                    >
                       {col.render ? col.render(row) : String(getValue(row, col))}
                     </td>
                   ))}
