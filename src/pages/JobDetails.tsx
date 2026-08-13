@@ -22,12 +22,24 @@ import { extractTags } from '../utils/skillExtractor';
 import { useSEO } from '../hooks/useSEO';
 import { generateSlug } from '../utils/slugGenerator';
 import { parseJobDescription } from '../utils/jobDescriptionFormatter';
+import { isHtmlDescription, sanitizeJobDescriptionHtml } from '../components/RichTextEditor';
 import type { ScreeningQuestion, ScreeningAnswer } from '../types/screening';
 
 const viewedJobIds = new Set<string>();
 
 const formatJobDescription = (description: string) => {
     if (!description) return <p className="text-secondary-700 dark:text-slate-300">No description available</p>;
+    // Jobs posted via the rich-text editor store real HTML; render that
+    // directly (sanitized). Legacy/XML-feed jobs are plain text, which the
+    // markdown-ish parser below turns into headings/bullets.
+    if (isHtmlDescription(description)) {
+        return (
+            <div
+                className="text-secondary-700 dark:text-slate-300"
+                dangerouslySetInnerHTML={{ __html: sanitizeJobDescriptionHtml(description) }}
+            />
+        );
+    }
     const sections = parseJobDescription(description);
     if (sections.length === 0) {
         return <p className="text-secondary-700 dark:text-slate-300">{description}</p>;
@@ -331,6 +343,10 @@ const JobDetails: React.FC = () => {
             toast.error('Company accounts cannot apply to jobs.');
             return;
         }
+        if (job.status === 'closed' && !applied) {
+            toast.error('This job is no longer accepting applications.');
+            return;
+        }
         const el = document.getElementById('apply-form');
         if (el) {
             el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -517,6 +533,10 @@ const JobDetails: React.FC = () => {
                         {isCompany ? (
                             <div className="rounded-xl bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 p-5 text-sm text-gray-600 dark:text-slate-400">
                                 Company accounts can't apply to jobs. Sign in with a candidate account to apply.
+                            </div>
+                        ) : job.status === 'closed' && !applied ? (
+                            <div className="rounded-xl bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 p-5 text-sm text-gray-600 dark:text-slate-400">
+                                This job is no longer accepting applications.
                             </div>
                         ) : (
                             <JobApplicationForm

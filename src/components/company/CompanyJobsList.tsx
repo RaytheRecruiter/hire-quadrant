@@ -2,13 +2,32 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from '../HardLink';
 import toast from 'react-hot-toast';
-import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles, Plus, Trash2 } from 'lucide-react';
+import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles, Plus, Trash2, Lock, Unlock } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import ScreeningQuestionsEditor from '../ScreeningQuestionsEditor';
 import CustomFieldsEditor from './CustomFieldsEditor';
 import NewJobModal from './NewJobModal';
+import RichTextEditor from '../RichTextEditor';
 import type { ScreeningQuestion } from '../../types/screening';
 import { usePermissions } from '../../hooks/usePermissions';
+
+const JOB_TYPES = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Temporary'];
+const WORKPLACE_TYPES = ['Remote', 'Hybrid', 'On-site'];
+const EXPERIENCE_LEVELS = ['Entry', 'Mid', 'Senior', 'Lead', 'Executive'];
+
+interface JobFormState {
+  title: string;
+  location: string;
+  salary: string;
+  type: string;
+  workplaceType: string;
+  experienceLevel: string;
+  description: string;
+}
+
+const emptyJobForm: JobFormState = {
+  title: '', location: '', salary: '', type: 'Full-time', workplaceType: 'Remote', experienceLevel: 'Mid', description: '',
+};
 
 interface CompanyJobsListProps {
   jobs: any[];
@@ -30,13 +49,16 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
   const canSponsorJobs = !permLoading && (noMember || isOwner || isAdmin || can('sponsor_jobs'));
   const [editingJobId, setEditingJobId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<ScreeningQuestion[]>([]);
+  const [jobForm, setJobForm] = useState<JobFormState>(emptyJobForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [sponsorBusyId, setSponsorBusyId] = useState<string | null>(null);
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
+  const [statusBusyId, setStatusBusyId] = useState<string | null>(null);
   const [newJobOpen, setNewJobOpen] = useState(false);
-  // Local override so the select reflects saved state without a full refresh
+  // Local overrides so selects/badges reflect saved state without a full refresh
   const [sponsorTiers, setSponsorTiers] = useState<Record<string, number>>({});
+  const [statusOverrides, setStatusOverrides] = useState<Record<string, 'open' | 'closed'>>({});
 
   const handleJobCreated = () => {
     if (onJobCreated) onJobCreated();
@@ -63,15 +85,46 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
     toast.success(tier === 0 ? 'Listing unsponsored' : `Promoted to tier ${tier}`);
   };
 
+  const getStatus = (job: any): 'open' | 'closed' => {
+    if (job.id in statusOverrides) return statusOverrides[job.id];
+    return job.status === 'closed' ? 'closed' : 'open';
+  };
+
+  const toggleStatus = async (job: any) => {
+    const next = getStatus(job) === 'open' ? 'closed' : 'open';
+    setStatusBusyId(job.id);
+    const { error: updateError } = await supabase
+      .from('jobs')
+      .update({ status: next })
+      .eq('id', job.id);
+    setStatusBusyId(null);
+    if (updateError) {
+      toast.error(updateError.message);
+      return;
+    }
+    setStatusOverrides((m) => ({ ...m, [job.id]: next }));
+    toast.success(next === 'closed' ? 'Job closed — no longer accepting applications' : 'Job reopened');
+  };
+
   const openEditor = (job: any) => {
     setEditingJobId(job.id);
     setQuestions((job.screening_questions as ScreeningQuestion[]) || []);
+    setJobForm({
+      title: job.title || '',
+      location: job.location || '',
+      salary: job.salary || '',
+      type: job.type || 'Full-time',
+      workplaceType: job.workplace_type || 'Remote',
+      experienceLevel: job.experience_level || 'Mid',
+      description: job.description || '',
+    });
     setError('');
   };
 
   const closeEditor = () => {
     setEditingJobId(null);
     setQuestions([]);
+    setJobForm(emptyJobForm);
     setError('');
   };
 
@@ -95,20 +148,35 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
     else window.location.reload();
   };
 
-  const saveQuestions = async () => {
+  const saveJob = async () => {
     if (!editingJobId) return;
+    if (!jobForm.title.trim() || !jobForm.location.trim() || !jobForm.description.replace(/<[^>]*>/g, '').trim()) {
+      setError('Title, location, and description are required.');
+      return;
+    }
     setSaving(true);
     setError('');
     const { error: updateError } = await supabase
       .from('jobs')
-      .update({ screening_questions: questions })
+      .update({
+        screening_questions: questions,
+        title: jobForm.title.trim(),
+        location: jobForm.location.trim(),
+        salary: jobForm.salary.trim() || null,
+        type: jobForm.type,
+        workplace_type: jobForm.workplaceType,
+        experience_level: jobForm.experienceLevel,
+        description: jobForm.description.trim(),
+      })
       .eq('id', editingJobId);
     setSaving(false);
     if (updateError) {
       setError(updateError.message);
       return;
     }
+    toast.success('Job updated');
     closeEditor();
+    handleJobCreated();
   };
 
   if (jobs.length === 0) {
@@ -156,6 +224,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
           <thead className="bg-gray-50 dark:bg-slate-900/50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Location</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Type</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Salary</th>
@@ -178,6 +247,36 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
                     >
                       {job.title}
                     </HardLink>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    {canEditJobs ? (
+                      <button
+                        type="button"
+                        onClick={() => toggleStatus(job)}
+                        disabled={statusBusyId === job.id}
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium disabled:opacity-60 ${
+                          getStatus(job) === 'open'
+                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                            : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-gray-300'
+                        }`}
+                        title={getStatus(job) === 'open' ? 'Close this job (stops new applications, keeps history)' : 'Reopen this job'}
+                      >
+                        {statusBusyId === job.id ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : getStatus(job) === 'open' ? (
+                          <Unlock className="h-3 w-3" />
+                        ) : (
+                          <Lock className="h-3 w-3" />
+                        )}
+                        {getStatus(job) === 'open' ? 'Open' : 'Closed'}
+                      </button>
+                    ) : (
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        getStatus(job) === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300'
+                      }`}>
+                        {getStatus(job) === 'open' ? 'Open' : 'Closed'}
+                      </span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
                     <div className="flex items-center">
@@ -281,13 +380,95 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-0 sm:p-4">
           <div className="bg-white dark:bg-slate-800 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-2xl flex flex-col">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
-              <h2 className="text-lg font-bold text-secondary-900 dark:text-white">Manage Screening Questions</h2>
+              <h2 className="text-lg font-bold text-secondary-900 dark:text-white">Manage Job</h2>
               <button onClick={closeEditor} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400" aria-label="Close">
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
-              <ScreeningQuestionsEditor value={questions} onChange={setQuestions} />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
+                    Title <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={jobForm.title}
+                    onChange={(e) => setJobForm((f) => ({ ...f, title: e.target.value }))}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
+                      Location <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={jobForm.location}
+                      onChange={(e) => setJobForm((f) => ({ ...f, location: e.target.value }))}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Salary range</label>
+                    <input
+                      type="text"
+                      value={jobForm.salary}
+                      onChange={(e) => setJobForm((f) => ({ ...f, salary: e.target.value }))}
+                      placeholder="$120k–$160k"
+                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Type</label>
+                    <select
+                      value={jobForm.type}
+                      onChange={(e) => setJobForm((f) => ({ ...f, type: e.target.value }))}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                    >
+                      {JOB_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Workplace</label>
+                    <select
+                      value={jobForm.workplaceType}
+                      onChange={(e) => setJobForm((f) => ({ ...f, workplaceType: e.target.value }))}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                    >
+                      {WORKPLACE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Experience</label>
+                    <select
+                      value={jobForm.experienceLevel}
+                      onChange={(e) => setJobForm((f) => ({ ...f, experienceLevel: e.target.value }))}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                    >
+                      {EXPERIENCE_LEVELS.map((t) => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
+                    Description <span className="text-red-500">*</span>
+                  </label>
+                  <RichTextEditor
+                    value={jobForm.description}
+                    onChange={(html) => setJobForm((f) => ({ ...f, description: html }))}
+                    placeholder="Describe the role, responsibilities, and requirements…"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-gray-100 dark:border-slate-700">
+                <h3 className="text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-3">Screening Questions</h3>
+                <ScreeningQuestionsEditor value={questions} onChange={setQuestions} />
+              </div>
               {error && (
                 <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>
               )}
@@ -303,12 +484,12 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
                 Cancel
               </button>
               <button
-                onClick={saveQuestions}
+                onClick={saveJob}
                 disabled={saving}
                 className="flex items-center gap-2 bg-gradient-to-r from-primary-400 to-primary-500 text-white px-6 py-2.5 rounded-xl font-semibold hover:from-primary-500 hover:to-primary-600 disabled:opacity-50 shadow-md"
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                Save Questions
+                Save Job
               </button>
             </div>
           </div>
