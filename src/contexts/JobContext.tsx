@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
+import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from './AuthContext';
 import { Job, JobApplication } from '../types';
@@ -316,7 +317,12 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
             // watching `applications` ran hasApplied() and got true on the
             // fake row. Result: the user thought they had applied but the
             // employer never saw it.
-            console.error('Error applying to job:', (error as { message?: string })?.message);
+            const message = (error as { message?: string })?.message || 'Unknown error';
+            console.error('Error applying to job:', message, error);
+            // Surface the real Postgres/PostgREST message (not just the generic
+            // "please try again" toast the form falls back to) so the next
+            // failure is diagnosable from a screenshot instead of guesswork.
+            toast.error(`Could not submit application: ${message}`);
             return false;
         }
     }, [user, jobs, applications]);
