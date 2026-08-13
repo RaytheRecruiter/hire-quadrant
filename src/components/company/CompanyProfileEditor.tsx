@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, CheckCircle, AlertCircle, Lock } from 'lucide-react';
+import { Save, CheckCircle, AlertCircle, Lock, Upload, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { usePermissions } from '../../hooks/usePermissions';
+import { supabase } from '../../utils/supabaseClient';
+import CompanyLogo from '../CompanyLogo';
 
 interface CompanyProfileEditorProps {
   company: any;
@@ -21,8 +24,10 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
     founded: '',
     contact_email: '',
     culture: '',
+    logo: '',
   });
   const [saving, setSaving] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -42,6 +47,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         size: company.size || '',
         location: company.location || '',
         founded: company.founded || '',
+        logo: company.logo || '',
         contact_email: company.contact_email || '',
         culture: company.culture || '',
       });
@@ -51,6 +57,37 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !company?.id) return;
+    if (!file.type.startsWith('image/')) {
+      setMessage({ type: 'error', text: 'Logo must be an image file.' });
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setMessage({ type: 'error', text: 'Logo must be under 2 MB.' });
+      return;
+    }
+    setUploadingLogo(true);
+    try {
+      const ext = file.name.split('.').pop() || 'png';
+      const path = `${company.id}/${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from('company-logos')
+        .upload(path, file, { upsert: false, contentType: file.type });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from('company-logos').getPublicUrl(path);
+      setFormData((prev) => ({ ...prev, logo: data.publicUrl }));
+      await onSave({ logo: data.publicUrl });
+      toast.success('Logo updated');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to upload logo');
+    } finally {
+      setUploadingLogo(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,6 +140,24 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
       )}
 
       <fieldset disabled={!canEdit} className={`space-y-6 ${!canEdit ? 'opacity-70' : ''}`}>
+      <div>
+        <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Company Logo</label>
+        <div className="flex items-center gap-4">
+          <CompanyLogo company={formData.display_name} logoUrl={formData.logo} size="lg" />
+          <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm font-medium text-gray-700 dark:text-slate-300 ${canEdit ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-700' : 'cursor-not-allowed opacity-60'}`}>
+            {uploadingLogo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+            {uploadingLogo ? 'Uploading…' : formData.logo ? 'Replace logo' : 'Upload logo'}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleLogoUpload}
+              disabled={!canEdit || uploadingLogo}
+              className="hidden"
+            />
+          </label>
+        </div>
+        <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">PNG or JPG, up to 2 MB. Saves immediately.</p>
+      </div>
       <div>
         <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Display Name</label>
         <input
