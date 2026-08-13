@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { geocode } from '../../utils/geocode';
+import RichTextEditor from '../RichTextEditor';
 
 interface NewJobModalProps {
   open: boolean;
@@ -48,7 +49,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
       toast.error('Your account is not linked to a company yet.');
       return;
     }
-    if (!title.trim() || !description.trim() || !location.trim()) {
+    if (!title.trim() || !description.replace(/<[^>]*>/g, '').trim() || !location.trim()) {
       toast.error('Title, location, and description are required.');
       return;
     }
@@ -204,17 +205,13 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
           </div>
 
           <div>
-            <label htmlFor="job-description" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
+            <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
               Description <span className="text-red-500">*</span>
             </label>
-            <textarea
-              id="job-description"
-              required
-              rows={8}
+            <RichTextEditor
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Use markdown for headers (## Responsibilities) and bullets (- list item)…"
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+              onChange={setDescription}
+              placeholder="Describe the role, responsibilities, and requirements…"
             />
           </div>
 

@@ -46,6 +46,7 @@ export interface Job {
     min_salary?: number | null;
     max_salary?: number | null;
     screening_questions?: ScreeningQuestion[] | null;
+    status?: 'open' | 'closed';
 }
 
 export interface JobApplication {
@@ -171,7 +172,10 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
             try {
                 let query = supabase
                     .from('jobs')
-                    .select('id, title, company, location, type, salary, posted_date, external_job_id, external_url, source_company, source_xml_file', { count: 'exact' });
+                    .select('id, title, company, location, type, salary, posted_date, external_job_id, external_url, source_company, source_xml_file, status', { count: 'exact' })
+                    // Closed jobs are a company-dashboard history feature —
+                    // don't surface them in the public directory/search.
+                    .neq('status', 'closed');
 
                 // Add filters to the query for server-side processing
                 if (searchTerm) {
