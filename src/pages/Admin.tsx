@@ -8,6 +8,7 @@ import { useAdminData } from '../hooks/useAdminData';
 import CandidateHub from '../components/CandidateHub';
 import PendingApprovals from '../components/admin/PendingApprovals';
 import SubscriptionManager from '../components/admin/SubscriptionManager';
+import AdminCompanyControl from '../components/admin/AdminCompanyControl';
 import AtsIntegrations from '../components/admin/AtsIntegrations';
 import DashboardCharts from '../components/admin/DashboardCharts';
 import { SortableTable, Column } from '../components/admin/SortableTable';
@@ -543,12 +544,26 @@ const Admin: React.FC = () => {
             >
               Candidate Hub
             </button>
+            <button
+              onClick={() => setActiveTab('companies')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'companies'
+                  ? 'border-primary-300 text-primary-300'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
+              }`}
+            >
+              Companies
+            </button>
           </nav>
         </div>
 
         {/* Tab Content */}
         {activeTab === 'approvals' && (
           <PendingApprovals />
+        )}
+
+        {activeTab === 'companies' && (
+          <AdminCompanyControl />
         )}
 
         {activeTab === 'overview' && (
