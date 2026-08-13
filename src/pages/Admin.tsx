@@ -684,7 +684,7 @@ const Admin: React.FC = () => {
                   },
                   { key: 'company', label: 'Company', getValue: (job) => job.company || '' },
                   { key: 'source_company', label: 'Source Company', getValue: (job) => job.source_company || 'Direct', render: (job) => <>{job.source_company || 'Direct'}</> },
-                  { key: 'views', label: 'Views', getValue: (job) => job.views || 0 },
+                  { key: 'views', label: 'Views', getValue: (job) => job.views || 0, align: 'right' },
                   {
                     key: 'app_count', label: 'Applications',
                     getValue: (job) => applications.filter(a => a.job_id === job.id).length,
@@ -716,6 +716,7 @@ const Admin: React.FC = () => {
                     key: 'conversion', label: 'Conversion Rate',
                     getValue: (job) => (job.views || 0) > 0 ? ((job.applications || 0) / (job.views || 1)) * 100 : 0,
                     render: (job) => <>{(job.views || 0) > 0 ? (((job.applications || 0) / (job.views || 1)) * 100).toFixed(1) : 0}%</>,
+                    align: 'right',
                   },
                 ] as Column<typeof jobs[0]>[]}
                 data={jobs}
