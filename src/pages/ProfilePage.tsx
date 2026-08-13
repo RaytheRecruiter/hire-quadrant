@@ -6,7 +6,7 @@ import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 import { getInitials, colorFromString } from '../utils/companyLogo';
 import toast from 'react-hot-toast';
-import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle, Sparkles, Camera, User as UserIcon } from 'lucide-react';
+import { MapPin, FileText, Briefcase, Calendar, Building2, ExternalLink, Eye, Trash2, Loader2, AlertCircle, Sparkles, Camera, User as UserIcon, ShieldCheck } from 'lucide-react';
 import ExperienceSection from '../components/profile/ExperienceSection';
 import EducationSection from '../components/profile/EducationSection';
 import SkillsSection from '../components/profile/SkillsSection';
@@ -15,6 +15,8 @@ import CertificationsSection from '../components/profile/CertificationsSection';
 import JobPreferencesSection from '../components/profile/JobPreferencesSection';
 import ProfileCompletenessScore from '../components/profile/ProfileCompletenessScore';
 import { useProfileCompleteness } from '../hooks/useProfileCompleteness';
+import { usePermissions } from '../hooks/usePermissions';
+import CompanyLogo from '../components/CompanyLogo';
 import { formatDistanceToNow } from 'date-fns';
 
 interface CandidateProfile {
@@ -50,14 +52,38 @@ interface JobInfo {
 }
 
 const ProfilePage = () => {
-    const { user, isAdmin, updateProfile, loading: authLoading } = useAuth();
+    const { user, isAdmin, isCompany, updateProfile, loading: authLoading } = useAuth();
+    // usePermissions() reads company_members role (owner/admin/standard) —
+    // unrelated to useAuth().isAdmin (HireQuadrant super-admin) despite the
+    // similar names, hence the alias.
+    const { isOwner: isCompanyOwner, isAdmin: isCompanyRoleAdmin, member: companyMember } = usePermissions();
     const [nameValue, setNameValue] = useState('');
     const [savingName, setSavingName] = useState(false);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
+    const [companyInfo, setCompanyInfo] = useState<{ name: string; display_name: string | null; logo: string | null } | null>(null);
 
     useEffect(() => {
         if (user?.name) setNameValue(user.name);
     }, [user?.name]);
+
+    useEffect(() => {
+        if (!isCompany || !user?.companyId) {
+            setCompanyInfo(null);
+            return;
+        }
+        let cancelled = false;
+        (async () => {
+            const { data } = await supabase
+                .from('companies')
+                .select('name, display_name, logo')
+                .eq('id', user.companyId)
+                .maybeSingle();
+            if (!cancelled) setCompanyInfo(data as typeof companyInfo);
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [isCompany, user?.companyId]);
 
     const handleSaveName = async () => {
         const trimmed = nameValue.trim();
@@ -569,6 +595,8 @@ const ProfilePage = () => {
                                 placeholder="e.g. (555) 123-4567"
                             />
                         </div>
+                        {!isCompany && (
+                        <>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Current Role</label>
                             <input
@@ -589,6 +617,8 @@ const ProfilePage = () => {
                                 placeholder="e.g. Engineering Manager"
                             />
                         </div>
+                        </>
+                        )}
                         <button
                             type="submit"
                             className="bg-primary-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors"
@@ -598,9 +628,56 @@ const ProfilePage = () => {
                     </form>
                 </div>
 
-                {/* Applicant-only sections: admins don't apply to jobs and
-                    shouldn't see candidate-style profile fields. */}
-                {!isAdmin && (
+                {/* Company Account: this is a user profile, not a copy of
+                    the candidate profile — shows which company this user
+                    belongs to and their role, with a link to the real
+                    company-management surface (Company Dashboard). */}
+                {isCompany && (
+                    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
+                        <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                            <Building2 className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+                            Company Account
+                        </h2>
+                        {companyInfo ? (
+                            <div className="flex items-center gap-4">
+                                <CompanyLogo
+                                    company={companyInfo.display_name || companyInfo.name}
+                                    logoUrl={companyInfo.logo}
+                                    size="lg"
+                                />
+                                <div className="min-w-0">
+                                    <p className="font-semibold text-gray-900 dark:text-white truncate">
+                                        {companyInfo.display_name || companyInfo.name}
+                                    </p>
+                                    {companyMember && (
+                                        <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary-50 text-primary-700 text-xs font-medium rounded-full capitalize">
+                                            <ShieldCheck className="h-3 w-3" />
+                                            {isCompanyOwner ? 'Owner' : isCompanyRoleAdmin ? 'Admin' : 'Standard User'}
+                                        </span>
+                                    )}
+                                    <div className="mt-3">
+                                        <HardLink
+                                            to="/company-dashboard"
+                                            className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                                        >
+                                            Go to Company Dashboard
+                                            <ExternalLink className="h-3 w-3" />
+                                        </HardLink>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-sm text-gray-500 dark:text-slate-400">
+                                Your account isn't linked to a company yet.
+                            </p>
+                        )}
+                    </div>
+                )}
+
+                {/* Applicant-only sections: company accounts don't apply to
+                    jobs (see Company Account above instead), and admins
+                    shouldn't see candidate-style profile fields either. */}
+                {!isAdmin && !isCompany && (
                 <>
                 <ProfileCompletenessBar />
 
