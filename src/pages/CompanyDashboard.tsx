@@ -15,7 +15,7 @@ import CompanyQAPanel from '../components/company/CompanyQAPanel';
 import WhyJoinUsPanel from '../components/company/WhyJoinUsPanel';
 import PendingApprovalBanner from '../components/company/PendingApprovalBanner';
 import AIJobDescriptionGenerator from '../components/AIJobDescriptionGenerator';
-import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, HelpCircle, Heart, Shield, Activity } from 'lucide-react';
+import { Briefcase, Users, Building2, CreditCard, Loader2, Sparkles, Megaphone, BarChart3, Star, HelpCircle, Heart, Shield, Activity, Search } from 'lucide-react';
 import HardLink from '../components/HardLink';
 
 const TABS = [
@@ -79,13 +79,22 @@ const CompanyDashboard: React.FC = () => {
               Manage your jobs, applicants, and company profile.
             </p>
           </div>
-          <HardLink
-            to="/company-dashboard/team"
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:text-primary-600 transition"
-          >
-            <Shield className="h-4 w-4" />
-            Team Members
-          </HardLink>
+          <div className="flex items-center gap-3">
+            <HardLink
+              to="/talent-search"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition font-medium"
+            >
+              <Search className="h-4 w-4" />
+              Search Resumes
+            </HardLink>
+            <HardLink
+              to="/company-dashboard/team"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:text-primary-600 transition"
+            >
+              <Shield className="h-4 w-4" />
+              Team Members
+            </HardLink>
+          </div>
         </div>
 
         {/* Pending Approval Banner */}

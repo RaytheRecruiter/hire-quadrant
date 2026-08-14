@@ -18,12 +18,16 @@ interface Candidate {
   open_to_work?: boolean;
   current_role?: string;
   target_role?: string;
+  current_title?: string;
+  certifications?: string[];
+  resume_parsed_at?: string;
 }
 
 interface UnlocksInfo {
   total: number;
   used: number;
   remaining: number;
+  purchased_remaining: number;
   period_start: string;
 }
 
@@ -41,6 +45,8 @@ const ResumeSearch: React.FC = () => {
   const [query, setQuery] = useState('');
   const [location, setLocation] = useState('');
   const [minYears, setMinYears] = useState<number>(0);
+  const [titleFilter, setTitleFilter] = useState('');
+  const [updatedWithinDays, setUpdatedWithinDays] = useState<number>(0);
   // Unlock credit state. Phase 2 #5: candidate contact + resume download
   // are gated by per-period credits. Already-unlocked candidates stay
   // visible to the whole company for the rest of the period.
@@ -58,8 +64,13 @@ const ResumeSearch: React.FC = () => {
 
     if (location) q = q.ilike('location', `%${location}%`);
     if (minYears > 0) q = q.gte('years_experience', minYears);
+    if (titleFilter) q = q.ilike('current_title', `%${titleFilter}%`);
+    if (updatedWithinDays > 0) {
+      const since = new Date(Date.now() - updatedWithinDays * 24 * 60 * 60 * 1000).toISOString();
+      q = q.gte('resume_parsed_at', since);
+    }
     if (query) {
-      q = q.or(`headline.ilike.%${query}%,resume_text.ilike.%${query}%,name.ilike.%${query}%`);
+      q = q.or(`headline.ilike.%${query}%,resume_text.ilike.%${query}%,name.ilike.%${query}%,current_title.ilike.%${query}%`);
     }
 
     const { data: candidateData, error } = await q.limit(50);
@@ -205,7 +216,10 @@ const ResumeSearch: React.FC = () => {
               <div className="mt-1 text-base font-semibold text-secondary-900 dark:text-white">
                 {unlocks.remaining} <span className="text-gray-400 dark:text-slate-500 font-normal">/ {unlocks.total} remaining</span>
               </div>
-              <div className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">Resets each billing period</div>
+              <div className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+                Resets each billing period
+                {unlocks.purchased_remaining > 0 && ` · +${unlocks.purchased_remaining} purchased`}
+              </div>
             </div>
           )}
         </div>
@@ -246,6 +260,29 @@ const ResumeSearch: React.FC = () => {
                 <option value="10">10+ years</option>
               </select>
             </div>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+              <input
+                type="text"
+                placeholder="Current job title"
+                value={titleFilter}
+                onChange={e => setTitleFilter(e.target.value)}
+                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+              />
+            </div>
+            <div className="relative md:col-span-1">
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+              <select
+                value={updatedWithinDays}
+                onChange={e => setUpdatedWithinDays(Number(e.target.value))}
+                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
+              >
+                <option value="0">Any time profile updated</option>
+                <option value="30">Updated in last 30 days</option>
+                <option value="90">Updated in last 90 days</option>
+                <option value="180">Updated in last 6 months</option>
+              </select>
+            </div>
           </div>
           <div className="mt-4">
             <button
@@ -272,7 +309,7 @@ const ResumeSearch: React.FC = () => {
                 opens the detail / downloads the resume. */}
             {candidates.map((c, idx) => {
               const isUnlocked = c.user_id ? unlockedSet.has(c.user_id) : false;
-              const noCredits = unlocks ? unlocks.remaining <= 0 : false;
+              const noCredits = unlocks ? unlocks.remaining <= 0 && unlocks.purchased_remaining <= 0 : false;
               return (
                 <div key={c.user_id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 flex items-start justify-between gap-4">
                   <div className="flex-1">

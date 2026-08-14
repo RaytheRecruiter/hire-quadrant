@@ -1,11 +1,17 @@
 // Per Scott 2026-04-29 Phase 2 — fills the previously placeholder
-// Subscription tab. Shows the company's current plan, job usage, and the
-// upgrade catalog. The "Change plan" / "Manage billing" actions are gated
-// on the manage_billing permission.
+// Subscription tab. Shows the company's current plan, credit usage, and
+// the Resume Database plan catalog.
+//
+// 2026-08-14: repriced for Ray's Resume Database (SOURCE) product —
+// job-limit gating is retired (job posting is always free), "Change
+// plan" / "Buy more contacts" now call real Stripe Checkout via
+// createCheckoutSession/createAddOnCheckoutSession. Both no-op with a
+// "billing coming soon" fallback until VITE_STRIPE_ENABLED + a
+// publishable key are configured (no Stripe account exists yet).
 //
 // Phase 2.1 (next): wire actual Stripe Customer Portal links here. For
-// now the button surfaces a mailto so Standard users can request a plan
-// change while Owners get a working contact path.
+// now "Contact billing" surfaces a mailto so Standard users can request a
+// plan change while Owners get a working contact path.
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -15,18 +21,29 @@ import {
   AlertCircle,
   Lock,
   Calendar,
-  Briefcase,
   Sparkles,
   Mail,
   KeyRound,
+  Plus,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { supabase } from '../../utils/supabaseClient';
 import { useSubscription } from '../../hooks/useSubscription';
 import { usePermissions } from '../../hooks/usePermissions';
+import { isStripeEnabled, createCheckoutSession, createAddOnCheckoutSession } from '../../utils/stripeClient';
 
 interface Props {
   companyId: string;
+}
+
+interface ContactCreditPack {
+  id: string;
+  name: string;
+  credits: number;
+  price_cents: number;
+  stripe_price_id: string | null;
+  is_active: boolean;
+  sort_order: number;
 }
 
 const STATUS_BADGE: Record<
@@ -40,9 +57,9 @@ const STATUS_BADGE: Record<
   inactive: { label: 'Inactive', className: 'bg-gray-100 text-gray-700' },
 };
 
-const fmtPrice = (cents: number) => {
+const fmtPrice = (cents: number, suffix: string) => {
   if (!cents || cents <= 0) return 'Free';
-  return `$${(cents / 100).toFixed(0)}/mo`;
+  return `$${(cents / 100).toFixed(0)}${suffix}`;
 };
 
 const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
@@ -50,12 +67,18 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
   const noMember = !member;
   const canManageBilling = noMember || isOwner || isAdmin || can('manage_billing');
 
-  const { plans, currentSubscription, jobsUsed, loading, error } = useSubscription({ companyId });
+  const { plans, currentSubscription, loading, error } = useSubscription({ companyId });
+  const [billingFrequency, setBillingFrequency] = useState<'monthly' | 'annual'>('monthly');
+  const [checkoutBusy, setCheckoutBusy] = useState<string | null>(null);
+  const [creditPacks, setCreditPacks] = useState<ContactCreditPack[]>([]);
 
-  // Phase 2 #5: pull current period unlock credit usage so the panel can
-  // surface "X / Y unlocks used this period". Optional — failure here is
-  // non-fatal; the rest of the panel still renders.
-  const [unlocks, setUnlocks] = useState<{ total: number; used: number; remaining: number } | null>(null);
+  const [unlocks, setUnlocks] = useState<{
+    total: number;
+    used: number;
+    remaining: number;
+    purchased_remaining: number;
+  } | null>(null);
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -63,13 +86,55 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
       if (cancelled) return;
       const row = Array.isArray(data) ? data[0] : data;
       if (row && typeof row.total === 'number') {
-        setUnlocks({ total: row.total, used: row.used, remaining: row.remaining });
+        setUnlocks({
+          total: row.total,
+          used: row.used,
+          remaining: row.remaining,
+          purchased_remaining: row.purchased_remaining || 0,
+        });
       }
     })();
     return () => {
       cancelled = true;
     };
   }, [companyId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from('contact_credit_packs')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order');
+      if (!cancelled && data) setCreditPacks(data);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleSubscribe = async (planId: string, priceId: string | null) => {
+    if (!isStripeEnabled() || !priceId) return;
+    setCheckoutBusy(planId);
+    try {
+      const url = await createCheckoutSession(priceId, planId, billingFrequency);
+      if (url) window.location.href = url;
+    } finally {
+      setCheckoutBusy(null);
+    }
+  };
+
+  const handleBuyCredits = async (pack: ContactCreditPack) => {
+    if (!isStripeEnabled() || !pack.stripe_price_id) return;
+    setCheckoutBusy(pack.id);
+    try {
+      const url = await createAddOnCheckoutSession(pack.stripe_price_id, pack.credits);
+      if (url) window.location.href = url;
+    } finally {
+      setCheckoutBusy(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -89,24 +154,13 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
   }
 
   const currentPlan = currentSubscription?.subscription_plans;
-  const limit = currentSubscription?.job_limit ?? 0;
-  const jobLimitLabel = limit === -1 ? 'Unlimited' : limit;
-  const usagePct = limit > 0 ? Math.min(100, Math.round((jobsUsed / limit) * 100)) : 0;
-  const usageTone =
-    limit === -1
-      ? 'bg-emerald-500'
-      : usagePct >= 95
-      ? 'bg-rose-500'
-      : usagePct >= 75
-      ? 'bg-amber-500'
-      : 'bg-primary-500';
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-secondary-900 dark:text-white flex items-center gap-2">
           <CreditCard className="h-5 w-5 text-primary-600" />
-          Subscription & Billing
+          Resume Database Subscription
         </h2>
         {canManageBilling ? (
           <a
@@ -124,6 +178,12 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
         )}
       </div>
 
+      {!isStripeEnabled() && (
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 text-sm text-blue-800 dark:text-blue-200">
+          Online checkout is coming soon. Use "Contact billing" above to change your plan or buy more contacts in the meantime.
+        </div>
+      )}
+
       {/* Current plan card */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
         {currentSubscription && currentPlan ? (
@@ -133,8 +193,8 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                 <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-slate-400 mb-1">Current plan</p>
                 <h3 className="text-2xl font-bold text-secondary-900 dark:text-white">{currentPlan.name}</h3>
                 <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
-                  {fmtPrice(currentPlan.price_monthly)}
-                  {currentPlan.price_yearly > 0 && ` · $${(currentPlan.price_yearly / 100).toFixed(0)}/yr`}
+                  {fmtPrice(currentPlan.price_monthly, '/mo')}
+                  {currentPlan.price_yearly > 0 && ` · ${fmtPrice(currentPlan.price_yearly, '/yr')}`}
                 </p>
               </div>
               <span
@@ -146,21 +206,21 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-2">
               <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
                 <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
-                  <Briefcase className="h-3 w-3" /> Job postings
+                  <KeyRound className="h-3 w-3" /> Monthly unlocks
                 </p>
                 <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-                  {jobsUsed} / {jobLimitLabel}
+                  {unlocks ? `${unlocks.used} / ${unlocks.total}` : '—'}
                 </p>
               </div>
               <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
                 <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
-                  <KeyRound className="h-3 w-3" /> Unlocks
+                  <Plus className="h-3 w-3" /> Purchased contacts remaining
                 </p>
                 <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-                  {unlocks ? `${unlocks.used} / ${unlocks.total}` : '—'}
+                  {unlocks ? unlocks.purchased_remaining : '—'}
                 </p>
               </div>
               <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
@@ -173,37 +233,14 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                     : '—'}
                 </p>
               </div>
-              <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
-                <p className="text-xs text-gray-500 dark:text-slate-400">Stripe customer</p>
-                <p className="text-xs font-mono text-gray-900 dark:text-white mt-1 truncate">
-                  {currentSubscription.stripe_customer_id || '—'}
-                </p>
-              </div>
             </div>
-
-            {limit > 0 && (
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs text-gray-600 dark:text-slate-400">Usage this period</span>
-                  <span className="text-xs font-semibold text-gray-900 dark:text-white">{usagePct}%</span>
-                </div>
-                <div className="h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className={`h-full ${usageTone} transition-all`} style={{ width: `${usagePct}%` }} />
-                </div>
-                {usagePct >= 90 && (
-                  <p className="text-xs text-amber-700 mt-2">
-                    You're nearing your job posting limit. Upgrade to keep posting without interruption.
-                  </p>
-                )}
-              </div>
-            )}
           </>
         ) : (
           <div className="text-center py-8">
             <CreditCard className="h-10 w-10 text-gray-300 mx-auto mb-3" />
             <p className="text-sm font-semibold text-gray-700 dark:text-slate-300">No active subscription</p>
             <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
-              Contact the HireQuadrant team to assign a plan to your company.
+              Subscribe to a Resume Database plan below to search and unlock candidates.
             </p>
           </div>
         )}
@@ -212,15 +249,37 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
       {/* Plans catalog */}
       {plans.length > 0 && (
         <div>
-          <h3 className="text-lg font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary-600" />
-            Available plans
-          </h3>
+          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+            <h3 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary-600" />
+              Resume Database plans
+            </h3>
+            <div className="inline-flex rounded-lg border border-gray-200 dark:border-slate-700 p-0.5 bg-gray-50 dark:bg-slate-900/50">
+              {(['monthly', 'annual'] as const).map((freq) => (
+                <button
+                  key={freq}
+                  type="button"
+                  onClick={() => setBillingFrequency(freq)}
+                  className={`px-3 py-1 text-xs font-medium rounded-md transition ${
+                    billingFrequency === freq
+                      ? 'bg-white dark:bg-slate-800 shadow text-primary-600'
+                      : 'text-gray-500 dark:text-slate-400'
+                  }`}
+                >
+                  {freq === 'monthly' ? 'Monthly' : 'Annual (save ~17%)'}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {plans
               .filter((p) => p.is_active)
               .map((plan) => {
                 const isCurrent = plan.id === currentSubscription?.plan_id;
+                const priceCents = billingFrequency === 'monthly' ? plan.price_monthly : plan.price_yearly;
+                const priceId =
+                  billingFrequency === 'monthly' ? plan.stripe_price_id_monthly : plan.stripe_price_id_annual;
+                const canCheckout = isStripeEnabled() && !!priceId;
                 return (
                   <div
                     key={plan.id}
@@ -238,14 +297,13 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                         </span>
                       )}
                     </div>
-                    <p className="text-2xl font-bold text-primary-600 mb-2">{fmtPrice(plan.price_monthly)}</p>
-                    <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
-                      {plan.job_limit === -1 ? 'Unlimited jobs' : `${plan.job_limit} jobs`}
+                    <p className="text-2xl font-bold text-primary-600 mb-2">
+                      {fmtPrice(priceCents, billingFrequency === 'monthly' ? '/mo' : '/yr')}
                     </p>
-                    {(plan as { monthly_unlock_credits?: number }).monthly_unlock_credits != null && (
+                    {plan.monthly_unlock_credits != null && (
                       <p className="text-xs text-gray-500 dark:text-slate-400 mb-3 flex items-center gap-1">
                         <KeyRound className="h-3 w-3 text-amber-500" />
-                        {(plan as { monthly_unlock_credits?: number }).monthly_unlock_credits} unlock credits / mo
+                        {plan.monthly_unlock_credits} unlock credits / mo
                       </p>
                     )}
                     {Array.isArray(plan.features) && plan.features.length > 0 && (
@@ -258,7 +316,17 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                         ))}
                       </ul>
                     )}
-                    {!isCurrent && canManageBilling && (
+                    {!isCurrent && canManageBilling && canCheckout && (
+                      <button
+                        type="button"
+                        disabled={checkoutBusy === plan.id}
+                        onClick={() => handleSubscribe(plan.id, priceId)}
+                        className="w-full text-center text-xs px-3 py-1.5 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium disabled:opacity-60"
+                      >
+                        {checkoutBusy === plan.id ? 'Redirecting…' : 'Subscribe'}
+                      </button>
+                    )}
+                    {!isCurrent && canManageBilling && !canCheckout && (
                       <a
                         href={`mailto:billing@hirequadrant.com?subject=Upgrade%20to%20${encodeURIComponent(plan.name)}`}
                         className="block text-center text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
@@ -274,6 +342,59 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                   </div>
                 );
               })}
+          </div>
+          <div className="mt-3 rounded-xl border border-dashed border-gray-300 dark:border-slate-700 p-4 text-center text-xs text-gray-500 dark:text-slate-400">
+            Need more than 200 unlocks/month or multiple team seats?{' '}
+            <a href="mailto:billing@hirequadrant.com?subject=Enterprise%20Resume%20Database" className="text-primary-600 font-medium">
+              Contact sales for Enterprise
+            </a>
+            .
+          </div>
+        </div>
+      )}
+
+      {/* Buy more contacts */}
+      {currentSubscription && creditPacks.length > 0 && (
+        <div>
+          <h3 className="text-lg font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-2">
+            <Plus className="h-4 w-4 text-primary-600" />
+            Buy more contacts
+          </h3>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">
+            Purchased contacts never expire and are used only after your monthly allowance runs out.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {creditPacks.map((pack) => {
+              const canCheckout = isStripeEnabled() && !!pack.stripe_price_id;
+              return (
+                <div
+                  key={pack.id}
+                  className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 text-center"
+                >
+                  <p className="text-2xl font-bold text-secondary-900 dark:text-white">{pack.credits}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-2">contacts</p>
+                  <p className="text-lg font-semibold text-primary-600 mb-3">{fmtPrice(pack.price_cents, '')}</p>
+                  {canManageBilling && canCheckout && (
+                    <button
+                      type="button"
+                      disabled={checkoutBusy === pack.id}
+                      onClick={() => handleBuyCredits(pack)}
+                      className="w-full text-xs px-3 py-1.5 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium disabled:opacity-60"
+                    >
+                      {checkoutBusy === pack.id ? 'Redirecting…' : 'Buy'}
+                    </button>
+                  )}
+                  {canManageBilling && !canCheckout && (
+                    <a
+                      href={`mailto:billing@hirequadrant.com?subject=Buy%20${pack.credits}%20contacts`}
+                      className="block text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
+                    >
+                      Request
+                    </a>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
