@@ -108,101 +108,101 @@ serve(async (req) => {
     console.log(`Processing Stripe webhook: ${event.type}`);
 
     switch (event.type) {
-      case 'customer.subscription.created':
+      // Fired once at the end of a successful Checkout — the only place we
+      // reliably learn *which* company and plan/credit-pack this purchase
+      // is for, via the metadata set in create-checkout-session.
+      case 'checkout.session.completed': {
+        const session = event.data.object;
+        const companyId = session.metadata?.companyId || session.client_reference_id;
+
+        if (!companyId) {
+          console.error('checkout.session.completed missing companyId metadata', session.id);
+          break;
+        }
+
+        if (session.mode === 'subscription') {
+          const planId = session.metadata?.planId;
+          const billingFrequency = session.metadata?.billingFrequency === 'annual' ? 'annual' : 'monthly';
+
+          const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${session.subscription}`, {
+            headers: { Authorization: `Bearer ${Deno.env.get('STRIPE_SECRET_KEY')}` },
+          });
+          const stripeSub = await subRes.json();
+
+          await supabase.from('subscriptions').upsert(
+            {
+              company_id: companyId,
+              plan_id: planId,
+              status: stripeSub.status,
+              stripe_customer_id: session.customer,
+              stripe_subscription_id: session.subscription,
+              billing_frequency: billingFrequency,
+              current_period_start: new Date(stripeSub.current_period_start * 1000),
+              current_period_end: new Date(stripeSub.current_period_end * 1000),
+              updated_at: new Date(),
+            },
+            { onConflict: 'company_id' }
+          );
+        } else if (session.mode === 'payment') {
+          // One-time "buy more contacts" credit pack purchase.
+          const credits = parseInt(session.metadata?.creditAmount || '0', 10);
+          if (credits > 0) {
+            const { data: existing } = await supabase
+              .from('subscriptions')
+              .select('purchased_contacts_remaining')
+              .eq('company_id', companyId)
+              .maybeSingle();
+
+            await supabase
+              .from('subscriptions')
+              .update({
+                purchased_contacts_remaining: (existing?.purchased_contacts_remaining || 0) + credits,
+                updated_at: new Date(),
+              })
+              .eq('company_id', companyId);
+          }
+        }
+        break;
+      }
+
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
-        const customerId = subscription.customer;
 
-        // Get customer email from Stripe
-        const stripeApiKey = Deno.env.get('STRIPE_SECRET_KEY');
-        const customerRes = await fetch(`https://api.stripe.com/v1/customers/${customerId}`, {
-          headers: {
-            Authorization: `Bearer ${stripeApiKey}`,
-          },
-        });
-        const customer = await customerRes.json();
-
-        // Find user by email
-        const { data: user } = await supabase
-          .from('profiles')
-          .select('user_id')
-          .eq('email', customer.email)
-          .maybeSingle();
-
-        if (user) {
-          // Update subscription status in DB
-          await supabase.from('user_subscriptions').upsert({
-            user_id: user.user_id,
-            stripe_customer_id: customerId,
-            stripe_subscription_id: subscription.id,
-            plan: subscription.items.data[0]?.plan.nickname || 'unknown',
+        await supabase
+          .from('subscriptions')
+          .update({
             status: subscription.status,
             current_period_start: new Date(subscription.current_period_start * 1000),
             current_period_end: new Date(subscription.current_period_end * 1000),
             updated_at: new Date(),
-          });
-        }
+          })
+          .eq('stripe_subscription_id', subscription.id);
         break;
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object;
-        const customerId = subscription.customer;
 
-        // Mark subscription as canceled
         await supabase
-          .from('user_subscriptions')
+          .from('subscriptions')
           .update({
             status: 'canceled',
             updated_at: new Date(),
           })
-          .eq('stripe_customer_id', customerId);
-        break;
-      }
-
-      case 'invoice.payment_succeeded': {
-        const invoice = event.data.object;
-
-        // Log successful payment
-        await supabase.from('payment_logs').insert({
-          stripe_invoice_id: invoice.id,
-          stripe_customer_id: invoice.customer,
-          amount: invoice.amount_paid,
-          currency: invoice.currency,
-          status: 'succeeded',
-          created_at: new Date(),
-        });
+          .eq('stripe_subscription_id', subscription.id);
         break;
       }
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object;
 
-        // Log failed payment
-        await supabase.from('payment_logs').insert({
-          stripe_invoice_id: invoice.id,
-          stripe_customer_id: invoice.customer,
-          amount: invoice.amount_due,
-          currency: invoice.currency,
-          status: 'failed',
-          error_message: invoice.last_stripe_error?.message || 'Unknown error',
-          created_at: new Date(),
-        });
-        break;
-      }
-
-      case 'charge.refunded': {
-        const charge = event.data.object;
-
-        // Log refund
-        await supabase.from('payment_logs').insert({
-          stripe_invoice_id: charge.invoice || null,
-          stripe_customer_id: charge.customer,
-          amount: charge.amount_refunded,
-          currency: charge.currency,
-          status: 'refunded',
-          created_at: new Date(),
-        });
+        await supabase
+          .from('subscriptions')
+          .update({
+            status: 'past_due',
+            updated_at: new Date(),
+          })
+          .eq('stripe_customer_id', invoice.customer);
         break;
       }
 

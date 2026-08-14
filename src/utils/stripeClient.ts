@@ -1,4 +1,7 @@
-// Stripe integration infrastructure -- inactive until VITE_STRIPE_ENABLED is set
+import { supabase } from './supabaseClient';
+
+// Stripe integration -- checkout stays disabled until VITE_STRIPE_ENABLED is
+// set and a publishable key is configured (no Stripe account exists yet).
 const STRIPE_ENABLED = import.meta.env.VITE_STRIPE_ENABLED === 'true';
 const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
 
@@ -6,34 +9,60 @@ export const isStripeEnabled = (): boolean => {
   return STRIPE_ENABLED && !!STRIPE_PUBLISHABLE_KEY;
 };
 
-// Placeholder: Create a Stripe Checkout Session
-// In production, this would call a Supabase Edge Function that creates
-// a Stripe Checkout Session on the server side
-export const createCheckoutSession = async (planId: string, companyId: string): Promise<string | null> => {
+interface CreateCheckoutSessionArgs {
+  mode: 'subscription' | 'payment';
+  priceId: string;
+  metadata?: Record<string, string>;
+}
+
+async function invokeCheckout({ mode, priceId, metadata }: CreateCheckoutSessionArgs): Promise<string | null> {
   if (!isStripeEnabled()) {
     console.warn('Stripe is not enabled. Set VITE_STRIPE_ENABLED=true and VITE_STRIPE_PUBLISHABLE_KEY to activate.');
     return null;
   }
 
-  // Suppress unused variable warnings in the placeholder
-  void planId;
-  void companyId;
+  const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+    body: {
+      mode,
+      priceId,
+      successUrl: `${window.location.origin}${window.location.pathname}?checkout=success`,
+      cancelUrl: `${window.location.origin}${window.location.pathname}?checkout=canceled`,
+      metadata,
+    },
+  });
 
-  // Future implementation:
-  // 1. Call Supabase Edge Function: supabase.functions.invoke('create-checkout-session', { body: { planId, companyId } })
-  // 2. The Edge Function creates a Stripe Checkout Session using the secret key
-  // 3. Return the session URL for redirect
-  return null;
+  if (error) {
+    console.error('Failed to create checkout session:', error);
+    return null;
+  }
+
+  return data?.url || null;
+}
+
+// Resume Database plan subscribe/change-plan checkout.
+export const createCheckoutSession = async (
+  stripePriceId: string,
+  planId: string,
+  billingFrequency: 'monthly' | 'annual'
+): Promise<string | null> => {
+  return invokeCheckout({
+    mode: 'subscription',
+    priceId: stripePriceId,
+    metadata: { planId, billingFrequency },
+  });
 };
 
-// Placeholder: Handle Stripe webhook events
-// This would be implemented as a Supabase Edge Function at:
-// supabase/functions/stripe-webhook/index.ts
-// Events to handle:
-// - checkout.session.completed -> activate subscription
-// - customer.subscription.updated -> update subscription status
-// - customer.subscription.deleted -> cancel subscription
-// - invoice.payment_failed -> set status to past_due
+// One-time "buy more contacts" credit pack purchase.
+export const createAddOnCheckoutSession = async (
+  stripePriceId: string,
+  creditAmount: number
+): Promise<string | null> => {
+  return invokeCheckout({
+    mode: 'payment',
+    priceId: stripePriceId,
+    metadata: { creditAmount: String(creditAmount) },
+  });
+};
 
 export const STRIPE_WEBHOOK_EVENTS = [
   'checkout.session.completed',

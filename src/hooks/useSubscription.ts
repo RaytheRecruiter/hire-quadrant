@@ -8,6 +8,9 @@ export interface SubscriptionPlan {
   job_limit: number;
   price_monthly: number;
   price_yearly: number;
+  monthly_unlock_credits: number;
+  stripe_price_id_monthly: string | null;
+  stripe_price_id_annual: string | null;
   features: string[];
   is_active: boolean;
   sort_order: number;
@@ -21,6 +24,8 @@ export interface Subscription {
   plan_id: string;
   status: 'active' | 'past_due' | 'canceled' | 'trialing' | 'inactive';
   job_limit: number;
+  billing_frequency: 'monthly' | 'annual';
+  purchased_contacts_remaining: number;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   current_period_start: string | null;
