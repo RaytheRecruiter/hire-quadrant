@@ -27,6 +27,9 @@ export interface AdminApplication {
   status: string;
   applied_at: string;
   source_company?: string;
+  // The resume attached to this specific application (can differ from the
+  // candidate's profile resume) — Ray 2026-08-14.
+  resume_url?: string | null;
 }
 
 export interface AdminUserProfile {
