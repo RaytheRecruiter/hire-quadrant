@@ -1,18 +1,25 @@
 // Supabase Edge Function: create-checkout-session
 //
-// Creates a Stripe Checkout Session for either:
-//  - mode: 'subscription' — a Resume Database plan (priceId = subscription_plans.stripe_price_id_monthly/annual)
-//  - mode: 'payment'      — a one-time "buy more contacts" credit pack
+// Creates a Stripe Checkout Session for:
+//  - mode: 'subscription' — a Resume Database plan
+//  - mode: 'payment'      — a one-time purchase: "buy more contacts" credit
+//                            pack (metadata.purchaseType='contact_credits'),
+//                            or job sponsorship + optional Urgent Hiring
+//                            add-on (metadata.purchaseType='job_sponsorship',
+//                            metadata.jobId set, 1-2 line items)
 //
-// The caller's company is resolved server-side from their auth token via
-// company_members (owner/admin only), never trusted from the request body —
-// otherwise a signed-in user could pass an arbitrary companyId and have a
-// purchase they're paying for land on a company they don't belong to.
+// Authorization is resolved server-side from the caller's auth token —
+// never trusted from the request body:
+//  - Billing purchases (subscription / contact credits) require the
+//    caller be Owner or Admin of a company (mirrors the manage_billing
+//    permission gate used client-side).
+//  - Job sponsorship purchases require the caller belong to the SAME
+//    company that owns the job, with the sponsor_jobs permission —
+//    Owner/Admin always have it; Standard users only if explicitly
+//    granted (mirrors src/utils/permissions.ts effectivePermissions()).
 //
-// companyId + planId/creditPackId are stashed in session.metadata so the
-// stripe-webhook function can apply the purchase without an email lookup.
-// Generalized enough that Phase 2 (job sponsorship, one-time purchases)
-// can reuse this same function.
+// companyId + purchase-specific metadata are stashed in session.metadata
+// so stripe-webhook can apply the purchase without an email lookup.
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
@@ -32,10 +39,18 @@ const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY');
 
 interface CheckoutRequest {
   mode: 'subscription' | 'payment';
-  priceId: string;
+  priceIds: string[];
   successUrl: string;
   cancelUrl: string;
   metadata?: Record<string, string>;
+}
+
+// Mirrors src/utils/permissions.ts effectivePermissions() for the one key
+// this function needs server-side. Owner/Admin always have sponsor_jobs;
+// Standard users only if explicitly granted.
+function hasSponsorJobsPermission(member: { role: string; permissions: Record<string, boolean> | null }): boolean {
+  if (member.role === 'owner' || member.role === 'admin') return true;
+  return member.permissions?.sponsor_jobs === true;
 }
 
 serve(async (req) => {
@@ -75,45 +90,86 @@ serve(async (req) => {
       });
     }
 
-    const { data: member } = await supabase
-      .from('company_members')
-      .select('company_id, role')
-      .eq('user_id', userData.user.id)
-      .eq('status', 'active')
-      .in('role', ['owner', 'admin'])
-      .limit(1)
-      .maybeSingle();
+    const body: CheckoutRequest = await req.json();
+    const { mode, priceIds, successUrl, cancelUrl, metadata } = body;
 
-    if (!member) {
-      return new Response(JSON.stringify({ error: 'You are not authorized to manage billing for a company' }), {
-        status: 403,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    if (!mode || !priceIds?.length || !successUrl || !cancelUrl) {
+      return new Response(
+        JSON.stringify({ error: 'mode, priceIds, successUrl, and cancelUrl are required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    const body: CheckoutRequest = await req.json();
-    const { mode, priceId, successUrl, cancelUrl, metadata } = body;
+    let companyId: string;
 
-    if (!mode || !priceId || !successUrl || !cancelUrl) {
-      return new Response(JSON.stringify({ error: 'mode, priceId, successUrl, and cancelUrl are required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    if (metadata?.purchaseType === 'job_sponsorship') {
+      const jobId = metadata.jobId;
+      if (!jobId) {
+        return new Response(JSON.stringify({ error: 'jobId is required for job sponsorship checkout' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const { data: job } = await supabase.from('jobs').select('company_id').eq('id', jobId).maybeSingle();
+      if (!job?.company_id) {
+        return new Response(JSON.stringify({ error: 'Job not found or not linked to a company' }), {
+          status: 404,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const { data: member } = await supabase
+        .from('company_members')
+        .select('company_id, role, permissions')
+        .eq('user_id', userData.user.id)
+        .eq('company_id', job.company_id)
+        .eq('status', 'active')
+        .maybeSingle();
+
+      if (!member || !hasSponsorJobsPermission(member)) {
+        return new Response(JSON.stringify({ error: 'You are not authorized to sponsor jobs for this company' }), {
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      companyId = member.company_id;
+    } else {
+      const { data: member } = await supabase
+        .from('company_members')
+        .select('company_id, role')
+        .eq('user_id', userData.user.id)
+        .eq('status', 'active')
+        .in('role', ['owner', 'admin'])
+        .limit(1)
+        .maybeSingle();
+
+      if (!member) {
+        return new Response(JSON.stringify({ error: 'You are not authorized to manage billing for a company' }), {
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      companyId = member.company_id;
     }
 
     const params = new URLSearchParams();
     params.set('mode', mode);
-    params.set('line_items[0][price]', priceId);
-    params.set('line_items[0][quantity]', '1');
+    priceIds.forEach((priceId, i) => {
+      params.set(`line_items[${i}][price]`, priceId);
+      params.set(`line_items[${i}][quantity]`, '1');
+    });
     params.set('success_url', successUrl);
     params.set('cancel_url', cancelUrl);
-    params.set('client_reference_id', member.company_id);
-    params.set('metadata[companyId]', member.company_id);
+    params.set('client_reference_id', companyId);
+    params.set('metadata[companyId]', companyId);
     for (const [key, value] of Object.entries(metadata || {})) {
       params.set(`metadata[${key}]`, value);
     }
     if (mode === 'subscription') {
-      params.set('subscription_data[metadata][companyId]', member.company_id);
+      params.set('subscription_data[metadata][companyId]', companyId);
     }
 
     const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {

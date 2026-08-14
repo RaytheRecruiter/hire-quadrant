@@ -143,6 +143,46 @@ serve(async (req) => {
             },
             { onConflict: 'company_id' }
           );
+        } else if (session.mode === 'payment' && session.metadata?.purchaseType === 'job_sponsorship') {
+          const jobId = session.metadata?.jobId;
+          const tier = session.metadata?.tier ? parseInt(session.metadata.tier, 10) : null;
+          const durationDays = parseInt(session.metadata?.durationDays || '0', 10);
+          const addonUrgent = session.metadata?.addonUrgent === 'true';
+          const addonDurationDays = parseInt(session.metadata?.addonDurationDays || '0', 10);
+          const pricePaidCents = parseInt(session.metadata?.tierPriceCents || '0', 10);
+          const addonPriceCents = parseInt(session.metadata?.addonPriceCents || '0', 10);
+
+          if (jobId) {
+            const now = new Date();
+            const jobUpdate: Record<string, unknown> = {};
+
+            if (tier && durationDays > 0) {
+              jobUpdate.is_sponsored = true;
+              jobUpdate.sponsor_tier = tier;
+              jobUpdate.sponsor_start_date = now;
+              jobUpdate.sponsor_end_date = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000);
+            }
+            if (addonUrgent && addonDurationDays > 0) {
+              jobUpdate.is_urgent = true;
+              jobUpdate.urgent_until = new Date(now.getTime() + addonDurationDays * 24 * 60 * 60 * 1000);
+            }
+
+            if (Object.keys(jobUpdate).length > 0) {
+              await supabase.from('jobs').update(jobUpdate).eq('id', jobId);
+            }
+
+            await supabase.from('job_sponsorship_orders').insert({
+              job_id: jobId,
+              company_id: companyId,
+              tier,
+              price_cents_paid: pricePaidCents,
+              duration_days: durationDays,
+              addon_urgent: addonUrgent,
+              addon_price_cents: addonPriceCents,
+              stripe_checkout_session_id: session.id,
+              purchased_by: session.metadata?.purchasedBy || null,
+            });
+          }
         } else if (session.mode === 'payment') {
           // One-time "buy more contacts" credit pack purchase.
           const credits = parseInt(session.metadata?.creditAmount || '0', 10);

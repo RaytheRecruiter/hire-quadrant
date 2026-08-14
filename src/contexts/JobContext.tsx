@@ -48,6 +48,10 @@ export interface Job {
     max_salary?: number | null;
     screening_questions?: ScreeningQuestion[] | null;
     status?: 'open' | 'closed';
+    is_sponsored?: boolean;
+    sponsor_tier?: number;
+    is_urgent?: boolean;
+    urgent_until?: string | null;
 }
 
 export interface JobApplication {
