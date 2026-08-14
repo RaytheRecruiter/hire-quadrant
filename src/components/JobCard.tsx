@@ -5,7 +5,7 @@ import { useJobs } from '../contexts/JobContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
 import { useJobMatchScore } from '../hooks/useJobMatchScore';
 import { Job } from '../contexts/JobContext';
-import { MapPin, DollarSign, Bookmark, BookmarkCheck, Zap, CheckCircle, Clock } from 'lucide-react';
+import { MapPin, DollarSign, Bookmark, BookmarkCheck, Zap, CheckCircle, Clock, Flame } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
 import CompanyLogo from './CompanyLogo';
@@ -95,6 +95,12 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                                 {job.is_sponsored && (
                                     <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 flex-shrink-0">
                                         Sponsored
+                                    </span>
+                                )}
+                                {job.is_urgent && (!job.urgent_until || new Date(job.urgent_until) > new Date()) && (
+                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-200 flex-shrink-0">
+                                        <Flame className="h-2.5 w-2.5" />
+                                        Urgent
                                     </span>
                                 )}
                             </div>

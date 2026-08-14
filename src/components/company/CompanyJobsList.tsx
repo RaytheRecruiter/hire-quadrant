@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from '../HardLink';
 import toast from 'react-hot-toast';
-import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles, Plus, Trash2, Lock, Unlock } from 'lucide-react';
+import { Briefcase, MapPin, Clock, DollarSign, Calendar, Settings, X, Save, Loader2, Sparkles, Plus, Trash2, Lock, Unlock, Zap } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import ScreeningQuestionsEditor from '../ScreeningQuestionsEditor';
 import CustomFieldsEditor from './CustomFieldsEditor';
 import NewJobModal from './NewJobModal';
 import RichTextEditor from '../RichTextEditor';
+import SponsorJobModal from './SponsorJobModal';
 import type { ScreeningQuestion } from '../../types/screening';
 import { usePermissions } from '../../hooks/usePermissions';
 
@@ -52,12 +53,10 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
   const [jobForm, setJobForm] = useState<JobFormState>(emptyJobForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [sponsorBusyId, setSponsorBusyId] = useState<string | null>(null);
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
   const [statusBusyId, setStatusBusyId] = useState<string | null>(null);
   const [newJobOpen, setNewJobOpen] = useState(false);
-  // Local overrides so selects/badges reflect saved state without a full refresh
-  const [sponsorTiers, setSponsorTiers] = useState<Record<string, number>>({});
+  const [sponsorModalJob, setSponsorModalJob] = useState<{ id: string; title: string } | null>(null);
   const [statusOverrides, setStatusOverrides] = useState<Record<string, 'open' | 'closed'>>({});
 
   const handleJobCreated = () => {
@@ -65,25 +64,12 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
     else window.location.reload();
   };
 
-  const getTier = (job: any): number => {
-    if (job.id in sponsorTiers) return sponsorTiers[job.id];
-    return job.is_sponsored ? job.sponsor_tier ?? 1 : 0;
-  };
-
-  const updateSponsor = async (jobId: string, tier: number) => {
-    setSponsorBusyId(jobId);
-    const { error: updateError } = await supabase
-      .from('jobs')
-      .update({ is_sponsored: tier > 0, sponsor_tier: tier })
-      .eq('id', jobId);
-    setSponsorBusyId(null);
-    if (updateError) {
-      toast.error(updateError.message);
-      return;
-    }
-    setSponsorTiers((m) => ({ ...m, [jobId]: tier }));
-    toast.success(tier === 0 ? 'Listing unsponsored' : `Promoted to tier ${tier}`);
-  };
+  // Sponsorship is now a one-time paid purchase (Stripe checkout via
+  // SponsorJobModal) applied by the stripe-webhook, not a free toggle —
+  // read straight from the job row instead of a local override map.
+  const getTier = (job: any): number => (job.is_sponsored ? job.sponsor_tier ?? 1 : 0);
+  const isUrgent = (job: any): boolean =>
+    !!job.is_urgent && (!job.urgent_until || new Date(job.urgent_until) > new Date());
 
   const getStatus = (job: any): 'open' | 'closed' => {
     if (job.id in statusOverrides) return statusOverrides[job.id];
@@ -317,29 +303,32 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {canSponsorJobs ? (
-                      <div className="flex items-center gap-2">
-                        <select
-                          value={getTier(job)}
-                          onChange={(e) => updateSponsor(job.id, Number(e.target.value))}
-                          disabled={sponsorBusyId === job.id}
-                          aria-label="Sponsor tier"
-                          className="text-xs rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-2 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-60"
+                    <div className="flex items-center gap-2">
+                      {getTier(job) > 0 && (
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 dark:text-amber-300">
+                          <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                          Tier {getTier(job)}
+                        </span>
+                      )}
+                      {isUrgent(job) && (
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 dark:text-rose-300">
+                          <Zap className="h-3.5 w-3.5 text-rose-500" />
+                          Urgent
+                        </span>
+                      )}
+                      {canSponsorJobs ? (
+                        <button
+                          onClick={() => setSponsorModalJob({ id: job.id, title: job.title })}
+                          className="inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:text-primary-800"
                         >
-                          <option value={0}>Off</option>
-                          <option value={1}>Tier 1</option>
-                          <option value={2}>Tier 2</option>
-                          <option value={3}>Tier 3</option>
-                        </select>
-                        {getTier(job) > 0 && (
-                          <Sparkles className="h-3.5 w-3.5 text-amber-500" aria-label="Sponsored" />
-                        )}
-                      </div>
-                    ) : (
-                      <span className="text-xs text-gray-400 dark:text-slate-500">
-                        {getTier(job) > 0 ? `Tier ${getTier(job)}` : '—'}
-                      </span>
-                    )}
+                          {getTier(job) > 0 ? 'Boost more' : 'Promote'}
+                        </button>
+                      ) : (
+                        getTier(job) === 0 && !isUrgent(job) && (
+                          <span className="text-xs text-gray-400 dark:text-slate-500">—</span>
+                        )
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {canEditJobs ? (
@@ -494,6 +483,13 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
             </div>
           </div>
         </div>
+      )}
+      {sponsorModalJob && (
+        <SponsorJobModal
+          jobId={sponsorModalJob.id}
+          jobTitle={sponsorModalJob.title}
+          onClose={() => setSponsorModalJob(null)}
+        />
       )}
     </>
   );

@@ -11,11 +11,11 @@ export const isStripeEnabled = (): boolean => {
 
 interface CreateCheckoutSessionArgs {
   mode: 'subscription' | 'payment';
-  priceId: string;
+  priceIds: string[];
   metadata?: Record<string, string>;
 }
 
-async function invokeCheckout({ mode, priceId, metadata }: CreateCheckoutSessionArgs): Promise<string | null> {
+async function invokeCheckout({ mode, priceIds, metadata }: CreateCheckoutSessionArgs): Promise<string | null> {
   if (!isStripeEnabled()) {
     console.warn('Stripe is not enabled. Set VITE_STRIPE_ENABLED=true and VITE_STRIPE_PUBLISHABLE_KEY to activate.');
     return null;
@@ -24,7 +24,7 @@ async function invokeCheckout({ mode, priceId, metadata }: CreateCheckoutSession
   const { data, error } = await supabase.functions.invoke('create-checkout-session', {
     body: {
       mode,
-      priceId,
+      priceIds,
       successUrl: `${window.location.origin}${window.location.pathname}?checkout=success`,
       cancelUrl: `${window.location.origin}${window.location.pathname}?checkout=canceled`,
       metadata,
@@ -47,7 +47,7 @@ export const createCheckoutSession = async (
 ): Promise<string | null> => {
   return invokeCheckout({
     mode: 'subscription',
-    priceId: stripePriceId,
+    priceIds: [stripePriceId],
     metadata: { planId, billingFrequency },
   });
 };
@@ -59,8 +59,51 @@ export const createAddOnCheckoutSession = async (
 ): Promise<string | null> => {
   return invokeCheckout({
     mode: 'payment',
-    priceId: stripePriceId,
+    priceIds: [stripePriceId],
     metadata: { creditAmount: String(creditAmount) },
+  });
+};
+
+interface SponsorshipTierArgs {
+  stripePriceId: string;
+  tier: number;
+  durationDays: number;
+  priceCents: number;
+}
+
+interface UrgentAddonArgs {
+  stripePriceId: string;
+  durationDays: number;
+  priceCents: number;
+}
+
+// Job sponsorship purchase — tier is required, Urgent Hiring add-on is
+// optional and bundled as a second Checkout line item in the same session.
+export const createJobSponsorshipCheckout = async (
+  jobId: string,
+  tierArgs: SponsorshipTierArgs,
+  urgentAddon?: UrgentAddonArgs
+): Promise<string | null> => {
+  const priceIds = [tierArgs.stripePriceId];
+  if (urgentAddon) priceIds.push(urgentAddon.stripePriceId);
+
+  return invokeCheckout({
+    mode: 'payment',
+    priceIds,
+    metadata: {
+      purchaseType: 'job_sponsorship',
+      jobId,
+      tier: String(tierArgs.tier),
+      durationDays: String(tierArgs.durationDays),
+      tierPriceCents: String(tierArgs.priceCents),
+      addonUrgent: urgentAddon ? 'true' : 'false',
+      ...(urgentAddon
+        ? {
+            addonDurationDays: String(urgentAddon.durationDays),
+            addonPriceCents: String(urgentAddon.priceCents),
+          }
+        : {}),
+    },
   });
 };
 
