@@ -56,7 +56,11 @@ alter table candidate_unlocks
   add column if not exists credit_source text not null default 'monthly'
     check (credit_source in ('monthly', 'purchased'));
 
--- 6. unlocks_remaining: also report the purchased-credit bucket.
+-- 6. unlocks_remaining: also report the purchased-credit bucket. Return
+--    shape changed (added purchased_remaining), so the old function must
+--    be dropped first — CREATE OR REPLACE can't change OUT-parameter types.
+drop function if exists unlocks_remaining(uuid);
+
 create or replace function unlocks_remaining(p_company_id uuid)
 returns table (
   total integer,
