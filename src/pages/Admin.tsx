@@ -282,6 +282,7 @@ const Admin: React.FC = () => {
     status: app.status as 'Applied' | 'Screening' | 'Interview' | 'Offer' | 'Rejected',
     applied_at: app.applied_at,
     source_company: app.source_company,
+    resume_url: app.resume_url,
   }));
 
   // Map jobs to the shape CandidateHub expects (Job from JobContext)

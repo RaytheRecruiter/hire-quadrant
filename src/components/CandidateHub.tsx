@@ -16,14 +16,21 @@ import {
   Loader2
 } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
+import toast from 'react-hot-toast';
 import { Job, JobApplication } from '../contexts/JobContext';
 import { supabase } from '../utils/supabaseClient';
+
+// The resume attached to a given application can differ from the
+// candidate's current profile resume (JobApplicationForm lets a candidate
+// upload a different one per application) — Ray 2026-08-14: "We need to
+// see the exact resume that came in with each individual application."
+type ApplicationWithResume = JobApplication & { resume_url?: string | null };
 
 interface Candidate {
   id: string;
   name: string;
   email: string;
-  applications: JobApplication[];
+  applications: ApplicationWithResume[];
   totalApplications: number;
   lastActivity: Date;
   status: string;
@@ -31,7 +38,7 @@ interface Candidate {
 
 interface CandidateHubProps {
   candidates: Candidate[];
-  applications: JobApplication[];
+  applications: ApplicationWithResume[];
   jobs: Job[];
 }
 
@@ -43,6 +50,7 @@ type CandidateProfile = {
   years_experience: number | null;
   resume_parsed_at: string | null;
   resume_url: string | null;
+  phone_number: string | null;
 };
 
 const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, jobs }) => {
@@ -55,6 +63,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
   const [profile, setProfile] = useState<CandidateProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [resumeSignedUrl, setResumeSignedUrl] = useState<string | null>(null);
+  const [appResumeLoadingId, setAppResumeLoadingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!selectedCandidate?.id) {
@@ -66,7 +75,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
     (async () => {
       const { data } = await supabase
         .from('candidates')
-        .select('skills, top_skills, certifications, current_title, years_experience, resume_parsed_at, resume_url')
+        .select('skills, top_skills, certifications, current_title, years_experience, resume_parsed_at, resume_url, phone_number')
         .eq('user_id', selectedCandidate.id)
         .maybeSingle();
       setProfile({
@@ -77,6 +86,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
         years_experience: (data?.years_experience as number | null) ?? null,
         resume_parsed_at: (data?.resume_parsed_at as string | null) ?? null,
         resume_url: (data?.resume_url as string | null) ?? null,
+        phone_number: (data?.phone_number as string | null) ?? null,
       });
       setProfileLoading(false);
       if (data?.resume_url) {
@@ -154,6 +164,27 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
   const handleCandidateClick = (candidate: Candidate) => {
     setSelectedCandidate(candidate);
     setShowCandidateModal(true);
+  };
+
+  // Opens (and downloads, via the signed URL's content-disposition) the
+  // resume attached to a specific application — distinct from the
+  // candidate's profile resume above, since JobApplicationForm lets a
+  // candidate upload a different file per application.
+  const handleViewApplicationResume = async (app: ApplicationWithResume) => {
+    if (!app.resume_url) {
+      toast.error('No resume was attached to this application.');
+      return;
+    }
+    setAppResumeLoadingId(app.id);
+    const { data, error } = await supabase.storage
+      .from('resumes')
+      .createSignedUrl(app.resume_url, 3600);
+    setAppResumeLoadingId(null);
+    if (error || !data?.signedUrl) {
+      toast.error('Could not open resume.');
+      return;
+    }
+    window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
   };
 
   const getStatusColor = (status: string) => {
@@ -349,7 +380,10 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                       {selectedCandidate.name || selectedCandidate.email}
                     </h2>
-                    <p className="text-xs text-gray-500 dark:text-slate-400">{selectedCandidate.email}</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">
+                      {selectedCandidate.email}
+                      {profile?.phone_number && <> · {profile.phone_number}</>}
+                    </p>
                     {profile?.current_title && (
                       <p className="text-sm text-gray-700 dark:text-slate-300 mt-2 font-medium">
                         {profile.current_title}
@@ -502,10 +536,25 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                             return (
                               <li key={app.id} className="text-xs text-gray-600 dark:text-slate-400">
                                 <div className="font-medium text-gray-800 dark:text-slate-200">{job ? job.title : 'Unknown Job'}</div>
-                                <div className="flex items-center justify-between">
-                                  <span>{job ? job.company : ''}</span>
-                                  <span>{format(new Date(app.applied_at), 'MMM d')}</span>
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="truncate">{job ? job.company : ''}</span>
+                                  <span className="flex-shrink-0">{format(new Date(app.applied_at), 'MMM d')}</span>
                                 </div>
+                                {app.resume_url && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleViewApplicationResume(app)}
+                                    disabled={appResumeLoadingId === app.id}
+                                    className="mt-1 inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 font-medium disabled:opacity-60"
+                                  >
+                                    {appResumeLoadingId === app.id ? (
+                                      <Loader2 className="h-3 w-3 animate-spin" />
+                                    ) : (
+                                      <FileText className="h-3 w-3" />
+                                    )}
+                                    Resume for this application
+                                  </button>
+                                )}
                               </li>
                             );
                           })}
