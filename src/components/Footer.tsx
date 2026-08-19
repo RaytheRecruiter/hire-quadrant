@@ -34,6 +34,7 @@ const Footer: React.FC = () => {
             <h4 className="font-semibold mb-4 text-white">For Employers</h4>
             <ul className="space-y-2 text-sm text-gray-300">
               <li><a href="mailto:employers@hirequadrant.com" className="hover:text-white transition">Post a Job</a></li>
+              <li><HardLink to="/pricing" className="hover:text-white transition">Pricing</HardLink></li>
               <li><a href="mailto:sales@hirequadrant.com" className="hover:text-white transition">Contact Sales</a></li>
             </ul>
           </div>

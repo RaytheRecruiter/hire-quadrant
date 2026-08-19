@@ -1,47 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// Public, self-service pricing page — per Ray's 2026-08-18 reply
+// referencing lusha.com/pricing: "Something like this could be good just
+// for automated sales; where it's self-service." Unauthenticated, pulls
+// live pricing from the same tables the logged-in company panels use
+// (subscription_plans, contact_credit_packs, sponsorship_plans,
+// job_addons — all publicly SELECT-able for is_active rows) so there's
+// only one source of truth for pricing.
+//
+// CTAs route to /register?type=company rather than straight to Stripe
+// Checkout — checkout requires an authenticated company account, so the
+// self-service flow here is "sign up, then subscribe from the dashboard,"
+// not a fully anonymous checkout.
+
+import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import HardLink from '../components/HardLink';
 import { supabase } from '../utils/supabaseClient';
-import { Check, Zap, Star, Crown, Building2, AlertCircle } from 'lucide-react';
-import { useSEO } from '../hooks/useSEO';
+import { Search, Sparkles, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
 
-interface PricingPlan {
-  id: string;
-  name: string;
-  slug: string;
-  job_limit: number;
-  price_monthly: number;
-  price_yearly: number;
-  features: string[];
-  sort_order: number;
-}
-
-const planIcons: Record<string, React.ReactNode> = {
-  free: <Zap className="w-8 h-8 text-gray-500" />,
-  basic: <Star className="w-8 h-8 text-blue-500" />,
-  premium: <Crown className="w-8 h-8 text-purple-500" />,
-  enterprise: <Building2 className="w-8 h-8 text-yellow-600" />,
-};
-
-const planHighlight: Record<string, string> = {
-  free: 'border-gray-200',
-  basic: 'border-blue-200',
-  premium: 'border-purple-300 ring-2 ring-purple-100',
-  enterprise: 'border-yellow-200',
-};
-
+// Replaces the old free/basic/premium/enterprise job-limit pricing page
+// (job posting has been unlimited and free since Phase 1 — those plans
+// were deactivated and their "Coming Soon" checkout buttons were never
+// wired up). FAQ content + JSON-LD pattern carried forward from that
+// page, updated for the new Post/Promote/Source model.
 const FAQ_ITEMS = [
   {
     q: 'Is HireQuadrant free for job seekers?',
     a: 'Yes. Candidates never pay. You can browse jobs, save searches, set up email alerts, and apply to any role for free.',
   },
   {
-    q: 'How much does it cost for employers?',
-    a: 'Employers can start on the Free plan with 3 active job postings. Paid plans start at $29.99/month (Basic) and unlock more postings, advanced analytics, resume downloads, and featured listings. Enterprise is available for unlimited postings and dedicated support.',
+    q: 'How much does it cost to post a job?',
+    a: 'Job postings are always free, with no limit on how many you post.',
+  },
+  {
+    q: 'What is Promote / Sponsored Jobs?',
+    a: 'A one-time purchase per job listing that boosts its placement in search results for a set number of days, with an optional Urgent Hiring add-on for extra visibility. No subscription required.',
+  },
+  {
+    q: 'What is Source / the Resume Database?',
+    a: 'A monthly or annual subscription that lets you search candidate profiles and unlock contact info directly, instead of waiting for applicants to come to you.',
   },
   {
     q: 'Can I cancel or change plans anytime?',
-    a: 'Yes. You can upgrade, downgrade, or cancel your subscription at any time from your Company Dashboard.',
+    a: 'Yes, for Starter and Pro Resume Database plans — upgrade, downgrade, or cancel anytime from your Company Dashboard. Our top-tier Business plan is set up with our sales team.',
   },
   {
     q: 'Does HireQuadrant use AI?',
@@ -53,15 +53,41 @@ const FAQ_ITEMS = [
   },
 ];
 
-const Pricing: React.FC = () => {
-  useSEO({ title: 'Pricing', description: 'Simple, transparent pricing for employers. Free for job seekers forever.', canonical: '/pricing' });
+interface ResumePlan {
+  id: string;
+  name: string;
+  slug: string;
+  price_monthly: number;
+  price_yearly: number;
+  monthly_unlock_credits: number;
+  features: string[];
+  requires_manual_upgrade: boolean;
+  sort_order: number;
+}
 
-  // Inject FAQ JSON-LD
+interface SponsorshipPlan {
+  id: string;
+  tier: number;
+  name: string;
+  price_cents: number;
+  duration_days: number;
+  features: string[];
+  sort_order: number;
+}
+
+const fmtMo = (cents: number) => (cents <= 0 ? 'Free' : `$${(cents / 100).toFixed(0)}`);
+
+const Pricing: React.FC = () => {
+  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly');
+  const [resumePlans, setResumePlans] = useState<ResumePlan[]>([]);
+  const [sponsorshipPlans, setSponsorshipPlans] = useState<SponsorshipPlan[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const faq = {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: FAQ_ITEMS.map(item => ({
+      mainEntity: FAQ_ITEMS.map((item) => ({
         '@type': 'Question',
         name: item.q,
         acceptedAnswer: { '@type': 'Answer', text: item.a },
@@ -77,221 +103,233 @@ const Pricing: React.FC = () => {
     return () => { document.getElementById('pricing-faq-schema')?.remove(); };
   }, []);
 
-  const [plans, setPlans] = useState<PricingPlan[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isYearly, setIsYearly] = useState(false);
-
   useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const { data, error } = await supabase
+    (async () => {
+      const [{ data: resumeData }, { data: sponsorData }] = await Promise.all([
+        supabase
           .from('subscription_plans')
-          .select('*')
+          .select('id, name, slug, price_monthly, price_yearly, monthly_unlock_credits, features, requires_manual_upgrade, sort_order')
           .eq('is_active', true)
-          .order('sort_order');
-
-        if (error) throw error;
-
-        const parsed = (data || []).map(plan => ({
-          ...plan,
-          features: typeof plan.features === 'string' ? JSON.parse(plan.features) : plan.features,
-        }));
-
-        setPlans(parsed);
-      } catch (err) {
-        console.error('Error fetching plans:', err);
-        setError('Failed to load pricing plans. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPlans();
+          .order('sort_order'),
+        supabase
+          .from('sponsorship_plans')
+          .select('id, tier, name, price_cents, duration_days, features, sort_order')
+          .eq('is_active', true)
+          .order('sort_order'),
+      ]);
+      setResumePlans(resumeData || []);
+      setSponsorshipPlans(sponsorData || []);
+      setLoading(false);
+    })();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="animate-pulse space-y-8">
-          <div className="h-10 bg-gray-200 rounded w-1/3 mx-auto"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-96 bg-gray-100 rounded-lg"></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <h3 className="font-semibold text-red-900 dark:text-red-200 mb-1">Unable to Load Pricing</h3>
-              <p className="text-red-800 dark:text-red-300 text-sm">{error}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Simple, Transparent Pricing
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Choose the plan that fits your hiring needs. Start free and scale as you grow.
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
+      <Helmet>
+        <title>Pricing — HireQuadrant</title>
+        <meta
+          name="description"
+          content="HireQuadrant pricing: post jobs for free, sponsor listings to reach more candidates, and search the resume database to find talent yourself."
+        />
+      </Helmet>
 
-        {/* Monthly / Yearly Toggle */}
-        <div className="mt-8 flex items-center justify-center gap-3">
-          <span className={`text-sm font-medium ${!isYearly ? 'text-gray-900' : 'text-gray-500'}`}>
-            Monthly
-          </span>
-          <button
-            onClick={() => setIsYearly(!isYearly)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              isYearly ? 'bg-green-600' : 'bg-gray-300'
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                isYearly ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
-          </button>
-          <span className={`text-sm font-medium ${isYearly ? 'text-gray-900' : 'text-gray-500'}`}>
-            Yearly
-            <span className="ml-1 text-xs text-green-600 font-semibold">Save ~17%</span>
-          </span>
+      {/* Hero */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10 text-center">
+        <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
+          Simple, self-service pricing
+        </h1>
+        <p className="mt-4 text-lg text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+          Post for free. Promote when you need more applicants. Source when you want to find candidates yourself.
+        </p>
+        <HardLink
+          to="/register?type=company"
+          className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl bg-gradient-to-r from-primary-400 to-primary-500 text-white font-semibold hover:from-primary-500 hover:to-primary-600 transition-all shadow-lg"
+        >
+          Get started for free
+          <ArrowRight className="h-4 w-4" />
+        </HardLink>
+      </div>
+
+      {/* POST — always free */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-6 flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-wide text-emerald-600 font-semibold mb-1">Post</p>
+            <h2 className="text-xl font-bold text-secondary-900 dark:text-white">Job postings are always free</h2>
+            <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">No limits, no plan required. Just sign up and post.</p>
+          </div>
+          <span className="text-3xl font-bold text-emerald-600">$0</span>
         </div>
       </div>
 
-      {/* Plan Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {plans.map((plan) => {
-          const isPremium = plan.slug === 'premium';
-          const price = isYearly ? plan.price_yearly : plan.price_monthly;
-          const period = isYearly ? '/year' : '/month';
-
-          return (
-            <div
-              key={plan.id}
-              className={`relative bg-white dark:bg-slate-800 rounded-xl border-2 shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col ${
-                planHighlight[plan.slug] || 'border-gray-200 dark:border-slate-700'
-              }`}
-            >
-              {isPremium && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-500 text-white shadow-soft">
-                    Most Popular
-                  </span>
-                </div>
-              )}
-
-              {/* Icon & Name */}
-              <div className="text-center mb-6">
-                <div className="flex justify-center mb-3">
-                  {planIcons[plan.slug] || <Zap className="w-8 h-8 text-gray-400" />}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{plan.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
-                  {plan.job_limit === -1 ? 'Unlimited' : plan.job_limit} job posting{plan.job_limit !== 1 ? 's' : ''}
+      {loading ? (
+        <div className="text-center py-16">
+          <Loader2 className="h-8 w-8 animate-spin text-primary-500 mx-auto" />
+        </div>
+      ) : (
+        <>
+          {/* PROMOTE — Job Sponsorship */}
+          {sponsorshipPlans.length > 0 && (
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+              <div className="text-center mb-8">
+                <p className="text-xs uppercase tracking-wide text-amber-600 font-semibold mb-1 flex items-center justify-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5" /> Promote
                 </p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-secondary-900 dark:text-white">Sponsor a job listing</h2>
+                <p className="text-gray-600 dark:text-slate-400 mt-2">One-time boost per job. No subscription required.</p>
               </div>
-
-              {/* Price */}
-              <div className="text-center mb-6">
-                {plan.price_monthly === 0 ? (
-                  <div>
-                    <span className="text-4xl font-bold text-gray-900 dark:text-white">Free</span>
-                  </div>
-                ) : (
-                  <div>
-                    <span className="text-4xl font-bold text-gray-900 dark:text-white">
-                      ${isYearly ? (plan.price_yearly / 12).toFixed(0) : plan.price_monthly}
-                    </span>
-                    <span className="text-gray-500 dark:text-slate-400 text-sm">/month</span>
-                    {isYearly && (
-                      <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
-                        Billed ${price}{period}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {sponsorshipPlans.map((plan) => {
+                  const isPopular = plan.features?.includes('Most Popular');
+                  return (
+                    <div
+                      key={plan.id}
+                      className={`relative rounded-2xl border p-6 bg-white/90 backdrop-blur-sm shadow-lg ${
+                        isPopular ? 'border-primary-400 ring-2 ring-primary-200' : 'border-white/20'
+                      }`}
+                    >
+                      {isPopular && (
+                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-primary-500 text-white">
+                          Most Popular
+                        </span>
+                      )}
+                      <h3 className="font-bold text-lg text-secondary-900 dark:text-white">{plan.name}</h3>
+                      <p className="text-3xl font-bold text-primary-600 mt-2">
+                        {fmtMo(plan.price_cents)}
+                        <span className="text-sm font-normal text-gray-400"> / {plan.duration_days} days</span>
                       </p>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Features */}
-              <ul className="space-y-3 mb-8 flex-grow">
-                {(plan.features || []).map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-600 dark:text-slate-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA */}
-              <div className="mt-auto">
-                {plan.slug === 'free' ? (
-                  <HardLink
-                    to="/register"
-                    className="block w-full text-center py-2.5 px-4 rounded-lg font-medium text-sm bg-amber-500 hover:bg-amber-600 text-white transition-colors shadow-soft hover:shadow-card-hover"
-                  >
-                    Get Started
-                  </HardLink>
-                ) : (
-                  <button
-                    disabled
-                    className="block w-full text-center py-2.5 px-4 rounded-lg font-medium text-sm bg-gray-100 text-gray-500 cursor-not-allowed"
-                  >
-                    Coming Soon
-                  </button>
-                )}
+                      <ul className="mt-4 space-y-2">
+                        {(plan.features || []).filter((f) => f !== 'Most Popular').map((f, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-slate-300">
+                            <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <HardLink
+                        to="/register?type=company"
+                        className="block text-center mt-6 px-4 py-2.5 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition"
+                      >
+                        Get started
+                      </HardLink>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          );
-        })}
-      </div>
+          )}
 
-      {/* FAQ section — matches the FAQPage JSON-LD injected above */}
-      <div className="mt-20 max-w-3xl mx-auto">
-        <h2 className="font-display text-3xl font-bold text-secondary-900 dark:text-white text-center mb-10">
-          Frequently asked questions
-        </h2>
-        <div className="space-y-3">
-          {FAQ_ITEMS.map((item, i) => (
-            <details key={i} className="group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5">
-              <summary className="font-semibold text-secondary-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
-                {item.q}
-                <span className="text-primary-500 transition-transform group-open:rotate-45 text-2xl leading-none">+</span>
-              </summary>
-              <p className="mt-3 text-secondary-600 dark:text-slate-300 leading-relaxed">{item.a}</p>
-            </details>
-          ))}
-        </div>
-      </div>
+          {/* SOURCE — Resume Database */}
+          {resumePlans.length > 0 && (
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+              <div className="text-center mb-8">
+                <p className="text-xs uppercase tracking-wide text-primary-600 font-semibold mb-1 flex items-center justify-center gap-1.5">
+                  <Search className="h-3.5 w-3.5" /> Source
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-secondary-900 dark:text-white">Search the resume database</h2>
+                <p className="text-gray-600 dark:text-slate-400 mt-2">Find and reach out to candidates directly.</p>
+                <div className="inline-flex rounded-lg border border-gray-200 dark:border-slate-700 p-0.5 bg-white dark:bg-slate-800 mt-4">
+                  {(['monthly', 'annual'] as const).map((freq) => (
+                    <button
+                      key={freq}
+                      type="button"
+                      onClick={() => setBilling(freq)}
+                      className={`px-4 py-1.5 text-sm font-medium rounded-md transition ${
+                        billing === freq ? 'bg-primary-500 text-white shadow' : 'text-gray-500 dark:text-slate-400'
+                      }`}
+                    >
+                      {freq === 'monthly' ? 'Monthly' : 'Annual (save ~17%)'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {resumePlans.map((plan) => {
+                  const price = billing === 'monthly' ? plan.price_monthly : plan.price_yearly;
+                  const isPopular = plan.features?.includes('Most Popular');
+                  return (
+                    <div
+                      key={plan.id}
+                      className={`relative rounded-2xl border p-6 bg-white/90 backdrop-blur-sm shadow-lg ${
+                        isPopular ? 'border-primary-400 ring-2 ring-primary-200' : 'border-white/20'
+                      }`}
+                    >
+                      {isPopular && (
+                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-primary-500 text-white">
+                          Most Popular
+                        </span>
+                      )}
+                      <h3 className="font-bold text-lg text-secondary-900 dark:text-white">{plan.name}</h3>
+                      <p className="text-3xl font-bold text-primary-600 mt-2">
+                        {fmtMo(price)}
+                        {price > 0 && <span className="text-sm font-normal text-gray-400">/{billing === 'monthly' ? 'mo' : 'yr'}</span>}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{plan.monthly_unlock_credits} unlocks / mo</p>
+                      <ul className="mt-4 space-y-2">
+                        {(plan.features || []).filter((f) => f !== 'Most Popular').map((f, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-slate-300">
+                            <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <HardLink
+                        to={plan.requires_manual_upgrade ? '/contact' : '/register?type=company'}
+                        className={`block text-center mt-6 px-4 py-2.5 rounded-xl font-semibold transition ${
+                          isPopular
+                            ? 'bg-primary-600 text-white hover:bg-primary-700'
+                            : 'border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30'
+                        }`}
+                      >
+                        {plan.requires_manual_upgrade ? 'Contact sales' : 'Get started'}
+                      </HardLink>
+                    </div>
+                  );
+                })}
+                <div className="rounded-2xl border border-dashed border-gray-300 dark:border-slate-700 p-6 flex flex-col justify-center items-center text-center">
+                  <h3 className="font-bold text-lg text-secondary-900 dark:text-white">Enterprise</h3>
+                  <p className="text-sm text-gray-500 dark:text-slate-400 mt-2 mb-4">
+                    Custom credits, team seats, and dedicated support.
+                  </p>
+                  <a
+                    href="mailto:billing@hirequadrant.com?subject=Enterprise%20Resume%20Database"
+                    className="px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 font-semibold hover:border-primary-400 hover:text-primary-600 transition"
+                  >
+                    Contact sales
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
 
-      <div className="mt-16 text-center">
-        <p className="text-gray-600 dark:text-slate-400">
-          Need a custom plan or have questions?{' '}
-          <a
-            href="mailto:sales@hirequadrant.com"
-            className="text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300"
-          >
-            Contact our sales team
-          </a>
-        </p>
-      </div>
+          {/* FAQ — matches the FAQPage JSON-LD injected above */}
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-secondary-900 dark:text-white text-center mb-10">
+              Frequently asked questions
+            </h2>
+            <div className="space-y-3">
+              {FAQ_ITEMS.map((item, i) => (
+                <details key={i} className="group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5">
+                  <summary className="font-semibold text-secondary-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
+                    {item.q}
+                    <span className="text-primary-500 transition-transform group-open:rotate-45 text-2xl leading-none">+</span>
+                  </summary>
+                  <p className="mt-3 text-secondary-600 dark:text-slate-300 leading-relaxed">{item.a}</p>
+                </details>
+              ))}
+            </div>
+            <p className="mt-10 text-center text-gray-600 dark:text-slate-400">
+              Need a custom plan or have questions?{' '}
+              <a
+                href="mailto:sales@hirequadrant.com"
+                className="text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300"
+              >
+                Contact our sales team
+              </a>
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 };

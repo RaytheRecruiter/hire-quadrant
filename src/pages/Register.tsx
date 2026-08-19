@@ -19,7 +19,9 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [userType, setUserType] = useState<'candidate' | 'company'>('candidate');
+  const [userType, setUserType] = useState<'candidate' | 'company'>(
+    searchParams.get('type') === 'company' ? 'company' : 'candidate'
+  );
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
