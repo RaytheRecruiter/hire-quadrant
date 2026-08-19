@@ -29,6 +29,7 @@ interface Prefs {
   open_to_relocation: boolean;
   work_authorization: string;
   ready_to_interview: boolean;
+  industries: string[];
 }
 
 const WORK_TYPES = ['Full-time', 'Part-time', 'Contract', 'Contract-to-hire', 'Internship', 'Temporary'];
@@ -39,6 +40,11 @@ const AUTH_OPTIONS = [
   'Need H-1B sponsorship',
   'Need other visa sponsorship',
   'Prefer not to say',
+];
+const INDUSTRIES = [
+  'Technology', 'Healthcare', 'Finance', 'Retail', 'Manufacturing', 'Education',
+  'Government', 'Nonprofit', 'Hospitality', 'Construction', 'Transportation & Logistics',
+  'Media & Entertainment', 'Professional Services', 'Energy', 'Real Estate',
 ];
 
 const empty: Prefs = {
@@ -56,6 +62,7 @@ const empty: Prefs = {
   open_to_relocation: false,
   work_authorization: '',
   ready_to_interview: false,
+  industries: [],
 };
 
 const ZIP_REGEX = /^\d{5}(-\d{4})?$/;
@@ -92,6 +99,7 @@ const JobPreferencesSection: React.FC = () => {
           open_to_relocation: data.open_to_relocation ?? false,
           work_authorization: data.work_authorization ?? '',
           ready_to_interview: data.ready_to_interview ?? false,
+          industries: data.industries ?? [],
         });
         setTitlesInput((data.desired_titles ?? []).join(', '));
         setLocationsInput((data.desired_locations ?? []).join(', '));
@@ -100,7 +108,7 @@ const JobPreferencesSection: React.FC = () => {
     })();
   }, [user?.id]);
 
-  const toggle = (key: 'work_types' | 'schedules' | 'workplace_types', value: string) => {
+  const toggle = (key: 'work_types' | 'schedules' | 'workplace_types' | 'industries', value: string) => {
     setPrefs((p) => ({
       ...p,
       [key]: p[key].includes(value) ? p[key].filter((v) => v !== value) : [...p[key], value],
@@ -155,6 +163,7 @@ const JobPreferencesSection: React.FC = () => {
         open_to_relocation: prefs.open_to_relocation,
         work_authorization: prefs.work_authorization || null,
         ready_to_interview: prefs.ready_to_interview,
+        industries: prefs.industries,
       },
       { onConflict: 'user_id' },
     );
@@ -278,6 +287,7 @@ const JobPreferencesSection: React.FC = () => {
         <ChipGroup label="Work types" options={WORK_TYPES} selected={prefs.work_types} onToggle={(v) => toggle('work_types', v)} />
         <ChipGroup label="Schedules" options={SCHEDULES} selected={prefs.schedules} onToggle={(v) => toggle('schedules', v)} />
         <ChipGroup label="Workplace" options={WORKPLACE} selected={prefs.workplace_types} onToggle={(v) => toggle('workplace_types', v)} />
+        <ChipGroup label="Industries" options={INDUSTRIES} selected={prefs.industries} onToggle={(v) => toggle('industries', v)} />
 
         <div>
           <label htmlFor="pref-auth" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Work authorization</label>
