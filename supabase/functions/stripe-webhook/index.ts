@@ -208,15 +208,29 @@ serve(async (req) => {
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
 
-        await supabase
-          .from('subscriptions')
-          .update({
-            status: subscription.status,
-            current_period_start: new Date(subscription.current_period_start * 1000),
-            current_period_end: new Date(subscription.current_period_end * 1000),
-            updated_at: new Date(),
-          })
-          .eq('stripe_subscription_id', subscription.id);
+        const update: Record<string, unknown> = {
+          status: subscription.status,
+          current_period_start: new Date(subscription.current_period_start * 1000),
+          current_period_end: new Date(subscription.current_period_end * 1000),
+          cancel_at_period_end: !!subscription.cancel_at_period_end,
+          updated_at: new Date(),
+        };
+
+        // Defense in depth: if the subscription's price changed by any path
+        // (manage-subscription already updates plan_id directly, but this
+        // also covers a plan change made straight in the Stripe dashboard),
+        // resolve which of our plans it now matches and sync plan_id.
+        const currentPriceId = subscription.items?.data?.[0]?.price?.id;
+        if (currentPriceId) {
+          const { data: matchedPlan } = await supabase
+            .from('subscription_plans')
+            .select('id')
+            .or(`stripe_price_id_monthly.eq.${currentPriceId},stripe_price_id_annual.eq.${currentPriceId}`)
+            .maybeSingle();
+          if (matchedPlan) update.plan_id = matchedPlan.id;
+        }
+
+        await supabase.from('subscriptions').update(update).eq('stripe_subscription_id', subscription.id);
         break;
       }
 

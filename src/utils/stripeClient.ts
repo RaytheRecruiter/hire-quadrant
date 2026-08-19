@@ -107,6 +107,36 @@ export const createJobSponsorshipCheckout = async (
   });
 };
 
+interface ManageSubscriptionResult {
+  success: boolean;
+  error?: string;
+}
+
+async function invokeManageSubscription(body: Record<string, unknown>): Promise<ManageSubscriptionResult> {
+  const { data, error } = await supabase.functions.invoke('manage-subscription', { body });
+  if (error) return { success: false, error: error.message };
+  if (data?.error) return { success: false, error: data.error };
+  return { success: true };
+}
+
+// In-place, prorated plan change for an existing Resume Database
+// subscriber. Do NOT use createCheckoutSession for this — that always
+// starts a brand new Stripe subscription instead of modifying theirs.
+export const changePlan = async (
+  planId: string,
+  billingFrequency: 'monthly' | 'annual'
+): Promise<ManageSubscriptionResult> => {
+  return invokeManageSubscription({ action: 'change_plan', planId, billingFrequency });
+};
+
+export const cancelSubscription = async (): Promise<ManageSubscriptionResult> => {
+  return invokeManageSubscription({ action: 'cancel' });
+};
+
+export const resumeSubscription = async (): Promise<ManageSubscriptionResult> => {
+  return invokeManageSubscription({ action: 'resume' });
+};
+
 export const STRIPE_WEBHOOK_EVENTS = [
   'checkout.session.completed',
   'customer.subscription.updated',

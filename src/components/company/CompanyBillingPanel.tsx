@@ -25,12 +25,22 @@ import {
   Mail,
   KeyRound,
   Plus,
+  Ban,
+  RotateCcw,
+  ShieldCheck,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { supabase } from '../../utils/supabaseClient';
 import { useSubscription } from '../../hooks/useSubscription';
 import { usePermissions } from '../../hooks/usePermissions';
-import { isStripeEnabled, createCheckoutSession, createAddOnCheckoutSession } from '../../utils/stripeClient';
+import {
+  isStripeEnabled,
+  createCheckoutSession,
+  createAddOnCheckoutSession,
+  changePlan,
+  cancelSubscription,
+  resumeSubscription,
+} from '../../utils/stripeClient';
 
 interface Props {
   companyId: string;
@@ -67,10 +77,11 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
   const noMember = !member;
   const canManageBilling = noMember || isOwner || isAdmin || can('manage_billing');
 
-  const { plans, currentSubscription, loading, error } = useSubscription({ companyId });
+  const { plans, currentSubscription, loading, error, refetch } = useSubscription({ companyId });
   const [billingFrequency, setBillingFrequency] = useState<'monthly' | 'annual'>('monthly');
   const [checkoutBusy, setCheckoutBusy] = useState<string | null>(null);
   const [creditPacks, setCreditPacks] = useState<ContactCreditPack[]>([]);
+  const [cancelBusy, setCancelBusy] = useState(false);
 
   const [unlocks, setUnlocks] = useState<{
     total: number;
@@ -118,11 +129,39 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
     if (!isStripeEnabled() || !priceId) return;
     setCheckoutBusy(planId);
     try {
-      const url = await createCheckoutSession(priceId, planId, billingFrequency);
-      if (url) window.location.href = url;
+      // Already have a real (non-comp) Stripe subscription -> change it in
+      // place instead of starting a second, duplicate subscription.
+      if (currentSubscription?.stripe_subscription_id && !currentSubscription.is_comp) {
+        const result = await changePlan(planId, billingFrequency);
+        if (result.success) {
+          await refetch();
+        } else if (result.error) {
+          alert(result.error);
+        }
+      } else {
+        const url = await createCheckoutSession(priceId, planId, billingFrequency);
+        if (url) window.location.href = url;
+      }
     } finally {
       setCheckoutBusy(null);
     }
+  };
+
+  const handleCancel = async () => {
+    if (!window.confirm('Cancel your subscription? You\'ll keep access until the end of the current billing period.')) return;
+    setCancelBusy(true);
+    const result = await cancelSubscription();
+    setCancelBusy(false);
+    if (result.success) await refetch();
+    else if (result.error) alert(result.error);
+  };
+
+  const handleResume = async () => {
+    setCancelBusy(true);
+    const result = await resumeSubscription();
+    setCancelBusy(false);
+    if (result.success) await refetch();
+    else if (result.error) alert(result.error);
   };
 
   const handleBuyCredits = async (pack: ContactCreditPack) => {
@@ -197,13 +236,24 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                   {currentPlan.price_yearly > 0 && ` · ${fmtPrice(currentPlan.price_yearly, '/yr')}`}
                 </p>
               </div>
-              <span
-                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-                  STATUS_BADGE[currentSubscription.status].className
-                }`}
-              >
-                {STATUS_BADGE[currentSubscription.status].label}
-              </span>
+              <div className="flex flex-col items-end gap-1.5">
+                <span
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                    STATUS_BADGE[currentSubscription.status].className
+                  }`}
+                >
+                  {STATUS_BADGE[currentSubscription.status].label}
+                </span>
+                {currentSubscription.is_comp && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-100 text-purple-800">
+                    <ShieldCheck className="h-3 w-3" />
+                    Comp account
+                  </span>
+                )}
+                {currentSubscription.cancel_at_period_end && (
+                  <span className="text-[10px] text-rose-600 font-medium">Cancels at period end</span>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-2">
@@ -234,6 +284,30 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                 </p>
               </div>
             </div>
+
+            {canManageBilling && currentSubscription.stripe_subscription_id && !currentSubscription.is_comp && (
+              <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-end">
+                {currentSubscription.cancel_at_period_end ? (
+                  <button
+                    onClick={handleResume}
+                    disabled={cancelBusy}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-primary-600 hover:text-primary-800 disabled:opacity-60"
+                  >
+                    {cancelBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />}
+                    Resume subscription
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleCancel}
+                    disabled={cancelBusy}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-rose-600 hover:text-rose-800 disabled:opacity-60"
+                  >
+                    {cancelBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Ban className="h-3.5 w-3.5" />}
+                    Cancel subscription
+                  </button>
+                )}
+              </div>
+            )}
           </>
         ) : (
           <div className="text-center py-8">
@@ -279,7 +353,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                 const priceCents = billingFrequency === 'monthly' ? plan.price_monthly : plan.price_yearly;
                 const priceId =
                   billingFrequency === 'monthly' ? plan.stripe_price_id_monthly : plan.stripe_price_id_annual;
-                const canCheckout = isStripeEnabled() && !!priceId;
+                const canCheckout = isStripeEnabled() && !!priceId && !plan.requires_manual_upgrade;
                 return (
                   <div
                     key={plan.id}
@@ -323,15 +397,17 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                         onClick={() => handleSubscribe(plan.id, priceId)}
                         className="w-full text-center text-xs px-3 py-1.5 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium disabled:opacity-60"
                       >
-                        {checkoutBusy === plan.id ? 'Redirecting…' : 'Subscribe'}
+                        {checkoutBusy === plan.id
+                          ? currentSubscription?.stripe_subscription_id ? 'Updating…' : 'Redirecting…'
+                          : currentSubscription?.stripe_subscription_id ? 'Change plan' : 'Subscribe'}
                       </button>
                     )}
                     {!isCurrent && canManageBilling && !canCheckout && (
                       <a
-                        href={`mailto:billing@hirequadrant.com?subject=Upgrade%20to%20${encodeURIComponent(plan.name)}`}
+                        href={`mailto:billing@hirequadrant.com?subject=${plan.requires_manual_upgrade ? 'Switch%20to' : 'Upgrade%20to'}%20${encodeURIComponent(plan.name)}`}
                         className="block text-center text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
                       >
-                        Request upgrade
+                        {plan.requires_manual_upgrade ? 'Contact sales' : 'Request upgrade'}
                       </a>
                     )}
                     {!isCurrent && !canManageBilling && (
