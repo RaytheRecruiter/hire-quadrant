@@ -21,6 +21,7 @@ import SavedJobs from './pages/SavedJobs';
 import Onboarding from './pages/Onboarding';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Pricing from './pages/Pricing';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import ContentPolicy from './pages/ContentPolicy';
@@ -113,6 +114,7 @@ function App() {
                 <Route path="/admin/cron" element={<CronHealth />} />
                 <Route path="/saved-searches" element={<SavedSearches />} />
                 <Route path="/compare" element={<CompareCompanies />} />
+                <Route path="/pricing" element={<Pricing />} />
                 <Route path="/help-center" element={<HelpCenter />} />
                 <Route path="/interview-practice" element={<InterviewPractice />} />
                 <Route path="/xml-feeder" element={<XMLFeederAdmin />} />
