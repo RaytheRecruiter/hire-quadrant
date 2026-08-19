@@ -11,6 +11,7 @@ export interface SubscriptionPlan {
   monthly_unlock_credits: number;
   stripe_price_id_monthly: string | null;
   stripe_price_id_annual: string | null;
+  requires_manual_upgrade: boolean;
   features: string[];
   is_active: boolean;
   sort_order: number;
@@ -26,6 +27,8 @@ export interface Subscription {
   job_limit: number;
   billing_frequency: 'monthly' | 'annual';
   purchased_contacts_remaining: number;
+  is_comp: boolean;
+  cancel_at_period_end: boolean;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   current_period_start: string | null;
@@ -57,7 +60,7 @@ interface UseSubscriptionReturn {
   allSubscriptions: SubscriptionWithCompany[];
   loading: boolean;
   error: string | null;
-  assignPlan: (companyId: string, planId: string) => Promise<boolean>;
+  assignPlan: (companyId: string, planId: string, isComp?: boolean) => Promise<boolean>;
   jobsUsed: number;
   jobsRemaining: number;
   refetch: () => Promise<void>;
@@ -166,7 +169,7 @@ export const useSubscription = (options: UseSubscriptionOptions = {}): UseSubscr
     fetchAll();
   }, [fetchAll]);
 
-  const assignPlan = async (targetCompanyId: string, planId: string): Promise<boolean> => {
+  const assignPlan = async (targetCompanyId: string, planId: string, isComp = false): Promise<boolean> => {
     try {
       setError(null);
 
@@ -177,6 +180,11 @@ export const useSubscription = (options: UseSubscriptionOptions = {}): UseSubscr
         return false;
       }
 
+      // Comp accounts (trial/demo) get a long runway so admins aren't
+      // re-granting every 30 days; real paid subscriptions are always
+      // driven by the Stripe webhook instead of this function.
+      const periodDays = isComp ? 365 : 30;
+
       const { error: upsertError } = await supabase
         .from('subscriptions')
         .upsert(
@@ -185,8 +193,9 @@ export const useSubscription = (options: UseSubscriptionOptions = {}): UseSubscr
             plan_id: planId,
             status: 'active',
             job_limit: plan.job_limit,
+            is_comp: isComp,
             current_period_start: new Date().toISOString(),
-            current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            current_period_end: new Date(Date.now() + periodDays * 24 * 60 * 60 * 1000).toISOString(),
             updated_at: new Date().toISOString(),
           },
           { onConflict: 'company_id' }

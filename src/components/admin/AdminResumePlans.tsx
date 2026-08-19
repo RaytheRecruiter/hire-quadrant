@@ -24,6 +24,7 @@ interface PlanRow {
   stripe_price_id_monthly: string | null;
   stripe_price_id_annual: string | null;
   is_active: boolean;
+  requires_manual_upgrade: boolean;
 }
 
 interface CreditPackRow {
@@ -97,6 +98,7 @@ const AdminResumePlans: React.FC = () => {
         stripe_price_id_monthly: plan.stripe_price_id_monthly || null,
         stripe_price_id_annual: plan.stripe_price_id_annual || null,
         is_active: plan.is_active,
+        requires_manual_upgrade: plan.requires_manual_upgrade,
         updated_at: new Date().toISOString(),
       })
       .eq('id', plan.id);
@@ -227,6 +229,7 @@ const AdminResumePlans: React.FC = () => {
                 <th className="py-2 pr-3">Stripe price (monthly)</th>
                 <th className="py-2 pr-3">Stripe price (annual)</th>
                 <th className="py-2 pr-3">Active</th>
+                <th className="py-2 pr-3" title="Self-serve upgrade/downgrade is disabled for this plan — always routes to Contact sales">Manual only</th>
                 <th className="py-2 pr-3"></th>
               </tr>
             </thead>
@@ -284,6 +287,13 @@ const AdminResumePlans: React.FC = () => {
                       type="checkbox"
                       checked={plan.is_active}
                       onChange={(e) => updatePlan(plan.id, { is_active: e.target.checked })}
+                    />
+                  </td>
+                  <td className="py-2 pr-3 text-center">
+                    <input
+                      type="checkbox"
+                      checked={plan.requires_manual_upgrade}
+                      onChange={(e) => updatePlan(plan.id, { requires_manual_upgrade: e.target.checked })}
                     />
                   </td>
                   <td className="py-2 pr-3">

@@ -30,6 +30,10 @@ const SubscriptionManager: React.FC = () => {
   const [transferTarget, setTransferTarget] = useState<CompanyRow | null>(null);
   const [inviteTarget, setInviteTarget] = useState<CompanyRow | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  // Per-row "comp this account" toggle for the pending plan assignment —
+  // grants free trial/demo access (is_comp=true, 1yr runway) with no
+  // Stripe charge, per Ray's 2026-08-18 ask.
+  const [compFlags, setCompFlags] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -112,7 +116,7 @@ const SubscriptionManager: React.FC = () => {
     setError(null);
     setSuccessMessage(null);
 
-    const success = await assignPlan(company.id, company.selectedPlanId);
+    const success = await assignPlan(company.id, company.selectedPlanId, !!compFlags[company.id]);
 
     if (success) {
       const plan = plans.find(p => p.id === company.selectedPlanId);
@@ -238,6 +242,9 @@ const SubscriptionManager: React.FC = () => {
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Assign Plan
                   </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider" title="Free trial/demo access, no Stripe charge">
+                    Comp?
+                  </th>
                   <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Actions
                   </th>
@@ -317,6 +324,14 @@ const SubscriptionManager: React.FC = () => {
                           </option>
                         ))}
                       </select>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <input
+                        type="checkbox"
+                        checked={!!compFlags[company.id]}
+                        onChange={(e) => setCompFlags((prev) => ({ ...prev, [company.id]: e.target.checked }))}
+                        title="Free trial/demo access — no Stripe charge"
+                      />
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-right">
                       <button
