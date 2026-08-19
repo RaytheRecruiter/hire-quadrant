@@ -9,6 +9,7 @@ import CandidateHub from '../components/CandidateHub';
 import PendingApprovals from '../components/admin/PendingApprovals';
 import SubscriptionManager from '../components/admin/SubscriptionManager';
 import AdminResumePlans from '../components/admin/AdminResumePlans';
+import AdminSponsorshipAnalytics from '../components/admin/AdminSponsorshipAnalytics';
 import AdminCompanyControl from '../components/admin/AdminCompanyControl';
 import AtsIntegrations from '../components/admin/AtsIntegrations';
 import DashboardCharts from '../components/admin/DashboardCharts';
@@ -537,6 +538,16 @@ const Admin: React.FC = () => {
               Pricing
             </button>
             <button
+              onClick={() => setActiveTab('sponsorship')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'sponsorship'
+                  ? 'border-primary-300 text-primary-300'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
+              }`}
+            >
+              Sponsorship
+            </button>
+            <button
               onClick={() => setActiveTab('ats')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'ats'
@@ -883,6 +894,10 @@ const Admin: React.FC = () => {
 
         {activeTab === 'pricing' && (
           <AdminResumePlans />
+        )}
+
+        {activeTab === 'sponsorship' && (
+          <AdminSponsorshipAnalytics />
         )}
 
         {activeTab === 'ats' && (
