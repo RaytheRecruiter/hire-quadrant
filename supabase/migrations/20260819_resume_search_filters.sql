@@ -84,7 +84,7 @@ as $$
     )
     and (p_query is null or c.headline ilike '%' || p_query || '%'
          or c.resume_text ilike '%' || p_query || '%'
-         or c.name ilike '%' || p_query || '%'
+         or up.name ilike '%' || p_query || '%'
          or c.current_title ilike '%' || p_query || '%')
     and (p_location is null or c.location ilike '%' || p_location || '%')
     and (p_min_years is null or c.years_experience >= p_min_years)
