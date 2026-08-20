@@ -66,7 +66,7 @@ security definer
 set search_path = public
 as $$
   select
-    c.user_id, c.name, c.email, c.location, c.headline, c.skills,
+    c.user_id, up.name, c.email, c.location, c.headline, c.skills,
     c.years_experience, c.resume_url, c.current_title, c.certifications, c.resume_parsed_at,
     jp.desired_salary_min, jp.desired_salary_max, jp.work_authorization, jp.workplace_types, jp.work_types,
     case
@@ -76,6 +76,7 @@ as $$
     end as distance_miles
   from candidates c
   left join user_job_preferences jp on jp.user_id = c.user_id
+  left join user_profiles up on up.id = c.user_id
   where c.open_to_work = true
     and exists (
       select 1 from user_profiles up
