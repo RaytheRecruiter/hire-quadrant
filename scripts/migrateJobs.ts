@@ -1,9 +1,36 @@
 // scripts/migrateJobs.ts
+//
+// Rewritten 2026-09-21 to loop over multiple ingestion sources (JobDiva XML
+// plus Greenhouse/Lever/Ashby/SmartRecruiters — see src/utils/jobSources/)
+// instead of a single hardcoded XML feed. Each source is wrapped in its own
+// try/catch so one platform being down/rate-limited never blocks the others.
+//
+// Also fixes two confirmed-live bugs while this file was being rewritten
+// anyway (see supabase/migrations/20260921_consolidate_job_source_columns.sql):
+//   1. This script now reads/writes the tracked snake_case columns
+//      (source_company, source_xml_file, external_job_id, external_url,
+//      posted_date) that CompanySourceManager.tsx/Admin.tsx/useAdminData.ts
+//      actually read, instead of an untracked camelCase set nothing else
+//      in the app ever consumed.
+//   2. Company linkage now goes through resolveCompanyId() (case-insensitive
+//      match + auto-create) instead of a case-sensitive exact match that
+//      left ~90% of jobs with company_id = null.
+//
+// Stale-job deletion is now scoped per source (`source_xml_file = <id>`)
+// rather than a single global sweep — syncing one platform can no longer
+// delete another platform's jobs. jobs.id (PK) is namespaced per platform
+// (`${platform}:${token}:${rawId}`) for the 4 new sources to make
+// cross-platform ID collisions structurally impossible; JobDiva keeps its
+// original unprefixed IDs unchanged for backward compatibility with
+// existing links/bookmarks.
+
 import dotenv from 'dotenv';
 import path from 'path';
-import { createClient } from '@supabase/supabase-js';
-import { fetchAndParseJobsXmlWithSources, XmlSource } from '../src/utils/xmlParser';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { deriveJobCategory } from '../src/utils/deriveJobCategory';
+import { buildJobSourceAdapters } from '../src/utils/jobSources/sourceConfig';
+import { resolveCompanyId, CompanyIdCache } from '../src/utils/jobSources/resolveCompany';
+import { JobSourceAdapter, NormalizedJob } from '../src/utils/jobSources/types';
 
 // Load environment variables from supabaseapi.env file
 dotenv.config({ path: path.resolve(process.cwd(), 'supabaseapi.env') });
@@ -11,22 +38,6 @@ dotenv.config({ path: path.resolve(process.cwd(), 'supabaseapi.env') });
 // supabaseapi.env — load it too so geocoding below has a token. dotenv
 // doesn't override already-set vars, so this only fills in what's missing.
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
-
-// --- IMPORTANT: Job Type Definition ---
-interface Job {
-    id: string; // This is the unique identifier for the job, to be used as the primary key
-    title: string;
-    description: string;
-    externalJobId: string; // Original ID from the source XML
-    externalUrl?: string; // Link to the original posting
-    postedDate: string; // Supabase stores timestamps as strings
-    sourceCompany: string; // Company that provided the job
-    sourceXmlFile?: string; // Original XML file
-    company?: string;
-    location?: string;
-    type?: string;
-    salary?: string;
-}
 
 // Best-effort geocoding for jobs.lat/lng, mirroring src/utils/geocode.ts
 // (which is browser-only and can't be reused directly from this Node
@@ -110,146 +121,137 @@ const getSupabaseClient = () => {
     });
 };
 
-// Main function to fetch, parse, and migrate jobs
+// JobDiva keeps its original unprefixed externalJobId as the PK, unchanged,
+// for backward compatibility with existing links/bookmarks. The 4 new ATS
+// sources get a namespaced PK so the same numeric/opaque ID from two
+// different platforms can never collide.
+function buildJobId(adapter: JobSourceAdapter, job: NormalizedJob): string {
+    return adapter.platform === 'jobdiva' ? job.externalJobId : `${adapter.id}:${job.externalJobId}`;
+}
+
+async function processSource(
+    supabase: SupabaseClient,
+    adapter: JobSourceAdapter,
+    existingGeoById: Map<string, { lat: number | null; lng: number | null }>,
+    companyIdCache: CompanyIdCache,
+) {
+    console.log(`--- [${adapter.id}] Fetching jobs ---`);
+    const jobs = await adapter.fetchJobs();
+    console.log(`--- [${adapter.id}] Fetched ${jobs.length} jobs ---`);
+
+    if (jobs.length === 0) {
+        console.log(`--- [${adapter.id}] No jobs returned, skipping upsert and stale-delete ---`);
+        return;
+    }
+
+    const rows = await Promise.all(jobs.map(async (job) => {
+        const id = buildJobId(adapter, job);
+
+        const existing = existingGeoById.get(id);
+        const { lat, lng } = existing?.lat != null && existing?.lng != null
+            ? { lat: existing.lat, lng: existing.lng }
+            : await geocodeJobLocation(job.location);
+
+        const company_id = job.company ? await resolveCompanyId(supabase, job.company, companyIdCache) : null;
+
+        return {
+            id,
+            external_job_id: job.externalJobId,
+            title: job.title,
+            description: job.description,
+            external_url: job.externalUrl,
+            posted_date: job.postedDate,
+            source_company: job.sourceCompany,
+            source_xml_file: job.sourceXmlFile,
+            company: job.company,
+            company_id,
+            location: job.location,
+            lat,
+            lng,
+            type: job.type,
+            salary: job.salary,
+            category: deriveJobCategory(job.title),
+        };
+    }));
+
+    const { error: upsertError } = await supabase
+        .from('jobs')
+        .upsert(rows, { onConflict: 'id' });
+
+    if (upsertError) {
+        console.error(`[${adapter.id}] Supabase upsert error:`, upsertError);
+        return;
+    }
+    console.log(`[${adapter.id}] Successfully upserted ${rows.length} jobs.`);
+
+    // Scoped stale-delete: only jobs previously ingested from THIS source
+    // and no longer present in today's fetch are removed. Never touches
+    // jobs from any other source.
+    const { data: existingForSource, error: fetchError } = await supabase
+        .from('jobs')
+        .select('id')
+        .eq('source_xml_file', adapter.id);
+
+    if (fetchError) {
+        console.error(`[${adapter.id}] Error fetching existing jobs for stale-delete:`, fetchError);
+        return;
+    }
+
+    const currentIds = new Set(rows.map((r) => r.id));
+    const staleIds = (existingForSource ?? [])
+        .map((r) => r.id as string)
+        .filter((id) => !currentIds.has(id));
+
+    if (staleIds.length === 0) {
+        console.log(`[${adapter.id}] No stale jobs to delete.`);
+        return;
+    }
+
+    const { error: deleteError } = await supabase
+        .from('jobs')
+        .delete()
+        .in('id', staleIds);
+
+    if (deleteError) {
+        console.error(`[${adapter.id}] Supabase delete error:`, deleteError);
+    } else {
+        console.log(`[${adapter.id}] Deleted ${staleIds.length} stale jobs.`);
+    }
+}
+
 async function migrateJobs() {
     console.log('--- Migration script started ---');
     const supabase = getSupabaseClient();
 
-    const xmlSources: XmlSource[] = [
-        { url: 'https://www2.jobdiva.com/candidates/myjobs/getportaljobs.jsp?a=ecjdnwoxsqkabbr23rp3rqscjzk6vq01b8i9xsuraltku3dg8lqd5euflfugmd70', name: 'hirequadrant.xml' },
-    ];
+    // Only geocode jobs that don't already have lat/lng — skips the
+    // Mapbox call entirely on repeat runs, and (just as importantly)
+    // never clobbers a value that was manually corrected in the DB
+    // (see 20260813_backfill_job_geocoding.sql). Loaded once up front and
+    // shared across every source below.
+    const { data: existingGeo } = await supabase
+        .from('jobs')
+        .select('id, lat, lng');
+    const existingGeoById = new Map(
+        ((existingGeo ?? []) as Array<{ id: string; lat: number | null; lng: number | null }>)
+            .map((r) => [r.id, r]),
+    );
 
-    let allJobs: Job[] = [];
-    try {
-        allJobs = await fetchAndParseJobsXmlWithSources(xmlSources);
-        console.log(`Total jobs from all XML files: ${allJobs.length}`);
-        console.log('--- Successfully fetched and parsed all jobs from XML sources ---');
-    } catch (error) {
-        console.error('Error fetching or parsing XML files:', error);
-        return;
-    }
+    // Shared across all sources so the same company name (e.g. a repeat
+    // employer posting on both Greenhouse and Lever) only round-trips to
+    // the DB once per run.
+    const companyIdCache: CompanyIdCache = new Map();
 
-    if (allJobs.length === 0) {
-      console.log('No jobs found in XML files. Exiting migration.');
-      return;
-    }
+    const adapters = buildJobSourceAdapters();
 
-    try {
-        console.log('--- Attempting to upsert jobs to Supabase ---');
-
-        // Map job.company (string) → companies.id so Browse Companies
-        // counts include externally-ingested jobs. Without this each
-        // JobDiva job lands with company_id = NULL and is invisible to
-        // the public_company_directory view (Ray QA 2026-05-20).
-        const distinctCompanyNames = Array.from(
-            new Set(allJobs.map((j) => j.company?.trim()).filter(Boolean) as string[])
-        );
-        const companyIdByName = new Map<string, string>();
-        if (distinctCompanyNames.length > 0) {
-            const { data: companyRows, error: cErr } = await supabase
-                .from('companies')
-                .select('id, name')
-                .in('name', distinctCompanyNames);
-            if (cErr) console.error('Could not load companies for FK linkage:', cErr);
-            else if (companyRows) {
-                for (const c of companyRows as Array<{ id: string; name: string }>) {
-                    companyIdByName.set(c.name.trim().toLowerCase(), c.id);
-                }
-            }
+    for (const adapter of adapters) {
+        try {
+            await processSource(supabase, adapter, existingGeoById, companyIdCache);
+        } catch (error) {
+            console.error(`[${adapter.id}] Unexpected error, skipping this source:`, error);
         }
-
-        // Only geocode jobs that don't already have lat/lng — skips the
-        // Mapbox call entirely on repeat runs, and (just as importantly)
-        // never clobbers a value that was manually corrected in the DB
-        // (see 20260813_backfill_job_geocoding.sql).
-        const { data: existingGeo } = await supabase
-            .from('jobs')
-            .select('externalJobId, lat, lng');
-        const existingGeoById = new Map(
-            ((existingGeo ?? []) as Array<{ externalJobId: string; lat: number | null; lng: number | null }>)
-                .map((r) => [r.externalJobId, r]),
-        );
-
-        console.log('--- Geocoding new job locations ---');
-        const jobsToUpsert = await Promise.all(allJobs.map(async (job) => {
-            const existing = existingGeoById.get(job.externalJobId);
-            const { lat, lng } = existing?.lat != null && existing?.lng != null
-                ? { lat: existing.lat, lng: existing.lng }
-                : await geocodeJobLocation(job.location);
-            return {
-                id: job.externalJobId, // Use the externalJobId as the primary key
-                externalJobId: job.externalJobId,
-                title: job.title,
-                description: job.description,
-                externalUrl: job.externalUrl,
-                postedDate: job.postedDate,
-                sourceCompany: job.sourceCompany,
-                sourceXmlFile: job.sourceXmlFile,
-                company: job.company,
-                company_id: job.company ? companyIdByName.get(job.company.trim().toLowerCase()) ?? null : null,
-                location: job.location,
-                lat,
-                lng,
-                type: job.type,
-                salary: job.salary,
-                category: deriveJobCategory(job.title),
-            };
-        }));
-        console.log(`--- Geocoded ${geocodeCache.size} unique locations ---`);
-
-        const { data, error } = await supabase
-            .from('jobs')
-            .upsert(jobsToUpsert, { onConflict: 'externalJobId' });
-
-        if (error) {
-            console.error('Supabase upsert error:', error);
-        } else {
-            console.log(`Successfully upserted ${jobsToUpsert.length} jobs to Supabase.`);
-        }
-    } catch (error: any) {
-        console.error('An unexpected error occurred during the upsert process:', error);
     }
 
-    try {
-        console.log('--- Deleting stale jobs from Supabase ---');
-
-        const { data: existingJobs, error: fetchError } = await supabase
-            .from('jobs')
-            .select('externalJobId');
-
-        if (fetchError) {
-            console.error('Error fetching existing jobs for deletion:', fetchError);
-        } else if (existingJobs) {
-            const existingDbJobIds = new Set(existingJobs.map(job => job.externalJobId));
-            const currentXmlJobIds = new Set(allJobs.map(job => job.externalJobId));
-
-            const jobIdsToDelete: string[] = [];
-            for (const dbId of existingDbJobIds) {
-                if (!currentXmlJobIds.has(dbId)) {
-                    jobIdsToDelete.push(dbId);
-                }
-            }
-
-            if (jobIdsToDelete.length > 0) {
-                console.log(`Identified ${jobIdsToDelete.length} stale jobs to delete.`);
-                const { error: deleteError } = await supabase
-                    .from('jobs')
-                    .delete()
-                    .in('externalJobId', jobIdsToDelete);
-
-                if (deleteError) {
-                    console.error('Supabase delete error:', deleteError);
-                } else {
-                    console.log(`Successfully deleted ${jobIdsToDelete.length} stale jobs from Supabase.`);
-                }
-            } else {
-                console.log('No stale jobs found to delete. Database is synchronized.');
-            }
-        }
-    } catch (error: any) {
-        console.error('An unexpected error occurred during job deletion process:', error);
-    }
-
+    console.log(`--- Geocoded ${geocodeCache.size} unique locations this run ---`);
     console.log('--- Migration script finished ---');
 }
 
