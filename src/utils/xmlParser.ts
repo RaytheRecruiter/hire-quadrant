@@ -495,8 +495,12 @@ export const fetchAndParseJobsXmlWithSources = async (xmlSources: XmlSource[]): 
  * Strip HTML tags from text content
  * @param html - HTML string to clean
  * @returns Clean text without HTML tags
+ *
+ * Exported (2026-09-21) so the Greenhouse/Lever/Ashby/SmartRecruiters
+ * adapters in src/utils/jobSources/ can reuse the exact same HTML→text
+ * conversion instead of reimplementing it per platform.
  */
-const stripHtmlTags = (html: string): string => {
+export const stripHtmlTags = (html: string): string => {
   if (!html) return '';
 
   let text = html
@@ -510,6 +514,10 @@ const stripHtmlTags = (html: string): string => {
     .replace(/<[^>]*>/g, ' ')
     // Replace HTML entities with their actual characters
     .replace(/&nbsp;/g, ' ')
+    // &#xa0; / &#160; (hex/decimal non-breaking space) — seen in
+    // SmartRecruiters job descriptions, added 2026-09-21
+    .replace(/&#xa0;/gi, ' ')
+    .replace(/&#160;/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
@@ -534,7 +542,7 @@ const stripHtmlTags = (html: string): string => {
  * @param description - Raw description text
  * @returns Formatted description with proper line breaks
  */
-const formatJobDescription = (description: string): string => {
+export const formatJobDescription = (description: string): string => {
   if (!description) return '';
 
   return description
