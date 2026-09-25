@@ -6,8 +6,8 @@ import { useSavedJobs } from '../hooks/useSavedJobs';
 import { useJobMatchScore } from '../hooks/useJobMatchScore';
 import { Job } from '../contexts/JobContext';
 import { MapPin, DollarSign, Bookmark, BookmarkCheck, Zap, CheckCircle, Clock, Flame } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
+import { formatPostedDate } from '../utils/formatPostedDate';
 import CompanyLogo from './CompanyLogo';
 import HardLink from './HardLink';
 import { extractTags } from '../utils/skillExtractor';
@@ -167,7 +167,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                     <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-50 dark:border-slate-700">
                         <span className="flex items-center gap-1 text-xs text-gray-400 dark:text-slate-500">
                             <Clock className="h-3 w-3" />
-                            Posted {formatDistanceToNow(new Date(job.postedDate), { addSuffix: true })}
+                            Posted {formatPostedDate(job)}
                         </span>
 
                         <div className="flex items-center gap-2">
@@ -206,7 +206,7 @@ export default React.memo(JobCard, (prev, next) => {
     if (prev.job.min_salary !== next.job.min_salary) return false;
     if (prev.job.max_salary !== next.job.max_salary) return false;
     if (prev.job.description !== next.job.description) return false;
-    if (prev.job.postedDate !== next.job.postedDate) return false;
+    if (prev.job.posted_date !== next.job.posted_date) return false;
     if ((prev.job.screening_questions?.length ?? 0) !== (next.job.screening_questions?.length ?? 0)) return false;
     return true;
 });

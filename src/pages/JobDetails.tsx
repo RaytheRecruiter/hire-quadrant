@@ -8,8 +8,8 @@ import { useSavedJobs } from '../hooks/useSavedJobs';
 import { useJobMatchScore } from '../hooks/useJobMatchScore';
 import { supabase } from '../utils/supabaseClient';
 import { MapPin, Calendar, Clock, ArrowLeft, CheckCircle, DollarSign, Bookmark, BookmarkCheck, Share2 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
+import { formatPostedDate } from '../utils/formatPostedDate';
 import RelatedJobs from '../components/RelatedJobs';
 import RecentlyViewedJobs from '../components/RecentlyViewedJobs';
 import { CareerGrowthPaths } from '../components/CareerGrowthPaths';
@@ -77,7 +77,7 @@ const buildJobSchema = (job: any, url: string) => {
         '@type': 'JobPosting',
         title: job.title,
         description: job.description,
-        datePosted: job.postedDate || job.posted_date,
+        datePosted: job.posted_date || job.postedDate,
         employmentType: (job.type || '').toUpperCase().replace('-', '_') || 'FULL_TIME',
         hiringOrganization: { '@type': 'Organization', name: job.company || 'HireQuadrant' },
         directApply: true,
@@ -464,7 +464,7 @@ const JobDetails: React.FC = () => {
                                     )}
                                     <span className="flex items-center gap-1 text-secondary-500">
                                         <Calendar className="h-3.5 w-3.5" />
-                                        {formatDistanceToNow(new Date(job.postedDate), { addSuffix: true })}
+                                        {formatPostedDate(job)}
                                     </span>
                                 </div>
 
@@ -557,7 +557,7 @@ const JobDetails: React.FC = () => {
                         <JobReferralShare
                             jobId={job.id}
                             jobTitle={job.title}
-                            companyName={job.company ?? job.sourceCompany ?? ''}
+                            companyName={job.company ?? job.source_company ?? job.sourceCompany ?? ''}
                         />
                     </div>
                 </div>

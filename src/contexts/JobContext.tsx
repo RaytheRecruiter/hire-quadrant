@@ -34,10 +34,21 @@ export interface Job {
     id: string;
     title: string;
     description: string;
-    externalJobId: string;
+    // Tracked (snake_case) columns -- what the DB actually returns as of
+    // supabase/migrations/20260921_consolidate_job_source_columns.sql.
+    external_job_id?: string;
+    external_url?: string;
+    posted_date?: string | null;
+    source_company?: string;
+    source_xml_file?: string;
+    // Legacy camelCase fields, kept optional for any code paths that still
+    // construct a Job object in-memory (e.g. XMLFeederAdmin's preview).
+    // The DB no longer has these columns, so a row fetched from Supabase
+    // will never populate them -- always prefer the snake_case fields above.
+    externalJobId?: string;
     externalUrl?: string;
-    postedDate: string;
-    sourceCompany: string;
+    postedDate?: string;
+    sourceCompany?: string;
     sourceXmlFile?: string;
     company?: string;
     company_logo_url?: string | null;
