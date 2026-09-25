@@ -103,7 +103,7 @@ export const useRecommendedJobs = (limit = 6) => {
 
         // === RECENCY BONUS ===
         const daysOld = Math.floor(
-          (Date.now() - new Date(job.postedDate).getTime()) / (1000 * 60 * 60 * 24)
+          (Date.now() - new Date(job.posted_date || job.postedDate || 0).getTime()) / (1000 * 60 * 60 * 24)
         );
         if (daysOld < 7) matchScore += 20;
         else if (daysOld < 14) matchScore += 10;

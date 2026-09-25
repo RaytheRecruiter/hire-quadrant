@@ -767,7 +767,7 @@ const Home: React.FC = () => {
                     {job.title}
                   </h3>
                   <p className="text-sm text-secondary-600 dark:text-slate-400 mb-3 font-medium">
-                    {job.company || job.sourceCompany}
+                    {job.company || job.source_company || job.sourceCompany}
                   </p>
                   <div className="flex flex-col gap-2">
                     {job.location && (
