@@ -10,6 +10,41 @@ import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 import { ROLE_LABEL } from '../utils/permissions';
 
+// Notify the company's owner(s) that a new user joined the account -- see
+// supabase/migrations/20260928_notify_owner_on_member_added.sql for the
+// SECURITY DEFINER RPC this depends on. Failure is non-fatal: the member
+// has already been added successfully by this point, this is just a
+// best-effort security alert on top of that.
+async function notifyOwnersOfNewMember(companyId: string, memberEmail: string, roleLabel: string, companyName: string) {
+  try {
+    const { data: owners, error } = await supabase.rpc('get_company_owner_emails', { p_company_id: companyId });
+    if (error || !owners || owners.length === 0) return;
+
+    const url = import.meta.env.VITE_SUPABASE_URL as string;
+    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+    const teamMembersUrl = `${window.location.origin}/company-dashboard/team`;
+
+    await Promise.all((owners as Array<{ email: string }>).map((o) =>
+      fetch(`${url}/functions/v1/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${anonKey}`,
+          apikey: anonKey,
+        },
+        body: JSON.stringify({
+          to: o.email,
+          subject: `New user added to your ${companyName} account`,
+          template: 'team_member_added',
+          variables: { companyName, memberEmail, roleLabel, teamMembersUrl },
+        }),
+      }).catch(() => {}),
+    ));
+  } catch {
+    // Best-effort only -- never block the accept flow on this.
+  }
+}
+
 type InviteSummary = {
   id: string;
   company_id: string;
@@ -89,6 +124,8 @@ const AcceptInvite: React.FC = () => {
       return;
     }
     toast.success('Welcome to the team');
+    const companyLabel = company?.display_name || company?.name || 'the company';
+    void notifyOwnersOfNewMember(invite!.company_id, invite!.email, ROLE_LABEL[invite!.role], companyLabel);
     navigate('/company-dashboard');
   };
 

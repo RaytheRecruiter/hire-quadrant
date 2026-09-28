@@ -93,6 +93,34 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
       </html>
     `,
 
+    // Sent to a company account owner whenever a new user joins the
+    // account (accept_company_invite succeeds) -- security alert pattern
+    // per Ray 2026-09-28, modeled on ZipRecruiter's "New User Added to
+    // Your Account" email.
+    team_member_added: (v) => `
+      <!DOCTYPE html>
+      <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: sans-serif; color: #333; max-width: 560px; margin: 0 auto;">
+          <h1>New user added to your account</h1>
+          <p>The following email address has been added as a <strong>${v.roleLabel}</strong> on your ${v.companyName} account on HireQuadrant:</p>
+          <p style="margin: 20px 0; padding: 14px 18px; background: #f5f7fa; border-radius: 6px; font-weight: 600;">
+            ${v.memberEmail}
+          </p>
+          <p style="margin: 24px 0;">
+            <a href="${v.teamMembersUrl}" style="background: #0035ff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+              Review team members
+            </a>
+          </p>
+          <p style="color: #666; font-size: 13px;">
+            If you didn't expect this, review your team roster and remove access immediately.
+          </p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 24px 0;">
+          <p style="font-size: 12px; color: #666;">© 2026 HireQuadrant</p>
+        </body>
+      </html>
+    `,
+
     weekly_digest: (v) => `
       <!DOCTYPE html>
       <html>
