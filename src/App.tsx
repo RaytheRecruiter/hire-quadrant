@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
@@ -133,7 +133,9 @@ function App() {
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/help" element={<Support />} />
                 <Route path="/advanced-search" element={<AdvancedSearch />} />
-                <Route path="/career" element={<CareerPath />} />
+                {/* Career Paths hidden 2026-09-28 per Ray -- broken AI helper
+                    (Anthropic credits), feature being rebuilt separately. */}
+                <Route path="/career" element={<Navigate to="/" replace />} />
                 <Route path="/companies" element={<Companies />} />
                 <Route path="/companies/industry/:industrySlug" element={<IndustryPage />} />
                 <Route path="/jobs/location/:locationSlug" element={<LocationPage />} />
@@ -141,7 +143,7 @@ function App() {
                 <Route path="/best/:categorySlug" element={<BestCompaniesPage />} />
                 <Route path="/interview-prep/:roleSlug" element={<InterviewPrepPage />} />
                 <Route path="/guide/:industrySlug" element={<IndustryGuidePage />} />
-                <Route path="/career/from/:fromSlug/to/:toSlug" element={<CareerTransitionPage />} />
+                <Route path="/career/from/:fromSlug/to/:toSlug" element={<Navigate to="/" replace />} />
                 <Route path="/talent-search" element={<ResumeSearch />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />

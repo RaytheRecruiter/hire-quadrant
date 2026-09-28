@@ -86,7 +86,10 @@ const Header: React.FC = () => {
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1">
             <HardLink to="/jobs" onClick={handleJobsClick} className={navClass('/jobs')}>Jobs</HardLink>
-            <HardLink to="/career" className={navClass('/career')}>Career Paths</HardLink>
+            {/* Career Paths nav link hidden 2026-09-28 per Ray -- the AI helper
+                backing it is broken (Anthropic credits) and the whole feature
+                area is being rebuilt separately. Route below still redirects
+                home so old links/bookmarks don't hit the broken page. */}
             <HardLink to="/companies" className={navClass('/companies')}>Companies</HardLink>
             <button
               type="button"
