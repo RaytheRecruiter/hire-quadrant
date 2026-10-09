@@ -115,6 +115,9 @@ export function createSmartRecruitersAdapter(companyId: string, displayName: str
           postedDate: detail.releasedDate || new Date().toISOString(),
           sourceCompany: `SmartRecruiters: ${displayName}`,
           sourceXmlFile: sourceId,
+          // SmartRecruiters exposes a proper ISO 3166-1 alpha-2 code
+          // directly, lowercase (e.g. "us").
+          country: detail.location?.country?.toUpperCase(),
         });
 
         await sleep(DETAIL_DELAY_MS);

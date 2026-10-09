@@ -92,6 +92,18 @@ function isBulletLine(line: string): boolean {
   return /^[\u2022\u2023\u25E6\u2043\u2219•\-\*]\s+/.test(line) || /^\d+[\.\)]\s+/.test(line);
 }
 
+// JobDiva's plain-text feed puts one duty/requirement per line with no
+// bullet marker at all (confirmed live 2026-10-09, job 26-02208's DUTIES/
+// MUST sections) -- single newlines, no blank lines between items. Without
+// this, every line in a Key Responsibilities / Required Qualifications
+// section falls through to the paragraph path and gets joined with spaces
+// into one unbroken wall of text. Sections that read as prose (overview,
+// ideal candidate, other) keep the paragraph-joining behavior; these
+// list-shaped sections treat every non-blank line as its own bullet.
+function isListSection(kind: SectionKind): boolean {
+  return kind === 'responsibilities' || kind === 'required' || kind === 'preferred' || kind === 'skills';
+}
+
 function stripBulletMarker(line: string): string {
   return line.replace(/^[\u2022\u2023\u25E6\u2043\u2219•\-\*]\s*/, '').replace(/^\d+[\.\)]\s*/, '').trim();
 }
@@ -169,6 +181,12 @@ export function parseJobDescription(raw: string | null | undefined): Section[] {
       flushParagraph();
       const text = stripBulletMarker(line);
       if (text) current.bullets.push(text);
+      continue;
+    }
+
+    if (isListSection(current.kind)) {
+      flushParagraph();
+      current.bullets.push(line);
       continue;
     }
 

@@ -8,6 +8,10 @@ export interface AdvancedFilters {
   visaSponsor: boolean;
   securityClearance: string;
   minSalary: number;
+  // Per Ray 2026-10-09: multi-ATS ingestion pulls in jobs posted outside the
+  // US (OCONUS), and most visitors only want domestic roles. Default false
+  // (US-only); checking it opts back in to international postings too.
+  includeOconus: boolean;
 }
 
 export const DEFAULT_ADVANCED_FILTERS: AdvancedFilters = {
@@ -17,6 +21,7 @@ export const DEFAULT_ADVANCED_FILTERS: AdvancedFilters = {
   visaSponsor: false,
   securityClearance: '',
   minSalary: 0,
+  includeOconus: false,
 };
 
 const EXPERIENCE_LEVELS = [
@@ -67,7 +72,8 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
     (value.postedWithinDays > 0 ? 1 : 0) +
     (value.visaSponsor ? 1 : 0) +
     (value.securityClearance ? 1 : 0) +
-    (value.minSalary > 0 ? 1 : 0);
+    (value.minSalary > 0 ? 1 : 0) +
+    (value.includeOconus ? 1 : 0);
 
   return (
     <aside
@@ -152,6 +158,16 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
             className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
           />
           <span className="text-sm text-gray-700 dark:text-slate-300">Visa sponsorship</span>
+        </label>
+
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={value.includeOconus}
+            onChange={(e) => onChange({ includeOconus: e.target.checked })}
+            className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+          />
+          <span className="text-sm text-gray-700 dark:text-slate-300">Include international (OCONUS)</span>
         </label>
       </div>
     </aside>

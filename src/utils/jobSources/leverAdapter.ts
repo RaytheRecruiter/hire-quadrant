@@ -50,6 +50,8 @@ export function createLeverAdapter(site: string, displayName: string): JobSource
           postedDate: new Date(posting.createdAt).toISOString(),
           sourceCompany: `Lever: ${displayName}`,
           sourceXmlFile: sourceId,
+          // Lever exposes a proper ISO 3166-1 alpha-2 code directly.
+          country: posting.country?.toUpperCase(),
         };
       });
     },

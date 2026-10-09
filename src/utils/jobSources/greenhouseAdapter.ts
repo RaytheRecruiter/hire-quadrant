@@ -26,6 +26,42 @@ function decodeHtmlEntities(text: string): string {
     .replace(/&#x27;/g, "'");
 }
 
+// Greenhouse's public board API exposes no structured country field at
+// all -- location.name is free text ("US-San Francisco, US-Seattle",
+// "Dublin or Germany (Berlin or Remote)", "Chicago, IL", "Toronto, Canada",
+// bare "Chicago"), confirmed by sampling 289 distinct values on the Stripe
+// board 2026-10-09. A perfect classifier isn't realistic; this is a
+// pragmatic heuristic for the Browse Jobs "US-only by default" filter --
+// if a location string contains ANY recognizable US marker, treat it as US
+// (a posting listing a US option among others is legitimately relevant to
+// a US-only view). Only fall through to the non-US list when no US marker
+// matched at all. Anything matching neither list is left undefined
+// (unfiltered by country) rather than guessed.
+const US_STATE_ABBR = [
+  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
+  'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK',
+  'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC',
+];
+const US_STATE_RE = new RegExp(`\\b(${US_STATE_ABBR.join('|')})\\b`);
+const US_CITY_RE =
+  /\b(san francisco|new york|seattle|chicago|atlanta|boston|austin|los angeles|denver|miami|dallas|houston|phoenix|philadelphia|san diego|portland|minneapolis|detroit|sf|nyc|sea|chi|dc)\b/i;
+
+const NON_US_MARKER_RE =
+  /\b(dublin|london|singapore|sydney|melbourne|tokyo|toronto|vancouver|paris|berlin|munich|milan|madrid|barcelona|mexico city|amsterdam|warsaw|bucharest|stockholm|zurich|geneva|bangalore|mumbai|delhi|hong kong|shanghai|beijing|ireland|united kingdom|\buk\b|england|germany|france|italy|spain|poland|romania|sweden|japan|israel|canada|australia|india|china|mexico|brazil|netherlands|switzerland)\b/i;
+
+function guessGreenhouseCountry(locationName: string | undefined): string | undefined {
+  if (!locationName) return undefined;
+  const text = locationName.toLowerCase();
+  const hasUSMarker =
+    /\bus-/i.test(locationName) ||
+    /united states|\busa\b|remote from the us/i.test(text) ||
+    US_STATE_RE.test(locationName) ||
+    US_CITY_RE.test(text);
+  if (hasUSMarker) return 'US';
+  if (NON_US_MARKER_RE.test(text)) return undefined; // known non-US -- leave undefined, not 'US'
+  return undefined;
+}
+
 interface GreenhouseJob {
   id: number;
   title: string;
@@ -68,6 +104,7 @@ export function createGreenhouseAdapter(boardToken: string, displayName: string)
           postedDate: job.updated_at,
           sourceCompany: `Greenhouse: ${displayName}`,
           sourceXmlFile: sourceId,
+          country: guessGreenhouseCountry(job.location?.name),
         };
       });
     },

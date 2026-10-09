@@ -19,6 +19,23 @@ interface AshbyJob {
   jobUrl?: string;
   applyUrl?: string;
   descriptionHtml?: string;
+  address?: { postalAddress?: { addressCountry?: string } };
+}
+
+// Ashby's address.postalAddress.addressCountry is a full country name
+// ("United States"), not an ISO code -- map the handful of names actually
+// worth distinguishing for the US-only Browse Jobs filter. Anything not in
+// this map is left undefined (unfiltered by country) rather than guessed.
+const COUNTRY_NAME_TO_CODE: Record<string, string> = {
+  'united states': 'US',
+  'united states of america': 'US',
+  usa: 'US',
+};
+
+function resolveAshbyCountry(job: AshbyJob): string | undefined {
+  const name = job.address?.postalAddress?.addressCountry?.trim().toLowerCase();
+  if (!name) return undefined;
+  return COUNTRY_NAME_TO_CODE[name];
 }
 
 interface AshbyResponse {
@@ -52,6 +69,7 @@ export function createAshbyAdapter(boardName: string, displayName: string): JobS
           postedDate: job.publishedAt || new Date().toISOString(),
           sourceCompany: `Ashby: ${displayName}`,
           sourceXmlFile: sourceId,
+          country: resolveAshbyCountry(job),
         };
       });
     },
