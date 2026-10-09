@@ -7,10 +7,19 @@ export const generateSlug = (title: string, company: string, id?: string): strin
     .replace(/-+/g, '-') // Replace multiple hyphens with single
     .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
 
-  // Add ID suffix for uniqueness (short 8-char version)
+  // Add the full ID as a suffix for uniqueness. Previously truncated to the
+  // first 8 characters, which worked when every ID was a short, distinct
+  // string (JobDiva's "26-02208" etc.) but broke once multi-ATS ingestion
+  // introduced namespaced IDs like "greenhouse:stripe:8227563" -- EVERY job
+  // from the same platform shares the same first 8 characters ("greenhou"
+  // for all ~700 Greenhouse jobs), so same-titled postings collided onto
+  // the identical slug and JobDetails.tsx's prefix lookup could resolve to
+  // the wrong job. Confirmed 2026-10-09 via audit N11. The full ID has no
+  // such collision, and JobDetails.tsx's lookup cascade already handles
+  // longer/hyphen-containing suffixes correctly (it's how "ui-{uuid}" ids
+  // already worked before this fix).
   if (id) {
-    const shortId = id.substring(0, 8);
-    return `${slugBase}-${shortId}`;
+    return `${slugBase}-${id}`;
   }
 
   return slugBase;
