@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Shield, ShieldCheck, Loader2, Copy, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
+import QRCode from 'qrcode';
 import { supabase } from '../../utils/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 import {
@@ -32,9 +33,29 @@ const TwoFactorPanel: React.FC = () => {
     return otpauthUri(secret, user.email);
   }, [pendingSecret, factor?.secret, user?.email]);
 
-  const qrUrl = useMemo(() => {
-    if (!otpauth) return null;
-    return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(otpauth)}&size=200x200`;
+  // Rendered locally (never sent to a third party) -- otpauth embeds the raw
+  // TOTP secret, and the previous implementation sent it to api.qrserver.com
+  // as a URL query param on every page load, where it would sit in that
+  // service's server logs and anyone's browser history. Confirmed 2026-10-09
+  // via security audit; qrcode draws directly to a canvas client-side with
+  // zero network calls.
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!otpauth) {
+      setQrDataUrl(null);
+      return;
+    }
+    let cancelled = false;
+    QRCode.toDataURL(otpauth, { width: 200, margin: 1 })
+      .then((url) => {
+        if (!cancelled) setQrDataUrl(url);
+      })
+      .catch(() => {
+        if (!cancelled) setQrDataUrl(null);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [otpauth]);
 
   useEffect(() => {
@@ -173,9 +194,9 @@ const TwoFactorPanel: React.FC = () => {
             1. Scan this QR in your authenticator app (Google Authenticator, 1Password, Authy).
             2. Enter the 6-digit code it shows.
           </p>
-          {qrUrl && (
+          {qrDataUrl && (
             <img
-              src={qrUrl}
+              src={qrDataUrl}
               alt="TOTP QR code"
               className="w-44 h-44 mx-auto mb-3 rounded-lg border border-gray-100 dark:border-slate-700 bg-white"
             />
