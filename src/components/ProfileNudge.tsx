@@ -1,55 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Sparkles, X } from 'lucide-react';
-import { supabase } from '../utils/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
+import { useProfileCompleteness } from '../hooks/useProfileCompleteness';
+import { computeProfileScore } from './profile/ProfileCompletenessScore';
 
-// Shows a banner if a candidate is missing key profile fields (resume, location, top skills).
-// Dismissal is persisted per session via sessionStorage. Re-checks fire on user change
-// or when a 'profile-updated' event is dispatched by ProfilePage after a save.
+// Shows a banner if a candidate's profile isn't 100% complete per the same
+// weighted formula used everywhere else (see computeProfileScore). Used to
+// run its own narrower 3-field check (resume/location/top skills, equally
+// weighted) that could show a completely different percentage than the
+// "Profile strength" widget elsewhere for the exact same profile --
+// confirmed live 2026-10-09 (audit N16) as a real, confusing discrepancy.
+// Dismissal is persisted per session via sessionStorage.
 const ProfileNudge: React.FC = () => {
   const { user, isCompany, isAdmin } = useAuth();
-  const [missing, setMissing] = useState<string[] | null>(null);
   const [dismissed, setDismissed] = useState(() => sessionStorage.getItem('profile-nudge-dismissed') === 'true');
+  const { inputs, loading } = useProfileCompleteness();
+  const { score: completion, next } = computeProfileScore(inputs);
 
-  const check = useCallback(async () => {
-    if (!user || isCompany || isAdmin || dismissed) {
-      setMissing([]);
-      return;
-    }
-    const { data } = await supabase
-      .from('candidates')
-      .select('resume_url, location, phone_number, top_skills')
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    const topSkillsArr = Array.isArray(data?.top_skills) ? (data!.top_skills as unknown[]) : [];
-    const gaps: string[] = [];
-    if (!data?.resume_url) gaps.push('resume');
-    if (!data?.location) gaps.push('location');
-    if (!topSkillsArr.length) gaps.push('top skills');
-    setMissing(gaps);
-  }, [user, isCompany, isAdmin, dismissed]);
-
-  useEffect(() => {
-    check();
-  }, [check]);
-
-  useEffect(() => {
-    const handler = () => {
-      check();
-    };
-    window.addEventListener('profile-updated', handler);
-    return () => window.removeEventListener('profile-updated', handler);
-  }, [check]);
-
-  if (!user || isCompany || isAdmin || dismissed || missing === null || missing.length === 0) return null;
+  if (!user || isCompany || isAdmin || dismissed || loading || completion >= 100) return null;
 
   const handleDismiss = () => {
     sessionStorage.setItem('profile-nudge-dismissed', 'true');
     setDismissed(true);
   };
-
-  const completion = Math.round(((3 - missing.length) / 3) * 100);
 
   return (
     <div className="relative bg-gradient-to-r from-primary-50 via-primary-100 to-primary-50 border-b border-primary-200">
@@ -62,9 +35,11 @@ const ProfileNudge: React.FC = () => {
             <span className="text-sm font-semibold text-primary-900">
               Your profile is {completion}% complete.
             </span>
-            <span className="text-sm text-primary-800 ml-1 hidden sm:inline">
-              Add a {missing.slice(0, 2).join(' and ')} so employers can find you.
-            </span>
+            {next && (
+              <span className="text-sm text-primary-800 ml-1 hidden sm:inline">
+                Add {next.toLowerCase()} so employers can find you.
+              </span>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">

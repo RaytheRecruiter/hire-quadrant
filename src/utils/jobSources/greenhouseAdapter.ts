@@ -49,6 +49,20 @@ const US_CITY_RE =
 const NON_US_MARKER_RE =
   /\b(dublin|london|singapore|sydney|melbourne|tokyo|toronto|vancouver|paris|berlin|munich|milan|madrid|barcelona|mexico city|amsterdam|warsaw|bucharest|stockholm|zurich|geneva|bangalore|mumbai|delhi|hong kong|shanghai|beijing|ireland|united kingdom|\buk\b|england|germany|france|italy|spain|poland|romania|sweden|japan|israel|canada|australia|india|china|mexico|brazil|netherlands|switzerland)\b/i;
 
+// Confirmed live 2026-10-09 (audit N13): Stripe's own Greenhouse postings
+// sometimes have location.name literally set to "LOCATION" or "N/A" --
+// placeholder text in a form field that was never filled in on their end,
+// not a bug in our parsing. 31 live jobs had this verbatim. Treat these as
+// no location at all rather than displaying the placeholder.
+const PLACEHOLDER_LOCATIONS = new Set(['location', 'n/a', 'na', 'tbd', 'unknown']);
+
+function normalizeGreenhouseLocation(locationName: string | undefined): string | undefined {
+  if (!locationName) return undefined;
+  const trimmed = locationName.trim();
+  if (!trimmed || PLACEHOLDER_LOCATIONS.has(trimmed.toLowerCase())) return undefined;
+  return trimmed;
+}
+
 function guessGreenhouseCountry(locationName: string | undefined): string | undefined {
   if (!locationName) return undefined;
   const text = locationName.toLowerCase();
@@ -98,13 +112,13 @@ export function createGreenhouseAdapter(boardToken: string, displayName: string)
           title: job.title,
           description: description || 'No description available',
           company: job.company_name || displayName,
-          location: job.location?.name || undefined,
+          location: normalizeGreenhouseLocation(job.location?.name),
           type: mapEmploymentType(undefined), // Greenhouse doesn't expose a normalized employment-type field on the public board API
           externalUrl: job.absolute_url,
           postedDate: job.updated_at,
           sourceCompany: `Greenhouse: ${displayName}`,
           sourceXmlFile: sourceId,
-          country: guessGreenhouseCountry(job.location?.name),
+          country: guessGreenhouseCountry(normalizeGreenhouseLocation(job.location?.name)),
         };
       });
     },

@@ -27,7 +27,15 @@ export function createJobDivaAdapter(): JobSourceAdapter {
         salary: job.salary,
         externalUrl: job.externalUrl,
         postedDate: (job.postedDate instanceof Date ? job.postedDate : new Date(job.postedDate)).toISOString(),
-        sourceCompany: job.sourceCompany,
+        // job.sourceCompany (from xmlParser.ts) holds the raw feed filename
+        // ("hirequadrant.xml"), not a real label -- admin tooling
+        // (CompanySourceManager.tsx) displays this value directly as the
+        // source's name, so it was literally showing "hirequadrant.xml" as
+        // if it were an employer/source label. Confirmed live 2026-10-09
+        // via audit N13. Override here to match the "Platform: Company"
+        // convention the 4 ATS adapters already use, rather than touching
+        // xmlParser.ts's parseJobsXml (used nowhere else).
+        sourceCompany: `JobDiva: ${job.company}`,
         sourceXmlFile: job.sourceXmlFile || JOBDIVA_SOURCE.name,
         // Every JobDiva job is a Quadrant, Inc. US agency placement --
         // location is always a US state ("VA - Alexandria" etc).
