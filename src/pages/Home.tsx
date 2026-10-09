@@ -617,9 +617,9 @@ const Home: React.FC = () => {
               <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">🔒</span>
               </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Encrypted Data</h3>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Encrypted in Transit</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
-                All data transmitted over HTTPS with end-to-end encryption
+                All data is transmitted over HTTPS
               </p>
             </div>
 
@@ -637,9 +637,9 @@ const Home: React.FC = () => {
               <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">⚖️</span>
               </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Compliant</h3>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Your Data, Your Control</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
-                GDPR, CCPA, and all data protection regulations complied
+                See our <HardLink to="/privacy" className="underline hover:text-primary-600">Privacy Policy</HardLink> for how we collect, use, and let you delete your data
               </p>
             </div>
           </div>
