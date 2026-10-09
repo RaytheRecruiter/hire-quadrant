@@ -4,6 +4,7 @@ import HardLink from './HardLink';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
 import { useProfileCompleteness } from '../hooks/useProfileCompleteness';
+import { computeProfileScore } from './profile/ProfileCompletenessScore';
 import { useSkillsMatchedJobs } from '../hooks/useSkillsMatchedJobs';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -16,7 +17,7 @@ interface ApplicationRow {
 
 const CandidateHomeDashboard: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
-  const inputs = useProfileCompleteness();
+  const { inputs } = useProfileCompleteness();
   const [savedCount, setSavedCount] = useState(0);
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
   const [unreadNotifs, setUnreadNotifs] = useState(0);
@@ -72,17 +73,7 @@ const CandidateHomeDashboard: React.FC = () => {
 
   if (!isAuthenticated || !user) return null;
 
-  const completenessScore = (() => {
-    const weights: Record<string, number> = {
-      hasName: 5, hasTopSkills: 10, hasAvatar: 10, hasResume: 20,
-      hasExperience: 20, hasEducation: 10, hasSkills: 15, hasPreferences: 10,
-    };
-    let earned = 0;
-    for (const [key, w] of Object.entries(weights)) {
-      if (inputs[key as keyof typeof inputs]) earned += w;
-    }
-    return earned;
-  })();
+  const completenessScore = computeProfileScore(inputs).score;
 
   return (
     <section className="bg-gradient-to-br from-primary-50/60 via-white to-white dark:from-primary-900/20 dark:via-slate-950 dark:to-slate-950 border-b border-gray-100 dark:border-slate-800">

@@ -17,6 +17,9 @@ const EMPTY: ProfileCompletenessInputs = {
 export function useProfileCompleteness(refreshToken: number = 0) {
   const { user } = useAuth();
   const [inputs, setInputs] = useState<ProfileCompletenessInputs>(EMPTY);
+  // Starts true so callers (e.g. ProfileNudge) can avoid flashing a "0%
+  // complete" banner for every user before the real data has loaded.
+  const [loading, setLoading] = useState(true);
   // Re-fetch when ProfilePage dispatches 'profile-updated' (any save:
   // name/avatar/resume/experience/education/skills/preferences). Without
   // this, the completeness bar never advanced past its initial load —
@@ -31,6 +34,7 @@ export function useProfileCompleteness(refreshToken: number = 0) {
   useEffect(() => {
     if (!user?.id) {
       setInputs(EMPTY);
+      setLoading(false);
       return;
     }
     let cancelled = false;
@@ -69,11 +73,12 @@ export function useProfileCompleteness(refreshToken: number = 0) {
         hasSkills: skillsArr.length > 0,
         hasPreferences: Boolean(prefRes.data),
       });
+      setLoading(false);
     })();
     return () => {
       cancelled = true;
     };
   }, [user?.id, user?.name, refreshToken, eventTick]);
 
-  return inputs;
+  return { inputs, loading };
 }

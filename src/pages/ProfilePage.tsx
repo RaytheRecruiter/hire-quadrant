@@ -925,7 +925,7 @@ const ProfilePage = () => {
 };
 
 const ProfileCompletenessBar: React.FC = () => {
-    const inputs = useProfileCompleteness();
+    const { inputs } = useProfileCompleteness();
     return <ProfileCompletenessScore inputs={inputs} />;
 };
 

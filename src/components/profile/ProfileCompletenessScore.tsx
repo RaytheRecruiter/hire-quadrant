@@ -25,19 +25,30 @@ const CRITERIA: Array<{ key: keyof ProfileCompletenessInputs; label: string; wei
   { key: 'hasPreferences', label: 'Job preferences', weight: 10 },
 ];
 
-const ProfileCompletenessScore: React.FC<{ inputs: ProfileCompletenessInputs }> = ({ inputs }) => {
-  const { score, next } = useMemo(() => {
-    let earned = 0;
-    let nextMissing: string | null = null;
-    for (const c of CRITERIA) {
-      if (inputs[c.key]) {
-        earned += c.weight;
-      } else if (!nextMissing) {
-        nextMissing = c.label;
-      }
+// Single source of truth for "how complete is this profile" -- exported so
+// every surface that shows a completion/strength percentage (this card,
+// CandidateHomeDashboard's header stat, ProfileNudge's banner) computes the
+// exact same number instead of maintaining its own copy of the weights.
+// Confirmed live 2026-10-09 (audit N16): three separate implementations had
+// drifted (a 3-field unweighted ProfileNudge check showing e.g. "33%" next
+// to this component's 8-factor weighted score showing an unrelated "20%"
+// for the same profile, plus a third copy of these exact weights
+// reimplemented inline in CandidateHomeDashboard).
+export function computeProfileScore(inputs: ProfileCompletenessInputs): { score: number; next: string | null } {
+  let earned = 0;
+  let nextMissing: string | null = null;
+  for (const c of CRITERIA) {
+    if (inputs[c.key]) {
+      earned += c.weight;
+    } else if (!nextMissing) {
+      nextMissing = c.label;
     }
-    return { score: Math.min(100, earned), next: nextMissing };
-  }, [inputs]);
+  }
+  return { score: Math.min(100, earned), next: nextMissing };
+}
+
+const ProfileCompletenessScore: React.FC<{ inputs: ProfileCompletenessInputs }> = ({ inputs }) => {
+  const { score, next } = useMemo(() => computeProfileScore(inputs), [inputs]);
 
   const tone =
     score >= 90 ? 'bg-emerald-500'
