@@ -15,6 +15,12 @@ export interface NormalizedJob {
   postedDate: string; // ISO 8601
   sourceCompany: string; // human-readable label shown in admin dashboards, e.g. "Greenhouse: Stripe"
   sourceXmlFile: string; // stable per-source identifier used for scoped stale-delete, e.g. "greenhouse:stripe" or "hirequadrant.xml"
+  // ISO 3166-1 alpha-2 country code, uppercase (e.g. "US"), when the source
+  // platform exposes one reliably enough to trust. Drives the Browse Jobs
+  // "US-only by default" filter added 2026-10-09 per Ray. Leave undefined
+  // if a source can't determine it confidently -- better to leave a job
+  // unfiltered-by-country than to misclassify it.
+  country?: string;
 }
 
 export type SourcePlatform = 'jobdiva' | 'greenhouse' | 'lever' | 'ashby' | 'smartrecruiters';

@@ -29,6 +29,9 @@ export function createJobDivaAdapter(): JobSourceAdapter {
         postedDate: (job.postedDate instanceof Date ? job.postedDate : new Date(job.postedDate)).toISOString(),
         sourceCompany: job.sourceCompany,
         sourceXmlFile: job.sourceXmlFile || JOBDIVA_SOURCE.name,
+        // Every JobDiva job is a Quadrant, Inc. US agency placement --
+        // location is always a US state ("VA - Alexandria" etc).
+        country: 'US',
       }));
     },
   };

@@ -171,6 +171,7 @@ async function processSource(
             type: job.type,
             salary: job.salary,
             category: deriveJobCategory(job.title),
+            country: job.country ?? null,
         };
     }));
 

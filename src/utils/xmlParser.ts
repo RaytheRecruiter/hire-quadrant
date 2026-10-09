@@ -256,6 +256,26 @@ export const parseJobsXml = (xmlContent: string, sourceCompany?: string, sourceX
  * @param tagName - Tag name to search for
  * @returns Text content or empty string
  */
+// JobDiva's feed double-encodes HTML entities in some fields (e.g. title
+// text contains the literal string "&amp;" even after the XML parser's own
+// single level of entity decoding) -- confirmed live 2026-10-09 on job
+// 26-02208, whose title stored "&amp;" verbatim while its description
+// (which happens to pass through stripHtmlTags' entity decoding on the way
+// in) correctly had a real "&". Decoding here, in the one shared primitive
+// every field extraction goes through, fixes title/company/location/etc.
+// all at once instead of patching each call site.
+const decodeHtmlEntities = (text: string): string =>
+  text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#xa0;/gi, ' ')
+    .replace(/&#160;/g, ' ');
+
 const getTextContent = (parent: Element, tagName: string): string => {
   const element = parent.querySelector(tagName);
   if (!element) return '';
@@ -265,10 +285,10 @@ const getTextContent = (parent: Element, tagName: string): string => {
  
   // Handle CDATA sections by extracting the content
   if (content.startsWith('<![CDATA[') && content.endsWith(']]>')) {
-    return content.slice(9, -3).trim();
+    return decodeHtmlEntities(content.slice(9, -3).trim());
   }
  
-  return content;
+  return decodeHtmlEntities(content);
 };
 
 /**
