@@ -25,6 +25,7 @@ import Pricing from './pages/Pricing';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import ContentPolicy from './pages/ContentPolicy';
+import SecurityPolicy from './pages/SecurityPolicy';
 import Cookies from './pages/Cookies';
 import Support from './pages/Support';
 import NotFound from './pages/NotFound';
@@ -153,6 +154,7 @@ function App() {
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/content-policy" element={<ContentPolicy />} />
+                <Route path="/security-policy" element={<SecurityPolicy />} />
                 <Route path="/cookies" element={<Cookies />} />
                 <Route path="*" element={<NotFound />} />
                       </Routes>

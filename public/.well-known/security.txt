@@ -3,7 +3,7 @@ Contact: https://hirequadrant.com/support
 Expires: 2027-04-24T23:59:59.000Z
 Preferred-Languages: en
 Canonical: https://hirequadrant.com/.well-known/security.txt
-Policy: https://hirequadrant.com/content-policy
+Policy: https://hirequadrant.com/security-policy
 Acknowledgments: https://hirequadrant.com/about
 
 # Please report security vulnerabilities responsibly.

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from './HardLink';
-import { Mail, Linkedin, Twitter, Github } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -48,6 +48,7 @@ const Footer: React.FC = () => {
               <li><HardLink to="/privacy" className="hover:text-white transition">Privacy</HardLink></li>
               <li><HardLink to="/terms" className="hover:text-white transition">Terms</HardLink></li>
               <li><HardLink to="/content-policy" className="hover:text-white transition">Content Policy</HardLink></li>
+              <li><HardLink to="/security-policy" className="hover:text-white transition">Security</HardLink></li>
               <li><HardLink to="/cookies" className="hover:text-white transition">Cookies</HardLink></li>
             </ul>
           </div>
@@ -59,17 +60,14 @@ const Footer: React.FC = () => {
             © {currentYear} HireQuadrant. All rights reserved.
           </p>
           <div className="flex gap-4">
+            {/* LinkedIn/Twitter/GitHub icons removed 2026-10-09 (audit N18,
+                confirmed): they linked to the generic platform homepages
+                (linkedin.com, twitter.com, github.com), not real company
+                profiles -- misleading rather than broken. Per the audit's
+                own guidance, omit the icon rather than link somewhere
+                wrong; add them back once real profile URLs exist. */}
             <a href="mailto:hello@hirequadrant.com" className="text-gray-300 hover:text-white transition">
               <Mail className="h-5 w-5" />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition">
-              <Linkedin className="h-5 w-5" />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition">
-              <Twitter className="h-5 w-5" />
-            </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition">
-              <Github className="h-5 w-5" />
             </a>
           </div>
         </div>
