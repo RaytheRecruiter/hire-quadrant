@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Mail, Send, Phone, MapPin, Clock, Zap } from 'lucide-react';
+import { Mail, Send, Phone, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Contact: React.FC = () => {
@@ -68,32 +68,22 @@ const Contact: React.FC = () => {
           </div>
 
           {/* Contact Options */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* "Live Chat" and "Status Page" cards removed 2026-10-09 (audit
+              N18, confirmed): neither is implemented anywhere -- Live Chat
+              claimed specific business hours with no actual chat widget,
+              and Status Page pointed to "status.hirequadrant.com", a
+              subdomain that doesn't exist. The audit's own guidance: only
+              show contact controls that actually work. Also dropped the
+              "Response within 24 hours" line per N04 (no response-time
+              guarantees) -- real response time isn't something we can
+              currently promise or verify. */}
+          <div className="grid grid-cols-1 gap-6 mb-12 max-w-sm">
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
               <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
                 <Mail className="h-6 w-6 text-primary-600 dark:text-primary-400" />
               </div>
               <h3 className="font-bold text-secondary-900 dark:text-white mb-2">Email</h3>
-              <p className="text-gray-600 dark:text-slate-400 text-sm mb-2">support@hirequadrant.com</p>
-              <p className="text-xs text-gray-500 dark:text-slate-500">Response within 24 hours</p>
-            </div>
-
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
-              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center mb-4">
-                <Zap className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-              </div>
-              <h3 className="font-bold text-secondary-900 dark:text-white mb-2">Live Chat</h3>
-              <p className="text-gray-600 dark:text-slate-400 text-sm mb-2">Available during business hours</p>
-              <p className="text-xs text-gray-500 dark:text-slate-500">Mon-Fri, 9am-6pm EST</p>
-            </div>
-
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
-              <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mb-4">
-                <Clock className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <h3 className="font-bold text-secondary-900 dark:text-white mb-2">Status Page</h3>
-              <p className="text-gray-600 dark:text-slate-400 text-sm mb-2">Check system status</p>
-              <p className="text-xs text-gray-500 dark:text-slate-500">status.hirequadrant.com</p>
+              <p className="text-gray-600 dark:text-slate-400 text-sm">support@hirequadrant.com</p>
             </div>
           </div>
 
