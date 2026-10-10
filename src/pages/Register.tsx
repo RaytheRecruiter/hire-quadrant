@@ -7,6 +7,22 @@ import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 import { checkPasswordBreach } from '../utils/hibp';
 
+// Maps the real Supabase signUp error message to user-facing copy. Confirmed
+// live 2026-10-10: every signup failure used to show "Email already
+// exists" regardless of actual cause, including a real rate-limit (429)
+// error on a brand-new email that had never been registered -- actively
+// misleading users toward the wrong recovery action.
+function friendlyRegisterError(message: string | undefined): string {
+  const m = (message || '').toLowerCase();
+  if (m.includes('already registered') || m.includes('already exists') || m.includes('user already')) {
+    return 'An account with this email already exists. Try signing in instead.';
+  }
+  if (m.includes('rate limit')) {
+    return "We're getting a lot of signups right now. Please wait a few minutes and try again.";
+  }
+  return message || 'Registration failed. Please try again.';
+}
+
 const Register: React.FC = () => {
   const [searchParams] = useSearchParams();
   const returnTo = searchParams.get('returnTo');
@@ -61,11 +77,11 @@ const Register: React.FC = () => {
     setLoading(true);
 
     try {
-      const success = await register(email, password, name, userType);
-      if (success) {
+      const result = await register(email, password, name, userType);
+      if (result.success) {
         setRegistered(true);
       } else {
-        setError('Email already exists. Please use a different email.');
+        setError(friendlyRegisterError(result.error));
       }
     } catch (err) {
       setError('Registration failed. Please try again.');

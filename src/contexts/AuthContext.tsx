@@ -17,7 +17,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   login: (email: string, password: string) => Promise<{ success: boolean; role?: string }>;
-  register: (email: string, password: string, name: string, role?: 'candidate' | 'company') => Promise<boolean>;
+  register: (email: string, password: string, name: string, role?: 'candidate' | 'company') => Promise<{ success: boolean; error?: string }>;
   loginWithGoogle: (role?: 'candidate' | 'company') => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
@@ -177,11 +177,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const register = useCallback(async (
-    email: string, 
-    password: string, 
-    name: string, 
+    email: string,
+    password: string,
+    name: string,
     role: 'candidate' | 'company' = 'candidate'
-  ): Promise<boolean> => {
+  ): Promise<{ success: boolean; error?: string }> => {
     try {
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
@@ -197,14 +197,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (authError) {
         console.error('Registration error:', authError.message);
-        return false;
+        // Propagate the real error instead of collapsing every failure
+        // into "email already exists" -- confirmed live 2026-10-10 that a
+        // signup hitting Supabase's email rate limit (429) was shown that
+        // exact false message to a brand-new email that had never been
+        // used, which would send a real new user down the wrong recovery
+        // path (trying to sign in / reset a password for an account that
+        // doesn't exist) instead of just waiting and retrying.
+        return { success: false, error: authError.message };
       }
-      
+
       const user = authData?.user;
-      
+
       if (!user) {
         console.log('Success! Please check your email to confirm your account.');
-        return true;
+        return { success: true };
       }
 
       const userProfile = await fetchUserProfile(user);
@@ -213,10 +220,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setSession(authData.session);
       }
 
-      return true;
+      return { success: true };
     } catch (error) {
       console.error('Registration error:', error);
-      return false;
+      return { success: false, error: error instanceof Error ? error.message : undefined };
     }
   }, []);
 
