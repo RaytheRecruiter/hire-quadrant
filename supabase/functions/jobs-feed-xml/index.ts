@@ -8,7 +8,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const BASE_URL = Deno.env.get('SITE_URL') || 'https://hirequadrant.com';
+const BASE_URL = Deno.env.get('SITE_URL') || 'https://nexegin.com';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -61,7 +61,7 @@ serve(async () => {
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <source>
-  <publisher>HireQuadrant</publisher>
+  <publisher>Nexegin</publisher>
   <publisherurl>${BASE_URL}</publisherurl>
   <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 ${items}

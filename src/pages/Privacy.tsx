@@ -5,7 +5,7 @@ const Privacy: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Privacy Policy — HireQuadrant</title>
+        <title>Privacy Policy — Nexegin</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
       <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
@@ -16,7 +16,7 @@ const Privacy: React.FC = () => {
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">1. Who operates this service</h2>
               <p className="text-gray-700 dark:text-slate-300">
-                HireQuadrant ("we", "us", or "our") is operated by Quadrant, Inc. and runs the hirequadrant.com website.
+                Nexegin ("we", "us", or "our") is operated by Quadrant, Inc. and runs the nexegin.com website.
                 This policy explains what personal data we collect from candidates and employers, how we use it, who
                 we share it with, and the choices you have.
               </p>
@@ -109,8 +109,8 @@ const Privacy: React.FC = () => {
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">9. Contact us</h2>
               <p className="text-gray-700 dark:text-slate-300">
                 If you have any questions about this Privacy Policy, please contact us at{' '}
-                <a href="mailto:privacy@hirequadrant.com" className="text-primary-500 hover:text-primary-600">
-                  privacy@hirequadrant.com
+                <a href="mailto:privacy@nexegin.com" className="text-primary-500 hover:text-primary-600">
+                  privacy@nexegin.com
                 </a>
               </p>
             </section>

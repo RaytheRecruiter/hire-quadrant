@@ -203,7 +203,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
         </h2>
         {canManageBilling ? (
           <a
-            href="mailto:billing@hirequadrant.com?subject=Plan%20change%20request"
+            href="mailto:billing@nexegin.com?subject=Plan%20change%20request"
             className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary-400 hover:text-primary-600 transition"
           >
             <Mail className="h-4 w-4" />
@@ -404,7 +404,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                     )}
                     {!isCurrent && canManageBilling && !canCheckout && (
                       <a
-                        href={`mailto:billing@hirequadrant.com?subject=${plan.requires_manual_upgrade ? 'Switch%20to' : 'Upgrade%20to'}%20${encodeURIComponent(plan.name)}`}
+                        href={`mailto:billing@nexegin.com?subject=${plan.requires_manual_upgrade ? 'Switch%20to' : 'Upgrade%20to'}%20${encodeURIComponent(plan.name)}`}
                         className="block text-center text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
                       >
                         {plan.requires_manual_upgrade ? 'Contact sales' : 'Request upgrade'}
@@ -421,7 +421,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
           </div>
           <div className="mt-3 rounded-xl border border-dashed border-gray-300 dark:border-slate-700 p-4 text-center text-xs text-gray-500 dark:text-slate-400">
             Need more than 200 unlocks/month or multiple team seats?{' '}
-            <a href="mailto:billing@hirequadrant.com?subject=Enterprise%20Resume%20Database" className="text-primary-600 font-medium">
+            <a href="mailto:billing@nexegin.com?subject=Enterprise%20Resume%20Database" className="text-primary-600 font-medium">
               Contact sales for Enterprise
             </a>
             .
@@ -462,7 +462,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                   )}
                   {canManageBilling && !canCheckout && (
                     <a
-                      href={`mailto:billing@hirequadrant.com?subject=Buy%20${pack.credits}%20contacts`}
+                      href={`mailto:billing@nexegin.com?subject=Buy%20${pack.credits}%20contacts`}
                       className="block text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
                     >
                       Request

@@ -7,7 +7,7 @@ import BreadcrumbSchema from '../components/BreadcrumbSchema';
 import { supabase } from '../utils/supabaseClient';
 import { prettyFromSlug, toSeoSlug } from '../utils/seoSlug';
 
-const ORIGIN = 'https://hirequadrant.com';
+const ORIGIN = 'https://nexegin.com';
 
 const INDUSTRY_DESCRIPTIONS: Record<string, string> = {
   technology: 'Software, cloud, AI, and hardware companies building the tools people use daily.',
@@ -26,7 +26,7 @@ const IndustryGuidePage: React.FC = () => {
   const lc = (industrySlug ?? '').toLowerCase();
   const description =
     INDUSTRY_DESCRIPTIONS[lc] ??
-    `Companies in the ${industryName} industry hiring on HireQuadrant.`;
+    `Companies in the ${industryName} industry hiring on Nexegin.`;
 
   const pageUrl = `${ORIGIN}/guide/${industrySlug}`;
 
@@ -87,14 +87,14 @@ const IndustryGuidePage: React.FC = () => {
     headline: `${industryName} careers guide`,
     description,
     mainEntityOfPage: pageUrl,
-    author: { '@type': 'Organization', name: 'HireQuadrant' },
+    author: { '@type': 'Organization', name: 'Nexegin' },
     datePublished: '2026-04-24',
   };
 
   return (
     <>
       <Helmet>
-        <title>{industryName} careers guide · HireQuadrant</title>
+        <title>{industryName} careers guide · Nexegin</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={pageUrl} />
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>

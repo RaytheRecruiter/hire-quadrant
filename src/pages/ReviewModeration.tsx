@@ -72,7 +72,7 @@ const ReviewModeration: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Review Moderation · Admin · HireQuadrant</title>
+        <title>Review Moderation · Admin · Nexegin</title>
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50/30 dark:from-slate-900 dark:to-slate-950">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

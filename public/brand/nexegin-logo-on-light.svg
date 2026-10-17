@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 72" role="img" aria-label="nexegin">
+  <g transform="translate(4,4)"><svg width="64" height="64" viewBox="0 0 64 64">
+    <rect x="2" y="2" width="60" height="60" rx="15" fill="#052e2b"/>
+    <path d="M14 47H26V35H38V23H50" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="14" cy="47" r="4.5" fill="#ffffff"/>
+  <circle cx="50" cy="23" r="7" fill="#E8631A"/>
+  </svg></g>
+  <!-- Wordmark uses Space Grotesk 700 (already loaded by the app). Convert text to outlines before sending this file to printers or partners. -->
+  <text x="84" y="49" font-family="'Space Grotesk','Inter',system-ui,sans-serif" font-weight="700" font-size="42" letter-spacing="-1.2" fill="#12201E">nexegin</text>
+</svg>

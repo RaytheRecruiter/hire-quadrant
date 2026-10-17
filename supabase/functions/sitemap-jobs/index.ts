@@ -10,7 +10,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 // Trim — operators have pasted SITE_URL with a leading tab in supabase secrets,
 // which produced invalid <loc>\thttps://...</loc> entries (sitemap.org spec
 // forbids whitespace in <loc>; sitemap-pages already does this).
-const BASE_URL = (Deno.env.get('SITE_URL') || 'https://hirequadrant.com').trim();
+const BASE_URL = (Deno.env.get('SITE_URL') || 'https://nexegin.com').trim();
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 

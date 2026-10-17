@@ -23,7 +23,7 @@ interface CompanyCard {
   median_salary: number | null;
 }
 
-const ORIGIN = 'https://hirequadrant.com';
+const ORIGIN = 'https://nexegin.com';
 const MAX_SLOTS = 3;
 
 const CompareCompanies: React.FC = () => {
@@ -173,10 +173,10 @@ const CompareCompanies: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{metaTitle} · HireQuadrant</title>
+        <title>{metaTitle} · Nexegin</title>
         <meta
           name="description"
-          content="Compare up to 3 companies side-by-side: ratings, open roles, salaries, industry, and location. Powered by real HireQuadrant review data."
+          content="Compare up to 3 companies side-by-side: ratings, open roles, salaries, industry, and location. Powered by real Nexegin review data."
         />
         <link rel="canonical" href={pageUrl} />
       </Helmet>

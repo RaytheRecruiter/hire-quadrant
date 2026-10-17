@@ -102,7 +102,7 @@ export const sendJobRecommendations = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         to: email,
-        subject: 'Your Weekly Job Recommendations – HireQuadrant',
+        subject: 'Your Weekly Job Recommendations – Nexegin',
         template: 'weekly_digest',
         variables: {
           jobs,
@@ -131,7 +131,7 @@ export const sendPasswordReset = async (email: string, resetToken: string) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         to: email,
-        subject: 'Reset Your HireQuadrant Password',
+        subject: 'Reset Your Nexegin Password',
         template: 'password_reset',
         variables: {
           resetUrl: `${window.location.origin}/reset-password?token=${resetToken}`,
@@ -164,7 +164,7 @@ export const sendCompanyWelcome = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         to: email,
-        subject: `Welcome to HireQuadrant, ${companyName}!`,
+        subject: `Welcome to Nexegin, ${companyName}!`,
         template: 'company_welcome',
         variables: {
           companyName,

@@ -8,7 +8,7 @@ import RatingStars from '../components/companies/RatingStars';
 import { useCompanyDirectory } from '../hooks/useCompanyDirectory';
 import { prettyFromSlug, toSeoSlug } from '../utils/seoSlug';
 
-const SITE_ORIGIN = 'https://hirequadrant.com';
+const SITE_ORIGIN = 'https://nexegin.com';
 
 const IndustryPage: React.FC = () => {
   const { industrySlug } = useParams<{ industrySlug: string }>();
@@ -39,8 +39,8 @@ const IndustryPage: React.FC = () => {
   );
 
   const pageUrl = `${SITE_ORIGIN}/companies/industry/${industrySlug}`;
-  const metaTitle = `Top ${pretty} Companies Hiring — HireQuadrant`;
-  const metaDesc = `${filtered.length > 0 ? `Browse ${filtered.length} ${pretty.toLowerCase()} companies` : `${pretty} companies`} on HireQuadrant. See ratings, open roles, and reviews from current and former employees.`;
+  const metaTitle = `Top ${pretty} Companies Hiring — Nexegin`;
+  const metaDesc = `${filtered.length > 0 ? `Browse ${filtered.length} ${pretty.toLowerCase()} companies` : `${pretty} companies`} on Nexegin. See ratings, open roles, and reviews from current and former employees.`;
 
   const itemListLd = ranked.length > 0 ? {
     '@context': 'https://schema.org',

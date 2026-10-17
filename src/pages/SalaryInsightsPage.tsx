@@ -6,7 +6,7 @@ import HardLink from '../components/HardLink';
 import { useSalaryInsights } from '../hooks/useSalaryInsights';
 import { prettyFromSlug } from '../utils/seoSlug';
 
-const SITE_ORIGIN = 'https://hirequadrant.com';
+const SITE_ORIGIN = 'https://nexegin.com';
 const fmt = (n: number) => '$' + Math.round(n / 1000) + 'k';
 
 const SalaryInsightsPage: React.FC = () => {
@@ -16,11 +16,11 @@ const SalaryInsightsPage: React.FC = () => {
 
   const pageUrl = `${SITE_ORIGIN}/salaries/${titleSlug}`;
   const metaTitle = insight
-    ? `${titleLike} salary: ${fmt(insight.median)} median — HireQuadrant`
-    : `${titleLike} salary data — HireQuadrant`;
+    ? `${titleLike} salary: ${fmt(insight.median)} median — Nexegin`
+    : `${titleLike} salary data — Nexegin`;
   const metaDesc = insight
-    ? `Median ${titleLike} salary is ${fmt(insight.median)} (25th %: ${fmt(insight.p25)}, 75th %: ${fmt(insight.p75)}) based on ${insight.count} open roles on HireQuadrant.`
-    : `Explore salary ranges for ${titleLike} roles on HireQuadrant.`;
+    ? `Median ${titleLike} salary is ${fmt(insight.median)} (25th %: ${fmt(insight.p25)}, 75th %: ${fmt(insight.p75)}) based on ${insight.count} open roles on Nexegin.`
+    : `Explore salary ranges for ${titleLike} roles on Nexegin.`;
 
   const occupationLd = insight
     ? {
@@ -69,7 +69,7 @@ const SalaryInsightsPage: React.FC = () => {
               </h1>
               <p className="text-gray-600 dark:text-slate-400">
                 {loading ? 'Crunching data…'
-                  : insight ? `${insight.count} open roles analyzed on HireQuadrant`
+                  : insight ? `${insight.count} open roles analyzed on Nexegin`
                   : `Not enough salary data for ${titleLike} yet.`}
               </p>
             </div>

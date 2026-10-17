@@ -79,7 +79,7 @@ const buildJobSchema = (job: any, url: string) => {
         description: job.description,
         datePosted: job.posted_date || job.postedDate,
         employmentType: (job.type || '').toUpperCase().replace('-', '_') || 'FULL_TIME',
-        hiringOrganization: { '@type': 'Organization', name: job.company || 'HireQuadrant' },
+        hiringOrganization: { '@type': 'Organization', name: job.company || 'Nexegin' },
         directApply: true,
         url,
     };
@@ -256,8 +256,8 @@ const JobDetails: React.FC = () => {
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Jobs', item: 'https://hirequadrant.com/' },
-                { '@type': 'ListItem', position: 2, name: job.company || 'Company', item: companyProfile ? `https://hirequadrant.com/companies/${companyProfile.id}` : 'https://hirequadrant.com/' },
+                { '@type': 'ListItem', position: 1, name: 'Jobs', item: 'https://nexegin.com/' },
+                { '@type': 'ListItem', position: 2, name: job.company || 'Company', item: companyProfile ? `https://nexegin.com/companies/${companyProfile.id}` : 'https://nexegin.com/' },
                 { '@type': 'ListItem', position: 3, name: job.title, item: window.location.href },
             ],
         };

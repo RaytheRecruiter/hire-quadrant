@@ -24,7 +24,6 @@ interface JobRow {
   visa_sponsor: boolean | null;
   security_clearance: string | null;
   sponsored: boolean | null;
-  country: string | null;
 }
 
 const PAGE_SIZE = 20;
@@ -79,7 +78,6 @@ const BrowseJobs: React.FC = () => {
     postedWithinDays: parseInt(params.get('posted') ?? '0', 10) || 0,
     visaSponsor: params.get('visa') === '1',
     securityClearance: params.get('clearance') ?? '',
-    includeOconus: params.get('oconus') === '1',
   });
   const [rows, setRows] = useState<JobRow[]>([]);
   const [loading, setLoading] = useState(false);
@@ -98,7 +96,6 @@ const BrowseJobs: React.FC = () => {
     if (merged.postedWithinDays > 0) next.set('posted', String(merged.postedWithinDays));
     if (merged.visaSponsor) next.set('visa', '1');
     if (merged.securityClearance) next.set('clearance', merged.securityClearance);
-    if (merged.includeOconus) next.set('oconus', '1');
     setParams(next, { replace: true });
   };
 
@@ -132,20 +129,9 @@ const BrowseJobs: React.FC = () => {
       let query = supabase
         .from('jobs')
         .select(
-          'id, title, company, location, type, salary, min_salary, max_salary, posted_date, created_at, experience_level, workplace_type, visa_sponsor, security_clearance, sponsored, description, country',
+          'id, title, company, location, type, salary, min_salary, max_salary, posted_date, created_at, experience_level, workplace_type, visa_sponsor, security_clearance, sponsored, description',
           { count: 'exact' },
         );
-
-      // Default to US-only (Ray, 2026-10-09): multi-ATS ingestion pulls in
-      // real international postings now, and most visitors only want
-      // domestic roles. "country" is populated per-source at ingest time
-      // (see src/utils/jobSources/) -- JobDiva jobs are always 'US', the
-      // 4 ATS adapters resolve it from structured fields where the
-      // platform exposes one. Checking "Include international (OCONUS)"
-      // removes this filter entirely.
-      if (!filters.includeOconus) {
-        query = query.eq('country', 'US');
-      }
 
       if (q) {
         query = query.or(
@@ -244,7 +230,7 @@ const BrowseJobs: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Browse Jobs · HireQuadrant</title>
+        <title>Browse Jobs · Nexegin</title>
         <meta name="description" content="Browse thousands of open jobs. Filter by salary, experience level, workplace type, visa sponsorship, and security clearance." />
       </Helmet>
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-8">

@@ -54,7 +54,7 @@ interface JobInfo {
 const ProfilePage = () => {
     const { user, isAdmin, isCompany, updateProfile, loading: authLoading } = useAuth();
     // usePermissions() reads company_members role (owner/admin/standard) —
-    // unrelated to useAuth().isAdmin (HireQuadrant super-admin) despite the
+    // unrelated to useAuth().isAdmin (Nexegin super-admin) despite the
     // similar names, hence the alias.
     const { isOwner: isCompanyOwner, isAdmin: isCompanyRoleAdmin, member: companyMember } = usePermissions();
     const [nameValue, setNameValue] = useState('');
@@ -925,7 +925,7 @@ const ProfilePage = () => {
 };
 
 const ProfileCompletenessBar: React.FC = () => {
-    const { inputs } = useProfileCompleteness();
+    const inputs = useProfileCompleteness();
     return <ProfileCompletenessScore inputs={inputs} />;
 };
 

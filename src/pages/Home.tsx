@@ -176,31 +176,31 @@ const Home: React.FC = () => {
     const organization = {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: 'HireQuadrant',
-      url: 'https://hirequadrant.com',
-      description: 'Job board where every application is screened, tracked, and acknowledged. We work for you, not the algorithm.',
-      logo: 'https://hirequadrant.com/logo.png',
+      name: 'Nexegin',
+      url: 'https://nexegin.com',
+      description: 'Find your next IT role. Explore IT jobs, save opportunities, and manage your applications in one place.',
+      logo: 'https://nexegin.com/logo.png',
       sameAs: [
-        'https://www.linkedin.com/company/hirequadrant',
-        'https://twitter.com/hirequadrant',
+        'https://www.linkedin.com/company/nexegin',
+        'https://twitter.com/nexegin',
       ],
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'Customer Service',
-        email: 'support@hirequadrant.com',
+        email: 'support@nexegin.com',
       },
     };
 
     const website = {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: 'HireQuadrant',
-      url: 'https://hirequadrant.com',
+      name: 'Nexegin',
+      url: 'https://nexegin.com',
       potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: 'https://hirequadrant.com/?q={search_term_string}',
+          urlTemplate: 'https://nexegin.com/?q={search_term_string}',
         },
         query_input: 'required name=search_term_string',
       },
@@ -252,21 +252,21 @@ const Home: React.FC = () => {
       {user && <CandidateHomeDashboard />}
       {/* Hero */}
       <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50/60 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 pt-16 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,53,148,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(61,107,175,0.18),transparent_60%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(6,111,104,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(49,196,186,0.14),transparent_60%)] pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="max-w-3xl mx-auto text-center">
             <span className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-700/30 text-amber-700 dark:text-amber-300 rounded-full px-4 py-1.5 text-sm font-semibold mb-6 shadow-soft">
               <Sparkles className="h-3.5 w-3.5" />
-              AI-powered job matching
+              Built for IT and technical roles
             </span>
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold text-secondary-900 dark:text-white leading-[1.02] tracking-tight text-balance">
-              We work for you,
+              Find your next
               <span className="block bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent pb-2">
-                not the algorithm.
+                IT role.
               </span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-secondary-600 dark:text-slate-300 max-w-xl mx-auto text-balance leading-relaxed">
-              Skip the black hole. Every application is screened, tracked, and acknowledged.
+              Explore IT jobs, save opportunities, and manage your applications in one place.
             </p>
 
             {/* Hero search */}
@@ -491,7 +491,7 @@ const Home: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
-              Job seekers love HireQuadrant
+              Job seekers love Nexegin
             </h2>
           </div>
 
@@ -526,13 +526,13 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-6">
-                About HireQuadrant
+                About Nexegin
               </h2>
               <p className="text-lg text-secondary-600 dark:text-slate-300 mb-4 leading-relaxed">
                 We believe job seekers deserve better than the black hole. Every application matters. Every candidate deserves feedback.
               </p>
               <p className="text-lg text-secondary-600 dark:text-slate-300 mb-6 leading-relaxed">
-                HireQuadrant is built on transparency. We work for candidates, not algorithms. We help employers find their best people and give candidates the clarity they deserve.
+                Nexegin is built on transparency. We work for candidates, not algorithms. We help employers find their best people and give candidates the clarity they deserve.
               </p>
               <HardLink
                 to="/about"
@@ -571,7 +571,7 @@ const Home: React.FC = () => {
               Common Questions
             </h2>
             <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
-              Get answers to questions about how HireQuadrant works
+              Get answers to questions about how Nexegin works
             </p>
           </div>
 
@@ -617,9 +617,9 @@ const Home: React.FC = () => {
               <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">🔒</span>
               </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Encrypted in Transit</h3>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Encrypted Data</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
-                All data is transmitted over HTTPS
+                All data transmitted over HTTPS with end-to-end encryption
               </p>
             </div>
 
@@ -637,9 +637,9 @@ const Home: React.FC = () => {
               <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">⚖️</span>
               </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Your Data, Your Control</h3>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Compliant</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
-                See our <HardLink to="/privacy" className="underline hover:text-primary-600">Privacy Policy</HardLink> for how we collect, use, and let you delete your data
+                GDPR, CCPA, and all data protection regulations complied
               </p>
             </div>
           </div>
@@ -668,7 +668,7 @@ const Home: React.FC = () => {
               Company & Resources
             </h2>
             <p className="text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
-              Everything you need to know about HireQuadrant
+              Everything you need to know about Nexegin
             </p>
           </div>
 

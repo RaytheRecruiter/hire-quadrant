@@ -7,7 +7,7 @@ export interface Crumb {
   to?: string;
 }
 
-const ORIGIN = 'https://hirequadrant.com';
+const ORIGIN = 'https://nexegin.com';
 
 interface Props {
   items: Crumb[];

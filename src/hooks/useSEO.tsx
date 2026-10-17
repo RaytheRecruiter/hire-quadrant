@@ -9,14 +9,14 @@ interface SEOOptions {
   noindex?: boolean;
 }
 
-const BASE_URL = 'https://hirequadrant.com';
-const DEFAULT_TITLE = 'HireQuadrant — Work with employers who show up';
-const DEFAULT_DESCRIPTION = "See who's interested. Get real feedback. Know where you stand at every step. Find jobs with transparent, responsive employers.";
-const DEFAULT_OG_IMAGE = 'https://hirequadrant.com/og-image.svg';
+const BASE_URL = 'https://nexegin.com';
+const DEFAULT_TITLE = 'Nexegin — Find your next IT role';
+const DEFAULT_DESCRIPTION = 'Explore IT jobs, save opportunities, and manage your applications in one place.';
+const DEFAULT_OG_IMAGE = 'https://nexegin.com/og-image.png';
 
 export function useSEO(options: SEOOptions = {}) {
   const title = options.title
-    ? `${options.title} · HireQuadrant`
+    ? `${options.title} · Nexegin`
     : DEFAULT_TITLE;
   const description = options.description || DEFAULT_DESCRIPTION;
   const canonical = options.canonical

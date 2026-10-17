@@ -136,7 +136,7 @@ const MessagesPage: React.FC = () => {
 
   return (
     <>
-      <Helmet><title>Messages · HireQuadrant</title></Helmet>
+      <Helmet><title>Messages · Nexegin</title></Helmet>
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-secondary-900 dark:text-white mb-4">Messages</h1>

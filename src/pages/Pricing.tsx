@@ -24,7 +24,7 @@ import { Search, Sparkles, CheckCircle2, ArrowRight, Loader2 } from 'lucide-reac
 // page, updated for the new Post/Promote/Source model.
 const FAQ_ITEMS = [
   {
-    q: 'Is HireQuadrant free for job seekers?',
+    q: 'Is Nexegin free for job seekers?',
     a: 'Yes. Candidates never pay. You can browse jobs, save searches, set up email alerts, and apply to any role for free.',
   },
   {
@@ -44,7 +44,7 @@ const FAQ_ITEMS = [
     a: 'Yes, for Starter and Pro Resume Database plans — upgrade, downgrade, or cancel anytime from your Company Dashboard. Our top-tier Business plan is set up with our sales team.',
   },
   {
-    q: 'Does HireQuadrant use AI?',
+    q: 'Does Nexegin use AI?',
     a: 'Yes. Employers get an AI job description generator and AI candidate screening with fit scores. Candidates get similar-job recommendations and AI-assisted matching.',
   },
   {
@@ -126,10 +126,10 @@ const Pricing: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
       <Helmet>
-        <title>Pricing — HireQuadrant</title>
+        <title>Pricing — Nexegin</title>
         <meta
           name="description"
-          content="HireQuadrant pricing: post jobs for free, sponsor listings to reach more candidates, and search the resume database to find talent yourself."
+          content="Nexegin pricing: post jobs for free, sponsor listings to reach more candidates, and search the resume database to find talent yourself."
         />
       </Helmet>
 
@@ -292,7 +292,7 @@ const Pricing: React.FC = () => {
                     Custom credits, team seats, and dedicated support.
                   </p>
                   <a
-                    href="mailto:billing@hirequadrant.com?subject=Enterprise%20Resume%20Database"
+                    href="mailto:billing@nexegin.com?subject=Enterprise%20Resume%20Database"
                     className="px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 font-semibold hover:border-primary-400 hover:text-primary-600 transition"
                   >
                     Contact sales
@@ -321,7 +321,7 @@ const Pricing: React.FC = () => {
             <p className="mt-10 text-center text-gray-600 dark:text-slate-400">
               Need a custom plan or have questions?{' '}
               <a
-                href="mailto:sales@hirequadrant.com"
+                href="mailto:sales@nexegin.com"
                 className="text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300"
               >
                 Contact our sales team

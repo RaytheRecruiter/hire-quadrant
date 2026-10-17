@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from './HardLink';
 import { Mail } from 'lucide-react';
+import { NexeginMark } from './NexeginLogo';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -12,9 +13,12 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h3 className="text-lg font-bold mb-4">HireQuadrant</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <NexeginMark className="h-7 w-7" />
+              <h3 className="text-lg font-bold">Nexegin</h3>
+            </div>
             <p className="text-sm text-gray-300">
-              Work with employers who show up.
+              Find your next IT role.
             </p>
           </div>
 
@@ -33,9 +37,9 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-semibold mb-4 text-white">For Employers</h4>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><a href="mailto:employers@hirequadrant.com" className="hover:text-white transition">Post a Job</a></li>
+              <li><a href="mailto:employers@nexegin.com" className="hover:text-white transition">Post a Job</a></li>
               <li><HardLink to="/pricing" className="hover:text-white transition">Pricing</HardLink></li>
-              <li><a href="mailto:sales@hirequadrant.com" className="hover:text-white transition">Contact Sales</a></li>
+              <li><a href="mailto:sales@nexegin.com" className="hover:text-white transition">Contact Sales</a></li>
             </ul>
           </div>
 
@@ -57,7 +61,7 @@ const Footer: React.FC = () => {
         {/* Social + Copyright */}
         <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-gray-300 mb-4 md:mb-0">
-            © {currentYear} HireQuadrant. All rights reserved.
+            © {currentYear} Nexegin. All rights reserved.
           </p>
           <div className="flex gap-4">
             {/* LinkedIn/Twitter/GitHub icons removed 2026-10-09 (audit N18,
@@ -66,7 +70,7 @@ const Footer: React.FC = () => {
                 profiles -- misleading rather than broken. Per the audit's
                 own guidance, omit the icon rather than link somewhere
                 wrong; add them back once real profile URLs exist. */}
-            <a href="mailto:hello@hirequadrant.com" className="text-gray-300 hover:text-white transition">
+            <a href="mailto:hello@nexegin.com" className="text-gray-300 hover:text-white transition">
               <Mail className="h-5 w-5" />
             </a>
           </div>

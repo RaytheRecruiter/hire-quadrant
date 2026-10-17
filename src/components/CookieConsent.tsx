@@ -58,7 +58,7 @@ const CookieConsent: React.FC = () => {
         </div>
         <div className="min-w-0">
           <h2 id="cookie-consent-title" className="text-sm font-semibold text-secondary-900 dark:text-white">
-            Cookies on HireQuadrant
+            Cookies on Nexegin
           </h2>
           <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">
             We use a small number of cookies — the strictly necessary ones to keep you signed in, plus Google

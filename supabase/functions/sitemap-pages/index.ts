@@ -9,7 +9,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // Strip any stray whitespace — operators have pasted the env var with a
 // leading tab before, which rendered inside every <loc>.
-const BASE_URL = (Deno.env.get('SITE_URL') || 'https://hirequadrant.com').trim();
+const BASE_URL = (Deno.env.get('SITE_URL') || 'https://nexegin.com').trim();
 
 const staticPages = [
   { path: '/', priority: '1.0', changefreq: 'daily' },

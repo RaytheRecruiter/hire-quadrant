@@ -183,7 +183,7 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
                   </button>
                 ) : (
                   <a
-                    href={`mailto:billing@hirequadrant.com?subject=Sponsor%20job:%20${encodeURIComponent(jobTitle)}`}
+                    href={`mailto:billing@nexegin.com?subject=Sponsor%20job:%20${encodeURIComponent(jobTitle)}`}
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary-400 text-primary-600 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30"
                   >
                     <Mail className="h-4 w-4" />

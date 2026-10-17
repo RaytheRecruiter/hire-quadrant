@@ -30,7 +30,7 @@ import AIReviewSummary from './companies/AIReviewSummary';
 import JobCard from './JobCard';
 import { buildAggregateRatingLd, buildOrganizationLd } from '../utils/structuredData';
 
-const SITE_ORIGIN = 'https://hirequadrant.com';
+const SITE_ORIGIN = 'https://nexegin.com';
 
 const CompanyProfile: React.FC = () => {
   // Route declares :id — treat the value as slug-or-id (hook resolves both)
@@ -95,10 +95,10 @@ const CompanyProfile: React.FC = () => {
     reviewCount: company.review_count,
   });
 
-  const metaTitle = `${company.display_name || company.name} — Jobs, Reviews & Ratings | HireQuadrant`;
+  const metaTitle = `${company.display_name || company.name} — Jobs, Reviews & Ratings | Nexegin`;
   const metaDesc =
     company.description?.slice(0, 155) ||
-    `See open roles, company info, and employee reviews for ${company.display_name || company.name} on HireQuadrant.`;
+    `See open roles, company info, and employee reviews for ${company.display_name || company.name} on Nexegin.`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">

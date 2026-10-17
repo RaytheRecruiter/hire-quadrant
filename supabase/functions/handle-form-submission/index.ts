@@ -149,12 +149,12 @@ serve(async (req) => {
       await supabase.functions.invoke('send-email', {
         body: {
           to: data.email,
-          subject: `We received your message - ${data.subject || 'HireQuadrant'}`,
+          subject: `We received your message - ${data.subject || 'Nexegin'}`,
           template: 'contact_confirmation',
           variables: {
             name: data.name || 'there',
             subject: data.subject,
-            supportEmail: 'support@hirequadrant.com',
+            supportEmail: 'support@nexegin.com',
           },
         },
       });
@@ -162,7 +162,7 @@ serve(async (req) => {
       // Send notification email to support
       await supabase.functions.invoke('send-email', {
         body: {
-          to: 'support@hirequadrant.com',
+          to: 'support@nexegin.com',
           subject: `New contact form: ${data.subject || 'General inquiry'}`,
           template: 'contact_notification',
           variables: {
@@ -179,7 +179,7 @@ serve(async (req) => {
       await supabase.functions.invoke('send-email', {
         body: {
           to: data.email,
-          subject: 'Welcome to HireQuadrant Weekly',
+          subject: 'Welcome to Nexegin Weekly',
           template: 'newsletter_confirmation',
           variables: {
             unsubscribeUrl: `${Deno.env.get('SITE_URL')}/unsubscribe?email=${encodeURIComponent(data.email)}`,

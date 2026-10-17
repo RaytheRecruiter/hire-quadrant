@@ -587,7 +587,7 @@ const InviteOwnerModal: React.FC<InviteOwnerModalProps> = ({ company, onClose, o
       undefined,
       { month: 'long', day: 'numeric', year: 'numeric' },
     );
-    const inviterName = user?.name || user?.email || 'HireQuadrant';
+    const inviterName = user?.name || user?.email || 'Nexegin';
     const companyName = company.display_name || company.name;
     try {
       const url = import.meta.env.VITE_SUPABASE_URL as string;
@@ -601,7 +601,7 @@ const InviteOwnerModal: React.FC<InviteOwnerModalProps> = ({ company, onClose, o
         },
         body: JSON.stringify({
           to: cleanEmail,
-          subject: `${inviterName} invited you to own ${companyName} on HireQuadrant`,
+          subject: `${inviterName} invited you to own ${companyName} on Nexegin`,
           template: 'team_invitation',
           variables: {
             companyName,

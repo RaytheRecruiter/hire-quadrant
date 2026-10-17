@@ -40,11 +40,11 @@ export function buildArticleLd(params: {
     ...(image ? { image } : {}),
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : datePublished ? { dateModified: datePublished } : {}),
-    author: { '@type': authorName ? 'Person' : 'Organization', name: authorName ?? 'HireQuadrant' },
+    author: { '@type': authorName ? 'Person' : 'Organization', name: authorName ?? 'Nexegin' },
     publisher: {
       '@type': 'Organization',
-      name: 'HireQuadrant',
-      logo: { '@type': 'ImageObject', url: 'https://hirequadrant.com/favicon.svg' },
+      name: 'Nexegin',
+      logo: { '@type': 'ImageObject', url: 'https://nexegin.com/favicon.svg' },
     },
   };
 }

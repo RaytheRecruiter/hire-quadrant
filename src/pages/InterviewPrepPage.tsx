@@ -6,7 +6,7 @@ import HardLink from '../components/HardLink';
 import BreadcrumbSchema from '../components/BreadcrumbSchema';
 import { prettyFromSlug } from '../utils/seoSlug';
 
-const ORIGIN = 'https://hirequadrant.com';
+const ORIGIN = 'https://nexegin.com';
 
 // Curated, role-agnostic prep content. Role-specific questions are
 // derived from the slug when possible; otherwise a generic bank is shown.
@@ -73,14 +73,14 @@ const InterviewPrepPage: React.FC = () => {
   const roleQuestions = ROLE_TEMPLATES[bucket];
 
   const pageUrl = `${ORIGIN}/interview-prep/${roleSlug}`;
-  const metaTitle = `${roleName} interview prep — top questions & answers · HireQuadrant`;
-  const metaDesc = `Practice ${roleName} interview questions with sample approaches. Curated by HireQuadrant from real hiring patterns.`;
+  const metaTitle = `${roleName} interview prep — top questions & answers · Nexegin`;
+  const metaDesc = `Practice ${roleName} interview questions with sample approaches. Curated by Nexegin from real hiring patterns.`;
 
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: `${roleName} interview questions and how to prepare`,
-    author: { '@type': 'Organization', name: 'HireQuadrant' },
+    author: { '@type': 'Organization', name: 'Nexegin' },
     datePublished: '2026-04-24',
     mainEntityOfPage: pageUrl,
   };

@@ -1,10 +1,10 @@
-Contact: mailto:security@hirequadrant.com
-Contact: https://hirequadrant.com/support
+Contact: mailto:security@nexegin.com
+Contact: https://nexegin.com/support
 Expires: 2027-04-24T23:59:59.000Z
 Preferred-Languages: en
-Canonical: https://hirequadrant.com/.well-known/security.txt
-Policy: https://hirequadrant.com/security-policy
-Acknowledgments: https://hirequadrant.com/about
+Canonical: https://nexegin.com/.well-known/security.txt
+Policy: https://nexegin.com/security-policy
+Acknowledgments: https://nexegin.com/about
 
 # Please report security vulnerabilities responsibly.
 # We aim to respond within 72 hours.

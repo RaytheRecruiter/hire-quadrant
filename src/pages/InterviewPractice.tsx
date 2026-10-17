@@ -159,7 +159,7 @@ const InterviewPractice: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Interview Practice · HireQuadrant</title>
+        <title>Interview Practice · Nexegin</title>
         <meta
           name="description"
           content="Practice interview questions with AI feedback. Covers behavioral, technical, system design, and role-specific questions."

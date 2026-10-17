@@ -80,12 +80,12 @@ const HelpCenter: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Help Center · HireQuadrant</title>
+        <title>Help Center · Nexegin</title>
         <meta
           name="description"
-          content="Answers to common questions about HireQuadrant — for job seekers, employers, reviews, billing, and account security."
+          content="Answers to common questions about Nexegin — for job seekers, employers, reviews, billing, and account security."
         />
-        <link rel="canonical" href="https://hirequadrant.com/help" />
+        <link rel="canonical" href="https://nexegin.com/help" />
       </Helmet>
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

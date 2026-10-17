@@ -1,5 +1,5 @@
-# HireQuadrant — robots.txt
-# https://hirequadrant.com/robots.txt
+# Nexegin — robots.txt
+# https://nexegin.com/robots.txt
 
 User-agent: *
 Allow: /
@@ -47,4 +47,4 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-Sitemap: https://hirequadrant.com/sitemap.xml
+Sitemap: https://nexegin.com/sitemap.xml

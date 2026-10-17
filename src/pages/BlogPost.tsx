@@ -102,7 +102,7 @@ const BlogPost: React.FC = () => {
 
   const articleLd = buildArticleLd({
     headline: post.title,
-    url: `https://hirequadrant.com/blog/${post.slug}`,
+    url: `https://nexegin.com/blog/${post.slug}`,
     description: post.excerpt,
     image: post.cover_image_url,
     datePublished: post.published_at,

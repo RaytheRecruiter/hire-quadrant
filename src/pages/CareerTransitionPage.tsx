@@ -8,7 +8,7 @@ import { supabase } from '../utils/supabaseClient';
 import { prettyFromSlug } from '../utils/seoSlug';
 import { formatDistanceToNow } from 'date-fns';
 
-const ORIGIN = 'https://hirequadrant.com';
+const ORIGIN = 'https://nexegin.com';
 
 interface JobRow {
   id: string;
@@ -51,7 +51,7 @@ const CareerTransitionPage: React.FC = () => {
   }, [toRole]);
 
   const pageUrl = `${ORIGIN}/career/from/${fromSlug}/to/${toSlug}`;
-  const metaTitle = `${fromRole} to ${toRole}: career transition guide · HireQuadrant`;
+  const metaTitle = `${fromRole} to ${toRole}: career transition guide · Nexegin`;
   const metaDesc = `How to transition from a ${fromRole} role to ${toRole}. Skills gap, common pivots, and open roles hiring now.`;
 
   const articleLd = {
@@ -59,7 +59,7 @@ const CareerTransitionPage: React.FC = () => {
     '@type': 'Article',
     headline: `${fromRole} to ${toRole} career transition`,
     mainEntityOfPage: pageUrl,
-    author: { '@type': 'Organization', name: 'HireQuadrant' },
+    author: { '@type': 'Organization', name: 'Nexegin' },
     datePublished: '2026-04-24',
   };
 

@@ -101,8 +101,8 @@ const Support: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Support & Help Center — HireQuadrant</title>
-        <meta name="description" content="Get help with your HireQuadrant account, job search, applications, and more." />
+        <title>Support & Help Center — Nexegin</title>
+        <meta name="description" content="Get help with your Nexegin account, job search, applications, and more." />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -124,12 +124,12 @@ const Support: React.FC = () => {
               </HardLink>
 
               <a
-                href="mailto:support@hirequadrant.com"
+                href="mailto:support@nexegin.com"
                 className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
               >
                 <HelpCircle className="h-6 w-6 text-amber-500 mx-auto mb-2" />
                 <h3 className="font-semibold text-secondary-900 dark:text-white mb-1">Email Support</h3>
-                <p className="text-sm text-gray-600 dark:text-slate-400">support@hirequadrant.com</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">support@nexegin.com</p>
               </a>
 
               <a
@@ -162,7 +162,7 @@ const Support: React.FC = () => {
                 <div className="text-center py-12">
                   <BookOpen className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                   <p className="text-gray-600 dark:text-slate-400">
-                    No results found. Try different search terms or contact us at support@hirequadrant.com
+                    No results found. Try different search terms or contact us at support@nexegin.com
                   </p>
                 </div>
               ) : (
@@ -216,7 +216,7 @@ const Support: React.FC = () => {
               Still need help?
             </h3>
             <p className="text-gray-600 dark:text-slate-400 mb-6">
-              Our support team is here to help. Reach out and we'll respond within 24 hours.
+              Our support team is here to help. Reach out and we'll get back to you.
             </p>
             <HardLink
               to="/contact"

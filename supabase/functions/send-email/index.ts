@@ -24,7 +24,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
           </p>
           <p>We'll keep you updated every step of the way.</p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-          <p style="font-size: 12px; color: #666;">© 2026 HireQuadrant</p>
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
         </body>
       </html>
     `,
@@ -43,7 +43,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
             </a>
           </p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-          <p style="font-size: 12px; color: #666;">© 2026 HireQuadrant</p>
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
         </body>
       </html>
     `,
@@ -62,7 +62,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
           </p>
           <p style="color: #666; font-size: 12px;">If you didn't request this, ignore this email.</p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-          <p style="font-size: 12px; color: #666;">© 2026 HireQuadrant</p>
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
         </body>
       </html>
     `,
@@ -72,7 +72,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
       <html>
         <head><meta charset="utf-8"></head>
         <body style="font-family: sans-serif; color: #333; max-width: 560px; margin: 0 auto;">
-          <h1>${v.recipientFirstName ? `Hi ${v.recipientFirstName}, you've` : "You've"} been invited to join ${v.companyName} on HireQuadrant</h1>
+          <h1>${v.recipientFirstName ? `Hi ${v.recipientFirstName}, you've` : "You've"} been invited to join ${v.companyName} on Nexegin</h1>
           <p>${v.inviterName ? `${v.inviterName}` : 'Your team'} invited you as a <strong>${v.roleLabel}</strong>${v.scopeLabel ? ` (${v.scopeLabel})` : ''}.</p>
           <p>Click below to accept the invitation. The link expires on ${v.expiresOn}.</p>
           <p style="margin: 24px 0;">
@@ -88,7 +88,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
           <p style="font-size: 12px; color: #666;">
             If you weren't expecting this, you can safely ignore the email.
           </p>
-          <p style="font-size: 12px; color: #666;">© 2026 HireQuadrant</p>
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
         </body>
       </html>
     `,
@@ -103,7 +103,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
         <head><meta charset="utf-8"></head>
         <body style="font-family: sans-serif; color: #333; max-width: 560px; margin: 0 auto;">
           <h1>New user added to your account</h1>
-          <p>The following email address has been added as a <strong>${v.roleLabel}</strong> on your ${v.companyName} account on HireQuadrant:</p>
+          <p>The following email address has been added as a <strong>${v.roleLabel}</strong> on your ${v.companyName} account on Nexegin:</p>
           <p style="margin: 20px 0; padding: 14px 18px; background: #f5f7fa; border-radius: 6px; font-weight: 600;">
             ${v.memberEmail}
           </p>
@@ -116,7 +116,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
             If you didn't expect this, review your team roster and remove access immediately.
           </p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 24px 0;">
-          <p style="font-size: 12px; color: #666;">© 2026 HireQuadrant</p>
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
         </body>
       </html>
     `,
@@ -146,7 +146,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
             </a>
           </p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-          <p style="font-size: 12px; color: #666;">© 2026 HireQuadrant</p>
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
         </body>
       </html>
     `,
@@ -212,8 +212,8 @@ serve(async (req) => {
           },
         ],
         from: {
-          email: 'noreply@hirequadrant.com',
-          name: 'HireQuadrant',
+          email: 'noreply@nexegin.com',
+          name: 'Nexegin',
         },
         subject,
         content: [

@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HardLink from './HardLink';
+import { NexeginMark } from './NexeginLogo';
 import { useAuth } from '../contexts/AuthContext';
 import {
-  Grid3X3, User, LogOut, BarChart3, FileText, Building2, Bookmark, Bell, Search, BookOpen,
+  User, LogOut, BarChart3, FileText, Building2, Bookmark, Bell, Search, BookOpen,
   ChevronDown, Menu, X, Settings, Briefcase, Sparkles, GraduationCap,
   MessageSquare, Star, Users as UsersIcon, HelpCircle, Key
 } from 'lucide-react';
@@ -77,10 +78,8 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <HardLink to="/" className="flex items-center gap-2.5 flex-shrink-0">
-            <div className="p-1.5 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg shadow-soft">
-              <Grid3X3 className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-display font-bold text-xl text-secondary-900 dark:text-white hidden sm:inline">Hire Quadrant</span>
+            <NexeginMark className="h-8 w-8" />
+            <span className="font-display font-bold text-xl tracking-tight text-secondary-900 dark:text-white hidden sm:inline">nexegin</span>
           </HardLink>
 
           {/* Desktop nav */}
