@@ -39,14 +39,14 @@ const Contact: React.FC = () => {
       });
 
       if (response.ok) {
-        toast.success('Message sent! We\'ll get back to you within 24 hours.');
+        toast.success('Message sent! We\'ll get back to you.');
         setForm({ name: '', email: '', category: 'general', subject: '', message: '' });
       } else {
-        toast.error('Failed to send message. Please try again or email support@hirequadrant.com');
+        toast.error('Failed to send message. Please try again or email support@nexegin.com');
       }
     } catch (err) {
       console.error('Contact form error:', err);
-      toast.error('Error sending message. Please email support@hirequadrant.com directly.');
+      toast.error('Error sending message. Please email support@nexegin.com directly.');
     } finally {
       setSending(false);
     }
@@ -55,15 +55,15 @@ const Contact: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Contact Us — HireQuadrant</title>
-        <meta name="description" content="Get in touch with the HireQuadrant team. We'd love to hear from you." />
+        <title>Contact Us — Nexegin</title>
+        <meta name="description" content="Get in touch with the Nexegin team. We'd love to hear from you." />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-4">Contact Us</h1>
             <p className="text-lg text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
-              Have a question or issue? We're here to help. Reach out via email, phone, or the form below and we'll get back to you within 24 hours.
+              Have a question or issue? We're here to help. Reach out via email, phone, or the form below and we'll get back to you.
             </p>
           </div>
 
@@ -71,7 +71,7 @@ const Contact: React.FC = () => {
           {/* "Live Chat" and "Status Page" cards removed 2026-10-09 (audit
               N18, confirmed): neither is implemented anywhere -- Live Chat
               claimed specific business hours with no actual chat widget,
-              and Status Page pointed to "status.hirequadrant.com", a
+              and Status Page pointed to "status.nexegin.com", a
               subdomain that doesn't exist. The audit's own guidance: only
               show contact controls that actually work. Also dropped the
               "Response within 24 hours" line per N04 (no response-time
@@ -83,7 +83,7 @@ const Contact: React.FC = () => {
                 <Mail className="h-6 w-6 text-primary-600 dark:text-primary-400" />
               </div>
               <h3 className="font-bold text-secondary-900 dark:text-white mb-2">Email</h3>
-              <p className="text-gray-600 dark:text-slate-400 text-sm">support@hirequadrant.com</p>
+              <p className="text-gray-600 dark:text-slate-400 text-sm">support@nexegin.com</p>
             </div>
           </div>
 
@@ -186,14 +186,14 @@ const Contact: React.FC = () => {
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-gray-700 dark:text-slate-300">
                   <Mail className="h-4 w-4 text-primary-500" />
-                  <a href="mailto:hello@hirequadrant.com" className="hover:text-primary-500 transition">
-                    hello@hirequadrant.com
+                  <a href="mailto:hello@nexegin.com" className="hover:text-primary-500 transition">
+                    hello@nexegin.com
                   </a>
                 </li>
                 <li className="flex items-center gap-2 text-gray-700 dark:text-slate-300">
                   <Mail className="h-4 w-4 text-primary-500" />
-                  <a href="mailto:employers@hirequadrant.com" className="hover:text-primary-500 transition">
-                    employers@hirequadrant.com
+                  <a href="mailto:employers@nexegin.com" className="hover:text-primary-500 transition">
+                    employers@nexegin.com
                   </a>
                 </li>
               </ul>

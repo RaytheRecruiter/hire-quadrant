@@ -10,7 +10,7 @@ interface Props {
   companyName: string;
 }
 
-const ORIGIN = typeof window !== 'undefined' ? window.location.origin : 'https://hirequadrant.com';
+const ORIGIN = typeof window !== 'undefined' ? window.location.origin : 'https://nexegin.com';
 
 const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => {
   const { user, isAuthenticated } = useAuth();

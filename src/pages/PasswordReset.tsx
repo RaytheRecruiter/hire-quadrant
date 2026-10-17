@@ -57,7 +57,7 @@ const PasswordReset: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Reset Password — HireQuadrant</title>
+        <title>Reset Password — Nexegin</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 

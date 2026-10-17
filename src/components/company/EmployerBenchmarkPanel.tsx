@@ -77,7 +77,7 @@ const EmployerBenchmarkPanel: React.FC<{ companyId: string }> = ({ companyId }) 
       </div>
       <p className="text-sm text-gray-600 dark:text-slate-400 mb-6">
         {data.industry
-          ? `How you compare to other ${data.industry} companies on HireQuadrant.`
+          ? `How you compare to other ${data.industry} companies on Nexegin.`
           : 'Peer industry is not set — add an industry in Company Profile to unlock richer benchmarks.'}
       </p>
 
@@ -125,7 +125,7 @@ const EmployerBenchmarkPanel: React.FC<{ companyId: string }> = ({ companyId }) 
       </div>
 
       <p className="mt-6 text-xs text-gray-500 dark:text-slate-400 italic">
-        Peer median is calculated across all companies in your industry on HireQuadrant. A 0 peer value means there isn't enough data yet — the benchmark fills in as more companies join.
+        Peer median is calculated across all companies in your industry on Nexegin. A 0 peer value means there isn't enough data yet — the benchmark fills in as more companies join.
       </p>
     </div>
   );

@@ -30,7 +30,7 @@ const SettingsPage: React.FC = () => {
 
   return (
     <>
-      <Helmet><title>Settings · HireQuadrant</title></Helmet>
+      <Helmet><title>Settings · Nexegin</title></Helmet>
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">

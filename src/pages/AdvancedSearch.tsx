@@ -31,7 +31,7 @@ const AdvancedSearch: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Advanced Job Search — HireQuadrant</title>
+        <title>Advanced Job Search — Nexegin</title>
         <meta name="description" content="Search jobs by title, location, type, salary, and more. Find your perfect role." />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">

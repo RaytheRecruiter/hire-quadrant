@@ -1,18 +1,18 @@
-# HireQuadrant
+# Nexegin
 
-> HireQuadrant is a modern job board that connects candidates with employers who actually reply. Every application is screened, tracked, and acknowledged — no more black hole.
+> Nexegin is a job board for IT and technical roles. Find your next IT role — explore IT jobs, save opportunities, and manage your applications in one place.
 
-HireQuadrant is built for both sides of hiring:
+Nexegin is built for both sides of hiring:
 - **Candidates** get AI-screened matches, saved searches with email alerts, a single dashboard for application tracking, and resume management
 - **Employers** get configurable screening questions, AI-powered candidate screening with fit scores, a talent database, and a simple applicant pipeline
 
 ## Core pages
 
-- [Home / Jobs](https://hirequadrant.com/): Primary job search with filters (keyword, location, type, salary)
-- [Blog](https://hirequadrant.com/blog): Career resources covering resumes, interviews, hiring, and industry insights
-- [Pricing](https://hirequadrant.com/pricing): Subscription tiers for companies (Free, Basic, Premium, Enterprise)
-- [Register](https://hirequadrant.com/register): Sign up as a job seeker or employer (company/employer)
-- [Login](https://hirequadrant.com/login): Sign in with email/password or Google SSO
+- [Home / Jobs](https://nexegin.com/): Primary job search with filters (keyword, location, type, salary)
+- [Blog](https://nexegin.com/blog): Career resources covering resumes, interviews, hiring, and industry insights
+- [Pricing](https://nexegin.com/pricing): Subscription tiers for companies (Free, Basic, Premium, Enterprise)
+- [Register](https://nexegin.com/register): Sign up as a job seeker or employer (company/employer)
+- [Login](https://nexegin.com/login): Sign in with email/password or Google SSO
 
 ## Job postings
 
@@ -39,8 +39,8 @@ Each job listing at `/jobs/:id` includes:
 
 ## Contact
 
-- Site: https://hirequadrant.com
-- Support: hello@hirequadrant.com
+- Site: https://nexegin.com
+- Support: hello@nexegin.com
 
 ## Crawling
 

@@ -21,7 +21,7 @@ const CompanyPortal: React.FC = () => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
   if (loading) return null;
   if (!isAuthenticated) return <Navigate to="/login?returnTo=/company-portal" replace />;
-  // HireQuadrant internal — admin role only.
+  // Nexegin internal — admin role only.
   if (!isAdmin) return <Navigate to="/" replace />;
 
   const moderation: Tile[] = [
@@ -144,7 +144,7 @@ const CompanyPortal: React.FC = () => {
 
   return (
     <>
-      <Helmet><title>HireQuadrant Portal · Admin</title></Helmet>
+      <Helmet><title>Nexegin Portal · Admin</title></Helmet>
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-8">
@@ -154,10 +154,10 @@ const CompanyPortal: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">
-                  HireQuadrant Portal
+                  Nexegin Portal
                 </h1>
                 <p className="text-gray-600 dark:text-slate-400 text-sm">
-                  Internal management hub for HireQuadrant admins.
+                  Internal management hub for Nexegin admins.
                 </p>
               </div>
             </div>

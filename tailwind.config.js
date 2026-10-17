@@ -9,20 +9,19 @@ export default {
         display: ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Dallas Cowboys navy — scale built around #003594
+        // Nexegin spruce (deep teal) - base #066f68 (6.0:1 on white). 500 is the lightest shade safe for text on white (4.7:1).
         primary: {
-          50: '#e8edf5',
-          100: '#cfdaeb',
-          200: '#9eb5d7',
-          300: '#6e90c3',
-          400: '#3d6baf',
-          500: '#003594',
-          600: '#002e80',
-          700: '#00276c',
-          800: '#001f58',
-          900: '#041E42',
+          50: '#f1f9f8',
+          100: '#daf1ef',
+          200: '#b4e4e1',
+          300: '#7bd5cf',
+          400: '#31c4ba',
+          500: '#088179',
+          600: '#066f68',
+          700: '#065b55',
+          800: '#064742',
+          900: '#052e2b',
         },
-        // Cowboys silver / slate secondary — scale around #b0b7bc
         secondary: {
           50: '#f7f8f9',
           100: '#e9ebed',
@@ -39,13 +38,15 @@ export default {
           amber: '#f59e0b',
           rose: '#f43f5e',
           indigo: '#6366f1',
+          signal: '#E8631A',      // decorative / large UI only (3.4:1 on white)
+          signalText: '#B84A0C',  // safe for text on white (5.2:1)
         },
       },
       boxShadow: {
-        'soft': '0 2px 8px -2px rgba(0, 53, 148, 0.08), 0 4px 16px -4px rgba(0, 53, 148, 0.05)',
+        'soft': '0 2px 8px -2px rgba(6, 111, 104, 0.08), 0 4px 16px -4px rgba(6, 111, 104, 0.05)',
         'card': '0 1px 2px 0 rgba(37, 40, 44, 0.05), 0 4px 12px -2px rgba(37, 40, 44, 0.06)',
-        'card-hover': '0 4px 16px -4px rgba(0, 53, 148, 0.18), 0 8px 24px -4px rgba(0, 53, 148, 0.10)',
-        'glow': '0 0 0 4px rgba(0, 53, 148, 0.20)',
+        'card-hover': '0 4px 16px -4px rgba(6, 111, 104, 0.18), 0 8px 24px -4px rgba(6, 111, 104, 0.10)',
+        'glow': '0 0 0 4px rgba(6, 111, 104, 0.20)',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',

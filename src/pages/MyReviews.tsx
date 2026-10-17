@@ -84,13 +84,13 @@ const MyReviews: React.FC = () => {
 
   return (
     <>
-      <Helmet><title>My Reviews · HireQuadrant</title></Helmet>
+      <Helmet><title>My Reviews · Nexegin</title></Helmet>
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">My Reviews</h1>
             <p className="text-gray-600 dark:text-slate-400">
-              Reviews you've written for companies on HireQuadrant.
+              Reviews you've written for companies on Nexegin.
             </p>
           </header>
 

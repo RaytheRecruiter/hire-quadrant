@@ -5,16 +5,16 @@ const Terms: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Terms of Service — HireQuadrant</title>
+        <title>Terms of Service — Nexegin</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
       <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-8">Terms of Service</h1>
           <p className="text-gray-700 dark:text-slate-300 mb-4">
-            HireQuadrant is operated by Quadrant, Inc. These terms apply to candidates browsing and applying for
+            Nexegin is operated by Quadrant, Inc. These terms apply to candidates browsing and applying for
             jobs, and to employers using paid subscriptions and job sponsorship features. By accessing or using
-            HireQuadrant, you agree to be bound by these terms. If you don't agree, please don't use the service.
+            Nexegin, you agree to be bound by these terms. If you don't agree, please don't use the service.
           </p>
 
           <div className="prose dark:prose-invert max-w-none space-y-6">
@@ -54,9 +54,9 @@ const Terms: React.FC = () => {
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">4. Job postings and content</h2>
               <p className="text-gray-700 dark:text-slate-300">
-                Employers are responsible for the accuracy of their job postings and company information. HireQuadrant
+                Employers are responsible for the accuracy of their job postings and company information. Nexegin
                 also aggregates publicly posted job listings from third-party sources; we don't guarantee the
-                accuracy, availability, or current status of any listing, and a listing's presence on HireQuadrant
+                accuracy, availability, or current status of any listing, and a listing's presence on Nexegin
                 doesn't imply our endorsement of the employer.
               </p>
             </section>
@@ -74,7 +74,7 @@ const Terms: React.FC = () => {
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">6. Limitation of liability</h2>
               <p className="text-gray-700 dark:text-slate-300">
-                To the extent permitted by law, HireQuadrant and Quadrant, Inc. won't be liable for indirect,
+                To the extent permitted by law, Nexegin and Quadrant, Inc. won't be liable for indirect,
                 incidental, or consequential damages arising from your use of the service, including lost data,
                 lost profits, or business interruption.
               </p>
@@ -83,7 +83,7 @@ const Terms: React.FC = () => {
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">7. Links to other sites</h2>
               <p className="text-gray-700 dark:text-slate-300">
-                We haven't reviewed every site linked from HireQuadrant and aren't responsible for their content.
+                We haven't reviewed every site linked from Nexegin and aren't responsible for their content.
                 Linking to a site doesn't imply our endorsement of it. Use of any linked site is at your own risk.
               </p>
             </section>
@@ -91,7 +91,7 @@ const Terms: React.FC = () => {
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">8. Changes to these terms</h2>
               <p className="text-gray-700 dark:text-slate-300">
-                We may update these terms from time to time. Continuing to use HireQuadrant after a change means you
+                We may update these terms from time to time. Continuing to use Nexegin after a change means you
                 accept the updated terms.
               </p>
             </section>
@@ -100,8 +100,8 @@ const Terms: React.FC = () => {
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">9. Contact us</h2>
               <p className="text-gray-700 dark:text-slate-300">
                 Questions about these terms can be sent to{' '}
-                <a href="mailto:support@hirequadrant.com" className="text-primary-500 hover:text-primary-600">
-                  support@hirequadrant.com
+                <a href="mailto:support@nexegin.com" className="text-primary-500 hover:text-primary-600">
+                  support@nexegin.com
                 </a>
               </p>
             </section>

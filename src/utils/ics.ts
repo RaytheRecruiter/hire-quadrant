@@ -29,7 +29,7 @@ export function buildIcs(ev: IcsEvent): string {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//HireQuadrant//Interview//EN',
+    'PRODID:-//Nexegin//Interview//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:REQUEST',
     'BEGIN:VEVENT',

@@ -8,7 +8,7 @@ import RatingStars from '../components/companies/RatingStars';
 import { useCompanyDirectory } from '../hooks/useCompanyDirectory';
 import { prettyFromSlug, toSeoSlug } from '../utils/seoSlug';
 
-const SITE_ORIGIN = 'https://hirequadrant.com';
+const SITE_ORIGIN = 'https://nexegin.com';
 
 // Curated category buckets — map slug → matchers
 const CATEGORY_MATCHERS: Record<
@@ -63,8 +63,8 @@ const BestCompaniesPage: React.FC = () => {
   }, [companies, meta]);
 
   const pageUrl = `${SITE_ORIGIN}/best/${categorySlug}`;
-  const metaTitle = `Best ${prettyLabel} companies hiring — HireQuadrant`;
-  const metaDesc = `Top ${prettyLabel} companies ranked by employee ratings and open roles on HireQuadrant.`;
+  const metaTitle = `Best ${prettyLabel} companies hiring — Nexegin`;
+  const metaDesc = `Top ${prettyLabel} companies ranked by employee ratings and open roles on Nexegin.`;
 
   const itemListLd = ranked.length > 0 ? {
     '@context': 'https://schema.org',
@@ -99,7 +99,7 @@ const BestCompaniesPage: React.FC = () => {
               <p className="text-gray-600 dark:text-slate-400">
                 {loading ? 'Ranking…'
                   : ranked.length === 0 ? `No companies yet in "${prettyLabel}".`
-                  : `Ranked by employee rating across ${ranked.length} companies with active hiring on HireQuadrant.`}
+                  : `Ranked by employee rating across ${ranked.length} companies with active hiring on Nexegin.`}
               </p>
             </div>
           </header>

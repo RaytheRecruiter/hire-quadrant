@@ -8,7 +8,7 @@ import { supabase } from '../utils/supabaseClient';
 import type { Job } from '../contexts/JobContext';
 import { prettyFromSlug, toSeoSlug } from '../utils/seoSlug';
 
-const SITE_ORIGIN = 'https://hirequadrant.com';
+const SITE_ORIGIN = 'https://nexegin.com';
 
 const LocationPage: React.FC = () => {
   const { locationSlug } = useParams<{ locationSlug: string }>();
@@ -54,8 +54,8 @@ const LocationPage: React.FC = () => {
   }, [locationSlug]);
 
   const pageUrl = `${SITE_ORIGIN}/jobs/location/${locationSlug}`;
-  const metaTitle = `Jobs in ${pretty} — HireQuadrant`;
-  const metaDesc = `${jobs.length > 0 ? `${jobs.length} open roles` : 'Open roles'} in ${pretty}. Browse the latest positions from companies actively hiring on HireQuadrant.`;
+  const metaTitle = `Jobs in ${pretty} — Nexegin`;
+  const metaDesc = `${jobs.length > 0 ? `${jobs.length} open roles` : 'Open roles'} in ${pretty}. Browse the latest positions from companies actively hiring on Nexegin.`;
 
   const itemListLd = useMemo(() => {
     if (jobs.length === 0) return null;

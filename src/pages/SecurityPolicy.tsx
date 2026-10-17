@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet-async';
 const SecurityPolicy: React.FC = () => (
   <>
     <Helmet>
-      <title>Vulnerability Disclosure Policy · HireQuadrant</title>
-      <meta name="description" content="How to report a security vulnerability on HireQuadrant, and what to expect after you do." />
+      <title>Vulnerability Disclosure Policy · Nexegin</title>
+      <meta name="description" content="How to report a security vulnerability on Nexegin, and what to expect after you do." />
     </Helmet>
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,14 +14,14 @@ const SecurityPolicy: React.FC = () => (
 
         <div className="prose prose-slate max-w-none space-y-6 text-secondary-800">
           <p>
-            If you've found a security vulnerability in HireQuadrant, we want to know about it. This page describes
+            If you've found a security vulnerability in Nexegin, we want to know about it. This page describes
             what's in scope, how to report a finding, and what you can expect from us once you do.
           </p>
 
           <section>
             <h2 className="text-xl font-semibold text-secondary-900">How to report</h2>
             <p>
-              Email <a className="text-primary-600 hover:underline" href="mailto:security@hirequadrant.com">security@hirequadrant.com</a> with
+              Email <a className="text-primary-600 hover:underline" href="mailto:security@nexegin.com">security@nexegin.com</a> with
               a description of the issue, the steps to reproduce it, and its potential impact. Include proof-of-concept
               details if you have them — screenshots, request/response examples, or a short video all help us triage faster.
             </p>
@@ -30,7 +30,7 @@ const SecurityPolicy: React.FC = () => (
           <section>
             <h2 className="text-xl font-semibold text-secondary-900">What's in scope</h2>
             <ul className="list-disc pl-6 space-y-1">
-              <li>hirequadrant.com and its subdomains</li>
+              <li>nexegin.com and its subdomains</li>
               <li>Authentication, authorization, and account-isolation issues</li>
               <li>Data exposure — candidate, employer, or application data visible to parties who shouldn't see it</li>
               <li>Injection, XSS, CSRF, and similar web application vulnerabilities</li>

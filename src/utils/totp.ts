@@ -85,7 +85,7 @@ export async function verifyTotp(secretBase32: string, token: string): Promise<b
   return false;
 }
 
-export function otpauthUri(secret: string, accountLabel: string, issuer = 'HireQuadrant'): string {
+export function otpauthUri(secret: string, accountLabel: string, issuer = 'Nexegin'): string {
   const params = new URLSearchParams({
     secret,
     issuer,

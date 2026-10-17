@@ -232,7 +232,7 @@ const TeamMembers: React.FC = () => {
           to: inv.email,
           subject: recipientFirstName
             ? `${recipientFirstName}, reminder: ${inviterName} invited you to join ${cName}`
-            : `Reminder: ${inviterName} invited you to join ${cName} on HireQuadrant`,
+            : `Reminder: ${inviterName} invited you to join ${cName} on Nexegin`,
           template: 'team_invitation',
           variables: {
             companyName: cName,
@@ -653,7 +653,7 @@ const InviteModal: React.FC<{
           to: cleanEmail,
           subject: recipientFirstName
             ? `${recipientFirstName}, ${inviterName} invited you to join ${companyName}`
-            : `${inviterName} invited you to join ${companyName} on HireQuadrant`,
+            : `${inviterName} invited you to join ${companyName} on Nexegin`,
           template: 'team_invitation',
           variables: {
             companyName,

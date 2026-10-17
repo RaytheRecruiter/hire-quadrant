@@ -101,9 +101,9 @@ const ScheduleInterviewModal: React.FC<Props> = ({
   const downloadInvite = () => {
     downloadIcs(
       {
-        uid: `hirequadrant-${applicationId}-${start.getTime()}@hirequadrant.com`,
+        uid: `nexegin-${applicationId}-${start.getTime()}@nexegin.com`,
         title: jobTitle ? `Interview: ${jobTitle}` : 'Interview',
-        description: notes || 'Interview scheduled via HireQuadrant.',
+        description: notes || 'Interview scheduled via Nexegin.',
         location: meetingUrl || location,
         startUtc: start,
         endUtc: end,

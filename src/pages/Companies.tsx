@@ -44,7 +44,7 @@ const Companies: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Browse Companies Hiring — HireQuadrant</title>
+        <title>Browse Companies Hiring — Nexegin</title>
         <meta
           name="description"
           content="Discover companies actively hiring. Read reviews, see ratings, and explore open roles across industries."
@@ -57,7 +57,7 @@ const Companies: React.FC = () => {
             <p className="text-lg text-gray-600 dark:text-slate-400">
               {loading
                 ? 'Loading…'
-                : `Explore ${companies.length} ${companies.length === 1 ? 'company' : 'companies'} on HireQuadrant`}
+                : `Explore ${companies.length} ${companies.length === 1 ? 'company' : 'companies'} on Nexegin`}
             </p>
           </header>
 

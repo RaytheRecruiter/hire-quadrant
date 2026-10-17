@@ -8,7 +8,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY')!;
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'alerts@hirequadrant.com';
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'alerts@nexegin.com';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -33,7 +33,7 @@ async function sendEmail(to: string, subject: string, html: string) {
     },
     body: JSON.stringify({
       personalizations: [{ to: [{ email: to }] }],
-      from: { email: FROM_EMAIL, name: 'HireQuadrant' },
+      from: { email: FROM_EMAIL, name: 'Nexegin' },
       subject,
       content: [{ type: 'text/html', value: html }],
     }),
@@ -46,7 +46,7 @@ function buildJobsHtml(alertName: string, jobs: any[]): string {
     .map(
       j => `
     <div style="border:1px solid #eee;border-radius:8px;padding:16px;margin-bottom:12px;">
-      <a href="https://hirequadrant.com/jobs/${j.id}" style="color:#4a9960;font-weight:600;text-decoration:none;font-size:16px;">${j.title}</a>
+      <a href="https://nexegin.com/jobs/${j.id}" style="color:#4a9960;font-weight:600;text-decoration:none;font-size:16px;">${j.title}</a>
       <div style="color:#555;font-size:14px;margin-top:4px;">${j.company || ''} • ${j.location || ''}</div>
       ${j.salary ? `<div style="color:#4a9960;font-size:13px;margin-top:4px;font-weight:600;">${j.salary}</div>` : ''}
     </div>
@@ -60,7 +60,7 @@ function buildJobsHtml(alertName: string, jobs: any[]): string {
       <p style="color:#555;">We found ${jobs.length} new match${jobs.length === 1 ? '' : 'es'}.</p>
       ${rows}
       <p style="margin-top:24px;font-size:12px;color:#888;">
-        <a href="https://hirequadrant.com/alerts" style="color:#4a9960;">Manage your alerts</a>
+        <a href="https://nexegin.com/alerts" style="color:#4a9960;">Manage your alerts</a>
       </p>
     </div>
   `;

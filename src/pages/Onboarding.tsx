@@ -71,7 +71,7 @@ const Onboarding: React.FC = () => {
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-gray-100 dark:border-slate-700 p-8 md:p-10 animate-fade-in">
           {step === 1 && (
             <>
-              <h1 className="font-display text-3xl font-bold text-secondary-900 dark:text-white mb-2">Welcome to HireQuadrant, {user.name?.split(' ')[0] || 'there'}!</h1>
+              <h1 className="font-display text-3xl font-bold text-secondary-900 dark:text-white mb-2">Welcome to Nexegin, {user.name?.split(' ')[0] || 'there'}!</h1>
               <p className="text-secondary-600 mb-8">Let's personalize your experience in 3 quick steps.</p>
               <div className="space-y-5">
                 <div>

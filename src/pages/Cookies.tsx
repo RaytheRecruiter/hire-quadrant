@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet-async';
 const Cookies: React.FC = () => (
   <>
     <Helmet>
-      <title>Cookie Policy · HireQuadrant</title>
-      <meta name="description" content="What cookies HireQuadrant uses and why." />
+      <title>Cookie Policy · Nexegin</title>
+      <meta name="description" content="What cookies Nexegin uses and why." />
     </Helmet>
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,7 +14,7 @@ const Cookies: React.FC = () => (
 
         <div className="prose prose-slate max-w-none space-y-6 text-secondary-800">
           <p>
-            Cookies are small text files that websites place on your device. HireQuadrant uses a small number of
+            Cookies are small text files that websites place on your device. Nexegin uses a small number of
             cookies — all are either strictly necessary or used for measurement. We don't use third-party
             advertising cookies.
           </p>
@@ -47,7 +47,7 @@ const Cookies: React.FC = () => (
             <h2 className="text-xl font-semibold text-secondary-900">Control</h2>
             <p>
               You can clear cookies at any time from your browser's settings. Most browsers also let you block
-              non-essential cookies — on HireQuadrant that will only affect the analytics signal.
+              non-essential cookies — on Nexegin that will only affect the analytics signal.
             </p>
           </section>
 

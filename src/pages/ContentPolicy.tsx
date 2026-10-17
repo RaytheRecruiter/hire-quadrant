@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet-async';
 const ContentPolicy: React.FC = () => (
   <>
     <Helmet>
-      <title>Content Policy · HireQuadrant</title>
-      <meta name="description" content="Rules for content posted on HireQuadrant — reviews, Q&A, company updates, messages." />
+      <title>Content Policy · Nexegin</title>
+      <meta name="description" content="Rules for content posted on Nexegin — reviews, Q&A, company updates, messages." />
     </Helmet>
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,8 +14,8 @@ const ContentPolicy: React.FC = () => (
 
         <div className="prose prose-slate max-w-none space-y-6 text-secondary-800">
           <p>
-            HireQuadrant is an open platform where current and former employees share experiences and employers
-            represent their companies. To keep that useful and safe, everyone posting on HireQuadrant agrees to
+            Nexegin is an open platform where current and former employees share experiences and employers
+            represent their companies. To keep that useful and safe, everyone posting on Nexegin agrees to
             follow this Content Policy.
           </p>
 
