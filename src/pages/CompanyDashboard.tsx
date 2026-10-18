@@ -153,6 +153,7 @@ const CompanyDashboard: React.FC = () => {
                   applications={applications}
                   jobs={jobs}
                   onStatusUpdate={updateApplicationStatus}
+                  companyId={company?.id}
                 />
               )}
               {activeTab === 'analytics' && company?.id && (

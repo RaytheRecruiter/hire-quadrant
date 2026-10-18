@@ -14,10 +14,11 @@ interface Applicant {
 
 interface Props {
   applicants: Applicant[];
+  companyId?: string;
   onClose?: () => void;
 }
 
-const BulkMessageComposer: React.FC<Props> = ({ applicants, onClose }) => {
+const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }) => {
   const { user } = useAuth();
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
@@ -59,38 +60,55 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, onClose }) => {
       return;
     }
 
-    // Fan out as in-app messages via existing conversations/messages tables.
+    // Fan out as in-app messages via the conversations/messages tables.
+    // conversations' real columns are employer_id/candidate_id/company_id
+    // (20260424_messaging_and_notifications.sql) -- this used to upsert
+    // participant_a/participant_b, which don't exist on this table at all,
+    // confirmed live (N19 QA 2026-10-18): every upsert 400'd, the error was
+    // never even captured (destructured away), and the function still
+    // reported "Sent to 0 applicants" as a *success* toast. This has never
+    // actually sent a single message.
     const now = new Date().toISOString();
-    const convoRows = recipientIds.map((recipient_id) => ({
-      participant_a: user.id,
-      participant_b: recipient_id,
-      last_message_at: now,
-    }));
-
-    // Upsert conversations one at a time so we can fetch ids.
     const messagePayload: Array<{ conversation_id: string; sender_id: string; body: string }> = [];
-    for (const row of convoRows) {
-      const { data: convo } = await supabase
+    let failures = 0;
+    for (const candidateId of recipientIds) {
+      const { data: convo, error: convoErr } = await supabase
         .from('conversations')
-        .upsert(row, { onConflict: 'participant_a,participant_b' })
+        .upsert(
+          { employer_id: user.id, candidate_id: candidateId, company_id: companyId ?? null, last_message_at: now },
+          { onConflict: 'employer_id,candidate_id,company_id' },
+        )
         .select('id')
         .single();
-      if (convo?.id) {
-        messagePayload.push({
-          conversation_id: convo.id,
-          sender_id: user.id,
-          body: subject.trim() ? `${subject.trim()}\n\n${body.trim()}` : body.trim(),
-        });
+      if (convoErr || !convo?.id) {
+        console.error('Failed to start conversation with', candidateId, convoErr);
+        failures += 1;
+        continue;
       }
+      messagePayload.push({
+        conversation_id: convo.id,
+        sender_id: user.id,
+        body: subject.trim() ? `${subject.trim()}\n\n${body.trim()}` : body.trim(),
+      });
     }
 
     if (messagePayload.length > 0) {
-      await supabase.from('messages').insert(messagePayload);
+      const { error: msgErr } = await supabase.from('messages').insert(messagePayload);
+      if (msgErr) {
+        console.error('Failed to send messages:', msgErr);
+        failures += messagePayload.length;
+        messagePayload.length = 0;
+      }
     }
 
     setSending(false);
-    toast.success(`Sent to ${messagePayload.length} applicant${messagePayload.length === 1 ? '' : 's'}`);
-    onClose?.();
+    if (messagePayload.length > 0) {
+      toast.success(`Sent to ${messagePayload.length} applicant${messagePayload.length === 1 ? '' : 's'}`);
+    }
+    if (failures > 0) {
+      toast.error(`Failed to send to ${failures} applicant${failures === 1 ? '' : 's'}`);
+    }
+    if (messagePayload.length > 0) onClose?.();
     // swallow unused to satisfy linter
     void bulkRow;
   };
