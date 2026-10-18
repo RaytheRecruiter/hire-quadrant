@@ -1,0 +1,28 @@
+-- CRITICAL, found continuing N19 QA (2026-10-18, admin pages pass):
+-- user_profiles has a policy named "Public profiles are viewable by
+-- everyone." (USING (true), no role restriction) that does not exist in
+-- any tracked migration in this repo -- confirmed by grepping every
+-- migration file for its exact name, zero matches. It was created
+-- directly against the database outside the migration system entirely,
+-- the same kind of untracked drift behind several other bugs fixed
+-- today, except this one leaks data instead of breaking a feature.
+--
+-- Postgres RLS policies are OR'd together, so a single USING (true)
+-- policy overrides every other, carefully-scoped policy on this table
+-- (own profile, admin-only, employer-for-applicant, teammate-only) --
+-- they become dead weight. Net effect, confirmed via live schema
+-- introspection: ANY authenticated caller (the anon key is public in
+-- every page's JS bundle) can read every column of every user's row --
+-- name, role, company_id, avatar_url, approval status -- for every
+-- candidate, employer, and admin on the platform. Live columns don't
+-- currently include email (confirmed via introspection), which caps the
+-- blast radius, but this exposes e.g. which company every employer
+-- account belongs to, and the identity of every admin account.
+--
+-- No legitimate feature in this codebase depends on anonymous/
+-- cross-user access to raw user_profiles rows -- public-facing pages
+-- read from companies / public_company_directory instead, and reviews
+-- are intentionally anonymized. Dropping this restores the table to the
+-- access model its other policies were already designed around.
+
+DROP POLICY IF EXISTS "Public profiles are viewable by everyone." ON user_profiles;

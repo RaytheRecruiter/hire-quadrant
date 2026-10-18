@@ -31,7 +31,6 @@ interface ActivityRow {
   last_active: string | null;
   // Hydrated client-side from user_profiles
   name?: string | null;
-  email?: string | null;
 }
 
 const RANGES = [
@@ -72,24 +71,23 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
         return;
       }
       const activity = (data || []) as ActivityRow[];
-      // Hydrate names/emails from user_profiles.
+      // Hydrate names from user_profiles. There is no email column on
+      // this table (confirmed via live schema introspection, 2026-10-18)
+      // -- selecting it errored on every load, silently (error unchecked)
+      // leaving every row's name blank.
       const userIds = activity.map((r) => r.user_id);
       const { data: profiles } = await supabase
         .from('user_profiles')
-        .select('id, name, email')
+        .select('id, name')
         .in('id', userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000']);
       if (cancelled) return;
       const profileMap = new Map(
-        (profiles || []).map((p: { id: string; name: string | null; email: string | null }) => [
-          p.id,
-          { name: p.name, email: p.email },
-        ]),
+        (profiles || []).map((p: { id: string; name: string | null }) => [p.id, { name: p.name }]),
       );
       setRows(
         activity.map((r) => ({
           ...r,
           name: profileMap.get(r.user_id)?.name ?? null,
-          email: profileMap.get(r.user_id)?.email ?? null,
         })),
       );
       setLoading(false);
@@ -200,7 +198,6 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
                       <div className="font-medium text-secondary-900 dark:text-white">
                         {r.name || '—'}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-slate-400">{r.email || ''}</div>
                     </td>
                     <td className="px-4 py-3 text-right tabular-nums">{r.jobs_posted}</td>
                     <td className="px-4 py-3 text-right tabular-nums">{r.applicants_reviewed}</td>
