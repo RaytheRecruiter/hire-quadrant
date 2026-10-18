@@ -12,7 +12,12 @@ const Terms: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-8">Terms of Service</h1>
           <p className="text-gray-700 dark:text-slate-300 mb-4">
-            Nexegin is operated by Quadrant, Inc. These terms apply to candidates browsing and applying for
+            {/* N03: Nexegin is Ray Rainey's independent venture, not operated
+                by Quadrant, Inc. -- Quadrant, Inc. is a legitimate employer
+                with authorized listings on the platform (and the source of
+                an early sandbox job feed), not the platform's legal
+                operator. Correct operator/entity details pending from Ray. */}
+            These terms apply to candidates browsing and applying for
             jobs, and to employers using paid subscriptions and job sponsorship features. By accessing or using
             Nexegin, you agree to be bound by these terms. If you don't agree, please don't use the service.
           </p>
@@ -74,7 +79,7 @@ const Terms: React.FC = () => {
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">6. Limitation of liability</h2>
               <p className="text-gray-700 dark:text-slate-300">
-                To the extent permitted by law, Nexegin and Quadrant, Inc. won't be liable for indirect,
+                To the extent permitted by law, Nexegin won't be liable for indirect,
                 incidental, or consequential damages arising from your use of the service, including lost data,
                 lost profits, or business interruption.
               </p>

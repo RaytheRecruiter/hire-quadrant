@@ -16,7 +16,13 @@ const Privacy: React.FC = () => {
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">1. Who operates this service</h2>
               <p className="text-gray-700 dark:text-slate-300">
-                Nexegin ("we", "us", or "our") is operated by Quadrant, Inc. and runs the nexegin.com website.
+                {/* N03: Nexegin is Ray Rainey's independent venture, not
+                    operated by Quadrant, Inc. -- Quadrant, Inc. is a
+                    legitimate employer with authorized listings on the
+                    platform (and the source of an early sandbox job feed),
+                    not the platform's legal operator. Correct operator/
+                    entity details pending from Ray. */}
+                Nexegin ("we", "us", or "our") runs the nexegin.com website.
                 This policy explains what personal data we collect from candidates and employers, how we use it, who
                 we share it with, and the choices you have.
               </p>
