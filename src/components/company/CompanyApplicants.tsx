@@ -11,6 +11,7 @@ interface CompanyApplicantsProps {
   applications: any[];
   jobs: any[];
   onStatusUpdate: (id: string, status: string) => void;
+  companyId?: string;
 }
 
 const STATUS_OPTIONS = ['pending', 'reviewing', 'interview', 'offered', 'hired', 'rejected'];
@@ -28,6 +29,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   applications,
   jobs,
   onStatusUpdate,
+  companyId,
 }) => {
   const { isOwner, isAdmin, can, member } = usePermissions();
   // No member row → legacy single-tenant flow → grant everything (the
@@ -351,6 +353,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
             user_email: a.user_email ?? candidateInfo[a.user_id]?.email ?? null,
             status: a.status,
           }))}
+          companyId={companyId}
           onClose={() => setShowBulk(false)}
         />
       )}
