@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Mail, Send, Phone, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { supabase } from '../utils/supabaseClient';
 
 const Contact: React.FC = () => {
   const [form, setForm] = useState({ name: '', email: '', category: 'general', subject: '', message: '' });
+  const [honeypot, setHoneypot] = useState(''); // bots auto-fill; humans never see it
   const [sending, setSending] = useState(false);
+  const mountedAtRef = useRef(Date.now());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,29 +24,30 @@ const Contact: React.FC = () => {
 
     setSending(true);
     try {
-      // IMPORTANT: Replace YOUR_FORM_ID with actual Formspree form ID
-      // Create one at: https://formspree.io/
-      const FORMSPREE_ID = 'YOUR_FORM_ID';
-
-      const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      // Formspree was never actually configured for this project (confirmed
+      // 2026-10-18) -- this used to post to a hardcoded 'YOUR_FORM_ID'
+      // Formspree endpoint, so every single submission 404'd. Route through
+      // handle-form-submission instead, which already has the real logic
+      // (anti-spam, dedup, form_submissions table, confirmation + support
+      // notification emails) and just was never wired up to this form.
+      const { data, error } = await supabase.functions.invoke('handle-form-submission', {
+        body: {
+          type: 'contact',
           name: form.name,
           email: form.email,
           category: form.category,
           subject: form.subject,
           message: form.message,
-          _replyto: form.email,
-        }),
+          honeypot,
+          timestamp: mountedAtRef.current,
+        },
       });
 
-      if (response.ok) {
-        toast.success('Message sent! We\'ll get back to you.');
-        setForm({ name: '', email: '', category: 'general', subject: '', message: '' });
-      } else {
-        toast.error('Failed to send message. Please try again or email support@nexegin.com');
-      }
+      if (error) throw error;
+      if (data?.ok === false) throw new Error(data.error || 'Send failed');
+
+      toast.success('Message sent! We\'ll get back to you.');
+      setForm({ name: '', email: '', category: 'general', subject: '', message: '' });
     } catch (err) {
       console.error('Contact form error:', err);
       toast.error('Error sending message. Please email support@nexegin.com directly.');
@@ -168,6 +172,18 @@ const Contact: React.FC = () => {
                   💡 Tip: Be specific about your issue. Include error messages or steps to reproduce if applicable.
                 </p>
               </div>
+
+              {/* Honeypot — hidden from humans, bots auto-fill and get silently dropped */}
+              <input
+                type="text"
+                name="website"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute left-[-9999px] opacity-0 pointer-events-none"
+              />
 
               <button
                 type="submit"

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Mail, Send } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { supabase } from '../utils/supabaseClient';
 
 interface NewsletterSignupProps {
   variant?: 'inline' | 'card' | 'footer';
@@ -14,7 +15,9 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
   description = 'Get weekly job recommendations and career tips delivered to your inbox.',
 }) => {
   const [email, setEmail] = useState('');
+  const [honeypot, setHoneypot] = useState(''); // bots auto-fill; humans never see it
   const [subscribing, setSubscribing] = useState(false);
+  const mountedAtRef = useRef(Date.now());
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,33 +29,30 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 
     setSubscribing(true);
     try {
-      // IMPORTANT: Replace YOUR_MAILCHIMP_FORM_ID with actual Mailchimp form action URL
-      // Get this from Mailchimp → Create Form → Embedded Forms → Copy the form action URL
-      const MAILCHIMP_ACTION = 'YOUR_MAILCHIMP_ACTION_URL';
-
-      if (!MAILCHIMP_ACTION || MAILCHIMP_ACTION === 'YOUR_MAILCHIMP_ACTION_URL') {
-        // Fallback for demo: just show success
-        toast.success('Thanks for subscribing! Check your email to confirm.');
-        setEmail('');
-        return;
-      }
-
-      const response = await fetch(MAILCHIMP_ACTION, {
-        method: 'POST',
-        body: `EMAIL=${encodeURIComponent(email)}`,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      // Mailchimp was never actually configured for this project (confirmed
+      // 2026-10-18) -- this used to hardcode a 'YOUR_MAILCHIMP_ACTION_URL'
+      // placeholder and show a fake success toast whenever that placeholder
+      // was detected, silently discarding every email with nothing captured
+      // anywhere. handle-form-submission already has the real logic
+      // (anti-spam, dedup, form_submissions table, confirmation email) --
+      // it just was never wired up to this component.
+      const { data, error } = await supabase.functions.invoke('handle-form-submission', {
+        body: {
+          type: 'newsletter',
+          email,
+          honeypot,
+          timestamp: mountedAtRef.current,
+        },
       });
 
-      if (response.ok) {
-        toast.success('Thanks for subscribing! Check your email to confirm.');
-        setEmail('');
-      } else {
-        toast.error('Already subscribed or email invalid');
-      }
-    } catch (err) {
-      // Mailchimp often throws CORS errors in browser, but form was likely submitted
-      toast.success('Thanks for subscribing! Check your email to confirm.');
+      if (error) throw error;
+      if (data?.ok === false) throw new Error(data.error || 'Subscription failed');
+
+      toast.success("You're subscribed!");
       setEmail('');
+    } catch (err) {
+      console.error('Newsletter signup error:', err);
+      toast.error('Something went wrong. Please try again.');
     } finally {
       setSubscribing(false);
     }
@@ -77,6 +77,16 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          />
+          <input
+            type="text"
+            name="website"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="absolute left-[-9999px] opacity-0 pointer-events-none"
           />
           <button
             type="submit"
@@ -106,6 +116,16 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             placeholder="your@email.com"
             className="flex-1 px-3 py-2 rounded text-sm border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
+          <input
+            type="text"
+            name="website"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="absolute left-[-9999px] opacity-0 pointer-events-none"
+          />
           <button
             type="submit"
             disabled={subscribing}
@@ -127,6 +147,16 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your email"
         className="flex-1 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+      />
+      <input
+        type="text"
+        name="website"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute left-[-9999px] opacity-0 pointer-events-none"
       />
       <button
         type="submit"

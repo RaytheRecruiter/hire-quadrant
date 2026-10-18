@@ -74,7 +74,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Missing required fields' }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
         }
       );
     }
@@ -85,7 +85,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Invalid email address' }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
         }
       );
     }
