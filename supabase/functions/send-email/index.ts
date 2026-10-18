@@ -18,7 +18,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
           <h1>Application Received!</h1>
           <p>We received your application for <strong>${v.jobTitle}</strong> at ${v.companyName}.</p>
           <p>
-            <a href="${v.trackingUrl}" style="background: #0035ff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+            <a href="${v.trackingUrl}" style="background: #066f68; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
               Track Application
             </a>
           </p>
@@ -38,7 +38,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
           <p>Great news! Your application for <strong>${v.jobTitle}</strong> is moving forward.</p>
           <p>${v.message || 'More details coming soon.'}</p>
           <p>
-            <a href="${v.dashboardUrl}" style="background: #0035ff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+            <a href="${v.dashboardUrl}" style="background: #066f68; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
               View All Applications
             </a>
           </p>
@@ -56,7 +56,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
           <h1>Reset Your Password</h1>
           <p>Click the link below to reset your password. This link expires in ${v.expiresInHours} hours.</p>
           <p>
-            <a href="${v.resetUrl}" style="background: #0035ff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+            <a href="${v.resetUrl}" style="background: #066f68; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
               Reset Password
             </a>
           </p>
@@ -76,13 +76,13 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
           <p>${v.inviterName ? `${v.inviterName}` : 'Your team'} invited you as a <strong>${v.roleLabel}</strong>${v.scopeLabel ? ` (${v.scopeLabel})` : ''}.</p>
           <p>Click below to accept the invitation. The link expires on ${v.expiresOn}.</p>
           <p style="margin: 24px 0;">
-            <a href="${v.inviteUrl}" style="background: #0035ff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+            <a href="${v.inviteUrl}" style="background: #066f68; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
               Accept invitation
             </a>
           </p>
           <p style="color: #666; font-size: 13px;">
             Or copy and paste this URL into your browser:<br>
-            <a href="${v.inviteUrl}" style="color: #0035ff; word-break: break-all;">${v.inviteUrl}</a>
+            <a href="${v.inviteUrl}" style="color: #066f68; word-break: break-all;">${v.inviteUrl}</a>
           </p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 24px 0;">
           <p style="font-size: 12px; color: #666;">
@@ -108,7 +108,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
             ${v.memberEmail}
           </p>
           <p style="margin: 24px 0;">
-            <a href="${v.teamMembersUrl}" style="background: #0035ff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+            <a href="${v.teamMembersUrl}" style="background: #066f68; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
               Review team members
             </a>
           </p>
@@ -132,7 +132,7 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
             ${(v.jobs || [])
               .map(
                 (job: any) => `
-              <li style="margin-bottom: 15px; padding: 10px; border-left: 4px solid #0035ff;">
+              <li style="margin-bottom: 15px; padding: 10px; border-left: 4px solid #066f68;">
                 <strong>${job.title}</strong> at ${job.company}<br>
                 <a href="${job.url}">View Job →</a>
               </li>
@@ -141,8 +141,67 @@ function buildEmailTemplate(template: string, variables: Record<string, any>): s
               .join('')}
           </ul>
           <p>
-            <a href="${v.unsubscribeUrl}" style="color: #0035ff; text-decoration: underline; font-size: 12px;">
+            <a href="${v.unsubscribeUrl}" style="color: #066f68; text-decoration: underline; font-size: 12px;">
               Unsubscribe from recommendations
+            </a>
+          </p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
+        </body>
+      </html>
+    `,
+
+    // Sent to the submitter when the Contact page form is received
+    // (handle-form-submission, type: 'contact').
+    contact_confirmation: (v) => `
+      <!DOCTYPE html>
+      <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: sans-serif; color: #333; max-width: 560px; margin: 0 auto;">
+          <h1>We received your message</h1>
+          <p>Hi ${v.name || 'there'}, thanks for reaching out${v.subject ? ` about "${v.subject}"` : ''}. Our team will get back to you soon.</p>
+          <p style="color: #666; font-size: 13px;">
+            Need to add anything? Just reply to this email, or reach us directly at
+            <a href="mailto:${v.supportEmail}" style="color: #066f68;">${v.supportEmail}</a>.
+          </p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
+        </body>
+      </html>
+    `,
+
+    // Sent to support when the Contact page form is received
+    // (handle-form-submission, type: 'contact').
+    contact_notification: (v) => `
+      <!DOCTYPE html>
+      <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: sans-serif; color: #333; max-width: 560px; margin: 0 auto;">
+          <h1>New contact form submission</h1>
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+            <tr><td style="padding: 6px 0; color: #666; width: 110px;">Name</td><td style="padding: 6px 0;">${v.name || '—'}</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Email</td><td style="padding: 6px 0;"><a href="mailto:${v.email}" style="color: #066f68;">${v.email}</a></td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Category</td><td style="padding: 6px 0;">${v.category || '—'}</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Subject</td><td style="padding: 6px 0;">${v.subject || '—'}</td></tr>
+          </table>
+          <p style="margin: 16px 0; padding: 14px 18px; background: #f5f7fa; border-radius: 6px; white-space: pre-wrap;">${v.message || ''}</p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+          <p style="font-size: 12px; color: #666;">© 2026 Nexegin</p>
+        </body>
+      </html>
+    `,
+
+    // Sent on newsletter signup (handle-form-submission, type: 'newsletter').
+    newsletter_confirmation: (v) => `
+      <!DOCTYPE html>
+      <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: sans-serif; color: #333; max-width: 560px; margin: 0 auto;">
+          <h1>You're subscribed</h1>
+          <p>Thanks for signing up for Nexegin Weekly — job recommendations and career tips, delivered weekly.</p>
+          <p>
+            <a href="${v.unsubscribeUrl}" style="color: #066f68; text-decoration: underline; font-size: 12px;">
+              Unsubscribe any time
             </a>
           </p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
