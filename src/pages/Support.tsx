@@ -56,7 +56,7 @@ const Support: React.FC = () => {
       questions: [
         {
           q: 'How do I reset my password?',
-          a: 'Click "Sign in", then "Forgot password?". Enter your email and we\'ll send you a link to reset your password within 5 minutes.',
+          a: 'Click "Sign in", then "Forgot password?". Enter your email and we\'ll send you a link to reset your password shortly.',
         },
         {
           q: 'Is my data safe?',
