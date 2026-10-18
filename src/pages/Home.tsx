@@ -122,15 +122,22 @@ const Home: React.FC = () => {
         const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
         // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
         // Stats must agree with what the job list below actually shows.
+        //
+        // The companies count goes through count_distinct_hiring_companies()
+        // (20261018_distinct_company_count.sql) rather than
+        // .select('company', { count: 'exact' }) -- that counts rows with a
+        // non-null company, not distinct companies, which is why this stat
+        // used to render identical to the open-jobs count (N15, confirmed
+        // live: both showed 2,853).
         const [jobsRes, companiesRes, recentRes] = await Promise.all([
           supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('is_it_role', true),
-          supabase.from('jobs').select('company', { count: 'exact', head: true }).not('company', 'is', null).eq('is_it_role', true),
+          supabase.rpc('count_distinct_hiring_companies', { it_only: true }),
           supabase.from('jobs').select('*', { count: 'exact', head: true }).gte('posted_date', weekAgo).eq('is_it_role', true),
         ]);
         if (cancelled) return;
         const next: StatsShape = {
           jobs: jobsRes.count ?? 0,
-          companies: companiesRes.count ?? 0,
+          companies: companiesRes.data ?? 0,
           postedThisWeek: recentRes.count ?? 0,
         };
         setStats(next);
@@ -545,22 +552,24 @@ const Home: React.FC = () => {
                 <ArrowRight className="h-4 w-4" />
               </HardLink>
             </div>
-            <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-primary-100 dark:border-primary-900/30 shadow-card">
-              <div className="space-y-6">
-                <div>
-                  <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">100%</div>
-                  <p className="text-secondary-600 dark:text-slate-300">Transparent Screening</p>
-                </div>
-                <div>
-                  <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">24hr</div>
-                  <p className="text-secondary-600 dark:text-slate-300">Average Response Time</p>
-                </div>
-                <div>
-                  <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">10K+</div>
-                  <p className="text-secondary-600 dark:text-slate-300">Jobs & Counting</p>
+            {stats.jobs > 0 && (
+              <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-primary-100 dark:border-primary-900/30 shadow-card">
+                <div className="space-y-6">
+                  <div>
+                    <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+                      {stats.jobs.toLocaleString()}
+                    </div>
+                    <p className="text-secondary-600 dark:text-slate-300">Open IT Jobs</p>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+                      {stats.companies.toLocaleString()}
+                    </div>
+                    <p className="text-secondary-600 dark:text-slate-300">Companies Hiring</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
