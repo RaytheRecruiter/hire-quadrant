@@ -18,6 +18,8 @@ serve(async () => {
   const { data: jobs, error } = await supabase
     .from('jobs')
     .select('id, posted_date')
+    // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+    .eq('is_it_role', true)
     .order('posted_date', { ascending: false })
     .limit(50000);
 

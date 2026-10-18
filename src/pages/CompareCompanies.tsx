@@ -65,7 +65,9 @@ const CompareCompanies: React.FC = () => {
         supabase
           .from('jobs')
           .select('company_id, min_salary, max_salary')
-          .in('company_id', ids),
+          .in('company_id', ids)
+          // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+          .eq('is_it_role', true),
       ]);
 
       if (cancelled) return;

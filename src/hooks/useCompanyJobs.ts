@@ -61,6 +61,11 @@ export function useCompanyJobs(
             .select(select)
             .eq('company_id', companyId);
           if (!includeClosed) q = q.eq('status', 'open');
+          // N07: the only current caller (CompanyProfile, the public
+          // company page) is a public discovery surface — IT/technical
+          // only, see 20261018_it_job_eligibility.sql. Revisit if a
+          // company-dashboard caller is ever added here.
+          q = q.eq('is_it_role', true);
           const { data, error: err } = await q
             .order('posted_date', { ascending: false })
             .limit(limit);
@@ -82,6 +87,7 @@ export function useCompanyJobs(
               .select(select)
               .eq('company', name);
             if (!includeClosed) q = q.eq('status', 'open');
+            q = q.eq('is_it_role', true);
             const { data, error: err } = await q
               .order('posted_date', { ascending: false })
               .limit(limit);

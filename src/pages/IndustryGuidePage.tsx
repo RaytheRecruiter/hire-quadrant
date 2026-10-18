@@ -49,6 +49,8 @@ const IndustryGuidePage: React.FC = () => {
           .from('jobs')
           .select('location', { count: 'exact' })
           .ilike('company', `%${industryName}%`)
+          // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+          .eq('is_it_role', true)
           .limit(2000),
       ]);
       if (cancelled) return;

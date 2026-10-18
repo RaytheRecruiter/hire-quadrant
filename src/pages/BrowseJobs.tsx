@@ -131,7 +131,9 @@ const BrowseJobs: React.FC = () => {
         .select(
           'id, title, company, location, type, salary, min_salary, max_salary, posted_date, created_at, experience_level, workplace_type, visa_sponsor, security_clearance, sponsored, description',
           { count: 'exact' },
-        );
+        )
+        // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+        .eq('is_it_role', true);
 
       if (q) {
         query = query.or(

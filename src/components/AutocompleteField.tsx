@@ -47,6 +47,8 @@ const AutocompleteField: React.FC<Props> = ({
         .select(column)
         .ilike(column, `%${term}%`)
         .not(column, 'is', null)
+        // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+        .eq('is_it_role', true)
         .limit(40);
       const uniq = new Set<string>();
       (data ?? []).forEach((r: Record<string, unknown>) => {

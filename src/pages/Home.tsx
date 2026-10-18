@@ -120,10 +120,12 @@ const Home: React.FC = () => {
     const fetchStats = async () => {
       try {
         const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+        // Stats must agree with what the job list below actually shows.
         const [jobsRes, companiesRes, recentRes] = await Promise.all([
-          supabase.from('jobs').select('*', { count: 'exact', head: true }),
-          supabase.from('jobs').select('company', { count: 'exact', head: true }).not('company', 'is', null),
-          supabase.from('jobs').select('*', { count: 'exact', head: true }).gte('posted_date', weekAgo),
+          supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('is_it_role', true),
+          supabase.from('jobs').select('company', { count: 'exact', head: true }).not('company', 'is', null).eq('is_it_role', true),
+          supabase.from('jobs').select('*', { count: 'exact', head: true }).gte('posted_date', weekAgo).eq('is_it_role', true),
         ]);
         if (cancelled) return;
         const next: StatsShape = {
@@ -152,6 +154,7 @@ const Home: React.FC = () => {
         .from('jobs')
         .select('company')
         .not('company', 'is', null)
+        .eq('is_it_role', true)
         .limit(16);
 
       if (cancelled || !data) return;

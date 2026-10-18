@@ -191,7 +191,12 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                     .select('id, title, company, location, type, salary, posted_date, external_job_id, external_url, source_company, source_xml_file, status', { count: 'exact' })
                     // Closed jobs are a company-dashboard history feature —
                     // don't surface them in the public directory/search.
-                    .neq('status', 'closed');
+                    .neq('status', 'closed')
+                    // N07: Nexegin is an IT/technical-only board. Jobs
+                    // classified as non-IT or not yet classified (NULL --
+                    // quarantined pending review) are excluded from public
+                    // discovery; see 20261018_it_job_eligibility.sql.
+                    .eq('is_it_role', true);
 
                 // Add filters to the query for server-side processing
                 if (searchTerm) {
