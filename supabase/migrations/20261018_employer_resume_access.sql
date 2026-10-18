@@ -20,6 +20,8 @@
 -- profile resumes in general, which stay candidate-only/admin-only as
 -- originally designed.
 
+DROP POLICY IF EXISTS "Company members can read applicant resumes" ON storage.objects;
+
 CREATE POLICY "Company members can read applicant resumes"
   ON storage.objects
   FOR SELECT
