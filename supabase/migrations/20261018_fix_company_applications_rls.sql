@@ -22,6 +22,8 @@
 
 DROP POLICY IF EXISTS "Company users can read applications for their jobs" ON job_applications;
 DROP POLICY IF EXISTS "Company users can update application status" ON job_applications;
+DROP POLICY IF EXISTS "Company members can read applications for their jobs" ON job_applications;
+DROP POLICY IF EXISTS "Company members can update applications for their jobs" ON job_applications;
 
 -- Second USING clause covers the ~1-in-11 legacy company account that
 -- predates company_members (no row there at all) -- CompanyApplicants.tsx
