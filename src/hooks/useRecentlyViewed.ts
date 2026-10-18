@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import { supabase } from '../utils/supabaseClient';
@@ -46,10 +46,16 @@ export const useRecentlyViewed = (excludeJobId?: string) => {
     fetchRecentlyViewed();
   }, [user?.id, excludeJobId]);
 
-  // Map job IDs to full job objects
-  const recentJobs = recentJobIds
-    .map(id => jobs.find(j => j.id === id))
-    .filter(Boolean);
+  // Map job IDs to full job objects. Memoized -- this used to recompute (and
+  // return a new array reference) on every render, which fed straight into
+  // useRecommendedJobs's useEffect dependency array and never stabilized:
+  // new array -> effect fires -> setRecommended -> re-render -> new array ->
+  // effect fires again, forever. Confirmed live 2026-10-18 (N19 QA pass):
+  // "Maximum update depth exceeded", hundreds of times a second on /saved.
+  const recentJobs = useMemo(
+    () => recentJobIds.map(id => jobs.find(j => j.id === id)).filter(Boolean),
+    [recentJobIds, jobs],
+  );
 
   return { recentJobs, loading };
 };
