@@ -77,11 +77,14 @@ async function geocode(query: string): Promise<GeocodeResult | null> {
     `?country=us&limit=1&access_token=${MAPBOX_TOKEN}`;
   try {
     // Mapbox URL-restricted tokens check the Referer header. Without one,
-    // they reject the request with 403. Send hirequadrant.com so the
-    // request looks like it came from the production site (the token is
-    // already restricted to that origin in the Mapbox dashboard).
+    // they reject the request with 403. Send the production origin so the
+    // request looks like it came from the live site -- N08: the Mapbox
+    // token's URL restriction in the Mapbox dashboard must be updated to
+    // nexegin.com too, or this (and the browser-side token) will start
+    // getting 403s once hirequadrant.com is no longer the live origin;
+    // this header change alone doesn't do that.
     const res = await fetch(url, {
-      headers: { Referer: 'https://hirequadrant.com/' },
+      headers: { Referer: 'https://nexegin.com/' },
     });
     if (!res.ok) {
       console.warn(`  ! Mapbox ${res.status} for "${query}"`);

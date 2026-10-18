@@ -13,7 +13,7 @@ on:
       base_url:
         description: 'Target URL (defaults to live prod)'
         required: false
-        default: 'https://hirequadrant.com'
+        default: 'https://nexegin.com'
 
 concurrency:
   group: qa-${{ github.ref }}
@@ -44,7 +44,7 @@ jobs:
 
       - name: Run smoke
         env:
-          QA_BASE_URL: ${{ inputs.base_url || 'https://hirequadrant.com' }}
+          QA_BASE_URL: ${{ inputs.base_url || 'https://nexegin.com' }}
           # Admin tests skip when these are absent (configured intentionally).
           QA_ADMIN_EMAIL: ${{ secrets.QA_ADMIN_EMAIL }}
           QA_ADMIN_PASSWORD: ${{ secrets.QA_ADMIN_PASSWORD }}
@@ -81,7 +81,7 @@ jobs:
       - run: npx playwright install --with-deps chromium webkit
 
       - env:
-          QA_BASE_URL: ${{ inputs.base_url || 'https://hirequadrant.com' }}
+          QA_BASE_URL: ${{ inputs.base_url || 'https://nexegin.com' }}
           QA_ADMIN_EMAIL: ${{ secrets.QA_ADMIN_EMAIL }}
           QA_ADMIN_PASSWORD: ${{ secrets.QA_ADMIN_PASSWORD }}
         run: npx playwright test --project=chromium-desktop --project=webkit-desktop

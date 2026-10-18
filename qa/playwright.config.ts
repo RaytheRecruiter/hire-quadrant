@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const BASE_URL = process.env.QA_BASE_URL ?? 'https://hirequadrant.com';
+const BASE_URL = process.env.QA_BASE_URL ?? 'https://nexegin.com';
 
 export default defineConfig({
   testDir: './tests',

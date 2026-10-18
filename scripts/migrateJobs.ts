@@ -82,8 +82,11 @@ async function geocodeJobLocation(rawLocation: string | undefined): Promise<{ la
         const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?country=us&limit=1&types=place&access_token=${token}`;
         // The Mapbox token is Referer-restricted to the production domain
         // in the Mapbox dashboard; this isn't a browser request, so it
-        // must supply one to avoid a 403.
-        const res = await fetch(url, { headers: { Referer: 'https://hirequadrant.com/' } });
+        // must supply one to avoid a 403. N08: the token's URL restriction
+        // itself must also be updated to nexegin.com in the Mapbox
+        // dashboard, or this starts getting 403s once hirequadrant.com is
+        // no longer the live origin -- this header alone doesn't do that.
+        const res = await fetch(url, { headers: { Referer: 'https://nexegin.com/' } });
         if (!res.ok) {
             geocodeCache.set(rawLocation, null);
             return { lat: null, lng: null };
