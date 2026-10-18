@@ -1,5 +1,5 @@
 -- CRITICAL, found continuing N19 QA (2026-10-18): two more bugs in the
--- Billing tab's unlock-credit RPCs (20260429_unlock_credits.sql).
+-- Billing tab's unlock-credit RPCs.
 --
 -- 1. unlocks_remaining(p_company_id uuid) is SECURITY DEFINER (bypasses
 --    RLS) and GRANT EXECUTE ... TO authenticated, but never checks the
@@ -15,18 +15,27 @@
 --    one-time company_members Owner backfill ran (2026-04-29,
 --    20260429_company_permissions_phase1.sql) gets a user_profiles.
 --    company_id link but no company_members row, since claim_company was
---    never updated to also insert one. Confirmed by reading both
---    functions: claim_company only inserts into company_admins + sets
---    user_profiles.company_id. Net effect: any company claimed in the
---    last ~6 months cannot unlock a single candidate resume -- it always
---    hits "You are not linked to a company account." Added the same
---    legacy user_profiles.company_id fallback used everywhere else today.
+--    never updated to also insert one. Net effect: any company claimed in
+--    the last ~6 months cannot unlock a single candidate resume -- it
+--    always hits "You are not linked to a company account." Added the
+--    same legacy user_profiles.company_id fallback used everywhere else
+--    today.
+--
+-- NOTE: this corrects an earlier attempt at this same fix today that used
+-- the stale pre-2026-08-14 4-column shape of unlocks_remaining (no
+-- purchased_remaining) and dropped unlock_candidate's purchased-credit
+-- fallback logic entirely -- that attempt failed outright on
+-- "cannot change return type of existing function" and was never applied
+-- (Supabase's SQL editor runs a script as one transaction, so nothing
+-- from it landed). This version is built against the real current
+-- definitions in 20260814_resume_database_pricing.sql.
 
 CREATE OR REPLACE FUNCTION unlocks_remaining(p_company_id uuid)
 RETURNS TABLE (
   total integer,
   used integer,
   remaining integer,
+  purchased_remaining integer,
   period_start timestamptz
 )
 LANGUAGE plpgsql
@@ -51,7 +60,7 @@ BEGIN
 
   RETURN QUERY
   WITH sub AS (
-    SELECT s.current_period_start, sp.monthly_unlock_credits
+    SELECT s.current_period_start, s.purchased_contacts_remaining, sp.monthly_unlock_credits
     FROM subscriptions s
     JOIN subscription_plans sp ON sp.id = s.plan_id
     WHERE s.company_id = p_company_id
@@ -62,6 +71,7 @@ BEGIN
   resolved AS (
     SELECT
       COALESCE((SELECT monthly_unlock_credits FROM sub), 0) AS total,
+      COALESCE((SELECT purchased_contacts_remaining FROM sub), 0) AS purchased_remaining,
       COALESCE(
         (SELECT current_period_start FROM sub),
         date_trunc('month', now())
@@ -72,11 +82,13 @@ BEGIN
     FROM candidate_unlocks cu, resolved
     WHERE cu.company_id = p_company_id
       AND cu.period_start >= resolved.period_start
+      AND cu.credit_source = 'monthly'
   )
   SELECT
     resolved.total,
     used_cte.n AS used,
     greatest(resolved.total - used_cte.n, 0) AS remaining,
+    resolved.purchased_remaining,
     resolved.period_start
   FROM resolved, used_cte;
 END;
@@ -97,9 +109,11 @@ DECLARE
   v_company_id uuid;
   v_period_start timestamptz;
   v_allowance integer;
+  v_purchased_remaining integer;
   v_used integer;
   v_unlock_id uuid;
   v_existing uuid;
+  v_source text;
 BEGIN
   IF v_user_id IS NULL THEN
     RAISE EXCEPTION 'Must be signed in';
@@ -122,8 +136,9 @@ BEGIN
   END IF;
 
   SELECT sp.monthly_unlock_credits,
+         s.purchased_contacts_remaining,
          COALESCE(s.current_period_start, date_trunc('month', now()))
-    INTO v_allowance, v_period_start
+    INTO v_allowance, v_purchased_remaining, v_period_start
   FROM subscriptions s
   JOIN subscription_plans sp ON sp.id = s.plan_id
   WHERE s.company_id = v_company_id
@@ -145,23 +160,33 @@ BEGIN
   IF v_existing IS NOT NULL THEN
     SELECT count(*) INTO v_used
     FROM candidate_unlocks
-    WHERE company_id = v_company_id AND period_start >= v_period_start;
+    WHERE company_id = v_company_id AND period_start >= v_period_start AND credit_source = 'monthly';
     RETURN QUERY SELECT v_existing, greatest(v_allowance - v_used, 0)::int, true;
     RETURN;
   END IF;
 
   SELECT count(*) INTO v_used
   FROM candidate_unlocks
-  WHERE company_id = v_company_id AND period_start >= v_period_start;
+  WHERE company_id = v_company_id AND period_start >= v_period_start AND credit_source = 'monthly';
 
-  IF v_used >= v_allowance THEN
+  IF v_used < v_allowance THEN
+    v_source := 'monthly';
+  ELSIF COALESCE(v_purchased_remaining, 0) > 0 THEN
+    v_source := 'purchased';
+    UPDATE subscriptions
+    SET purchased_contacts_remaining = purchased_contacts_remaining - 1
+    WHERE company_id = v_company_id;
+  ELSE
     RAISE EXCEPTION 'No unlock credits remaining this billing period';
   END IF;
 
-  INSERT INTO candidate_unlocks (company_id, candidate_user_id, unlocked_by, period_start)
-  VALUES (v_company_id, p_candidate_user_id, v_user_id, v_period_start)
+  INSERT INTO candidate_unlocks (company_id, candidate_user_id, unlocked_by, period_start, credit_source)
+  VALUES (v_company_id, p_candidate_user_id, v_user_id, v_period_start, v_source)
   RETURNING id INTO v_unlock_id;
 
-  RETURN QUERY SELECT v_unlock_id, greatest(v_allowance - (v_used + 1), 0)::int, false;
+  RETURN QUERY SELECT
+    v_unlock_id,
+    CASE WHEN v_source = 'monthly' THEN greatest(v_allowance - (v_used + 1), 0)::int ELSE greatest(v_allowance - v_used, 0)::int END,
+    false;
 END;
 $$;
