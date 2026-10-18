@@ -53,9 +53,16 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
       const userIds = [...new Set(applications.map((a) => a.user_id).filter(Boolean))];
       if (userIds.length === 0) return;
 
+      // candidates has no `name` column (confirmed live, N19 QA 2026-10-18)
+      // -- the same class of bug already fixed in search_candidates() (#140)
+      // but not caught here. Selecting it made the whole query 400, which
+      // meant candidateInfo never populated at all -- silently breaking
+      // resume downloads too, since handleResumeDownload reads
+      // candidateInfo[userId]?.resume_url exclusively and has no fallback
+      // to the application's own resume_url field.
       const { data, error } = await supabase
         .from('candidates')
-        .select('user_id, name, email, resume_url')
+        .select('user_id, email, resume_url')
         .in('user_id', userIds);
 
       if (error) {
@@ -247,11 +254,11 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                        {candidate?.name || app.candidate_name || 'Unknown'}
+                        {app.user_name || candidate?.name || 'Unknown'}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-slate-400">
                         {canViewContact
-                          ? (candidate?.email || app.candidate_email || '')
+                          ? (app.user_email || candidate?.email || '')
                           : <span className="italic text-gray-400 dark:text-slate-500">Contact info hidden</span>}
                       </div>
                     </div>
