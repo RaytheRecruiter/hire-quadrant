@@ -48,15 +48,23 @@ function writeCache<T>(key: string, value: T): void {
   }
 }
 
+// N06/N07: Nexegin is now IT/technical-only (see
+// 20261018_it_job_eligibility.sql) -- the old general-board categories
+// (Marketing, Finance, Sales, Healthcare, etc.) are all excluded by that
+// filter, so clicking any of them would silently return zero results.
+// Replaced with the IT categories the handoff itself suggests, matched by
+// keyword search rather than the stored `category` column: that column
+// still holds the old general taxonomy (20260423_add_job_category.sql,
+// used by find_similar_jobs) and was never backfilled with values like
+// "Cybersecurity" or "IT Support", so category-based matching would also
+// return nothing for the four buckets with no equivalent there.
 const CATEGORIES = [
-  { label: 'Engineering', icon: '⚙️' },
-  { label: 'Design', icon: '🎨' },
-  { label: 'Marketing', icon: '📣' },
-  { label: 'Finance', icon: '💰' },
-  { label: 'Sales', icon: '📈' },
-  { label: 'Operations', icon: '🏗️' },
-  { label: 'Data & Analytics', icon: '📊' },
-  { label: 'Healthcare', icon: '🏥' },
+  { label: 'Software', icon: '💻', keyword: 'software' },
+  { label: 'Cybersecurity', icon: '🔒', keyword: 'security' },
+  { label: 'Cloud', icon: '☁️', keyword: 'cloud' },
+  { label: 'Data', icon: '📊', keyword: 'data' },
+  { label: 'IT Support', icon: '🛠️', keyword: 'support' },
+  { label: 'Infrastructure', icon: '🖥️', keyword: 'infrastructure' },
 ] as const;
 
 const Home: React.FC = () => {
@@ -445,7 +453,7 @@ const Home: React.FC = () => {
             {CATEGORIES.map((cat) => (
               <HardLink
                 key={cat.label}
-                to={`/?category=${encodeURIComponent(cat.label)}`}
+                to={`/?keyword=${encodeURIComponent(cat.keyword)}`}
                 className="flex items-center gap-3 bg-gray-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 rounded-xl p-4 transition-all group"
               >
                 <span className="text-2xl">{cat.icon}</span>
@@ -457,6 +465,76 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Personalized Recommendations (Phase 2) */}
+      {user && <RecommendedJobs />}
+
+      {/* Featured Jobs */}
+      {/* N06: moved up from the bottom of the page -- actual job listings
+          belong right after the headline/search and category browser, not
+          behind a dozen marketing sections (confirmed: scrollIntoView
+          targets this same #jobs-section id, so every "search"/category/
+          "Browse Jobs" action already scrolls here -- moving the section
+          itself up means that scroll is now short, not most of the page). */}
+      <div id="jobs-section" className="py-16 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white">
+              Trending Now
+            </h2>
+            <HardLink
+              to="/"
+              onClick={handleBrowseAllJobs}
+              className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-semibold flex items-center gap-1 text-sm"
+            >
+              Browse all jobs
+              <ArrowRight className="h-4 w-4" />
+            </HardLink>
+          </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin">
+                <Briefcase className="h-8 w-8 text-primary-500" />
+              </div>
+            </div>
+          ) : jobs.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {jobs.slice(0, 9).map((job) => (
+                <HardLink
+                  key={job.id}
+                  to={`/jobs/${job.id}`}
+                  className="group bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-200 dark:border-slate-700 hover:shadow-card-hover transition-all hover:border-primary-300"
+                >
+                  <h3 className="font-bold text-lg text-secondary-900 dark:text-white group-hover:text-primary-600 mb-2 line-clamp-2">
+                    {job.title}
+                  </h3>
+                  <p className="text-sm text-secondary-600 dark:text-slate-400 mb-3 font-medium">
+                    {job.company || job.source_company || job.sourceCompany}
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {job.location && (
+                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+                        <MapPin className="h-3 w-3 flex-shrink-0" />
+                        <span className="line-clamp-1">{job.location}</span>
+                      </div>
+                    )}
+                    {job.type && (
+                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+                        <Briefcase className="h-3 w-3 flex-shrink-0" />
+                        <span>{job.type}</span>
+                      </div>
+                    )}
+                  </div>
+                </HardLink>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-600 dark:text-slate-400">
+              <p>No jobs available yet. Check back soon!</p>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* How It Works */}
       <section className="py-20 bg-gray-50 dark:bg-slate-900">
@@ -496,39 +574,12 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Testimonials / Social Proof */}
-      <section className="py-20 bg-white dark:bg-slate-950">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
-              Job seekers love Nexegin
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { quote: 'Finally, a job board that actually keeps me in the loop. No more wondering if my application went to the void.', author: 'Sarah M.', role: 'Product Manager' },
-              { quote: 'The filtering tools here are incredible. Found a perfect fit within minutes instead of hours.', author: 'James K.', role: 'Software Engineer' },
-              { quote: 'I appreciated the transparency. Every company was responsive and professional throughout the process.', author: 'Maria L.', role: 'Data Analyst' },
-            ].map((testimonial, idx) => (
-              <div key={idx} className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-amber-400 text-lg">★</span>
-                  ))}
-                </div>
-                <p className="text-secondary-600 dark:text-slate-300 mb-6 italic leading-relaxed">
-                  "{testimonial.quote}"
-                </p>
-                <div>
-                  <div className="font-semibold text-secondary-900 dark:text-white">{testimonial.author}</div>
-                  <div className="text-sm text-secondary-500 dark:text-slate-400">{testimonial.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Testimonials section removed (N06/N15, 2026-10-18): the three
+          quotes were fabricated -- hardcoded names/roles with no backing
+          record (no reviews table, no user attribution, nothing a visitor
+          could verify). Fake testimonials are exactly the kind of static
+          social-proof N06 said to remove; add this back for real once
+          there's an actual source of candidate feedback to draw from. */}
 
       {/* About Section */}
       <section className="py-20 bg-gradient-to-b from-white to-primary-50/30 dark:from-slate-950 dark:to-primary-900/20">
@@ -629,9 +680,9 @@ const Home: React.FC = () => {
               <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">🔒</span>
               </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Encrypted Data</h3>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Encrypted in Transit</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
-                All data transmitted over HTTPS with end-to-end encryption
+                All data is transmitted over HTTPS and stored with access controls that restrict who can read it
               </p>
             </div>
 
@@ -649,9 +700,9 @@ const Home: React.FC = () => {
               <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">⚖️</span>
               </div>
-              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Compliant</h3>
+              <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Your Data, Your Call</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
-                GDPR, CCPA, and all data protection regulations complied
+                Request a copy or deletion of your data any time — see our Privacy Policy for how
               </p>
             </div>
           </div>
@@ -741,70 +792,6 @@ const Home: React.FC = () => {
           <NewsletterSignup variant="card" title="" description="" />
         </div>
       </section>
-
-      {/* Personalized Recommendations (Phase 2) */}
-      {user && <RecommendedJobs />}
-
-      {/* Featured Jobs */}
-      <div id="jobs-section" className="py-16 bg-gray-50 dark:bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white">
-              Trending Now
-            </h2>
-            <HardLink
-              to="/"
-              onClick={handleBrowseAllJobs}
-              className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-semibold flex items-center gap-1 text-sm"
-            >
-              Browse all jobs
-              <ArrowRight className="h-4 w-4" />
-            </HardLink>
-          </div>
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin">
-                <Briefcase className="h-8 w-8 text-primary-500" />
-              </div>
-            </div>
-          ) : jobs.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {jobs.slice(0, 9).map((job) => (
-                <HardLink
-                  key={job.id}
-                  to={`/jobs/${job.id}`}
-                  className="group bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-200 dark:border-slate-700 hover:shadow-card-hover transition-all hover:border-primary-300"
-                >
-                  <h3 className="font-bold text-lg text-secondary-900 dark:text-white group-hover:text-primary-600 mb-2 line-clamp-2">
-                    {job.title}
-                  </h3>
-                  <p className="text-sm text-secondary-600 dark:text-slate-400 mb-3 font-medium">
-                    {job.company || job.source_company || job.sourceCompany}
-                  </p>
-                  <div className="flex flex-col gap-2">
-                    {job.location && (
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
-                        <MapPin className="h-3 w-3 flex-shrink-0" />
-                        <span className="line-clamp-1">{job.location}</span>
-                      </div>
-                    )}
-                    {job.type && (
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
-                        <Briefcase className="h-3 w-3 flex-shrink-0" />
-                        <span>{job.type}</span>
-                      </div>
-                    )}
-                  </div>
-                </HardLink>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 text-gray-600 dark:text-slate-400">
-              <p>No jobs available yet. Check back soon!</p>
-            </div>
-          )}
-        </div>
-      </div>
       </div>
     </>
   );
