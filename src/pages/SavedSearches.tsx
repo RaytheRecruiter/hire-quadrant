@@ -11,9 +11,10 @@ import { formatDistanceToNow } from 'date-fns';
 interface SavedSearchRow {
   id: string;
   name: string;
-  query: { q?: string; loc?: string };
-  alert_frequency: 'off' | 'daily' | 'weekly';
-  last_run_at: string | null;
+  search_term: string | null;
+  location_filter: string | null;
+  email_frequency: 'never' | 'daily' | 'weekly';
+  last_sent_at: string | null;
   created_at: string;
 }
 
@@ -24,7 +25,7 @@ const SavedSearches: React.FC = () => {
   const [name, setName] = useState('');
   const [q, setQ] = useState('');
   const [loc, setLoc] = useState('');
-  const [frequency, setFrequency] = useState<'off' | 'daily' | 'weekly'>('daily');
+  const [frequency, setFrequency] = useState<'never' | 'daily' | 'weekly'>('daily');
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
@@ -49,8 +50,9 @@ const SavedSearches: React.FC = () => {
     const { error } = await supabase.from('saved_searches').insert({
       user_id: user.id,
       name: name.trim(),
-      query: { q: q.trim(), loc: loc.trim() },
-      alert_frequency: frequency,
+      search_term: q.trim() || null,
+      location_filter: loc.trim() || null,
+      email_frequency: frequency,
     });
     setSaving(false);
     if (error) {
@@ -73,16 +75,16 @@ const SavedSearches: React.FC = () => {
     setRows((cur) => cur.filter((r) => r.id !== id));
   };
 
-  const updateFrequency = async (id: string, freq: 'off' | 'daily' | 'weekly') => {
+  const updateFrequency = async (id: string, freq: 'never' | 'daily' | 'weekly') => {
     const { error } = await supabase
       .from('saved_searches')
-      .update({ alert_frequency: freq })
+      .update({ email_frequency: freq })
       .eq('id', id);
     if (error) {
       toast.error(error.message);
       return;
     }
-    setRows((cur) => cur.map((r) => (r.id === id ? { ...r, alert_frequency: freq } : r)));
+    setRows((cur) => cur.map((r) => (r.id === id ? { ...r, email_frequency: freq } : r)));
   };
 
   if (authLoading) return null;
@@ -142,10 +144,10 @@ const SavedSearches: React.FC = () => {
               <div className="flex items-center justify-between gap-2">
                 <select
                   value={frequency}
-                  onChange={(e) => setFrequency(e.target.value as 'off' | 'daily' | 'weekly')}
+                  onChange={(e) => setFrequency(e.target.value as 'never' | 'daily' | 'weekly')}
                   className="text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                 >
-                  <option value="off">No alerts</option>
+                  <option value="never">No alerts</option>
                   <option value="daily">Daily alerts</option>
                   <option value="weekly">Weekly alerts</option>
                 </select>
@@ -175,27 +177,27 @@ const SavedSearches: React.FC = () => {
             ) : (
               <ul className="divide-y divide-gray-100 dark:divide-slate-700">
                 {rows.map((r) => {
-                  const hasQ = Boolean(r.query?.q);
-                  const hasLoc = Boolean(r.query?.loc);
+                  const hasQ = Boolean(r.search_term);
+                  const hasLoc = Boolean(r.location_filter);
                   return (
                     <li key={r.id} className="py-3 flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <HardLink
-                          to={`/jobs?${new URLSearchParams({ q: r.query?.q ?? '', loc: r.query?.loc ?? '' }).toString()}`}
+                          to={`/jobs?${new URLSearchParams({ q: r.search_term ?? '', loc: r.location_filter ?? '' }).toString()}`}
                           className="block hover:bg-gray-50 dark:hover:bg-slate-700/50 rounded -mx-2 px-2 py-1"
                         >
                           <p className="text-sm font-medium text-secondary-900 dark:text-white">
                             {r.name}
                           </p>
                           <p className="text-[11px] text-gray-500 dark:text-slate-400">
-                            {hasQ && `"${r.query.q}"`}
+                            {hasQ && `"${r.search_term}"`}
                             {hasQ && hasLoc && ' · '}
-                            {hasLoc && r.query.loc}
+                            {hasLoc && r.location_filter}
                             {!hasQ && !hasLoc && 'All jobs'}
-                            {r.last_run_at && (
+                            {r.last_sent_at && (
                               <span className="ml-2">
-                                · last run{' '}
-                                {formatDistanceToNow(new Date(r.last_run_at), { addSuffix: true })}
+                                · last sent{' '}
+                                {formatDistanceToNow(new Date(r.last_sent_at), { addSuffix: true })}
                               </span>
                             )}
                           </p>
@@ -203,13 +205,13 @@ const SavedSearches: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-1.5 flex-shrink-0">
                         <select
-                          value={r.alert_frequency}
+                          value={r.email_frequency}
                           onChange={(e) =>
-                            updateFrequency(r.id, e.target.value as 'off' | 'daily' | 'weekly')
+                            updateFrequency(r.id, e.target.value as 'never' | 'daily' | 'weekly')
                           }
                           className="text-xs rounded border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                         >
-                          <option value="off">Off</option>
+                          <option value="never">Off</option>
                           <option value="daily">Daily</option>
                           <option value="weekly">Weekly</option>
                         </select>
