@@ -38,6 +38,8 @@ const CareerTransitionPage: React.FC = () => {
         .from('jobs')
         .select('id, title, company, location, posted_date')
         .ilike('title', `%${toRole}%`)
+        // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+        .eq('is_it_role', true)
         .order('posted_date', { ascending: false })
         .limit(8);
       if (!cancelled) {

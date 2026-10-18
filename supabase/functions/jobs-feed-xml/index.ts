@@ -30,6 +30,10 @@ serve(async () => {
   const { data: jobs, error } = await supabase
     .from('jobs')
     .select('id, title, description, company, location, type, salary, min_salary, max_salary, posted_date, application_deadline, external_url')
+    // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+    // This feed syndicates to external aggregators, so non-IT roles here
+    // would leak the old general-board scope onto other sites.
+    .eq('is_it_role', true)
     .order('posted_date', { ascending: false })
     .limit(2000);
 

@@ -36,6 +36,8 @@ async function searchAll(term: string): Promise<Result[]> {
       .from('jobs')
       .select('id, title, company, location')
       .or(`title.ilike.${pattern},company.ilike.${pattern}`)
+      // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+      .eq('is_it_role', true)
       .limit(6),
     supabase
       .from('public_company_directory')

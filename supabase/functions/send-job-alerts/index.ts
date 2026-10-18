@@ -97,6 +97,8 @@ serve(async (req) => {
         .from('jobs')
         .select('id, title, company, location, salary, posted_date')
         .gt('posted_date', lastSent.toISOString())
+        // N07: IT/technical-only board — see 20261018_it_job_eligibility.sql.
+        .eq('is_it_role', true)
         .order('posted_date', { ascending: false })
         .limit(20);
 
