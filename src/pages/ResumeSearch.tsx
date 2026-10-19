@@ -578,7 +578,7 @@ const ResumeSearch: React.FC = () => {
                       <button
                         onClick={() => handleUnlock(c)}
                         disabled={unlockingId === c.user_id || (noCredits && !isUnlocked)}
-                        className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                         title={noCredits ? 'No unlock credits remaining this period' : 'Unlock contact info + resume (1 credit)'}
                       >
                         {unlockingId === c.user_id ? (

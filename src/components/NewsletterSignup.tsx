@@ -66,8 +66,12 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             <Mail className="h-6 w-6 text-primary-600 dark:text-primary-400" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-secondary-900 dark:text-white">{title}</h3>
-            <p className="text-gray-600 dark:text-slate-400 text-sm mt-1">{description}</p>
+            {title && (
+              <h3 className="text-xl font-bold text-secondary-900 dark:text-white">{title}</h3>
+            )}
+            {description && (
+              <p className="text-gray-600 dark:text-slate-400 text-sm mt-1">{description}</p>
+            )}
           </div>
         </div>
         <form onSubmit={handleSubscribe} className="flex gap-2 mt-4">

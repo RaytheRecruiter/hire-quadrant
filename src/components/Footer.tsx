@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
                 profiles -- misleading rather than broken. Per the audit's
                 own guidance, omit the icon rather than link somewhere
                 wrong; add them back once real profile URLs exist. */}
-            <a href="mailto:hello@nexegin.com" className="text-gray-300 hover:text-white transition">
+            <a href="mailto:hello@nexegin.com" aria-label="Email hello@nexegin.com" className="text-gray-300 hover:text-white transition">
               <Mail className="h-5 w-5" />
             </a>
           </div>

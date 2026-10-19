@@ -312,7 +312,7 @@ const Home: React.FC = () => {
                 </div>
                 <button
                   type="submit"
-                  className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all flex items-center justify-center gap-2"
+                  className="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all flex items-center justify-center gap-2"
                 >
                   Search
                   <ArrowRight className="h-4 w-4" />
@@ -369,9 +369,9 @@ const Home: React.FC = () => {
             {/* Job Seeker Card */}
             <div className="group relative bg-gradient-to-br from-primary-50 to-primary-100/40 dark:from-primary-900/20 dark:to-slate-900 rounded-3xl p-8 border border-primary-100 dark:border-primary-900/30 hover:shadow-card-hover transition-all">
               <Users className="h-10 w-10 text-primary-500 mb-4" />
-              <h3 className="font-display text-2xl font-bold text-secondary-900 dark:text-white mb-4">
+              <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white mb-4">
                 Find Your Next Role
-              </h3>
+              </h2>
               <ul className="space-y-2 mb-6">
                 <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
                   <CheckCircle2 className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
@@ -400,9 +400,9 @@ const Home: React.FC = () => {
             {/* Employer Card */}
             <div className="group relative bg-gradient-to-br from-amber-50 to-amber-100/40 dark:from-amber-900/20 dark:to-slate-900 rounded-3xl p-8 border border-amber-200 dark:border-amber-900/30 hover:shadow-card-hover transition-all">
               <Building2 className="h-10 w-10 text-amber-500 mb-4" />
-              <h3 className="font-display text-2xl font-bold text-secondary-900 dark:text-white mb-4">
+              <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white mb-4">
                 Find Your Next Hire
-              </h3>
+              </h2>
               <ul className="space-y-2 mb-6">
                 <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
                   <CheckCircle2 className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
