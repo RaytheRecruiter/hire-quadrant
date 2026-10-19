@@ -490,7 +490,18 @@ export const fetchAndParseJobsXmlWithSources = async (xmlSources: XmlSource[]): 
      
       const xmlContent = await response.text();
       console.log(`Raw XML content from ${source.url}:`, xmlContent.substring(0, 500) + '...');
-      const jobs = parseJobsXml(xmlContent, source.name, source.url);
+      // sourceXmlFile must be the stable per-source identifier
+      // (source.name, e.g. "hirequadrant.xml") that matches
+      // JobSourceAdapter.id -- not source.url. Passing the URL here meant
+      // every job's stored source_xml_file never matched adapter.id, so
+      // migrateJobs.ts's scoped stale-delete (`.eq('source_xml_file',
+      // adapter.id)`) could never find any JobDiva row to consider stale.
+      // Confirmed live 2026-10-18: JobDiva postings removed from the feed
+      // stayed in the jobs table with status='open' indefinitely, visible
+      // to candidates with no trace of ever being re-synced or deleted.
+      // scripts/migrateLocal.ts already calls parseJobsXml with the same
+      // value for both args, confirming this is the intended pattern.
+      const jobs = parseJobsXml(xmlContent, source.name, source.name);
      
       console.log(`Loaded ${jobs.length} jobs from ${source.url} (${source.name})`);
       if (jobs.length > 0) {
