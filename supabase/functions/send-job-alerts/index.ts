@@ -78,13 +78,27 @@ serve(async (req) => {
     // Load due alerts
     const { data: searches, error: searchError } = await supabase
       .from('saved_searches')
-      .select('*, user:auth.users!user_id(email)')
+      .select('*')
       .neq('email_frequency', 'never');
 
     if (searchError) throw searchError;
 
     const now = new Date();
     const results: any[] = [];
+
+    // PostgREST can't embed auth.users (it's not in the exposed schema
+    // cache -- the `user:auth.users!user_id(email)` select above used to
+    // fail to parse on every run). Resolve emails via the admin API
+    // instead, which talks to GoTrue directly, cached per user_id since
+    // multiple saved searches commonly belong to the same user.
+    const emailCache = new Map<string, string | null>();
+    async function getUserEmail(userId: string): Promise<string | null> {
+      if (emailCache.has(userId)) return emailCache.get(userId)!;
+      const { data, error } = await supabase.auth.admin.getUserById(userId);
+      const email = error ? null : data.user?.email ?? null;
+      emailCache.set(userId, email);
+      return email;
+    }
 
     for (const s of (searches || []) as any[]) {
       const frequencyHours = s.email_frequency === 'daily' ? 24 : 24 * 7;
@@ -112,7 +126,7 @@ serve(async (req) => {
       const { data: jobs } = await q;
       if (!jobs || jobs.length === 0) continue;
 
-      const userEmail = s.user?.email;
+      const userEmail = await getUserEmail(s.user_id);
       if (!userEmail) continue;
 
       try {
