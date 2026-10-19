@@ -521,7 +521,7 @@ const TransferOwnershipModal: React.FC<TransferModalProps> = ({ company, onClose
           <button
             onClick={handleConfirm}
             disabled={!selectedUserId || saving}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-amber-600 hover:bg-amber-700 text-white rounded-lg disabled:opacity-60"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-amber-700 hover:bg-amber-800 text-white rounded-lg disabled:opacity-60"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRightLeft className="h-4 w-4" />}
             Transfer

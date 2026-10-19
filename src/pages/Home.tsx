@@ -312,7 +312,7 @@ const Home: React.FC = () => {
                 </div>
                 <button
                   type="submit"
-                  className="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all flex items-center justify-center gap-2"
+                  className="bg-amber-700 hover:bg-amber-800 text-white font-semibold px-6 py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all flex items-center justify-center gap-2"
                 >
                   Search
                   <ArrowRight className="h-4 w-4" />

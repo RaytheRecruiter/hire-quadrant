@@ -158,7 +158,7 @@ const AdvancedSearch: React.FC = () => {
             {/* Search Button */}
             <button
               type="submit"
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-soft hover:shadow-card-hover flex items-center justify-center gap-2"
+              className="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-soft hover:shadow-card-hover flex items-center justify-center gap-2"
             >
               <Filter className="h-4 w-4" />
               Search Jobs

@@ -123,7 +123,7 @@ const TopSkillsSection: React.FC = () => {
               type="button"
               onClick={addTopSkill}
               disabled={saving || !input.trim() || topSkills.length >= MAX_TOP_SKILLS}
-              className="inline-flex items-center gap-1 px-3 py-2 text-sm rounded-lg bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-60"
+              className="inline-flex items-center gap-1 px-3 py-2 text-sm rounded-lg bg-amber-700 text-white hover:bg-amber-800 disabled:opacity-60"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Add

@@ -116,7 +116,7 @@ const JobList: React.FC = () => {
             <SearchBar />
             <button
               onClick={() => setMobileFiltersOpen(false)}
-              className="mt-4 w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all"
+              className="mt-4 w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-3 rounded-xl shadow-soft hover:shadow-card-hover transition-all"
             >
               Show {totalJobsCount} jobs
             </button>
@@ -192,7 +192,7 @@ const JobList: React.FC = () => {
                 onClick={() => goToPage(page)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   page === currentPage
-                    ? 'bg-amber-600 text-white shadow-soft'
+                    ? 'bg-amber-700 text-white shadow-soft'
                     : 'border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700'
                 }`}
               >
