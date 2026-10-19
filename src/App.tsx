@@ -93,6 +93,14 @@ function App() {
                 <ScrollToTop />
                 <PageTracker>
                   <div className="min-h-screen bg-gray-50">
+                    {/* Rendered first so its fixed-position buttons are
+                        early in tab order -- confirmed live via manual
+                        keyboard testing (2026-10-19): CookieConsent was
+                        rendered last (after Footer), landing at tab stop
+                        58 of 60 on the homepage despite being visible
+                        from page load. Fixed positioning means DOM order
+                        doesn't affect where it renders visually. */}
+                    <CookieConsent />
                     <Header />
                     <ProfileNudge />
                     <Suspense fallback={<RouteFallback />}>
@@ -160,7 +168,6 @@ function App() {
                       </Routes>
                     </Suspense>
                     <Footer />
-                    <CookieConsent />
                   </div>
                 </PageTracker>
               </Router>
