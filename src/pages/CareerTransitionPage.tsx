@@ -117,7 +117,7 @@ const CareerTransitionPage: React.FC = () => {
             </h2>
             <ol className="space-y-3 text-sm text-gray-700 dark:text-slate-300 list-decimal list-inside">
               <li>
-                <span className="font-semibold">Weeks 1–2:</span> Shadow 3 people currently doing{' '}
+                <span className="font-semibold">Weeks 1–2:</span> Shadow people currently doing{' '}
                 {toRole.toLowerCase()} work. Ask for their job descriptions and weekly calendars.
               </li>
               <li>
@@ -130,8 +130,8 @@ const CareerTransitionPage: React.FC = () => {
                 role, you have relevant stories — frame them correctly.
               </li>
               <li>
-                <span className="font-semibold">Weeks 11–13:</span> Apply. Lean on warm intros
-                over cold apps 4:1. Expect the first offers in month 3–4.
+                <span className="font-semibold">Weeks 11–13:</span> Apply, leaning on warm
+                intros where you can.
               </li>
             </ol>
           </section>
