@@ -62,6 +62,11 @@ const ScheduleInterviewModal: React.FC<Props> = ({
     toast.success('Interview scheduled');
 
     // Best-effort: send a message with the details.
+    // conversations' real columns are employer_id/candidate_id/company_id,
+    // unique on all three (see BulkMessageComposer.tsx / N19 QA fix,
+    // commit 4cc3caca) -- this used to upsert participant_a/participant_b,
+    // which don't exist on this table at all, so this notification has
+    // never actually been sent.
     const body =
       `Interview scheduled for ${start.toLocaleString()}\n` +
       `Duration: ${duration} minutes\n` +
@@ -69,19 +74,25 @@ const ScheduleInterviewModal: React.FC<Props> = ({
       (meetingUrl ? `Link: ${meetingUrl}\n` : '') +
       (notes ? `\nNotes:\n${notes}` : '');
     try {
-      const applicantId = (
-        await supabase.from('job_applications').select('user_id').eq('id', applicationId).maybeSingle()
-      ).data?.user_id;
+      const application = (
+        await supabase.from('job_applications').select('user_id, job_id').eq('id', applicationId).maybeSingle()
+      ).data;
+      const applicantId = application?.user_id;
       if (applicantId) {
-        const { data: convo } = await supabase
+        const job = application?.job_id
+          ? (await supabase.from('jobs').select('company_id').eq('id', application.job_id).maybeSingle()).data
+          : null;
+        const { data: convo, error: convoErr } = await supabase
           .from('conversations')
           .upsert(
-            { participant_a: user.id, participant_b: applicantId, last_message_at: new Date().toISOString() },
-            { onConflict: 'participant_a,participant_b' },
+            { employer_id: user.id, candidate_id: applicantId, company_id: job?.company_id ?? null, last_message_at: new Date().toISOString() },
+            { onConflict: 'employer_id,candidate_id,company_id' },
           )
           .select('id')
           .single();
-        if (convo?.id) {
+        if (convoErr) {
+          console.error('Failed to start conversation for interview notification:', convoErr);
+        } else if (convo?.id) {
           await supabase.from('messages').insert({
             conversation_id: convo.id,
             sender_id: user.id,
@@ -89,8 +100,8 @@ const ScheduleInterviewModal: React.FC<Props> = ({
           });
         }
       }
-    } catch {
-      // non-fatal
+    } catch (err) {
+      console.error('Failed to send interview notification message:', err);
     }
 
     onScheduled?.();
