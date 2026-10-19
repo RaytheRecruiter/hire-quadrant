@@ -105,6 +105,33 @@ serve(async (req) => {
 
     const event = JSON.parse(body);
 
+    // Idempotency: Stripe retries webhooks on a non-2xx response, a
+    // timeout, or a network blip -- documented, expected behavior, not an
+    // edge case. Without this, a retried checkout.session.completed would
+    // double-credit purchased_contacts_remaining and create a duplicate
+    // job_sponsorship_orders row (extending sponsor_end_date/urgent_until
+    // further for free). Record the event id before doing any work; if
+    // it's already there, this is a repeat delivery -- skip straight to
+    // a 200 so Stripe stops retrying.
+    const { error: dedupeError } = await supabase
+      .from('stripe_webhook_events')
+      .insert({ id: event.id, event_type: event.type });
+    if (dedupeError) {
+      if (dedupeError.code === '23505') {
+        console.log(`Duplicate Stripe webhook delivery, skipping: ${event.id}`);
+        return new Response(JSON.stringify({ received: true, duplicate: true }), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      // Any other error recording the event: fail closed rather than risk
+      // double-processing a payment silently.
+      console.error('Failed to record webhook event for idempotency:', dedupeError);
+      return new Response(JSON.stringify({ error: 'Failed to record webhook event' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     console.log(`Processing Stripe webhook: ${event.type}`);
 
     switch (event.type) {
