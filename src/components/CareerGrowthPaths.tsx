@@ -55,13 +55,17 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
 
   return (
     <div className="mt-12">
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-3 mb-2">
         <GraduationCap className="h-6 w-6 text-primary-600" />
         <div>
           <h3 className="text-2xl font-bold text-secondary-900 dark:text-white">Career Growth Paths</h3>
           <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">Where this role can take you next</p>
         </div>
       </div>
+      <p className="text-xs text-gray-500 dark:text-slate-400 mb-6 italic">
+        AI-generated estimates, not based on Nexegin platform data or verified outcomes. Use as a
+        starting point for your own research, not as a guarantee.
+      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {paths.slice(0, 3).map((path, idx) => (
