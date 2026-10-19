@@ -46,10 +46,16 @@ const CandidateHomeDashboard: React.FC = () => {
           .select('id', { count: 'exact', head: true })
           .eq('user_id', user.id)
           .is('read_at', null),
+        // conversations' real columns are employer_id/candidate_id/company_id
+        // (a candidate is always the candidate_id side) -- this used to
+        // filter on participant_a/participant_b, which don't exist on this
+        // table at all (same bug as BulkMessageComposer.tsx / commit
+        // 4cc3caca), so this query has always failed silently and
+        // unreadMsgs has always shown 0 regardless of real unread messages.
         supabase
           .from('conversations')
           .select('id, last_message_at, messages(id, read_at, sender_id)')
-          .or(`participant_a.eq.${user.id},participant_b.eq.${user.id}`)
+          .eq('candidate_id', user.id)
           .order('last_message_at', { ascending: false })
           .limit(20),
       ]);
