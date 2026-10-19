@@ -98,7 +98,7 @@ const Header: React.FC = () => {
             >
               <Search className="h-4 w-4" />
               <span>Search</span>
-              <kbd className="hidden xl:inline text-[10px] px-1 py-0.5 rounded bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 font-mono">⌘K</kbd>
+              <kbd className="hidden xl:inline text-[10px] px-1 py-0.5 rounded bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 font-mono">⌘K</kbd>
             </button>
             <HardLink to="/blog" className={navClass('/blog')}>Blog</HardLink>
             {isCompany && (
