@@ -152,7 +152,7 @@ const Login: React.FC = () => {
             ) : (
               <form className="space-y-6" onSubmit={handleForgotSubmit}>
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl font-medium">{error}</div>
+                  <div role="alert" className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl font-medium">{error}</div>
                 )}
                 <p className="text-sm text-gray-600 dark:text-slate-400">
                   Enter your account email and we'll send you a link to set a new password.
@@ -197,7 +197,7 @@ const Login: React.FC = () => {
 
           <form className="space-y-8" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl font-medium">
+              <div role="alert" className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl font-medium">
                 {error}
               </div>
             )}

@@ -102,6 +102,7 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
   const [results, setResults] = useState<Result[]>([]);
   const [activeIdx, setActiveIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
   const runSearch = useMemo(
     () =>
@@ -117,7 +118,16 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
 
   useEffect(() => {
     if (!open) return;
-    setTimeout(() => inputRef.current?.focus(), 30);
+    // Keyboard users lose their place entirely without this -- confirmed
+    // live via manual keyboard testing (2026-10-19): closing via Escape
+    // dropped focus to <body>, forcing a full re-tab from the top of the
+    // page. Restore focus to whatever triggered the search on close.
+    previouslyFocusedRef.current = document.activeElement as HTMLElement;
+    const t = setTimeout(() => inputRef.current?.focus(), 30);
+    return () => {
+      clearTimeout(t);
+      previouslyFocusedRef.current?.focus?.();
+    };
   }, [open]);
 
   useEffect(() => {
