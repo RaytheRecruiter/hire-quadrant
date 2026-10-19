@@ -20,3 +20,31 @@
   for = "/"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# N22: hirequadrant.com's DNS still points at this site's Netlify IPs
+# (never changed at the registrar), but the domain itself was removed as
+# a configured alias on this Netlify site when nexegin.com became primary
+# -- confirmed live 2026-10-19: https://hirequadrant.com/ fails outright
+# with ERR_CERT_COMMON_NAME_INVALID (Netlify serves its generic *.netlify.app
+# cert, which doesn't match), and plain http://hirequadrant.com/ returns a
+# bare 404. No redirect exists at all right now -- every pre-rebrand
+# bookmark, indexed search result, and old password-reset/confirmation
+# email link is a dead end for visitors, not a redirect to the live site.
+#
+# These rules alone are not sufficient: Netlify only provisions a TLS
+# certificate and honors domain-scoped redirects for domains it knows
+# are aliases of this site. hirequadrant.com (and www.) must be added
+# back under Site configuration -> Domain management -> Domain aliases
+# in the Netlify dashboard before this takes effect -- that's the
+# one remaining manual step.
+[[redirects]]
+  from = "https://hirequadrant.com/*"
+  to = "https://nexegin.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.hirequadrant.com/*"
+  to = "https://nexegin.com/:splat"
+  status = 301
+  force = true
