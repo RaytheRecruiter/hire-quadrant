@@ -47,7 +47,7 @@ const ErrorFallback: React.FC<{ error: Error | null }> = ({ error }) => {
           We encountered an unexpected error. Please try refreshing the page or returning to the home page.
         </p>
         {error && process.env.NODE_ENV === 'development' && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg p-4 mb-6 text-left">
+          <div role="alert" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg p-4 mb-6 text-left">
             <p className="text-xs font-mono text-red-700 dark:text-red-300 whitespace-pre-wrap break-words">
               {error.message}
             </p>

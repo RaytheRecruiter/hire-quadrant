@@ -158,7 +158,7 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2 text-sm text-red-800">
+        <div role="alert" className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2 text-sm text-red-800">
           <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
           {error}
         </div>

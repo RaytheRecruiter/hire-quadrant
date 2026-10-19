@@ -200,6 +200,7 @@ const AdminResumePlans: React.FC = () => {
     <div className="space-y-8">
       {message && (
         <div
+          role={message.type === 'success' ? 'status' : 'alert'}
           className={`flex items-center gap-2 rounded-lg px-4 py-3 text-sm ${
             message.type === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-800'
           }`}

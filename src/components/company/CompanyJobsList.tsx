@@ -459,7 +459,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
                 <ScreeningQuestionsEditor value={questions} onChange={setQuestions} />
               </div>
               {error && (
-                <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>
+                <div role="alert" className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>
               )}
               <div className="pt-4 border-t border-gray-100 dark:border-slate-700">
                 <CustomFieldsEditor jobId={editingJobId} />

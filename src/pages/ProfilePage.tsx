@@ -457,7 +457,7 @@ const ProfilePage = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900/50 py-12">
                 <div className="max-w-md w-full mx-auto px-4">
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+                    <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-6">
                         <div className="flex items-start gap-3">
                             <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                             <div>
@@ -559,7 +559,7 @@ const ProfilePage = () => {
                 </div>
 
                 {message && (
-                    <div className={`mb-6 px-4 py-3 rounded-lg ${
+                    <div role={message.type === 'success' ? 'status' : 'alert'} className={`mb-6 px-4 py-3 rounded-lg ${
                         message.type === 'success'
                             ? 'bg-green-50 text-green-700 border border-green-200'
                             : 'bg-red-50 text-red-700 border border-red-200'
