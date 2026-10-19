@@ -99,7 +99,7 @@ export async function extractParseAndStore(
 
   const { data: existing } = await supabase
     .from('candidates')
-    .select('skills, certifications, top_skills, current_title')
+    .select('skills, certifications, top_skills, current_title, years_experience')
     .eq('user_id', userId)
     .maybeSingle();
 
@@ -117,7 +117,11 @@ export async function extractParseAndStore(
     certifications: (existing?.certifications as string[] | null)?.length ? existing!.certifications : parsed.certifications,
     top_skills: (existing?.top_skills as string[] | null)?.length ? existing!.top_skills : parsed.top_skills,
     current_title: existing?.current_title || parsed.current_title,
-    years_experience: parsed.years_experience,
+    // Null-check, not a truthy check -- "0 years experience" (just
+    // starting out, e.g. set via Onboarding.tsx) is a legitimate manually
+    // set value that a falsy check would wrongly treat as "unset" and
+    // overwrite with the AI's guess.
+    years_experience: existing?.years_experience != null ? existing.years_experience : parsed.years_experience,
     resume_parsed_at: new Date().toISOString(),
   };
 
