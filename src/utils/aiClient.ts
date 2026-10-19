@@ -4,11 +4,19 @@ const FUNCTIONS_BASE = (import.meta.env.VITE_SUPABASE_URL as string)?.replace('.
 
 async function callEdgeFunction(path: string, body: any): Promise<any> {
   const { data: { session } } = await supabase.auth.getSession();
+  // ai-helpers requires a valid Supabase JWT at the platform gateway
+  // (re-enabled 2026-10-19 after it was found open to unauthenticated
+  // cost abuse). career-paths is rendered on the public, logged-out
+  // JobDetails page -- without this fallback, every anonymous visitor
+  // got a silent 401 and the whole feature never loaded for them.
+  // Matches the anon-key-fallback pattern already used in
+  // resumeParser.ts and InterviewPractice.tsx.
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
   const res = await fetch(`${FUNCTIONS_BASE}/ai-helpers/${path}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+      Authorization: `Bearer ${session?.access_token ?? anonKey}`,
     },
     body: JSON.stringify(body),
   });
