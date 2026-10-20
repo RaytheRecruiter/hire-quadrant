@@ -56,6 +56,10 @@ const CLEARANCES = [
   { value: 'secret', label: 'Secret' },
   { value: 'top_secret', label: 'Top Secret' },
   { value: 'ts_sci', label: 'TS/SCI' },
+  // Per Ray (2026-10-20): missing clearance info must not be treated as
+  // "None required" -- those are different claims. This is the explicit
+  // "we don't know" bucket.
+  { value: 'not_specified', label: 'Not specified' },
 ];
 
 interface Props {

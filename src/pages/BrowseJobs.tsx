@@ -178,12 +178,28 @@ const BrowseJobs: React.FC = () => {
         // results under both "None required" and no filter, vs. 9 under
         // "Public Trust"). security_clearance is still NULL on every job
         // (JobDiva doesn't populate it), so this remains a description
-        // text-match approximation, not a verified exclusion -- a job
-        // that doesn't mention clearance at all is treated as "none
-        // required" even though the real answer may just be unspecified.
-        const CLEARANCE_TERMS = ['public trust', 'secret', 'top secret', 'TS/SCI'];
+        // text-match approximation, not a verified field.
+        //
+        // Per Ray (2026-10-20, same-day follow-up): a job that doesn't
+        // mention clearance at all is NOT the same claim as a job that
+        // explicitly says no clearance is required -- the first fix
+        // conflated "unknown" with "none required". Split into two
+        // distinct, explicit categories instead:
+        //   - "None required": description explicitly says so
+        //   - "Not specified": description gives no clearance signal at
+        //     all (neither a level nor an explicit none-required phrase)
+        const LEVEL_TERMS = ['public trust', 'secret', 'top secret', 'TS/SCI'];
+        const NONE_PHRASES = [
+          'no clearance required',
+          'no security clearance required',
+          'clearance not required',
+          'does not require a security clearance',
+          'no clearance needed',
+        ];
         if (filters.securityClearance === 'none') {
-          for (const term of CLEARANCE_TERMS) {
+          query = query.or(NONE_PHRASES.map((p) => `description.ilike.%${p}%`).join(','));
+        } else if (filters.securityClearance === 'not_specified') {
+          for (const term of [...LEVEL_TERMS, ...NONE_PHRASES]) {
             query = query.not('description', 'ilike', `%${term}%`);
           }
         } else {

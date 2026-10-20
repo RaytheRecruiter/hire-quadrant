@@ -12,7 +12,6 @@ import toast from 'react-hot-toast';
 import { formatPostedDate } from '../utils/formatPostedDate';
 import RelatedJobs from '../components/RelatedJobs';
 import RecentlyViewedJobs from '../components/RecentlyViewedJobs';
-import { CareerGrowthPaths } from '../components/CareerGrowthPaths';
 import CompanyLogo from '../components/CompanyLogo';
 import ShareButtons from '../components/ShareButtons';
 import JobApplicationForm, { SubmittedApplicationDetails } from '../components/JobApplicationForm';
@@ -568,7 +567,9 @@ const JobDetails: React.FC = () => {
                     currentMinSalary={(job as any).min_salary}
                     currentMaxSalary={(job as any).max_salary}
                 />
-                <CareerGrowthPaths jobTitle={job.title} jobDescription={job.description} />
+                {/* Career Growth Paths hidden 2026-10-20 per Ray -- he's
+                    building this section separately. Component/hook/AI
+                    endpoint left intact, just not rendered. */}
                 <RecentlyViewedJobs excludeJobId={job.id} />
             </div>
 
