@@ -1,7 +1,6 @@
 import React from 'react';
 import { GraduationCap, Flame, ThumbsUp, AlertCircle, Loader2 } from 'lucide-react';
 import { useCareerPaths } from '../hooks/useCareerPaths';
-import { useNavigate } from 'react-router-dom';
 
 interface CareerGrowthPathsProps {
   jobId: string;
@@ -14,7 +13,6 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
   jobDescription,
 }) => {
   const { paths, loading, error } = useCareerPaths(jobTitle, jobDescription);
-  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -98,14 +96,6 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
                 ))}
               </div>
             </div>
-
-            {/* CTA */}
-            <button
-              onClick={() => navigate(`/career?from=${encodeURIComponent(path.role)}`)}
-              className="w-full mt-4 px-4 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
-            >
-              View full path →
-            </button>
           </div>
         ))}
       </div>
