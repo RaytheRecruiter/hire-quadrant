@@ -1,14 +1,23 @@
 import React, { useMemo, useState } from 'react';
 import { User, GripVertical } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import toast from 'react-hot-toast';
 
+// QA04 (2026-10-20 tester retest): these ids used to be
+// pending/reviewing/interview/offered/hired/rejected, which don't match
+// job_applications_status_check (Applied/Screening/Interview/Offer/
+// Rejected -- Hired didn't exist in the schema at all). Every drag
+// attempted a status update the database constraint rejected outright,
+// 100% of the time, silently (see handleDrop). Aligned to the real
+// values; Hired added to the check constraint in the companion migration
+// (20261020_fix_job_applications_status_values.sql).
 const STAGES: Array<{ id: string; label: string; tone: string }> = [
-  { id: 'pending', label: 'New', tone: 'border-yellow-300 bg-yellow-50 dark:bg-yellow-900/10' },
-  { id: 'reviewing', label: 'Reviewing', tone: 'border-blue-300 bg-blue-50 dark:bg-blue-900/10' },
-  { id: 'interview', label: 'Interview', tone: 'border-indigo-300 bg-indigo-50 dark:bg-indigo-900/10' },
-  { id: 'offered', label: 'Offered', tone: 'border-emerald-300 bg-emerald-50 dark:bg-emerald-900/10' },
-  { id: 'hired', label: 'Hired', tone: 'border-green-400 bg-green-50 dark:bg-green-900/10' },
-  { id: 'rejected', label: 'Rejected', tone: 'border-rose-300 bg-rose-50 dark:bg-rose-900/10' },
+  { id: 'Applied', label: 'New', tone: 'border-yellow-300 bg-yellow-50 dark:bg-yellow-900/10' },
+  { id: 'Screening', label: 'Reviewing', tone: 'border-blue-300 bg-blue-50 dark:bg-blue-900/10' },
+  { id: 'Interview', label: 'Interview', tone: 'border-indigo-300 bg-indigo-50 dark:bg-indigo-900/10' },
+  { id: 'Offer', label: 'Offered', tone: 'border-emerald-300 bg-emerald-50 dark:bg-emerald-900/10' },
+  { id: 'Hired', label: 'Hired', tone: 'border-green-400 bg-green-50 dark:bg-green-900/10' },
+  { id: 'Rejected', label: 'Rejected', tone: 'border-rose-300 bg-rose-50 dark:bg-rose-900/10' },
 ];
 
 interface Applicant {
@@ -49,21 +58,33 @@ const ApplicantKanban: React.FC<Props> = ({ applications, jobs, onStatusUpdate, 
       acc[s.id] = [];
     });
     filtered.forEach((a) => {
-      const key = STAGES.some((s) => s.id === a.status) ? a.status : 'pending';
+      const key = STAGES.some((s) => s.id === a.status) ? a.status : 'Applied';
       acc[key].push(a);
     });
     return acc;
   }, [filtered]);
 
+  const moveApplicant = async (id: string, stage: string) => {
+    const app = applications.find((a) => a.id === id);
+    if (!app || app.status === stage) return;
+    try {
+      await onStatusUpdate(id, stage);
+    } catch (err) {
+      // QA04: onStatusUpdate used to be called without await/catch here,
+      // so a rejected update (e.g. the status check-constraint mismatch
+      // that caused this whole bug) was a silently swallowed promise
+      // rejection -- the card just never moved, with no error shown.
+      console.error('Failed to update applicant status:', err);
+      toast.error('Failed to move applicant. Please try again.');
+    }
+  };
+
   const handleDrop = (e: React.DragEvent, stage: string) => {
     e.preventDefault();
     const id = dragId ?? e.dataTransfer.getData('text/plain');
-    if (!id) return;
-    const app = applications.find((a) => a.id === id);
-    if (app && app.status !== stage) {
-      onStatusUpdate(id, stage);
-    }
     setDragId(null);
+    if (!id) return;
+    void moveApplicant(id, stage);
   };
 
   return (
@@ -129,6 +150,25 @@ const ApplicantKanban: React.FC<Props> = ({ applications, jobs, onStatusUpdate, 
                       <p className="text-[10px] text-gray-400 dark:text-slate-500">
                         {formatDistanceToNow(new Date(a.applied_at), { addSuffix: true })}
                       </p>
+                      {/* QA04: keyboard-accessible alternative to dragging -- a
+                          native select is fully operable via Tab/arrows/Enter,
+                          no drag gesture required. */}
+                      <select
+                        value={a.status}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          void moveApplicant(a.id, e.target.value);
+                        }}
+                        aria-label={`Move ${a.user_name ?? a.user_email ?? 'applicant'} to a different stage`}
+                        className="mt-1.5 w-full text-[10px] rounded border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 py-0.5"
+                      >
+                        {STAGES.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </li>
@@ -143,7 +183,7 @@ const ApplicantKanban: React.FC<Props> = ({ applications, jobs, onStatusUpdate, 
         ))}
       </div>
       <p className="mt-3 text-xs text-gray-500 dark:text-slate-400">
-        Drag cards between columns to update status.
+        Drag cards between columns, or use the stage dropdown on each card, to update status.
       </p>
     </div>
   );

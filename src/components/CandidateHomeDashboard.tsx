@@ -331,6 +331,7 @@ const STATUS_TONES: Record<string, string> = {
   offered: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300',
   Rejected: 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300',
   rejected: 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300',
+  Hired: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
   hired: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
 };
 
