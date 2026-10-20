@@ -171,15 +171,29 @@ const BrowseJobs: React.FC = () => {
         );
       }
       if (filters.securityClearance) {
-        const map: Record<string, string> = {
-          public_trust: 'public trust',
-          secret: 'secret',
-          top_secret: 'top secret',
-          ts_sci: 'TS/SCI',
-          none: '',
-        };
-        const term = map[filters.securityClearance] ?? filters.securityClearance;
-        if (term) {
+        // QA06 (2026-10-20 retest): "None required" used to map to an
+        // empty string, and `if (term)` treats '' as falsy, so the whole
+        // filter block was skipped -- "None required" silently returned
+        // every job, identical to no filter at all (reproduced live: 562
+        // results under both "None required" and no filter, vs. 9 under
+        // "Public Trust"). security_clearance is still NULL on every job
+        // (JobDiva doesn't populate it), so this remains a description
+        // text-match approximation, not a verified exclusion -- a job
+        // that doesn't mention clearance at all is treated as "none
+        // required" even though the real answer may just be unspecified.
+        const CLEARANCE_TERMS = ['public trust', 'secret', 'top secret', 'TS/SCI'];
+        if (filters.securityClearance === 'none') {
+          for (const term of CLEARANCE_TERMS) {
+            query = query.not('description', 'ilike', `%${term}%`);
+          }
+        } else {
+          const map: Record<string, string> = {
+            public_trust: 'public trust',
+            secret: 'secret',
+            top_secret: 'top secret',
+            ts_sci: 'TS/SCI',
+          };
+          const term = map[filters.securityClearance] ?? filters.securityClearance;
           query = query.or(
             `security_clearance.eq.${filters.securityClearance},description.ilike.%${term}%`,
           );
