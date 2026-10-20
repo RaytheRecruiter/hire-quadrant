@@ -87,8 +87,16 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
       toast.error("You don't have permission to download resumes. Ask your Owner.");
       return;
     }
-    const candidate = candidateInfo[userId];
-    if (!candidate?.resume_url) {
+    // QA01 (2026-10-20 retest): candidateInfo[userId].resume_url comes from
+    // the candidates table and is frequently empty -- many applicants never
+    // go through the full profile flow that populates it. The resume
+    // actually attached at submission time lives on the application itself
+    // (job_applications.resume_url), which is also what the storage RLS
+    // policy is scoped against. Fall back to that instead of failing.
+    const candidateResumeUrl = candidateInfo[userId]?.resume_url;
+    const appResumeUrl = applications.find((a) => a.id === appId)?.resume_url;
+    const resumeUrl = candidateResumeUrl || appResumeUrl;
+    if (!resumeUrl) {
       toast.error('No resume available for this candidate.');
       return;
     }
@@ -101,7 +109,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
     try {
       const { data, error } = await supabase.storage
         .from('resumes')
-        .createSignedUrl(candidate.resume_url, 3600);
+        .createSignedUrl(resumeUrl, 3600);
 
       if (error) {
         console.error('Error creating signed URL:', error);

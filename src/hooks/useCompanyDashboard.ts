@@ -46,12 +46,21 @@ export const useCompanyDashboard = (user: DashboardUser | null) => {
       }
 
       setCompany(companyData);
-      const companyName = companyData.name || companyData.display_name || '';
 
-      // Fetch jobs for this company
-      const { data: allJobs, error: jobsError } = await supabase
+      // Fetch jobs for this company. Used to filter all jobs client-side by
+      // job.source_company/job.company === companyData.name -- a fragile
+      // text match against jobs.company_id, which is the real relational
+      // link and what RLS, Recruiter Activity, and every other
+      // company-scoped query in this codebase already correctly use.
+      // Confirmed live (2026-10-20 QA retest, QA01/QA04): this mismatch
+      // was silently dropping real jobs/applications out of the dashboard
+      // whenever a job's display company string didn't exactly match the
+      // company row's name (punctuation, casing, or a source feed's
+      // formatting differences).
+      const { data: companyJobs, error: jobsError } = await supabase
         .from('jobs')
-        .select('*');
+        .select('*')
+        .eq('company_id', user.companyId);
 
       if (jobsError) {
         console.error('Error fetching jobs:', jobsError);
@@ -60,27 +69,20 @@ export const useCompanyDashboard = (user: DashboardUser | null) => {
         return;
       }
 
-      const companyJobs = (allJobs || []).filter(
-        (job: any) =>
-          job.source_company === companyName ||
-          job.company === companyName
-      );
-      setJobs(companyJobs);
+      setJobs(companyJobs || []);
 
       // Fetch applications for those jobs
-      if (companyJobs.length > 0) {
+      if (companyJobs && companyJobs.length > 0) {
         const jobIds = companyJobs.map((j: any) => j.id);
         const { data: appsData, error: appsError } = await supabase
           .from('job_applications')
-          .select('*');
+          .select('*')
+          .in('job_id', jobIds);
 
         if (appsError) {
           console.error('Error fetching applications:', appsError);
         } else {
-          const filteredApps = (appsData || []).filter((app: any) =>
-            jobIds.includes(app.job_id)
-          );
-          setApplications(filteredApps);
+          setApplications(appsData || []);
         }
       } else {
         setApplications([]);
