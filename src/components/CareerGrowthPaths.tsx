@@ -84,36 +84,6 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
               </div>
             </div>
 
-            {/* Skill Transfer */}
-            <div className="mb-4">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700 dark:text-slate-300">Skill Transfer</span>
-                <span className="text-sm font-semibold text-primary-600">{path.skill_transfer_pct}%</span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                <div
-                  className="bg-gradient-to-r from-primary-400 to-primary-500 h-2 rounded-full transition-all"
-                  style={{ width: `${path.skill_transfer_pct}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Salary Increase */}
-            <div className="mb-4 p-3 bg-green-50 rounded-lg">
-              <p className="text-sm font-medium text-green-900">
-                Salary Increase
-              </p>
-              <p className="text-lg font-bold text-green-700 mt-1">
-                +${(path.salary_delta_low / 1000).toFixed(0)}K – +${(path.salary_delta_high / 1000).toFixed(0)}K
-              </p>
-            </div>
-
-            {/* Time to Transition */}
-            <div className="mb-4 text-sm">
-              <span className="text-gray-600 dark:text-slate-400">Time to Transition:</span>
-              <p className="font-semibold text-secondary-900 dark:text-white mt-1">{path.time_to_transition}</p>
-            </div>
-
             {/* Missing Skills */}
             <div className="mb-4">
               <p className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">You'll Need to Learn</p>
