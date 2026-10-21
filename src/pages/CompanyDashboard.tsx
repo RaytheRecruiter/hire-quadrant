@@ -110,12 +110,14 @@ const CompanyDashboard: React.FC = () => {
               the nav stretched the whole page horizontally (confirmed live,
               2026-10-21 manual mobile pass: 1445px content in a 360px
               viewport) instead of scrolling within itself. */}
-          <nav className="flex space-x-8 overflow-x-auto" aria-label="Tabs">
+          <nav className="flex space-x-8 overflow-x-auto" aria-label="Tabs" role="tablist">
             {TABS.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   disabled={!isApproved && tab.id !== 'profile'}
                   className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-all ${

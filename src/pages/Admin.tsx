@@ -466,9 +466,11 @@ const Admin: React.FC = () => {
               the nav stretched the whole page horizontally (confirmed live,
               2026-10-21 manual mobile pass: 1194px content in a 360px
               viewport), same bug already fixed on CompanyDashboard.tsx. */}
-          <nav className="flex space-x-8 border-b border-gray-200 dark:border-slate-700 overflow-x-auto" aria-label="Tabs">
+          <nav className="flex space-x-8 border-b border-gray-200 dark:border-slate-700 overflow-x-auto" aria-label="Tabs" role="tablist">
             <button
               onClick={() => setActiveTab('overview')}
+              role="tab"
+              aria-selected={activeTab === 'overview'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'overview'
                   ? 'border-primary-300 text-primary-300'
@@ -479,6 +481,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('approvals')}
+              role="tab"
+              aria-selected={activeTab === 'approvals'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'approvals'
                   ? 'border-primary-300 text-primary-300'
@@ -489,6 +493,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('jobs')}
+              role="tab"
+              aria-selected={activeTab === 'jobs'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'jobs'
                   ? 'border-primary-300 text-primary-300'
@@ -499,6 +505,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('sources')}
+              role="tab"
+              aria-selected={activeTab === 'sources'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'sources'
                   ? 'border-primary-300 text-primary-300'
@@ -513,6 +521,8 @@ const Admin: React.FC = () => {
                 "Applications" flat list was redundant and is gone. */}
             <button
               onClick={() => setActiveTab('candidates')}
+              role="tab"
+              aria-selected={activeTab === 'candidates'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'candidates'
                   ? 'border-primary-300 text-primary-300'
@@ -523,6 +533,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('subscriptions')}
+              role="tab"
+              aria-selected={activeTab === 'subscriptions'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'subscriptions'
                   ? 'border-primary-300 text-primary-300'
@@ -533,6 +545,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('pricing')}
+              role="tab"
+              aria-selected={activeTab === 'pricing'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'pricing'
                   ? 'border-primary-300 text-primary-300'
@@ -543,6 +557,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('sponsorship')}
+              role="tab"
+              aria-selected={activeTab === 'sponsorship'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'sponsorship'
                   ? 'border-primary-300 text-primary-300'
@@ -553,6 +569,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('ats')}
+              role="tab"
+              aria-selected={activeTab === 'ats'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'ats'
                   ? 'border-primary-300 text-primary-300'
@@ -563,6 +581,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('candidate-hub')}
+              role="tab"
+              aria-selected={activeTab === 'candidate-hub'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'candidate-hub'
                   ? 'border-primary-300 text-primary-300'
@@ -573,6 +593,8 @@ const Admin: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('companies')}
+              role="tab"
+              aria-selected={activeTab === 'companies'}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'companies'
                   ? 'border-primary-300 text-primary-300'
