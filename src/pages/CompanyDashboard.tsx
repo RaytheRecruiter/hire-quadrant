@@ -70,7 +70,7 @@ const CompanyDashboard: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8 flex items-start justify-between gap-4">
+        <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
               Company Dashboard
@@ -106,7 +106,11 @@ const CompanyDashboard: React.FC = () => {
 
         {/* Tabs */}
         <div className="border-b border-gray-200 dark:border-slate-700 mb-6">
-          <nav className="flex space-x-8" aria-label="Tabs">
+          {/* 12 tabs don't fit a mobile viewport; without overflow-x-auto here
+              the nav stretched the whole page horizontally (confirmed live,
+              2026-10-21 manual mobile pass: 1445px content in a 360px
+              viewport) instead of scrolling within itself. */}
+          <nav className="flex space-x-8 overflow-x-auto" aria-label="Tabs">
             {TABS.map((tab) => {
               const Icon = tab.icon;
               return (
