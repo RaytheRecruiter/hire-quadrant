@@ -41,32 +41,40 @@ const MyJobs: React.FC = () => {
 
     try {
       if (active === 'saved') {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('saved_jobs')
           .select('job:jobs(id, title, company, location, posted_date)')
           .eq('user_id', user.id);
+        if (error) console.error('Error loading saved jobs:', error);
         setJobs(((data ?? []).map((r: any) => r.job).filter(Boolean)) as JobRow[]);
       } else if (active === 'applied') {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('job_applications')
           .select('id, job:jobs(id, title, company, location, posted_date)')
           .eq('user_id', user.id);
+        // QA02: this embed silently errored on every call until the
+        // missing job_applications -> jobs FK was added
+        // (20261020_fix_job_applications_missing_fk.sql) -- the error was
+        // never surfaced before, so the tab just looked empty.
+        if (error) console.error('Error loading applied jobs:', error);
         setJobs(
           ((data ?? [])
             .filter((r: any) => r.job)
             .map((r: any) => ({ ...r.job, application_id: r.id }))) as JobRow[],
         );
       } else if (active === 'archived') {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('job_skips')
           .select('job:jobs(id, title, company, location, posted_date)')
           .eq('user_id', user.id);
+        if (error) console.error('Error loading archived jobs:', error);
         setJobs(((data ?? []).map((r: any) => r.job).filter(Boolean)) as JobRow[]);
       } else {
         // invitations & interviews — not yet implemented
         setJobs([]);
       }
-    } catch {
+    } catch (err) {
+      console.error('Unexpected error loading my-jobs tab:', err);
       setJobs([]);
     } finally {
       setLoading(false);

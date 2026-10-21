@@ -327,12 +327,12 @@ const Admin: React.FC = () => {
         </div>
       )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
             <p className="text-gray-600 dark:text-slate-400 mt-2">Monitor job board performance and manage applications</p>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 flex-wrap">
             <button
               onClick={exportTrackingData}
               className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300"
@@ -462,7 +462,11 @@ const Admin: React.FC = () => {
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <nav className="flex space-x-8 border-b border-gray-200 dark:border-slate-700">
+          {/* 11 tabs don't fit a mobile viewport; without overflow-x-auto here
+              the nav stretched the whole page horizontally (confirmed live,
+              2026-10-21 manual mobile pass: 1194px content in a 360px
+              viewport), same bug already fixed on CompanyDashboard.tsx. */}
+          <nav className="flex space-x-8 border-b border-gray-200 dark:border-slate-700 overflow-x-auto" aria-label="Tabs">
             <button
               onClick={() => setActiveTab('overview')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
