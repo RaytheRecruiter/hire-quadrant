@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabaseClient';
+import { sendStatusUpdate } from '../utils/emailService';
 
 // Scott/Ray QA (2026-10-27): admin "Job Performance" table showed as
 // "cut off" with missing data, and the Overview stat card read "Total
@@ -47,6 +48,7 @@ export interface AdminJob {
   source_xml_file?: string;
   views?: number;
   applications?: number;
+  is_it_role?: boolean | null;
 }
 
 export interface AdminApplication {
@@ -139,7 +141,15 @@ export function useAdminData() {
     setApplications(prev =>
       prev.map(app => (app.id === id ? { ...app, status } : app))
     );
-  }, []);
+
+    // Fire-and-forget candidate notification. Gated server-side behind
+    // the candidate's own email_application_updates preference.
+    const app = applications.find((a) => a.id === id);
+    const job = app ? jobs.find((j) => j.id === app.job_id) : null;
+    if (app?.user_email && job) {
+      sendStatusUpdate(app.user_email, app.user_id, job.title, job.company || 'the company', status);
+    }
+  }, [applications, jobs]);
 
   const refreshData = useCallback(() => {
     fetchData();

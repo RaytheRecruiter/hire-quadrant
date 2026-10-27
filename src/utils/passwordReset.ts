@@ -1,5 +1,4 @@
 import { supabase } from './supabaseClient';
-import { sendPasswordReset } from './emailService';
 
 /**
  * Request password reset

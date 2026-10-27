@@ -100,6 +100,24 @@ serve(async (req) => {
       return email;
     }
 
+    // Ray/Scott QA (2026-10-27): the email_job_alerts toggle on the
+    // candidate profile saved correctly but nothing ever checked it --
+    // this was the only place that could have, and didn't. Default to
+    // allowed (true) when the user has no preferences row yet, matching
+    // DEFAULTS in useNotificationPreferences.ts.
+    const jobAlertsAllowedCache = new Map<string, boolean>();
+    async function jobAlertsAllowed(userId: string): Promise<boolean> {
+      if (jobAlertsAllowedCache.has(userId)) return jobAlertsAllowedCache.get(userId)!;
+      const { data } = await supabase
+        .from('notification_preferences')
+        .select('email_job_alerts, digest_frequency')
+        .eq('user_id', userId)
+        .maybeSingle();
+      const allowed = !data || (data.email_job_alerts !== false && data.digest_frequency !== 'off');
+      jobAlertsAllowedCache.set(userId, allowed);
+      return allowed;
+    }
+
     for (const s of (searches || []) as any[]) {
       const frequencyHours = s.email_frequency === 'daily' ? 24 : 24 * 7;
       const lastSent = s.last_sent_at ? new Date(s.last_sent_at) : new Date(0);
@@ -125,6 +143,8 @@ serve(async (req) => {
 
       const { data: jobs } = await q;
       if (!jobs || jobs.length === 0) continue;
+
+      if (!(await jobAlertsAllowed(s.user_id))) continue;
 
       const userEmail = await getUserEmail(s.user_id);
       if (!userEmail) continue;

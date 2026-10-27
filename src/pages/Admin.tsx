@@ -12,6 +12,7 @@ import AdminResumePlans from '../components/admin/AdminResumePlans';
 import AdminSponsorshipAnalytics from '../components/admin/AdminSponsorshipAnalytics';
 import AdminCompanyControl from '../components/admin/AdminCompanyControl';
 import AtsIntegrations from '../components/admin/AtsIntegrations';
+import JobClassificationReview from '../components/admin/JobClassificationReview';
 import DashboardCharts from '../components/admin/DashboardCharts';
 import { SortableTable, Column } from '../components/admin/SortableTable';
 import { TrackingService } from '../utils/trackingService';
@@ -26,6 +27,15 @@ const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [importResult, setImportResult] = useState<{ kind: 'success' | 'error'; message: string } | null>(null);
+  // Ray recommendation (2026-10-27 QA): Source Performance should be
+  // filterable by day/week/month/year/all time. applications.applied_at
+  // is a real timestamp, so that half is straightforward. jobs.views has
+  // no timestamp history (a single lifetime counter, incremented in
+  // place) -- filtering that by date range would need new event-level
+  // tracking, a separate and much bigger piece of work. Jobs/Views below
+  // stay as lifetime totals; only Applications and its conversion rate
+  // respond to this filter.
+  const [sourceDateRange, setSourceDateRange] = useState<'all' | 'today' | 'week' | 'month' | 'year'>('all');
 
   useEffect(() => {
     TrackingService.initialize();
@@ -228,6 +238,23 @@ const Admin: React.FC = () => {
   // their real company/feed name, and UI-posted jobs group by the actual
   // company that posted them (Ray QA 2026-08-12: "Quadrant Inc job not
   // showing" / "Direct is linked to the Quadrant XML feed").
+  const sourceRangeStart: Date | null = (() => {
+    const now = new Date();
+    switch (sourceDateRange) {
+      case 'today': return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      case 'week': return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      case 'month': return new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+      case 'year': return new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+      default: return null;
+    }
+  })();
+
+  const rangedAppCountByJobId = new Map<string, number>();
+  applications.forEach((app) => {
+    if (sourceRangeStart && new Date(app.applied_at) < sourceRangeStart) return;
+    rangedAppCountByJobId.set(app.job_id, (rangedAppCountByJobId.get(app.job_id) || 0) + 1);
+  });
+
   const sourceStats = jobs.reduce((acc, job) => {
     const source = job.source_company || job.company || 'Direct';
     if (!acc[source]) {
@@ -235,7 +262,7 @@ const Admin: React.FC = () => {
     }
     acc[source].jobs += 1;
     acc[source].views += (job.views || 0);
-    acc[source].applications += getAppCount(job);
+    acc[source].applications += (rangedAppCountByJobId.get(job.id) || 0);
     return acc;
   }, {} as Record<string, { jobs: number; views: number; applications: number }>);
 
@@ -541,6 +568,23 @@ const Admin: React.FC = () => {
             >
               Source Performance
             </button>
+            <button
+              onClick={() => setActiveTab('it-review')}
+              role="tab"
+              aria-selected={activeTab === 'it-review'}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'it-review'
+                  ? 'border-primary-300 text-primary-300'
+                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300'
+              }`}
+            >
+              IT Review
+              {jobs.filter((j) => j.is_it_role === null).length > 0 && (
+                <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-800">
+                  {jobs.filter((j) => j.is_it_role === null).length}
+                </span>
+              )}
+            </button>
             {/* Per Scott 2026-04-28: merged Applications + Candidates into a
                 single "Applicants" tab (deduped by email). The Candidates
                 reducer at the top of this file already does the dedup; the
@@ -827,7 +871,30 @@ const Admin: React.FC = () => {
         {activeTab === 'sources' && (
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Source Company Performance</h3>
+              <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Source Company Performance</h3>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="source-date-range" className="text-xs font-medium text-gray-500 dark:text-slate-400">
+                    Applications from:
+                  </label>
+                  <select
+                    id="source-date-range"
+                    value={sourceDateRange}
+                    onChange={(e) => setSourceDateRange(e.target.value as typeof sourceDateRange)}
+                    className="text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    <option value="all">All time</option>
+                    <option value="today">Today</option>
+                    <option value="week">Past week</option>
+                    <option value="month">Past month</option>
+                    <option value="year">Past year</option>
+                  </select>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 dark:text-slate-500 mb-4">
+                Total Jobs and Total Views are lifetime totals (view counts aren&rsquo;t timestamped yet, so they
+                can&rsquo;t be filtered by date). Total Applications and Avg. Conversion Rate reflect the selected range.
+              </p>
               <SortableTable
                 columns={[
                   {
@@ -856,6 +923,10 @@ const Admin: React.FC = () => {
               />
             </div>
           </div>
+        )}
+
+        {activeTab === 'it-review' && (
+          <JobClassificationReview jobs={jobs} />
         )}
 
         {/* "Applications" flat tab removed per Scott 2026-04-28; deduped

@@ -1,10 +1,52 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 interface EmailRequest {
   to: string;
   subject: string;
   template: string;
   variables: Record<string, any>;
+  // Optional: when set, gated templates (see PREFERENCE_GATED_TEMPLATES
+  // below) check this user's notification_preferences before sending.
+  // Needed because notification_preferences is self-read-only by RLS --
+  // e.g. a company user changing an applicant's status has no client-side
+  // access to that applicant's preferences, so the check has to happen
+  // here, server-side, with the service-role key.
+  userId?: string;
+}
+
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+// Maps a template to the notification_preferences column that must be
+// true (or, for weekly_digest, a digest_frequency other than 'off') for
+// the send to proceed. Templates not listed here (application_confirmation,
+// team_invitation, contact_confirmation, password_reset, etc.) are
+// transactional/receipts, not opt-out-able notifications, and always send.
+const PREFERENCE_GATED_TEMPLATES: Record<string, string> = {
+  status_update: 'email_application_updates',
+  weekly_digest: 'email_job_alerts',
+};
+
+// Returns false only when the user has an explicit, loaded preference row
+// that disables this template. Any lookup failure (no row yet, RLS/service
+// hiccup, user never visited settings) fails OPEN -- defaults in
+// useNotificationPreferences.ts are all "on" for these, and a missing row
+// should behave the same as those defaults, not silently suppress mail.
+async function isAllowedByPreferences(template: string, userId: string | undefined): Promise<boolean> {
+  const column = PREFERENCE_GATED_TEMPLATES[template];
+  if (!column || !userId) return true;
+
+  const { data } = await supabaseAdmin
+    .from('notification_preferences')
+    .select(`${column}, digest_frequency`)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (!data) return true;
+  if (template === 'weekly_digest' && data.digest_frequency === 'off') return false;
+  return (data as Record<string, unknown>)[column] !== false;
 }
 
 // Build email template HTML
@@ -222,7 +264,7 @@ serve(async (req) => {
       });
     }
 
-    const { to, subject, template, variables } = (await req.json()) as EmailRequest;
+    const { to, subject, template, variables, userId } = (await req.json()) as EmailRequest;
 
     if (!to || !subject || !template) {
       return new Response(
@@ -233,6 +275,13 @@ serve(async (req) => {
           status: 400,
           headers: { 'Content-Type': 'application/json' },
         }
+      );
+    }
+
+    if (!(await isAllowedByPreferences(template, userId))) {
+      return new Response(
+        JSON.stringify({ success: true, note: 'Skipped: recipient opted out via notification_preferences' }),
+        { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
       );
     }
 

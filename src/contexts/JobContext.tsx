@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabaseClient';
 import { useAuth } from './AuthContext';
 import { Job, JobApplication } from '../types';
+import { sendApplicationConfirmation } from '../utils/emailService';
 
 // Utility for debouncing function calls to prevent excessive API calls
 const debounce = (func, delay) => {
@@ -329,6 +330,13 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
             if (data) {
                 // Update local state directly for immediate UI feedback
                 setApplications(prevApplications => [...prevApplications, data as JobApplication]);
+                // Fire-and-forget: a failed confirmation email should never
+                // undo a successful application. sendApplicationConfirmation
+                // already catches and logs its own errors.
+                const recipientEmail = details?.applicantEmail?.trim() || user.email;
+                if (recipientEmail && job) {
+                    sendApplicationConfirmation(recipientEmail, job.title, job.company, newApplication.id);
+                }
                 return true;
             }
 

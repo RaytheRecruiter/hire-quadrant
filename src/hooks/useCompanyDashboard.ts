@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabaseClient';
+import { sendStatusUpdate } from '../utils/emailService';
 
 interface DashboardUser {
   id: string;
@@ -134,6 +135,21 @@ export const useCompanyDashboard = (user: DashboardUser | null) => {
       setApplications((prev) =>
         prev.map((app) => (app.id === id ? { ...app, status } : app))
       );
+
+      // Fire-and-forget candidate notification. Gated server-side behind
+      // the candidate's own email_application_updates preference, since
+      // this (company-side) session has no RLS access to read it.
+      const app = applications.find((a) => a.id === id);
+      const job = app ? jobs.find((j) => j.id === app.job_id) : null;
+      if (app?.user_email && job) {
+        sendStatusUpdate(
+          app.user_email,
+          app.user_id,
+          job.title,
+          company?.display_name || company?.name || 'the company',
+          status,
+        );
+      }
     } catch (err) {
       throw err;
     }

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { ChevronUp, ChevronDown, ChevronsUpDown, Search, X } from 'lucide-react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { ChevronUp, ChevronDown, ChevronsUpDown, Search, X, ChevronRight } from 'lucide-react';
 
 export interface Column<T> {
   key: string;
@@ -31,6 +31,34 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
   const [sortDir, setSortDir] = useState<SortDirection>(null);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
+
+  // Scott/Ray QA (2026-10-27): the Job Performance table has enough
+  // columns to overflow horizontally with no visible cue that more exist
+  // off-screen — Conversion Rate looked "cut off" with no indication it
+  // was one scroll away, not missing. Track real scroll position so the
+  // hint only shows when there's actually more to see, and hides once the
+  // user has scrolled there.
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollRight(el.scrollWidth - el.clientWidth - el.scrollLeft > 4);
+  }, []);
+
+  useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (!el) return;
+    const resizeObserver = new ResizeObserver(checkScroll);
+    resizeObserver.observe(el);
+    el.addEventListener('scroll', checkScroll);
+    return () => {
+      resizeObserver.disconnect();
+      el.removeEventListener('scroll', checkScroll);
+    };
+  }, [checkScroll]);
 
   const handleSort = (key: string) => {
     if (sortKey === key) {
@@ -85,6 +113,10 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
     return result;
   }, [data, sortKey, sortDir, filters, columns]);
 
+  useEffect(() => {
+    checkScroll();
+  }, [processedData, checkScroll]);
+
   const hasActiveFilters = Object.values(filters).some(v => v);
 
   return (
@@ -100,8 +132,17 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
           </button>
         </div>
       )}
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+      <div className="relative">
+        {canScrollRight && (
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 flex items-center">
+            <div className="h-full w-12 bg-gradient-to-l from-white dark:from-slate-800 to-transparent" />
+            <div className="absolute right-1 flex items-center gap-0.5 text-[11px] font-medium text-gray-400 dark:text-slate-500 bg-white/90 dark:bg-slate-800/90 px-1 rounded">
+              Scroll <ChevronRight className="h-3 w-3" />
+            </div>
+          </div>
+        )}
+        <div ref={scrollRef} className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
           <thead className="bg-gray-50 dark:bg-slate-900/50">
             <tr>
               {columns.map(col => (
@@ -180,6 +221,7 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
