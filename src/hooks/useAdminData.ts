@@ -1,6 +1,37 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabaseClient';
 
+// Scott/Ray QA (2026-10-27): admin "Job Performance" table showed as
+// "cut off" with missing data, and the Overview stat card read "Total
+// Jobs: 1000" against a real jobs table of 2,551 rows. Root cause: every
+// query below was a bare `.select('*')` with no `.range()`/`.limit()` and
+// no `.order()`, so PostgREST silently applied its server-side default
+// row cap (1000) and handed back an arbitrary, unordered slice. This
+// quietly undercounted every admin-side total (stats, Job Performance,
+// Source Performance) derived from `jobs`, not just the table rendering.
+// Page through in batches instead of trusting a single unbounded select.
+const PAGE_SIZE = 1000;
+
+async function fetchAllRows<T>(
+  table: string,
+  select: string,
+  orderBy?: { column: string; ascending?: boolean },
+): Promise<{ data: T[]; error: { message: string } | null }> {
+  const rows: T[] = [];
+  let from = 0;
+  for (;;) {
+    let query = supabase.from(table).select(select).range(from, from + PAGE_SIZE - 1);
+    if (orderBy) query = query.order(orderBy.column, { ascending: orderBy.ascending ?? true });
+    const { data, error } = await query;
+    if (error) return { data: rows, error };
+    const batch = (data ?? []) as T[];
+    rows.push(...batch);
+    if (batch.length < PAGE_SIZE) break;
+    from += PAGE_SIZE;
+  }
+  return { data: rows, error: null };
+}
+
 export interface AdminJob {
   id: string;
   title: string;
@@ -63,10 +94,10 @@ export function useAdminData() {
 
     try {
       const [jobsResult, applicationsResult, profilesResult, candidatesResult] = await Promise.all([
-        supabase.from('jobs').select('*'),
-        supabase.from('job_applications').select('*').order('applied_at', { ascending: false }),
-        supabase.from('user_profiles').select('*'),
-        supabase.from('candidates').select('*'),
+        fetchAllRows<AdminJob>('jobs', '*', { column: 'id' }),
+        fetchAllRows<AdminApplication>('job_applications', '*', { column: 'applied_at', ascending: false }),
+        fetchAllRows<AdminUserProfile>('user_profiles', '*', { column: 'id' }),
+        fetchAllRows<AdminCandidate>('candidates', '*', { column: 'user_id' }),
       ]);
 
       if (jobsResult.error) throw new Error(`Jobs fetch failed: ${jobsResult.error.message}`);

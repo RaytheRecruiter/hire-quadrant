@@ -359,7 +359,22 @@ const BrowseJobs: React.FC = () => {
                 </div>
               ) : rows.length === 0 ? (
                 <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-8 text-center text-sm text-gray-500 dark:text-slate-400">
-                  No jobs match these filters. Try broadening your search.
+                  {filters.securityClearance === 'none' ? (
+                    <>
+                      No jobs in our current listings explicitly state &ldquo;no clearance required.&rdquo; Most
+                      postings that don&rsquo;t need one simply don&rsquo;t mention clearance at all &mdash; try{' '}
+                      <button
+                        type="button"
+                        onClick={() => updateFilters({ securityClearance: 'not_specified' })}
+                        className="font-medium text-primary-600 hover:underline"
+                      >
+                        &ldquo;Not specified&rdquo;
+                      </button>{' '}
+                      instead.
+                    </>
+                  ) : (
+                    'No jobs match these filters. Try broadening your search.'
+                  )}
                 </div>
               ) : (
                 <ul className="space-y-3">

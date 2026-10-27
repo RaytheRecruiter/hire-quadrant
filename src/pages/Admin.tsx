@@ -76,6 +76,21 @@ const Admin: React.FC = () => {
     );
   }
 
+  // Scott/Ray QA (2026-10-27): Source Performance "Total Applications"
+  // read as permanently 0/not tracking. Root cause: jobs.applications is a
+  // dead denormalized counter -- nothing in the ingestion pipeline or
+  // application-submission flow ever writes to it (confirmed live: sum of
+  // jobs.applications across every job is 0). Real counts only exist as
+  // rows in job_applications. Build a real per-job count from the actual
+  // applications array and use it everywhere below instead of the dead
+  // column. jobs.views is unaffected -- it has a real RPC increment path
+  // (increment_job_views, called from JobDetails.tsx).
+  const appCountByJobId = new Map<string, number>();
+  applications.forEach((app) => {
+    appCountByJobId.set(app.job_id, (appCountByJobId.get(app.job_id) || 0) + 1);
+  });
+  const getAppCount = (job: typeof jobs[0]) => appCountByJobId.get(job.id) || 0;
+
   // Calculate statistics
   const totalJobs = jobs.length;
   const totalApplications = applications.length;
@@ -84,13 +99,13 @@ const Admin: React.FC = () => {
 
   // Get top performing jobs (by applications count)
   const topJobs = [...jobs]
-    .sort((a, b) => (b.applications || 0) - (a.applications || 0))
+    .sort((a, b) => getAppCount(b) - getAppCount(a))
     .slice(0, 5);
 
   // Get jobs with highest conversion rates (applications/views)
   const topConversionJobs = [...jobs]
     .filter(job => (job.views || 0) > 0)
-    .sort((a, b) => ((b.applications || 0) / (b.views || 1)) - ((a.applications || 0) / (a.views || 1)))
+    .sort((a, b) => (getAppCount(b) / (b.views || 1)) - (getAppCount(a) / (a.views || 1)))
     .slice(0, 5);
 
   // Get recent applications (already ordered by applied_at desc from the hook)
@@ -180,6 +195,17 @@ const Admin: React.FC = () => {
     new Date(b.lastActivity).getTime() - new Date(a.lastActivity).getTime()
   );
 
+  // Scott/Ray QA (2026-10-27): a tab literally labeled "Applicants" was
+  // listing candidates with 0 applications ("No applications yet") --
+  // confirmed via screenshots showing the same person (0 applications)
+  // present in both this table and the Candidate Hub. candidatesFromApps
+  // is deliberately "every candidate profile" (the Candidate Hub's job,
+  // per the comment above) -- the Applicants *table* specifically should
+  // only list people who have actually applied to something. Candidate
+  // Hub (candidateHubCandidates below) is untouched and keeps showing
+  // everyone, including non-appliers.
+  const actualApplicants = sortedCandidates.filter((c) => c.totalApplications > 0);
+
   // Candidate statistics
   const totalCandidates = candidatesFromApps.length;
   const activeCandidates = candidatesFromApps.filter(c =>
@@ -209,7 +235,7 @@ const Admin: React.FC = () => {
     }
     acc[source].jobs += 1;
     acc[source].views += (job.views || 0);
-    acc[source].applications += (job.applications || 0);
+    acc[source].applications += getAppCount(job);
     return acc;
   }, {} as Record<string, { jobs: number; views: number; applications: number }>);
 
@@ -712,7 +738,7 @@ const Admin: React.FC = () => {
                           <div className="text-xs text-gray-500 dark:text-slate-400">{job.company}</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-primary-600">{job.applications || 0}</div>
+                          <div className="font-bold text-primary-600">{getAppCount(job)}</div>
                           <div className="text-xs text-gray-500 dark:text-slate-400">applications</div>
                         </div>
                       </div>
@@ -732,7 +758,7 @@ const Admin: React.FC = () => {
                         </div>
                         <div className="text-right">
                           <div className="font-bold text-secondary-600">
-                            {(((job.applications || 0) / (job.views || 1)) * 100).toFixed(1)}%
+                            {((getAppCount(job) / (job.views || 1)) * 100).toFixed(1)}%
                           </div>
                           <div className="text-xs text-gray-500 dark:text-slate-400">conversion</div>
                         </div>
@@ -786,8 +812,8 @@ const Admin: React.FC = () => {
                   },
                   {
                     key: 'conversion', label: 'Conversion Rate',
-                    getValue: (job) => (job.views || 0) > 0 ? ((job.applications || 0) / (job.views || 1)) * 100 : 0,
-                    render: (job) => <>{(job.views || 0) > 0 ? (((job.applications || 0) / (job.views || 1)) * 100).toFixed(1) : 0}%</>,
+                    getValue: (job) => (job.views || 0) > 0 ? (getAppCount(job) / (job.views || 1)) * 100 : 0,
+                    render: (job) => <>{(job.views || 0) > 0 ? ((getAppCount(job) / (job.views || 1)) * 100).toFixed(1) : 0}%</>,
                     align: 'right',
                   },
                 ] as Column<typeof jobs[0]>[]}
@@ -845,8 +871,9 @@ const Admin: React.FC = () => {
                     <Users className="h-6 w-6 text-blue-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm text-gray-600 dark:text-slate-400">Total Candidates</p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">Total Registered Candidates</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalCandidates}</p>
+                    <p className="text-xs text-gray-400 dark:text-slate-500">Platform-wide, not just applicants</p>
                   </div>
                 </div>
               </div>
@@ -879,7 +906,11 @@ const Admin: React.FC = () => {
             {/* Candidates Table */}
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Candidate List</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Applicant List</h3>
+                <p className="text-sm text-gray-500 dark:text-slate-400 -mt-2 mb-4">
+                  Candidates who have applied to at least one job. For every registered candidate
+                  (including those who haven&rsquo;t applied yet), see the Candidate Hub tab.
+                </p>
                 <SortableTable
                   columns={[
                     {
@@ -906,7 +937,7 @@ const Admin: React.FC = () => {
                       render: (c) => <>{format(new Date(c.lastActivity), 'MMM d, yyyy h:mm a')}</>,
                     },
                   ] as Column<typeof sortedCandidates[0]>[]}
-                  data={sortedCandidates}
+                  data={actualApplicants}
                   rowKey={(c) => c.id}
                 />
               </div>
