@@ -81,6 +81,32 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
     return job.status === 'closed' ? 'closed' : 'open';
   };
 
+  // Ray QA (2026-11-05): "dashboard shows 3 jobs open, public search shows
+  // 1" -- not a bug, every public surface filters to is_it_role = true
+  // (20261018_it_job_eligibility.sql) and the other 2 are stuck at
+  // is_it_role = null, quarantined for admin review (JobClassificationReview.tsx)
+  // and invisible everywhere public until that happens. The dashboard's
+  // "Open" badge never said any of that, so an employer had no way to know
+  // "Open" here didn't mean "visible to candidates." Surface it here so the
+  // two states can't silently diverge again.
+  const getVisibilityBadge = (job: any): { label: string; className: string; title: string } | null => {
+    if (job.is_it_role === false) {
+      return {
+        label: 'Not public',
+        className: 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300',
+        title: 'Marked not eligible for this IT job board — hidden from Browse Jobs, the homepage, and your company page.',
+      };
+    }
+    if (job.is_it_role === null || job.is_it_role === undefined) {
+      return {
+        label: 'Pending review',
+        className: 'bg-amber-100 text-amber-800',
+        title: "Awaiting IT-role classification review — hidden from Browse Jobs, the homepage, and your company page until an admin approves it. This doesn't affect candidates already applying via direct link.",
+      };
+    }
+    return null;
+  };
+
   const toggleStatus = async (job: any) => {
     const next = getStatus(job) === 'open' ? 'closed' : 'open';
     setStatusBusyId(job.id);
@@ -253,35 +279,49 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
             key: 'status',
             label: 'Status',
             getValue: (job) => getStatus(job),
-            render: (job) =>
-              canEditJobs ? (
-                <button
-                  type="button"
-                  onClick={() => toggleStatus(job)}
-                  disabled={statusBusyId === job.id}
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium disabled:opacity-60 ${
-                    getStatus(job) === 'open'
-                      ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                      : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-gray-300'
-                  }`}
-                  title={getStatus(job) === 'open' ? 'Close this job (stops new applications, keeps history)' : 'Reopen this job'}
-                >
-                  {statusBusyId === job.id ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : getStatus(job) === 'open' ? (
-                    <Unlock className="h-3 w-3" />
+            render: (job) => {
+              const visibility = getVisibilityBadge(job);
+              return (
+                <div className="flex flex-col items-start gap-1">
+                  {canEditJobs ? (
+                    <button
+                      type="button"
+                      onClick={() => toggleStatus(job)}
+                      disabled={statusBusyId === job.id}
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium disabled:opacity-60 ${
+                        getStatus(job) === 'open'
+                          ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                          : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-gray-300'
+                      }`}
+                      title={getStatus(job) === 'open' ? 'Close this job (stops new applications, keeps history)' : 'Reopen this job'}
+                    >
+                      {statusBusyId === job.id ? (
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                      ) : getStatus(job) === 'open' ? (
+                        <Unlock className="h-3 w-3" />
+                      ) : (
+                        <Lock className="h-3 w-3" />
+                      )}
+                      {getStatus(job) === 'open' ? 'Open' : 'Closed'}
+                    </button>
                   ) : (
-                    <Lock className="h-3 w-3" />
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      getStatus(job) === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300'
+                    }`}>
+                      {getStatus(job) === 'open' ? 'Open' : 'Closed'}
+                    </span>
                   )}
-                  {getStatus(job) === 'open' ? 'Open' : 'Closed'}
-                </button>
-              ) : (
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  getStatus(job) === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300'
-                }`}>
-                  {getStatus(job) === 'open' ? 'Open' : 'Closed'}
-                </span>
-              ),
+                  {getStatus(job) === 'open' && visibility && (
+                    <span
+                      title={visibility.title}
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${visibility.className}`}
+                    >
+                      {visibility.label}
+                    </span>
+                  )}
+                </div>
+              );
+            },
           },
           {
             key: 'details',
