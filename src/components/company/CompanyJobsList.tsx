@@ -32,13 +32,18 @@ const emptyJobForm: JobFormState = {
 
 interface CompanyJobsListProps {
   jobs: any[];
+  // Ray QA (2026-11-03): the Apps column read `job.application_count`, a
+  // column that doesn't exist anywhere in the jobs table (confirmed —
+  // nothing in the schema ever writes it); it always showed 0. Count live
+  // from the applications CompanyDashboard already fetches instead.
+  applications?: any[];
   onJobCreated?: () => void;
   // Needed by NewJobModal — jobs.company is a legacy NOT NULL display
   // string predating company_id. Without it, INSERT fails silently.
   companyName: string;
 }
 
-const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, companyName }) => {
+const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = [], onJobCreated, companyName }) => {
   const { isOwner, isAdmin, can, member, loading: permLoading } = usePermissions();
   // Owner/Admin can always post; Standard users need the explicit toggle.
   // If a user has no membership row at all (legacy single-tenant company),
@@ -205,165 +210,180 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, onJobCreated, c
         </div>
       )}
       <NewJobModal open={newJobOpen} onClose={() => setNewJobOpen(false)} onCreated={handleJobCreated} companyName={companyName} />
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
-          <thead className="bg-gray-50 dark:bg-slate-900/50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Location</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Salary</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Posted</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Apps</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Screening</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Sponsor</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
-            {jobs.map((job) => {
+      {/* Ray QA (2026-11-03): 10 fixed-width columns forced horizontal
+          scroll just to reach Actions -- "scroll to the right just to
+          manage jobs". Reuse the admin SortableTable (sort + per-column
+          filter, already proven on Job Performance) instead of a plain
+          <table>, and compress 10 columns to 6 by folding Location/Type/
+          Salary into one cell and Screening/Sponsor into the row itself,
+          so the whole table fits the dashboard's existing max-w-7xl
+          content width without scrolling sideways. Vertical scroll is
+          just the page -- no fixed-height wrapper, so there's nothing to
+          engineer "past a threshold"; it falls out of the column-count
+          reduction alone. */}
+      <SortableTable<any>
+        rowKey={(job) => job.id}
+        emptyMessage="No jobs posted yet."
+        data={jobs}
+        columns={[
+          {
+            key: 'title',
+            label: 'Title',
+            getValue: (job) => job.title,
+            render: (job) => {
               const qCount = (job.screening_questions as ScreeningQuestion[] | undefined)?.length || 0;
               return (
-                <tr key={job.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <HardLink
-                      to={`/jobs/${job.id}`}
-                      className="text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline"
-                    >
-                      {job.title}
-                    </HardLink>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {canEditJobs ? (
-                      <button
-                        type="button"
-                        onClick={() => toggleStatus(job)}
-                        disabled={statusBusyId === job.id}
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium disabled:opacity-60 ${
-                          getStatus(job) === 'open'
-                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                            : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-gray-300'
-                        }`}
-                        title={getStatus(job) === 'open' ? 'Close this job (stops new applications, keeps history)' : 'Reopen this job'}
-                      >
-                        {statusBusyId === job.id ? (
-                          <Loader2 className="h-3 w-3 animate-spin" />
-                        ) : getStatus(job) === 'open' ? (
-                          <Unlock className="h-3 w-3" />
-                        ) : (
-                          <Lock className="h-3 w-3" />
-                        )}
-                        {getStatus(job) === 'open' ? 'Open' : 'Closed'}
-                      </button>
-                    ) : (
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        getStatus(job) === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300'
-                      }`}>
-                        {getStatus(job) === 'open' ? 'Open' : 'Closed'}
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
-                    <div className="flex items-center">
-                      <MapPin className="h-4 w-4 mr-1 text-gray-400 dark:text-slate-500" />
-                      {job.location || 'Remote'}
+                <div>
+                  <HardLink
+                    to={`/jobs/${job.id}`}
+                    className="text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline"
+                  >
+                    {job.title}
+                  </HardLink>
+                  {qCount > 0 && (
+                    <div className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">
+                      {qCount} screening question{qCount === 1 ? '' : 's'}
                     </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      <Clock className="h-3 w-3 mr-1" />
-                      {job.type || job.job_type || 'Full-time'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
-                    <div className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-1 text-gray-400 dark:text-slate-500" />
-                      {job.salary || job.salary_range || 'Not specified'}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
-                    <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1 text-gray-400 dark:text-slate-500" />
-                      {job.created_at ? new Date(job.created_at).toLocaleDateString() : 'N/A'}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      {job.application_count ?? 0}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
-                    {qCount > 0 ? (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
-                        {qCount} question{qCount === 1 ? '' : 's'}
-                      </span>
-                    ) : (
-                      <span className="text-xs text-gray-400 dark:text-slate-500">None</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-2">
-                      {getTier(job) > 0 && (
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 dark:text-amber-300">
-                          <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                          Tier {getTier(job)}
-                        </span>
-                      )}
-                      {isUrgent(job) && (
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 dark:text-rose-300">
-                          <Zap className="h-3.5 w-3.5 text-rose-500" />
-                          Urgent
-                        </span>
-                      )}
-                      {canSponsorJobs ? (
-                        <button
-                          onClick={() => setSponsorModalJob({ id: job.id, title: job.title })}
-                          className="inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:text-primary-800"
-                        >
-                          {getTier(job) > 0 ? 'Boost more' : 'Promote'}
-                        </button>
-                      ) : (
-                        getTier(job) === 0 && !isUrgent(job) && (
-                          <span className="text-xs text-gray-400 dark:text-slate-500">—</span>
-                        )
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {canEditJobs ? (
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => openEditor(job)}
-                          className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium text-sm"
-                        >
-                          <Settings className="h-4 w-4" />
-                          Manage
-                        </button>
-                        <button
-                          onClick={() => deleteJob(job)}
-                          disabled={deletingJobId === job.id}
-                          aria-label={`Delete ${job.title}`}
-                          className="inline-flex items-center gap-1 text-rose-600 hover:text-rose-800 font-medium text-sm disabled:opacity-50"
-                        >
-                          {deletingJobId === job.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Trash2 className="h-4 w-4" />
-                          )}
-                          Delete
-                        </button>
-                      </div>
-                    ) : (
-                      <span className="text-xs text-gray-400 dark:text-slate-500 italic">View only</span>
-                    )}
-                  </td>
-                </tr>
+                  )}
+                </div>
               );
-            })}
-          </tbody>
-        </table>
-      </div>
+            },
+          },
+          {
+            key: 'status',
+            label: 'Status',
+            getValue: (job) => getStatus(job),
+            render: (job) =>
+              canEditJobs ? (
+                <button
+                  type="button"
+                  onClick={() => toggleStatus(job)}
+                  disabled={statusBusyId === job.id}
+                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium disabled:opacity-60 ${
+                    getStatus(job) === 'open'
+                      ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                      : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-gray-300'
+                  }`}
+                  title={getStatus(job) === 'open' ? 'Close this job (stops new applications, keeps history)' : 'Reopen this job'}
+                >
+                  {statusBusyId === job.id ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : getStatus(job) === 'open' ? (
+                    <Unlock className="h-3 w-3" />
+                  ) : (
+                    <Lock className="h-3 w-3" />
+                  )}
+                  {getStatus(job) === 'open' ? 'Open' : 'Closed'}
+                </button>
+              ) : (
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  getStatus(job) === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300'
+                }`}>
+                  {getStatus(job) === 'open' ? 'Open' : 'Closed'}
+                </span>
+              ),
+          },
+          {
+            key: 'details',
+            label: 'Location / Type / Salary',
+            getValue: (job) => `${job.location || 'Remote'} ${job.type || job.job_type || 'Full-time'}`,
+            render: (job) => (
+              <div className="space-y-1">
+                <div className="flex items-center text-gray-600 dark:text-slate-400">
+                  <MapPin className="h-3.5 w-3.5 mr-1 text-gray-400 dark:text-slate-500 flex-shrink-0" />
+                  {job.location || 'Remote'}
+                </div>
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <Clock className="h-3 w-3 mr-1" />
+                  {job.type || job.job_type || 'Full-time'}
+                </span>
+                <div className="flex items-center text-gray-500 dark:text-slate-500">
+                  <DollarSign className="h-3.5 w-3.5 mr-1 text-gray-400 dark:text-slate-500 flex-shrink-0" />
+                  {job.salary || job.salary_range || 'Not specified'}
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: 'posted',
+            label: 'Posted',
+            getValue: (job) => job.created_at || '',
+            render: (job) => (
+              <div className="flex items-center">
+                <Calendar className="h-3.5 w-3.5 mr-1 text-gray-400 dark:text-slate-500" />
+                {job.created_at ? new Date(job.created_at).toLocaleDateString() : 'N/A'}
+              </div>
+            ),
+          },
+          {
+            key: 'apps',
+            label: 'Apps',
+            align: 'right',
+            getValue: (job) => applications.filter((a) => a.job_id === job.id).length,
+            render: (job) => (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                {applications.filter((a) => a.job_id === job.id).length}
+              </span>
+            ),
+          },
+          {
+            key: 'actions',
+            label: 'Actions',
+            sortable: false,
+            filterable: false,
+            render: (job) => (
+              <div className="flex items-center gap-3 flex-wrap">
+                {canEditJobs ? (
+                  <>
+                    <button
+                      onClick={() => openEditor(job)}
+                      className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium text-sm"
+                    >
+                      <Settings className="h-4 w-4" />
+                      Manage
+                    </button>
+                    <button
+                      onClick={() => deleteJob(job)}
+                      disabled={deletingJobId === job.id}
+                      aria-label={`Delete ${job.title}`}
+                      className="inline-flex items-center gap-1 text-rose-600 hover:text-rose-800 font-medium text-sm disabled:opacity-50"
+                    >
+                      {deletingJobId === job.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
+                      Delete
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-xs text-gray-400 dark:text-slate-500 italic">View only</span>
+                )}
+                {getTier(job) > 0 && (
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 dark:text-amber-300">
+                    <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                    Tier {getTier(job)}
+                  </span>
+                )}
+                {isUrgent(job) && (
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 dark:text-rose-300">
+                    <Zap className="h-3.5 w-3.5 text-rose-500" />
+                    Urgent
+                  </span>
+                )}
+                {canSponsorJobs && (
+                  <button
+                    onClick={() => setSponsorModalJob({ id: job.id, title: job.title })}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:text-primary-800"
+                  >
+                    {getTier(job) > 0 ? 'Boost more' : 'Promote'}
+                  </button>
+                )}
+              </div>
+            ),
+          },
+        ] as Column<any>[]}
+      />
 
       {editingJobId && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-0 sm:p-4">

@@ -120,7 +120,10 @@ export const useCompanyDashboard = (user: DashboardUser | null) => {
     }
   };
 
-  const updateApplicationStatus = async (id: string, status: string) => {
+  // `message` lets a caller (e.g. ScheduleInterviewModal) attach specifics
+  // -- date/time/location -- to the status-change email instead of the
+  // generic "You're Invited to Interview" with no details.
+  const updateApplicationStatus = async (id: string, status: string, message?: string) => {
     try {
       const { error: updateError } = await supabase
         .from('job_applications')
@@ -148,6 +151,7 @@ export const useCompanyDashboard = (user: DashboardUser | null) => {
           job.title,
           company?.display_name || company?.name || 'the company',
           status,
+          message,
         );
       }
     } catch (err) {

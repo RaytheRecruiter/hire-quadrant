@@ -17,7 +17,7 @@ interface ApplicationRow {
 
 const CandidateHomeDashboard: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
-  const { inputs } = useProfileCompleteness();
+  const { inputs, loading: completenessLoading } = useProfileCompleteness();
   const [savedCount, setSavedCount] = useState(0);
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
   const [unreadNotifs, setUnreadNotifs] = useState(0);
@@ -135,28 +135,37 @@ const CandidateHomeDashboard: React.FC = () => {
                 Profile strength
               </h3>
             </div>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-3xl font-bold text-secondary-900 dark:text-white">
-                {completenessScore}%
-              </span>
-              {completenessScore < 100 && (
-                <span className="text-xs text-gray-500 dark:text-slate-400">complete</span>
-              )}
-            </div>
-            <div className="w-full h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3">
-              <div
-                className={`h-full transition-all ${
-                  completenessScore >= 90
-                    ? 'bg-emerald-500'
-                    : completenessScore >= 60
-                    ? 'bg-primary-500'
-                    : completenessScore >= 30
-                    ? 'bg-amber-500'
-                    : 'bg-rose-500'
-                }`}
-                style={{ width: `${completenessScore}%` }}
-              />
-            </div>
+            {completenessLoading ? (
+              <>
+                <div className="h-9 w-16 bg-gray-100 dark:bg-slate-700 rounded animate-pulse mb-2" />
+                <div className="w-full h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3 animate-pulse" />
+              </>
+            ) : (
+              <>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-3xl font-bold text-secondary-900 dark:text-white">
+                    {completenessScore}%
+                  </span>
+                  {completenessScore < 100 && (
+                    <span className="text-xs text-gray-500 dark:text-slate-400">complete</span>
+                  )}
+                </div>
+                <div className="w-full h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3">
+                  <div
+                    className={`h-full transition-all ${
+                      completenessScore >= 90
+                        ? 'bg-emerald-500'
+                        : completenessScore >= 60
+                        ? 'bg-primary-500'
+                        : completenessScore >= 30
+                        ? 'bg-amber-500'
+                        : 'bg-rose-500'
+                    }`}
+                    style={{ width: `${completenessScore}%` }}
+                  />
+                </div>
+              </>
+            )}
             <HardLink
               to="/profile"
               className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 font-medium"

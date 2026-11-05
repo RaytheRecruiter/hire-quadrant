@@ -17,6 +17,10 @@ interface JobRow {
   location: string | null;
   posted_date?: string | null;
   application_id?: string | null; // populated when viewing the Applied tab
+  // Populated when viewing the Interviews tab.
+  interview_at?: string | null;
+  interview_location?: string | null;
+  interview_meeting_url?: string | null;
 }
 
 const TABS: Array<{ id: Tab; label: string; icon: React.ComponentType<{ className?: string }> }> = [
@@ -69,8 +73,50 @@ const MyJobs: React.FC = () => {
           .eq('user_id', user.id);
         if (error) console.error('Error loading archived jobs:', error);
         setJobs(((data ?? []).map((r: any) => r.job).filter(Boolean)) as JobRow[]);
+      } else if (active === 'interviews') {
+        // Ray QA (2026-11-03): this tab was a permanent stub -- scheduling
+        // an interview (ScheduleInterviewModal) never read from here, so it
+        // always rendered empty regardless of what employers scheduled.
+        // Two-step fetch (this user's application ids, then interviews for
+        // those ids) to match the rest of this file's style rather than a
+        // nested-embed filter, which isn't used anywhere else in this repo.
+        const { data: apps, error: appsErr } = await supabase
+          .from('job_applications')
+          .select('id, job:jobs(id, title, company, location, posted_date)')
+          .eq('user_id', user.id);
+        if (appsErr) console.error('Error loading applications for interviews tab:', appsErr);
+        const appById = new Map(
+          (apps ?? []).filter((r: any) => r.job).map((r: any) => [r.id, r.job]),
+        );
+        const appIds = Array.from(appById.keys());
+        if (appIds.length === 0) {
+          setJobs([]);
+        } else {
+          const { data: interviews, error: interviewsErr } = await supabase
+            .from('scheduled_interviews')
+            .select('application_id, scheduled_for, location, meeting_url, status')
+            .in('application_id', appIds)
+            .neq('status', 'cancelled')
+            .order('scheduled_for', { ascending: true });
+          if (interviewsErr) console.error('Error loading interviews:', interviewsErr);
+          setJobs(
+            ((interviews ?? [])
+              .map((iv: any) => {
+                const job = appById.get(iv.application_id);
+                if (!job) return null;
+                return {
+                  ...job,
+                  application_id: iv.application_id,
+                  interview_at: iv.scheduled_for,
+                  interview_location: iv.location,
+                  interview_meeting_url: iv.meeting_url,
+                };
+              })
+              .filter(Boolean)) as JobRow[],
+          );
+        }
       } else {
-        // invitations & interviews — not yet implemented
+        // invitations — not yet implemented
         setJobs([]);
       }
     } catch (err) {
@@ -176,6 +222,26 @@ const MyJobs: React.FC = () => {
                             {j.company}
                             {j.location ? ` · ${j.location}` : ''}
                           </p>
+                          {active === 'interviews' && j.interview_at && (
+                            <p className="text-xs text-primary-600 mt-0.5">
+                              {new Date(j.interview_at).toLocaleString()}
+                              {j.interview_location ? ` · ${j.interview_location}` : ''}
+                              {j.interview_meeting_url ? (
+                                <>
+                                  {' · '}
+                                  <a
+                                    href={j.interview_meeting_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="underline hover:text-primary-700"
+                                  >
+                                    Join link
+                                  </a>
+                                </>
+                              ) : ''}
+                            </p>
+                          )}
                         </HardLink>
                         <div className="flex items-center gap-1.5 flex-shrink-0">
                           {active === 'applied' && appId && (

@@ -61,8 +61,19 @@ export function useCompanyProfile(slugOrId: string | undefined) {
         }
 
         // Stats via parallel counts (follower_count via separate query)
+        // Ray QA (2026-11-03): job_count counted every job row regardless of
+        // status/is_it_role, while the page's own job list (useCompanyJobs)
+        // only ever shows status='open' AND is_it_role=true (N07 — public
+        // company pages are IT/technical-only). That mismatch is exactly
+        // "shows 3 open roles but only 1 is listed" — scope the count to
+        // what the page actually renders.
         const [{ count: jobCount }, reviewAgg, { count: followerCount }] = await Promise.all([
-          supabase.from('jobs').select('id', { count: 'exact', head: true }).eq('company_id', base.id),
+          supabase
+            .from('jobs')
+            .select('id', { count: 'exact', head: true })
+            .eq('company_id', base.id)
+            .eq('status', 'open')
+            .eq('is_it_role', true),
           supabase
             .from('company_reviews')
             .select('rating_overall', { count: 'exact' })

@@ -14,9 +14,10 @@ interface Props {
   job?: any | null;
   onClose: () => void;
   onSaved: () => void;
+  onStatusUpdate?: (id: string, status: string, message?: string) => void;
 }
 
-const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, job, onClose, onSaved }) => {
+const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, job, onClose, onSaved, onStatusUpdate }) => {
   const { isOwner, isAdmin, can, member } = usePermissions();
   const noMember = !member;
   const canSeeMatchScores = noMember || isOwner || isAdmin || can('view_match_scores');
@@ -254,6 +255,7 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
           candidateEmail={candidate?.email ?? application.user_email ?? null}
           jobTitle={job?.title ?? null}
           onClose={() => setShowSchedule(false)}
+          onStatusUpdate={onStatusUpdate}
         />
       )}
     </div>

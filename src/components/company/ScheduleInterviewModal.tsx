@@ -12,6 +12,12 @@ interface Props {
   jobTitle?: string | null;
   onClose: () => void;
   onScheduled?: () => void;
+  // Ray QA (2026-11-03): scheduling an interview never moved the pipeline
+  // stage or emailed the candidate -- it only wrote scheduled_interviews and
+  // posted an in-app message. Reuse the existing status-change email
+  // pipeline (sendStatusUpdate already has an "Interview" template) instead
+  // of building a second notification path.
+  onStatusUpdate?: (id: string, status: string, message?: string) => void;
 }
 
 const ScheduleInterviewModal: React.FC<Props> = ({
@@ -21,6 +27,7 @@ const ScheduleInterviewModal: React.FC<Props> = ({
   jobTitle,
   onClose,
   onScheduled,
+  onStatusUpdate,
 }) => {
   const { user } = useAuth();
   const today = new Date();
@@ -60,6 +67,20 @@ const ScheduleInterviewModal: React.FC<Props> = ({
       return;
     }
     toast.success('Interview scheduled');
+
+    // Move the pipeline stage and email the candidate the actual details --
+    // previously this modal only inserted scheduled_interviews and posted
+    // an in-app message, so the applicant stayed stuck at whatever stage
+    // they were already on and never got an email at all.
+    // status_update's email template drops this straight into an HTML <p>,
+    // so join with <br> rather than \n or the details collapse onto one line.
+    const details = [
+      `Your interview is scheduled for ${start.toLocaleString()} (${duration} minutes).`,
+      location ? `Where: ${location}` : null,
+      meetingUrl ? `Link: ${meetingUrl}` : null,
+      notes ? `Notes: ${notes}` : null,
+    ].filter(Boolean).join('<br>');
+    onStatusUpdate?.(applicationId, 'Interview', details);
 
     // Best-effort: send a message with the details.
     // conversations' real columns are employer_id/candidate_id/company_id,

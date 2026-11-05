@@ -87,6 +87,36 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
     setScreeningAnswers((prev) => ({ ...prev, [qId]: value }));
   };
 
+  // Ray QA (2026-11-05): the form only ever said "resume on file" with no
+  // filename and no way to inspect or drop it, so candidates applying with
+  // an old resume had no way to tell what was about to be submitted.
+  // candidates.resume_url is stored as `${uid}/${timestamp}_${filename}`
+  // (see ProfilePage.tsx handleFileUpload), so strip the folder + timestamp
+  // prefix to recover the original filename for display.
+  const existingResumeName = existingResumePath
+    ? existingResumePath.split('/').pop()?.replace(/^\d+_/, '') || 'Resume on file'
+    : null;
+
+  const handleViewExistingResume = async () => {
+    if (!existingResumePath) return;
+    // Open the tab synchronously on the click so browsers don't treat the
+    // later async navigation as a popup and block it.
+    const tab = window.open('', '_blank');
+    const { data, error } = await supabase.storage
+      .from('resumes')
+      .createSignedUrl(existingResumePath, 3600);
+    if (error || !data?.signedUrl) {
+      tab?.close();
+      toast.error('Failed to open resume.');
+      return;
+    }
+    if (tab) tab.location.href = data.signedUrl;
+  };
+
+  const handleRemoveExistingResume = () => {
+    setExistingResumePath(null);
+  };
+
   const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) {
@@ -282,13 +312,35 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
             <label className={labelClass}>
               Resume <span className="text-red-500">*</span>
             </label>
-            <label className="flex items-center gap-3 px-4 py-3 border border-dashed border-gray-300 dark:border-slate-600 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+            {existingResumePath && !resumeFile ? (
+              <div className="flex items-center gap-3 px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-900/50">
+                <FileText className="h-5 w-5 text-gray-500 dark:text-slate-400 flex-shrink-0" />
+                <span className="text-sm text-gray-700 dark:text-slate-300 truncate flex-1" title={existingResumeName || undefined}>
+                  {existingResumeName}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleViewExistingResume}
+                  className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex-shrink-0"
+                >
+                  View
+                </button>
+                <button
+                  type="button"
+                  onClick={handleRemoveExistingResume}
+                  className="text-xs font-semibold text-rose-600 hover:text-rose-700 flex-shrink-0"
+                >
+                  Remove
+                </button>
+              </div>
+            ) : null}
+            <label className="flex items-center gap-3 px-4 py-3 border border-dashed border-gray-300 dark:border-slate-600 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors mt-2">
               <Upload className="h-5 w-5 text-gray-500 dark:text-slate-400 flex-shrink-0" />
               <span className="text-sm text-gray-700 dark:text-slate-300 truncate">
                 {resumeFile
                   ? resumeFile.name
                   : existingResumePath
-                    ? 'Using resume on file — click to replace'
+                    ? 'Click to replace with a new file'
                     : 'No file chosen'}
               </span>
               <input
@@ -302,10 +354,18 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               Accepted file types: pdf, docx, doc, txt. Max. file size: 50 MB.
             </p>
             {existingResumePath && !resumeFile && (
-              <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                <FileText className="h-3 w-3" />
-                Your existing resume will be used unless you upload a new one.
+              <p className="text-xs text-gray-500 mt-1">
+                This resume will be submitted with your application unless you replace it above.
               </p>
+            )}
+            {resumeFile && (
+              <button
+                type="button"
+                onClick={() => setResumeFile(null)}
+                className="text-xs font-semibold text-gray-500 hover:text-gray-700 mt-1"
+              >
+                Cancel — use {existingResumePath ? 'previous resume' : 'no resume'} instead
+              </button>
             )}
           </div>
 
@@ -383,6 +443,10 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
           {/* Privacy consent */}
           <div className="border-t border-gray-200 dark:border-slate-700 pt-5">
+            <p className="text-xs text-gray-500 dark:text-slate-400 mb-2">
+              Submitting shares your name, contact info, resume, cover letter, and screening
+              answers above with {company || 'this employer'} so they can review your application.
+            </p>
             <label className="flex items-start gap-3 text-sm text-secondary-800 dark:text-slate-200 cursor-pointer">
               <input
                 type="checkbox"
@@ -393,7 +457,12 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               />
               <span>
                 By submitting you agree to our{' '}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline font-semibold">
+                <a
+                  href="/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-600 hover:underline font-semibold underline"
+                >
                   Privacy Policy
                 </a>{' '}
                 <span className="text-red-500">*</span>

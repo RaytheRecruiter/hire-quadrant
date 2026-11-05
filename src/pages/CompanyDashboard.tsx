@@ -151,6 +151,7 @@ const CompanyDashboard: React.FC = () => {
               {activeTab === 'jobs' && (
                 <CompanyJobsList
                   jobs={jobs}
+                  applications={applications}
                   companyName={company?.displayName || company?.name || 'Your Company'}
                 />
               )}

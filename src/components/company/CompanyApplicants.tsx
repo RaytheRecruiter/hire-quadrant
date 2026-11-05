@@ -10,7 +10,7 @@ import { usePermissions } from '../../hooks/usePermissions';
 interface CompanyApplicantsProps {
   applications: any[];
   jobs: any[];
-  onStatusUpdate: (id: string, status: string) => void;
+  onStatusUpdate: (id: string, status: string, message?: string) => void;
   companyId?: string;
 }
 
@@ -87,15 +87,18 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
       toast.error("You don't have permission to download resumes. Ask your Owner.");
       return;
     }
-    // QA01 (2026-10-20 retest): candidateInfo[userId].resume_url comes from
-    // the candidates table and is frequently empty -- many applicants never
-    // go through the full profile flow that populates it. The resume
-    // actually attached at submission time lives on the application itself
-    // (job_applications.resume_url), which is also what the storage RLS
-    // policy is scoped against. Fall back to that instead of failing.
-    const candidateResumeUrl = candidateInfo[userId]?.resume_url;
+    // Ray QA (2026-11-03): "Company members can read applicant resumes"
+    // (20261018_employer_resume_access.sql) grants storage SELECT only when
+    // storage.objects.name matches THIS application's job_applications.resume_url
+    // -- it was never extended to a candidate's profile resume. Preferring
+    // candidateInfo[userId].resume_url here (previous QA01 fix) broke that:
+    // whenever a candidate's profile resume differs from what they attached
+    // to this application, the signed-URL call fails storage RLS and throws.
+    // job_applications.resume_url is both the one actually submitted with
+    // this application and the only one the policy allows -- use it first.
     const appResumeUrl = applications.find((a) => a.id === appId)?.resume_url;
-    const resumeUrl = candidateResumeUrl || appResumeUrl;
+    const candidateResumeUrl = candidateInfo[userId]?.resume_url;
+    const resumeUrl = appResumeUrl || candidateResumeUrl;
     if (!resumeUrl) {
       toast.error('No resume available for this candidate.');
       return;
@@ -251,6 +254,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Candidate</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Job</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Applied</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Stage</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Rating</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Resume</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
@@ -302,7 +306,22 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       </div>
                     )}
                   </td>
-                  {/* Status badge column removed per Scott 2026-04-28: not a CRM. */}
+                  {/* Ray 2026-11-03: list view had no way to change stage without
+                      opening the Pipeline/kanban tab -- reverses the Scott
+                      2026-04-28 "not a CRM" removal. Inline dropdown instead of
+                      a static badge so a stage change is one click, not a tab
+                      switch. */}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <select
+                      value={app.status}
+                      onChange={(e) => onStatusUpdate(app.id, e.target.value)}
+                      className={`text-xs font-medium rounded-full px-2.5 py-1 border-0 focus:outline-none focus:ring-2 focus:ring-primary-400 ${statusColors[app.status] || 'bg-gray-100 text-gray-800'}`}
+                    >
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {canDownloadResumes ? (
                       <button
@@ -350,6 +369,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
         job={detailApp ? jobs.find(j => j.id === detailApp.job_id) : null}
         onClose={() => setDetailApp(null)}
         onSaved={() => setRefreshTick(t => t + 1)}
+        onStatusUpdate={onStatusUpdate}
       />
 
       {showBulk && (
