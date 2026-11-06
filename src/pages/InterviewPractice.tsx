@@ -149,7 +149,7 @@ const InterviewPractice: React.FC = () => {
   if (!isAuthenticated) return <Navigate to="/login?returnTo=/interview-practice" replace />;
 
   const tone = (n: number | null) => {
-    if (n == null) return 'text-gray-500';
+    if (n == null) return 'text-secondary-500';
     if (n >= 85) return 'text-emerald-600 dark:text-emerald-400';
     if (n >= 65) return 'text-primary-600 dark:text-primary-400';
     if (n >= 45) return 'text-amber-600 dark:text-amber-400';
@@ -165,7 +165,7 @@ const InterviewPractice: React.FC = () => {
           content="Practice interview questions with AI feedback. Covers behavioral, technical, system design, and role-specific questions."
         />
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <BreadcrumbSchema
             className="mb-4"
@@ -178,22 +178,22 @@ const InterviewPractice: React.FC = () => {
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">
                 Interview Practice
               </h1>
-              <p className="text-gray-600 dark:text-slate-400 text-sm">
+              <p className="text-secondary-600 dark:text-slate-400 text-sm">
                 Type your answer. AI scores it and gives specific feedback. Your history is saved so you can track progress.
               </p>
             </div>
           </header>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
                   Role you are interviewing for
                 </label>
                 <select
                   value={roleTarget}
                   onChange={(e) => setRoleTarget(e.target.value)}
-                  className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                 >
                   {ROLES.map((r) => (
                     <option key={r} value={r}>{r}</option>
@@ -201,7 +201,7 @@ const InterviewPractice: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
                   Question type
                 </label>
                 <select
@@ -213,7 +213,7 @@ const InterviewPractice: React.FC = () => {
                     setAnswer('');
                     setResult(null);
                   }}
-                  className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="behavioral">Behavioral</option>
                   <option value="technical">Technical</option>
@@ -223,7 +223,7 @@ const InterviewPractice: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-gray-50 dark:bg-slate-900/40 rounded-lg p-4 mb-3">
+            <div className="bg-secondary-50 dark:bg-slate-900/40 rounded-lg p-4 mb-3">
               <div className="flex items-start justify-between gap-2 mb-1">
                 <p className="text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wide">
                   Question
@@ -231,7 +231,7 @@ const InterviewPractice: React.FC = () => {
                 <button
                   type="button"
                   onClick={pickQuestion}
-                  className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+                  className="inline-flex items-center gap-1 text-xs text-secondary-500 hover:text-secondary-700"
                   title="New question"
                 >
                   <Shuffle className="h-3 w-3" />
@@ -246,10 +246,10 @@ const InterviewPractice: React.FC = () => {
               onChange={(e) => setAnswer(e.target.value)}
               rows={8}
               placeholder="Type your answer. Aim for 2-4 paragraphs with specific examples."
-              className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
+              className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
             />
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-500 dark:text-slate-400">
+              <span className="text-xs text-secondary-500 dark:text-slate-400">
                 {answer.length} chars
               </span>
               {error && <span className="text-xs text-rose-600 dark:text-rose-400">{error}</span>}
@@ -266,14 +266,14 @@ const InterviewPractice: React.FC = () => {
           </section>
 
           {result && (
-            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
               <div className="flex items-center gap-3 mb-4">
                 <div className={`text-5xl font-bold ${tone(result.score)}`}>
                   {result.score}
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Score</p>
-                  <p className="text-sm text-gray-700 dark:text-slate-300">{result.summary}</p>
+                  <p className="text-xs text-secondary-500 dark:text-slate-400">Score</p>
+                  <p className="text-sm text-secondary-700 dark:text-slate-300">{result.summary}</p>
                 </div>
               </div>
 
@@ -283,7 +283,7 @@ const InterviewPractice: React.FC = () => {
                     <CheckCircle2 className="h-3 w-3" />
                     Strengths
                   </p>
-                  <ul className="text-xs text-gray-700 dark:text-slate-300 space-y-0.5">
+                  <ul className="text-xs text-secondary-700 dark:text-slate-300 space-y-0.5">
                     {result.strengths.map((s) => <li key={s}>· {s}</li>)}
                   </ul>
                 </div>
@@ -295,7 +295,7 @@ const InterviewPractice: React.FC = () => {
                     <AlertTriangle className="h-3 w-3" />
                     How to improve
                   </p>
-                  <ul className="text-xs text-gray-700 dark:text-slate-300 space-y-0.5">
+                  <ul className="text-xs text-secondary-700 dark:text-slate-300 space-y-0.5">
                     {result.improvements.map((s) => <li key={s}>· {s}</li>)}
                   </ul>
                 </div>
@@ -306,7 +306,7 @@ const InterviewPractice: React.FC = () => {
                   <p className="text-xs font-semibold text-primary-700 dark:text-primary-300 mb-1">
                     Example of a stronger answer
                   </p>
-                  <p className="text-xs text-gray-700 dark:text-slate-300 whitespace-pre-wrap">
+                  <p className="text-xs text-secondary-700 dark:text-slate-300 whitespace-pre-wrap">
                     {result.better_example}
                   </p>
                 </div>
@@ -315,21 +315,21 @@ const InterviewPractice: React.FC = () => {
           )}
 
           {history.length > 0 && (
-            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Clock className="h-4 w-4 text-primary-500" />
                 <h2 className="text-sm font-semibold text-secondary-900 dark:text-white">
                   Your recent sessions
                 </h2>
               </div>
-              <ul className="divide-y divide-gray-100 dark:divide-slate-700">
+              <ul className="divide-y divide-secondary-100 dark:divide-slate-700">
                 {history.map((s) => (
                   <li key={s.id} className="py-2.5 flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-secondary-900 dark:text-white truncate">
                         {s.question}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-slate-400">
+                      <p className="text-xs text-secondary-500 dark:text-slate-400">
                         {s.role_target} · {s.question_type} · {formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}
                       </p>
                     </div>

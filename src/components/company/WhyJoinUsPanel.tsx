@@ -128,19 +128,19 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
         )}
       </div>
 
-      <p className="text-sm text-gray-500 dark:text-slate-400">
+      <p className="text-sm text-secondary-500 dark:text-slate-400">
         These blocks render in order on your public company profile, above the About section. Mix text, quotes, stats, images, and videos to tell your story.
       </p>
 
       {editing && (
-        <div className="bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
+        <div className="bg-secondary-50 dark:bg-slate-900/50 border border-secondary-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
           <div>
             <label htmlFor="block-kind" className="block text-sm font-medium text-secondary-900 dark:text-white mb-1">Type</label>
             <select
               id="block-kind"
               value={draft.kind}
               onChange={(e) => setDraft((d) => ({ ...d, kind: e.target.value as Draft['kind'] }))}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             >
               <option value="text">Text</option>
               <option value="quote">Quote</option>
@@ -148,7 +148,7 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
               <option value="image">Image</option>
               <option value="video">Video</option>
             </select>
-            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{KIND_HINTS[draft.kind]}</p>
+            <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">{KIND_HINTS[draft.kind]}</p>
           </div>
 
           {(draft.kind === 'text' || draft.kind === 'quote' || draft.kind === 'stat' || draft.kind === 'image' || draft.kind === 'video') && (
@@ -163,7 +163,7 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
                 : draft.kind === 'video' ? 'Video title (optional)'
                 : 'Heading (optional)'
               }
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             />
           )}
 
@@ -178,7 +178,7 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
                 : draft.kind === 'quote' ? 'The quote'
                 : 'Body copy'
               }
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             />
           )}
 
@@ -188,7 +188,7 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
               value={draft.image_url ?? ''}
               onChange={(e) => setDraft((d) => ({ ...d, image_url: e.target.value }))}
               placeholder="https://..."
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             />
           )}
 
@@ -198,12 +198,12 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
               value={draft.video_url ?? ''}
               onChange={(e) => setDraft((d) => ({ ...d, video_url: e.target.value }))}
               placeholder="YouTube, Vimeo, or direct .mp4 URL"
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             />
           )}
 
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={close} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700">
+            <button type="button" onClick={close} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700">
               <X className="h-4 w-4" /> Cancel
             </button>
             <button type="button" onClick={save} disabled={saving} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60">
@@ -219,31 +219,31 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
           <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
         </div>
       ) : blocks.length === 0 && !editing ? (
-        <p className="text-sm text-gray-500 dark:text-slate-400 py-8 text-center">
+        <p className="text-sm text-secondary-500 dark:text-slate-400 py-8 text-center">
           No content blocks yet. Click <strong>New block</strong> to add your first one.
         </p>
       ) : (
         <ul className="space-y-3">
           {blocks.map((b, i) => (
-            <li key={b.id} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4">
+            <li key={b.id} className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-xl p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="text-xs font-semibold uppercase tracking-wide text-primary-600 mb-1">{b.kind}</div>
                   {b.heading && <div className="font-medium text-secondary-900 dark:text-white">{b.heading}</div>}
                   {b.body && (
-                    <div className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-line line-clamp-4">{b.body}</div>
+                    <div className="text-sm text-secondary-700 dark:text-slate-300 whitespace-pre-line line-clamp-4">{b.body}</div>
                   )}
-                  {b.image_url && <div className="text-xs text-gray-500 dark:text-slate-400 truncate">img: {b.image_url}</div>}
-                  {b.video_url && <div className="text-xs text-gray-500 dark:text-slate-400 truncate">video: {b.video_url}</div>}
+                  {b.image_url && <div className="text-xs text-secondary-500 dark:text-slate-400 truncate">img: {b.image_url}</div>}
+                  {b.video_url && <div className="text-xs text-secondary-500 dark:text-slate-400 truncate">video: {b.video_url}</div>}
                 </div>
                 <div className="flex flex-col gap-1 flex-shrink-0">
-                  <button type="button" onClick={() => move(b, -1)} disabled={i === 0} title="Move up" className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500 disabled:opacity-30">
+                  <button type="button" onClick={() => move(b, -1)} disabled={i === 0} title="Move up" className="p-1.5 rounded hover:bg-secondary-100 dark:hover:bg-slate-700 text-secondary-500 disabled:opacity-30">
                     <ArrowUp className="h-4 w-4" />
                   </button>
-                  <button type="button" onClick={() => move(b, 1)} disabled={i === blocks.length - 1} title="Move down" className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500 disabled:opacity-30">
+                  <button type="button" onClick={() => move(b, 1)} disabled={i === blocks.length - 1} title="Move down" className="p-1.5 rounded hover:bg-secondary-100 dark:hover:bg-slate-700 text-secondary-500 disabled:opacity-30">
                     <ArrowDown className="h-4 w-4" />
                   </button>
-                  <button type="button" onClick={() => openEdit(b)} title="Edit" className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500">
+                  <button type="button" onClick={() => openEdit(b)} title="Edit" className="p-1.5 rounded hover:bg-secondary-100 dark:hover:bg-slate-700 text-secondary-500">
                     <Edit2 className="h-4 w-4" />
                   </button>
                   <button type="button" onClick={() => remove(b.id)} title="Delete" className="p-1.5 rounded hover:bg-rose-50 dark:hover:bg-rose-900/20 text-rose-600">

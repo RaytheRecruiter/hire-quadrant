@@ -158,16 +158,16 @@ const MyJobs: React.FC = () => {
       <Helmet>
         <title>My Jobs · Nexegin</title>
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">My Jobs</h1>
-            <p className="text-gray-600 dark:text-slate-400">
+            <p className="text-secondary-600 dark:text-slate-400">
               Everything you've saved, applied to, and archived in one place.
             </p>
           </header>
 
-          <div className="border-b border-gray-200 dark:border-slate-700 mb-6 overflow-x-auto">
+          <div className="border-b border-secondary-200 dark:border-slate-700 mb-6 overflow-x-auto">
             <nav className="flex gap-6" aria-label="My jobs tabs">
               {TABS.map((t) => {
                 const Icon = t.icon;
@@ -180,7 +180,7 @@ const MyJobs: React.FC = () => {
                     className={`flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
                       isActive
                         ? 'border-primary-500 text-primary-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        : 'border-transparent text-secondary-500 hover:text-secondary-700 hover:border-secondary-300'
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -191,14 +191,14 @@ const MyJobs: React.FC = () => {
             </nav>
           </div>
 
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
             {loading ? (
               <div className="text-center py-10">
                 <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
               </div>
             ) : jobs.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-sm text-gray-500 dark:text-slate-400">
+                <p className="text-sm text-secondary-500 dark:text-slate-400">
                   {stubCopy[active] || `You have no ${activeLabel.toLowerCase()} jobs yet.`}
                 </p>
                 {(active === 'saved' || active === 'applied') && (
@@ -211,16 +211,16 @@ const MyJobs: React.FC = () => {
                 )}
               </div>
             ) : (
-              <ul className="divide-y divide-gray-100 dark:divide-slate-700">
+              <ul className="divide-y divide-secondary-100 dark:divide-slate-700">
                 {jobs.map((j) => {
                   const appId = j.application_id ?? null;
                   const isOpen = appId && expandedAppId === appId;
                   return (
                     <li key={`${j.id}-${appId ?? 'x'}`} className="py-3">
-                      <div className="flex items-start justify-between gap-3 hover:bg-gray-50 dark:hover:bg-slate-700/50 -mx-3 px-3 py-2 rounded-lg">
+                      <div className="flex items-start justify-between gap-3 hover:bg-secondary-50 dark:hover:bg-slate-700/50 -mx-3 px-3 py-2 rounded-lg">
                         <HardLink to={`/jobs/${j.id}`} className="min-w-0 flex-1">
                           <p className="font-medium text-secondary-900 dark:text-white truncate">{j.title}</p>
-                          <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
+                          <p className="text-xs text-secondary-500 dark:text-slate-400 truncate">
                             {j.company}
                             {j.location ? ` · ${j.location}` : ''}
                           </p>
@@ -252,7 +252,7 @@ const MyJobs: React.FC = () => {
                                 type="button"
                                 onClick={() => setExpandedAppId(isOpen ? null : appId)}
                                 title="View status timeline"
-                                className="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-gray-800 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-slate-700"
+                                className="inline-flex items-center gap-1 text-xs text-secondary-600 hover:text-secondary-800 px-2 py-1 rounded hover:bg-secondary-100 dark:hover:bg-slate-700"
                               >
                                 {isOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                                 Status

@@ -64,7 +64,7 @@ const JobDescriptionScorer: React.FC<Props> = ({ title, description }) => {
       : 'text-rose-600 dark:text-rose-400';
 
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary-500" />
@@ -92,8 +92,8 @@ const JobDescriptionScorer: React.FC<Props> = ({ title, description }) => {
               {score.overall_score}
             </div>
             <div>
-              <p className="text-xs text-gray-500 dark:text-slate-400">Overall score</p>
-              <p className="text-xs text-gray-600 dark:text-slate-400">
+              <p className="text-xs text-secondary-500 dark:text-slate-400">Overall score</p>
+              <p className="text-xs text-secondary-600 dark:text-slate-400">
                 {score.overall_score >= 85
                   ? 'Excellent — post as-is.'
                   : score.overall_score >= 65
@@ -114,9 +114,9 @@ const JobDescriptionScorer: React.FC<Props> = ({ title, description }) => {
             ] as const).map(([label, n]) => (
               <div
                 key={label}
-                className="bg-gray-50 dark:bg-slate-900/40 rounded-lg p-2.5 text-center"
+                className="bg-secondary-50 dark:bg-slate-900/40 rounded-lg p-2.5 text-center"
               >
-                <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-0.5">
+                <p className="text-xs text-secondary-500 dark:text-slate-400 uppercase tracking-wide mb-0.5">
                   {label}
                 </p>
                 <p className={`text-lg font-bold ${tone(n)}`}>{n}</p>
@@ -130,7 +130,7 @@ const JobDescriptionScorer: React.FC<Props> = ({ title, description }) => {
                 <CheckCircle2 className="h-3 w-3" />
                 What's working
               </p>
-              <ul className="text-xs text-gray-700 dark:text-slate-300 space-y-0.5">
+              <ul className="text-xs text-secondary-700 dark:text-slate-300 space-y-0.5">
                 {score.strengths.map((s) => (
                   <li key={s}>· {s}</li>
                 ))}
@@ -144,7 +144,7 @@ const JobDescriptionScorer: React.FC<Props> = ({ title, description }) => {
                 <AlertTriangle className="h-3 w-3" />
                 How to improve
               </p>
-              <ul className="text-xs text-gray-700 dark:text-slate-300 space-y-0.5">
+              <ul className="text-xs text-secondary-700 dark:text-slate-300 space-y-0.5">
                 {score.improvements.map((s) => (
                   <li key={s}>· {s}</li>
                 ))}
@@ -157,7 +157,7 @@ const JobDescriptionScorer: React.FC<Props> = ({ title, description }) => {
               <p className="text-xs font-semibold text-rose-700 dark:text-rose-300 mb-1">
                 Missing sections
               </p>
-              <p className="text-xs text-gray-700 dark:text-slate-300">
+              <p className="text-xs text-secondary-700 dark:text-slate-300">
                 {score.missing_sections.join(' · ')}
               </p>
             </div>

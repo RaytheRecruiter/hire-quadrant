@@ -124,7 +124,7 @@ const Pricing: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 to-primary-50/30">
+    <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 to-primary-50/30">
       <Helmet>
         <title>Pricing — Nexegin</title>
         <meta
@@ -138,7 +138,7 @@ const Pricing: React.FC = () => {
         <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
           Simple, self-service pricing
         </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+        <p className="mt-4 text-lg text-secondary-600 dark:text-slate-400 max-w-2xl mx-auto">
           Post for free. Promote when you need more applicants. Source when you want to find candidates yourself.
         </p>
         <HardLink
@@ -156,7 +156,7 @@ const Pricing: React.FC = () => {
           <div>
             <p className="text-xs uppercase tracking-wide text-emerald-600 font-semibold mb-1">Post</p>
             <h2 className="text-xl font-bold text-secondary-900 dark:text-white">Job postings are always free</h2>
-            <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">No limits, no plan required. Just sign up and post.</p>
+            <p className="text-sm text-secondary-600 dark:text-slate-400 mt-1">No limits, no plan required. Just sign up and post.</p>
           </div>
           <span className="text-3xl font-bold text-emerald-600">$0</span>
         </div>
@@ -176,7 +176,7 @@ const Pricing: React.FC = () => {
                   <Sparkles className="h-3.5 w-3.5" /> Promote
                 </p>
                 <h2 className="text-2xl sm:text-3xl font-bold text-secondary-900 dark:text-white">Sponsor a job listing</h2>
-                <p className="text-gray-600 dark:text-slate-400 mt-2">One-time boost per job. No subscription required.</p>
+                <p className="text-secondary-600 dark:text-slate-400 mt-2">One-time boost per job. No subscription required.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {sponsorshipPlans.map((plan) => {
@@ -196,11 +196,11 @@ const Pricing: React.FC = () => {
                       <h3 className="font-bold text-lg text-secondary-900 dark:text-white">{plan.name}</h3>
                       <p className="text-3xl font-bold text-primary-600 mt-2">
                         {fmtMo(plan.price_cents)}
-                        <span className="text-sm font-normal text-gray-400"> / {plan.duration_days} days</span>
+                        <span className="text-sm font-normal text-secondary-400"> / {plan.duration_days} days</span>
                       </p>
                       <ul className="mt-4 space-y-2">
                         {(plan.features || []).filter((f) => f !== 'Most Popular').map((f, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-slate-300">
+                          <li key={i} className="flex items-start gap-2 text-sm text-secondary-700 dark:text-slate-300">
                             <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                             {f}
                           </li>
@@ -227,15 +227,15 @@ const Pricing: React.FC = () => {
                   <Search className="h-3.5 w-3.5" /> Source
                 </p>
                 <h2 className="text-2xl sm:text-3xl font-bold text-secondary-900 dark:text-white">Search the resume database</h2>
-                <p className="text-gray-600 dark:text-slate-400 mt-2">Find and reach out to candidates directly.</p>
-                <div className="inline-flex rounded-lg border border-gray-200 dark:border-slate-700 p-0.5 bg-white dark:bg-slate-800 mt-4">
+                <p className="text-secondary-600 dark:text-slate-400 mt-2">Find and reach out to candidates directly.</p>
+                <div className="inline-flex rounded-lg border border-secondary-200 dark:border-slate-700 p-0.5 bg-white dark:bg-slate-800 mt-4">
                   {(['monthly', 'annual'] as const).map((freq) => (
                     <button
                       key={freq}
                       type="button"
                       onClick={() => setBilling(freq)}
                       className={`px-4 py-1.5 text-sm font-medium rounded-md transition ${
-                        billing === freq ? 'bg-primary-500 text-white shadow' : 'text-gray-500 dark:text-slate-400'
+                        billing === freq ? 'bg-primary-500 text-white shadow' : 'text-secondary-500 dark:text-slate-400'
                       }`}
                     >
                       {freq === 'monthly' ? 'Monthly' : 'Annual (save ~17%)'}
@@ -262,12 +262,12 @@ const Pricing: React.FC = () => {
                       <h3 className="font-bold text-lg text-secondary-900 dark:text-white">{plan.name}</h3>
                       <p className="text-3xl font-bold text-primary-600 mt-2">
                         {fmtMo(price)}
-                        {price > 0 && <span className="text-sm font-normal text-gray-400">/{billing === 'monthly' ? 'mo' : 'yr'}</span>}
+                        {price > 0 && <span className="text-sm font-normal text-secondary-400">/{billing === 'monthly' ? 'mo' : 'yr'}</span>}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{plan.monthly_unlock_credits} unlocks / mo</p>
+                      <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">{plan.monthly_unlock_credits} unlocks / mo</p>
                       <ul className="mt-4 space-y-2">
                         {(plan.features || []).filter((f) => f !== 'Most Popular').map((f, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-slate-300">
+                          <li key={i} className="flex items-start gap-2 text-sm text-secondary-700 dark:text-slate-300">
                             <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                             {f}
                           </li>
@@ -286,14 +286,14 @@ const Pricing: React.FC = () => {
                     </div>
                   );
                 })}
-                <div className="rounded-2xl border border-dashed border-gray-300 dark:border-slate-700 p-6 flex flex-col justify-center items-center text-center">
+                <div className="rounded-2xl border border-dashed border-secondary-300 dark:border-slate-700 p-6 flex flex-col justify-center items-center text-center">
                   <h3 className="font-bold text-lg text-secondary-900 dark:text-white">Enterprise</h3>
-                  <p className="text-sm text-gray-500 dark:text-slate-400 mt-2 mb-4">
+                  <p className="text-sm text-secondary-500 dark:text-slate-400 mt-2 mb-4">
                     Custom credits, team seats, and dedicated support.
                   </p>
                   <a
                     href="mailto:billing@nexegin.com?subject=Enterprise%20Resume%20Database"
-                    className="px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 font-semibold hover:border-primary-400 hover:text-primary-600 transition"
+                    className="px-4 py-2.5 rounded-xl border border-secondary-300 dark:border-slate-600 text-secondary-700 dark:text-slate-300 font-semibold hover:border-primary-400 hover:text-primary-600 transition"
                   >
                     Contact sales
                   </a>
@@ -309,7 +309,7 @@ const Pricing: React.FC = () => {
             </h2>
             <div className="space-y-3">
               {FAQ_ITEMS.map((item, i) => (
-                <details key={i} className="group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5">
+                <details key={i} className="group bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl p-5">
                   <summary className="font-semibold text-secondary-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
                     {item.q}
                     <span className="text-primary-500 transition-transform group-open:rotate-45 text-2xl leading-none">+</span>
@@ -318,7 +318,7 @@ const Pricing: React.FC = () => {
                 </details>
               ))}
             </div>
-            <p className="mt-10 text-center text-gray-600 dark:text-slate-400">
+            <p className="mt-10 text-center text-secondary-600 dark:text-slate-400">
               Need a custom plan or have questions?{' '}
               <a
                 href="mailto:sales@nexegin.com"

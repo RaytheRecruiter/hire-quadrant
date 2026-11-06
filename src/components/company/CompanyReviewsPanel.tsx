@@ -111,20 +111,20 @@ const ResponseEditor: React.FC<{
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg p-3 space-y-2">
+    <div className="bg-secondary-50 dark:bg-slate-900/50 border border-secondary-200 dark:border-slate-700 rounded-lg p-3 space-y-2">
       <textarea
         rows={3}
         value={body}
         onChange={(e) => setBody(e.target.value)}
         maxLength={2000}
         placeholder="Write a public response to this review"
-        className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
       />
       <div className="flex justify-end gap-2">
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+          className="px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-secondary-100 dark:hover:bg-slate-700"
         >
           Cancel
         </button>
@@ -179,8 +179,8 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
 
   if (reviews.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-10 text-center">
-        <p className="text-gray-600 dark:text-slate-400">No reviews yet for your company.</p>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
+        <p className="text-secondary-600 dark:text-slate-400">No reviews yet for your company.</p>
       </div>
     );
   }
@@ -189,20 +189,20 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 dark:text-slate-500" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-secondary-400 dark:text-slate-500" />
           <input
             type="text"
             placeholder="Search reviews — title, pros, cons, job title"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
           aria-label="Status filter"
-          className="text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="text-sm rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         >
           <option value="all">All statuses</option>
           <option value="pending">Pending</option>
@@ -211,13 +211,13 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
         </select>
       </div>
 
-      <p className="text-xs text-gray-500 dark:text-slate-400">
+      <p className="text-xs text-secondary-500 dark:text-slate-400">
         Showing {filtered.length} of {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
       </p>
 
       {filtered.length === 0 ? (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-10 text-center">
-          <p className="text-sm text-gray-500 dark:text-slate-400">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
+          <p className="text-sm text-secondary-500 dark:text-slate-400">
             No reviews match the current filters.
           </p>
         </div>
@@ -229,7 +229,7 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
         return (
           <article
             key={r.id}
-            className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5"
+            className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl p-5"
           >
             <header className="flex items-start justify-between gap-3 mb-3">
               <div className="min-w-0">
@@ -240,11 +240,11 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
                     <StatusIcon className="h-3 w-3" />
                     {s.label}
                   </span>
-                  <span className="text-xs text-gray-500 dark:text-slate-400">
+                  <span className="text-xs text-secondary-500 dark:text-slate-400">
                     {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
                   </span>
                   {r.job_title && (
-                    <span className="text-xs text-gray-500 dark:text-slate-400">· {r.job_title}</span>
+                    <span className="text-xs text-secondary-500 dark:text-slate-400">· {r.job_title}</span>
                   )}
                 </div>
                 <h3 className="text-lg font-semibold text-secondary-900 dark:text-white">{r.title}</h3>
@@ -253,7 +253,7 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
             </header>
 
             {r.pros && (
-              <div className="text-sm text-gray-700 dark:text-slate-300 mb-2">
+              <div className="text-sm text-secondary-700 dark:text-slate-300 mb-2">
                 <span className="inline-flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400 mr-1">
                   <ThumbsUp className="h-3.5 w-3.5" /> Pros:
                 </span>
@@ -261,7 +261,7 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
               </div>
             )}
             {r.cons && (
-              <div className="text-sm text-gray-700 dark:text-slate-300 mb-3">
+              <div className="text-sm text-secondary-700 dark:text-slate-300 mb-3">
                 <span className="inline-flex items-center gap-1 font-semibold text-rose-700 dark:text-rose-400 mr-1">
                   <ThumbsDown className="h-3.5 w-3.5" /> Cons:
                 </span>

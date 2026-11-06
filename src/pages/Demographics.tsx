@@ -95,11 +95,11 @@ const Demographics: React.FC = () => {
   return (
     <>
       <Helmet><title>My Demographics · Nexegin</title></Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">My Demographics</h1>
-            <p className="text-gray-600 dark:text-slate-400 mt-1">
+            <p className="text-secondary-600 dark:text-slate-400 mt-1">
               Optional, self-reported information used for EEO reporting and to help us track equal-opportunity outcomes.
             </p>
           </header>
@@ -116,7 +116,7 @@ const Demographics: React.FC = () => {
               <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
             </div>
           ) : (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 space-y-6">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6 space-y-6">
               <section>
                 <label htmlFor="demographics-gender" className="block text-sm font-medium text-secondary-900 dark:text-white mb-2">
                   Gender
@@ -125,7 +125,7 @@ const Demographics: React.FC = () => {
                   id="demographics-gender"
                   value={form.gender}
                   onChange={(e) => setForm((f) => ({ ...f, gender: e.target.value }))}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   <option value="">—</option>
                   {GENDER.map((g) => <option key={g} value={g}>{g}</option>)}
@@ -143,7 +143,7 @@ const Demographics: React.FC = () => {
                         type="checkbox"
                         checked={form.race.includes(r)}
                         onChange={() => toggleRace(r)}
-                        className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+                        className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
                       />
                       {r}
                     </label>
@@ -159,7 +159,7 @@ const Demographics: React.FC = () => {
                   id="demographics-veteran"
                   value={form.veteran_status}
                   onChange={(e) => setForm((f) => ({ ...f, veteran_status: e.target.value }))}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   <option value="">—</option>
                   {VETERAN.map((v) => <option key={v} value={v}>{v}</option>)}
@@ -174,7 +174,7 @@ const Demographics: React.FC = () => {
                   id="demographics-disability"
                   value={form.disability_status}
                   onChange={(e) => setForm((f) => ({ ...f, disability_status: e.target.value }))}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   <option value="">—</option>
                   {DISABILITY.map((d) => <option key={d} value={d}>{d}</option>)}

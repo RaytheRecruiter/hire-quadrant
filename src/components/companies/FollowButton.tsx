@@ -34,7 +34,7 @@ const FollowButton: React.FC<Props> = ({ companyId, companySlug, className = '' 
       className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border transition-colors disabled:opacity-60 ${
         following
           ? 'bg-primary-600 border-primary-600 text-white hover:bg-primary-700'
-          : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700'
+          : 'bg-white dark:bg-slate-800 border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700'
       } ${className}`}
     >
       {loading ? (
@@ -44,7 +44,7 @@ const FollowButton: React.FC<Props> = ({ companyId, companySlug, className = '' 
       )}
       <span className="text-sm font-medium">{label}</span>
       {followerCount > 0 && (
-        <span className={`text-xs ${following ? 'text-white/90' : 'text-gray-500 dark:text-slate-400'}`}>
+        <span className={`text-xs ${following ? 'text-white/90' : 'text-secondary-500 dark:text-slate-400'}`}>
           · {followerCount}
         </span>
       )}

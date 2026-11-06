@@ -12,7 +12,7 @@ interface Props {
 const ReviewList: React.FC<Props> = ({ reviews, companyName, companySlug, emptyLabel }) => {
   if (reviews.length === 0) {
     return (
-      <p className="text-sm text-gray-500 dark:text-slate-400">
+      <p className="text-sm text-secondary-500 dark:text-slate-400">
         {emptyLabel ?? 'No reviews yet. Be the first to share your experience.'}
       </p>
     );

@@ -49,9 +49,9 @@ const SalaryInsightsPage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         {occupationLd && <script type="application/ld+json">{JSON.stringify(occupationLd)}</script>}
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="mb-4 text-sm text-gray-500 dark:text-slate-400">
+          <nav className="mb-4 text-sm text-secondary-500 dark:text-slate-400">
             <HardLink to="/" className="hover:text-primary-600">Jobs</HardLink>
             <span className="mx-2">/</span>
             <span>Salaries</span>
@@ -67,7 +67,7 @@ const SalaryInsightsPage: React.FC = () => {
               <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-1">
                 {titleLike} salary
               </h1>
-              <p className="text-gray-600 dark:text-slate-400">
+              <p className="text-secondary-600 dark:text-slate-400">
                 {loading ? 'Crunching data…'
                   : insight ? `${insight.count} open roles analyzed on Nexegin`
                   : `Not enough salary data for ${titleLike} yet.`}
@@ -76,12 +76,12 @@ const SalaryInsightsPage: React.FC = () => {
           </header>
 
           {loading ? (
-            <div className="animate-pulse h-32 bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700" />
+            <div className="animate-pulse h-32 bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700" />
           ) : !insight ? (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-8 flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-gray-400 mt-0.5" />
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-8 flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-secondary-400 mt-0.5" />
               <div>
-                <p className="text-sm text-gray-700 dark:text-slate-300 mb-3">
+                <p className="text-sm text-secondary-700 dark:text-slate-300 mb-3">
                   We don't have enough salary samples for this title yet. Try a broader role — or browse open roles below.
                 </p>
                 <HardLink to="/" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
@@ -97,9 +97,9 @@ const SalaryInsightsPage: React.FC = () => {
                 <StatCard label="75th percentile" value={fmt(insight.p75)} accent="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300" />
               </div>
 
-              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
                 <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">Range</h2>
-                <div className="relative h-2 rounded-full bg-gray-200 dark:bg-slate-700">
+                <div className="relative h-2 rounded-full bg-secondary-200 dark:bg-slate-700">
                   <div
                     className="absolute top-0 h-2 rounded-full bg-gradient-to-r from-amber-400 via-primary-400 to-emerald-400"
                     style={{
@@ -108,25 +108,25 @@ const SalaryInsightsPage: React.FC = () => {
                     }}
                   />
                 </div>
-                <div className="flex justify-between text-xs text-gray-500 dark:text-slate-400 mt-2">
+                <div className="flex justify-between text-xs text-secondary-500 dark:text-slate-400 mt-2">
                   <span>{fmt(insight.min)}</span>
                   <span>{fmt(insight.max)}</span>
                 </div>
               </div>
 
               {insight.top_locations.length > 0 && (
-                <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+                <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
                   <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
                     Top locations hiring
                   </h2>
                   <ul className="space-y-2">
                     {insight.top_locations.map((l) => (
                       <li key={l.location} className="flex items-center justify-between text-sm">
-                        <span className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300">
-                          <MapPin className="h-3.5 w-3.5 text-gray-400" />
+                        <span className="flex items-center gap-1.5 text-secondary-700 dark:text-slate-300">
+                          <MapPin className="h-3.5 w-3.5 text-secondary-400" />
                           {l.location}
                         </span>
-                        <span className="text-gray-500 dark:text-slate-400">
+                        <span className="text-secondary-500 dark:text-slate-400">
                           {l.count} {l.count === 1 ? 'role' : 'roles'}
                         </span>
                       </li>
@@ -135,13 +135,13 @@ const SalaryInsightsPage: React.FC = () => {
                 </section>
               )}
 
-              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                 <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
                   Titles included in this estimate
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {insight.sample_titles.map((t) => (
-                    <span key={t} className="px-2.5 py-1 text-xs rounded-full bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300">
+                    <span key={t} className="px-2.5 py-1 text-xs rounded-full bg-secondary-100 dark:bg-slate-700 text-secondary-700 dark:text-slate-300">
                       {t}
                     </span>
                   ))}

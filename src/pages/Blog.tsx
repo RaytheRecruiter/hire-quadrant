@@ -99,18 +99,18 @@ const Blog: React.FC = () => {
   }, [category, jobTrade]);
 
   return (
-    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
+    <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent flex items-center gap-3">
             <BookOpen className="h-8 w-8 text-primary-500" />
             Career Resources
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-slate-400 text-lg">Expert advice on resumes, interviews, and job hunting.</p>
+          <p className="mt-2 text-secondary-600 dark:text-slate-400 text-lg">Expert advice on resumes, interviews, and job hunting.</p>
         </div>
 
         <div className="mb-3">
-          <p className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-2">Topic</p>
+          <p className="text-xs font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-wide mb-2">Topic</p>
           <div className="flex flex-wrap gap-2">
             {['all', 'career', 'resume', 'interview', 'hiring', 'industry'].map(c => (
               <button
@@ -119,7 +119,7 @@ const Blog: React.FC = () => {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   category === c
                     ? 'bg-primary-500 text-white'
-                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
+                    : 'bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 border border-secondary-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
                 }`}
               >
                 {c.charAt(0).toUpperCase() + c.slice(1)}
@@ -129,14 +129,14 @@ const Blog: React.FC = () => {
         </div>
 
         <div className="mb-8">
-          <p className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-2">For your role</p>
+          <p className="text-xs font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-wide mb-2">For your role</p>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setJobTrade('all')}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 jobTrade === 'all'
                   ? 'bg-primary-500 text-white'
-                  : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
+                  : 'bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 border border-secondary-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
               }`}
             >
               All roles
@@ -146,7 +146,7 @@ const Blog: React.FC = () => {
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 jobTrade === 'general'
                   ? 'bg-primary-500 text-white'
-                  : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
+                  : 'bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 border border-secondary-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
               }`}
             >
               Universal
@@ -158,7 +158,7 @@ const Blog: React.FC = () => {
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                   jobTrade === key
                     ? 'bg-primary-500 text-white'
-                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
+                    : 'bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 border border-secondary-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-500'
                 }`}
               >
                 {label}
@@ -181,8 +181,8 @@ const Blog: React.FC = () => {
           </div>
         ) : posts.length === 0 ? (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-12 text-center">
-            <BookOpen className="mx-auto h-12 w-12 text-gray-300 dark:text-slate-600 mb-3" />
-            <p className="text-gray-500 dark:text-slate-400">No posts in this category yet.</p>
+            <BookOpen className="mx-auto h-12 w-12 text-secondary-300 dark:text-slate-600 mb-3" />
+            <p className="text-secondary-500 dark:text-slate-400">No posts in this category yet.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -208,11 +208,11 @@ const Blog: React.FC = () => {
                 )}
                 <div className="p-6">
                   <div className="flex flex-wrap gap-1.5 mb-3">
-                    <span className={`inline-block px-3 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide ${categoryColors[p.category] || 'bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-300'}`}>
+                    <span className={`inline-block px-3 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide ${categoryColors[p.category] || 'bg-secondary-100 text-secondary-700 dark:bg-slate-700 dark:text-slate-300'}`}>
                       {p.category}
                     </span>
                     {p.job_trade && (
-                      <span className={`inline-block px-3 py-0.5 rounded-full text-xs font-medium ${jobTradeColors[p.job_trade] || 'bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-300'}`}>
+                      <span className={`inline-block px-3 py-0.5 rounded-full text-xs font-medium ${jobTradeColors[p.job_trade] || 'bg-secondary-100 text-secondary-700 dark:bg-slate-700 dark:text-slate-300'}`}>
                         {jobTradeLabels[p.job_trade] || p.job_trade}
                       </span>
                     )}
@@ -220,8 +220,8 @@ const Blog: React.FC = () => {
                   <h2 className="text-xl font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors mb-2">
                     {p.title}
                   </h2>
-                  <p className="text-gray-600 dark:text-slate-400 text-sm line-clamp-3 mb-4">{p.excerpt}</p>
-                  <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-slate-500">
+                  <p className="text-secondary-600 dark:text-slate-400 text-sm line-clamp-3 mb-4">{p.excerpt}</p>
+                  <div className="flex items-center gap-3 text-xs text-secondary-500 dark:text-slate-500">
                     <span>{p.author_name}</span>
                     <span>•</span>
                     <span className="flex items-center gap-1">

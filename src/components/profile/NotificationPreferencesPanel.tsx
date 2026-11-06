@@ -14,13 +14,13 @@ const NotificationPreferencesPanel: React.FC = () => {
   const { prefs, save, loading, saving } = useNotificationPreferences();
 
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
       <div className="flex items-center gap-2 mb-4">
         <Bell className="h-4 w-4 text-primary-500" />
         <h2 className="text-sm font-semibold text-secondary-900 dark:text-white">
           Notification preferences
         </h2>
-        {(loading || saving) && <Loader2 className="h-3.5 w-3.5 text-gray-400 animate-spin" />}
+        {(loading || saving) && <Loader2 className="h-3.5 w-3.5 text-secondary-400 animate-spin" />}
       </div>
 
       <div className="space-y-3">
@@ -29,26 +29,26 @@ const NotificationPreferencesPanel: React.FC = () => {
             <div>
               <p className="text-sm text-secondary-900 dark:text-white">{r.label}</p>
               {r.hint && (
-                <p className="text-xs text-gray-500 dark:text-slate-400">{r.hint}</p>
+                <p className="text-xs text-secondary-500 dark:text-slate-400">{r.hint}</p>
               )}
             </div>
             <input
               type="checkbox"
               checked={Boolean(prefs[r.key])}
               onChange={(e) => save({ [r.key]: e.target.checked } as Partial<typeof prefs>)}
-              className="mt-0.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="mt-0.5 rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
             />
           </label>
         ))}
 
-        <div className="pt-3 border-t border-gray-100 dark:border-slate-700">
+        <div className="pt-3 border-t border-secondary-100 dark:border-slate-700">
           <label className="block text-sm text-secondary-900 dark:text-white mb-1">
             Digest frequency
           </label>
           <select
             value={prefs.digest_frequency}
             onChange={(e) => save({ digest_frequency: e.target.value as 'off' | 'daily' | 'weekly' })}
-            className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
           >
             <option value="off">Off</option>
             <option value="daily">Daily</option>

@@ -87,7 +87,7 @@ const ReviewVoteButtons: React.FC<Props> = ({ reviewId, initialHelpful = 0, init
         className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border transition-colors ${
           myVote === true
             ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300'
-            : 'border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-700'
+            : 'border-secondary-200 dark:border-slate-700 text-secondary-600 dark:text-slate-400 hover:bg-secondary-50 dark:hover:bg-slate-700'
         }`}
       >
         <ThumbsUp className="h-3.5 w-3.5" />
@@ -101,7 +101,7 @@ const ReviewVoteButtons: React.FC<Props> = ({ reviewId, initialHelpful = 0, init
         className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border transition-colors ${
           myVote === false
             ? 'border-rose-400 bg-rose-50 text-rose-700 dark:bg-rose-900/20 dark:text-rose-300'
-            : 'border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-700'
+            : 'border-secondary-200 dark:border-slate-700 text-secondary-600 dark:text-slate-400 hover:bg-secondary-50 dark:hover:bg-slate-700'
         }`}
       >
         <ThumbsDown className="h-3.5 w-3.5" />

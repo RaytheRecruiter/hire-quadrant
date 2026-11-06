@@ -50,11 +50,11 @@ const Companies: React.FC = () => {
           content="Discover companies actively hiring. Read reviews, see ratings, and explore open roles across industries."
         />
       </Helmet>
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <header className="mb-8">
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-3">Browse Companies</h1>
-            <p className="text-lg text-gray-600 dark:text-slate-400">
+            <p className="text-lg text-secondary-600 dark:text-slate-400">
               {loading
                 ? 'Loading…'
                 : `Explore ${companies.length} ${companies.length === 1 ? 'company' : 'companies'} on Nexegin`}
@@ -63,7 +63,7 @@ const Companies: React.FC = () => {
 
           <div className="mb-8 flex flex-col md:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-3.5 h-5 w-5 text-gray-400 dark:text-slate-500" />
+              <Search className="absolute left-3 top-3.5 h-5 w-5 text-secondary-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Search by name, industry, or location"
@@ -72,7 +72,7 @@ const Companies: React.FC = () => {
                   setSearch(e.target.value);
                   resetPage();
                 }}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <select
@@ -81,7 +81,7 @@ const Companies: React.FC = () => {
                 setIndustry(e.target.value);
                 resetPage();
               }}
-              className="px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent min-w-[200px]"
+              className="px-4 py-3 rounded-xl border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent min-w-[200px]"
               aria-label="Filter by industry"
             >
               <option value={ALL}>All industries</option>
@@ -109,8 +109,8 @@ const Companies: React.FC = () => {
             </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-16">
-              <Building2 className="h-12 w-12 text-gray-300 dark:text-slate-600 mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-slate-400">
+              <Building2 className="h-12 w-12 text-secondary-300 dark:text-slate-600 mx-auto mb-4" />
+              <p className="text-secondary-600 dark:text-slate-400">
                 {companies.length === 0
                   ? 'No companies listed yet.'
                   : 'No companies match your filters.'}
@@ -123,7 +123,7 @@ const Companies: React.FC = () => {
                   <HardLink
                     key={c.id}
                     to={`/companies/${c.slug}`}
-                    className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 transition-all"
+                    className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card hover:shadow-card-hover border border-secondary-100 dark:border-slate-700 transition-all"
                   >
                     <div className="flex items-start gap-4 mb-4">
                       <CompanyLogo company={c.name} logoUrl={c.logo ?? undefined} size="lg" />
@@ -132,10 +132,10 @@ const Companies: React.FC = () => {
                           {c.display_name || c.name}
                         </h3>
                         {c.industry && (
-                          <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{c.industry}</p>
+                          <p className="text-xs text-secondary-500 dark:text-slate-400 mt-0.5">{c.industry}</p>
                         )}
                         {c.location && (
-                          <p className="text-sm text-gray-600 dark:text-slate-400 flex items-center gap-1 mt-1">
+                          <p className="text-sm text-secondary-600 dark:text-slate-400 flex items-center gap-1 mt-1">
                             <MapPin className="h-3 w-3" />
                             {c.location}
                           </p>
@@ -151,7 +151,7 @@ const Companies: React.FC = () => {
                       {c.review_count > 0 ? (
                         <RatingStars value={c.avg_rating} size="sm" showValue />
                       ) : (
-                        <span className="text-xs text-gray-400 dark:text-slate-500">No reviews yet</span>
+                        <span className="text-xs text-secondary-400 dark:text-slate-500">No reviews yet</span>
                       )}
                     </div>
                   </HardLink>
@@ -167,18 +167,18 @@ const Companies: React.FC = () => {
                     type="button"
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
                     disabled={currentPage === 0}
-                    className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-700"
+                    className="px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-secondary-50 dark:hover:bg-slate-700"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </button>
-                  <span className="text-sm text-gray-600 dark:text-slate-400 px-2">
+                  <span className="text-sm text-secondary-600 dark:text-slate-400 px-2">
                     Page {currentPage + 1} of {pageCount}
                   </span>
                   <button
                     type="button"
                     onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
                     disabled={currentPage >= pageCount - 1}
-                    className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-700"
+                    className="px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-secondary-50 dark:hover:bg-slate-700"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </button>

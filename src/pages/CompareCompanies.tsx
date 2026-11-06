@@ -182,7 +182,7 @@ const CompareCompanies: React.FC = () => {
         />
         <link rel="canonical" href={pageUrl} />
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <BreadcrumbSchema
             className="mb-4"
@@ -199,15 +199,15 @@ const CompareCompanies: React.FC = () => {
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">
                 Compare companies
               </h1>
-              <p className="text-gray-600 dark:text-slate-400 text-sm">
+              <p className="text-secondary-600 dark:text-slate-400 text-sm">
                 Side-by-side on ratings, open roles, salaries, and culture signals. Pick up to {MAX_SLOTS}.
               </p>
             </div>
           </header>
 
           {slugs.length < MAX_SLOTS && (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 mb-5 relative">
-              <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1.5">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-4 mb-5 relative">
+              <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1.5">
                 Add a company
               </label>
               <input
@@ -215,17 +215,17 @@ const CompareCompanies: React.FC = () => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Start typing a company name..."
-                className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
               />
               {suggestions.length > 0 && (
-                <ul className="absolute z-10 left-4 right-4 mt-1 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 shadow-lg max-h-60 overflow-auto">
+                <ul className="absolute z-10 left-4 right-4 mt-1 bg-white dark:bg-slate-800 rounded-lg border border-secondary-200 dark:border-slate-700 shadow-lg max-h-60 overflow-auto">
                   {suggestions.map((s) => (
                     <li key={s.slug}>
                       <button
                         type="button"
                         onClick={() => addSlug(s.slug)}
                         disabled={slugs.includes(s.slug)}
-                        className="w-full text-left px-3 py-2 text-sm text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 text-sm text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
                       >
                         <Plus className="h-3.5 w-3.5 text-primary-500" />
                         {s.name}
@@ -242,9 +242,9 @@ const CompareCompanies: React.FC = () => {
               <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
             </div>
           ) : companies.length === 0 ? (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-10 text-center">
-              <Scale className="h-10 w-10 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
-              <p className="text-sm text-gray-600 dark:text-slate-400">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
+              <Scale className="h-10 w-10 text-secondary-300 dark:text-slate-600 mx-auto mb-3" />
+              <p className="text-sm text-secondary-600 dark:text-slate-400">
                 Add 2 or 3 companies above to start comparing.
               </p>
               <HardLink
@@ -259,7 +259,7 @@ const CompareCompanies: React.FC = () => {
               {companies.map((c) => (
                 <article
                   key={c.id}
-                  className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5"
+                  className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5"
                 >
                   <header className="flex items-start justify-between gap-2 mb-4">
                     <div className="min-w-0">
@@ -276,7 +276,7 @@ const CompareCompanies: React.FC = () => {
                         {c.display_name ?? c.name}
                       </HardLink>
                       {c.industry && (
-                        <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
+                        <p className="text-xs text-secondary-500 dark:text-slate-400 truncate">
                           {c.industry}
                         </p>
                       )}
@@ -284,7 +284,7 @@ const CompareCompanies: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => removeSlug(c.slug)}
-                      className="p-1 rounded text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                      className="p-1 rounded text-secondary-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20"
                       title="Remove"
                     >
                       <X className="h-4 w-4" />
@@ -324,7 +324,7 @@ const CompareCompanies: React.FC = () => {
                   </dl>
 
                   {c.description && (
-                    <p className="mt-4 text-xs text-gray-600 dark:text-slate-400 line-clamp-4">
+                    <p className="mt-4 text-xs text-secondary-600 dark:text-slate-400 line-clamp-4">
                       {c.description}
                     </p>
                   )}
@@ -351,7 +351,7 @@ const Row: React.FC<{ icon?: React.ReactNode; label: string; value: string }> = 
   value,
 }) => (
   <div className="flex items-start justify-between gap-2">
-    <dt className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1.5">
+    <dt className="text-xs text-secondary-500 dark:text-slate-400 flex items-center gap-1.5">
       {icon}
       {label}
     </dt>

@@ -63,7 +63,7 @@ const ReviewAppeals: React.FC = () => {
   return (
     <>
       <Helmet><title>Review Appeals · Admin · Nexegin</title></Helmet>
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 to-primary-50/30 dark:from-slate-900 dark:to-slate-950">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 to-primary-50/30 dark:from-slate-900 dark:to-slate-950">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <HardLink to="/admin" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 mb-6 text-sm">
             <ArrowLeft className="h-4 w-4" /> Back to Admin
@@ -75,7 +75,7 @@ const ReviewAppeals: React.FC = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-secondary-900 dark:text-white">Review Appeals</h1>
-              <p className="text-sm text-gray-600 dark:text-slate-400">
+              <p className="text-sm text-secondary-600 dark:text-slate-400">
                 {loading ? 'Loading…' : `${rows.length} pending ${rows.length === 1 ? 'appeal' : 'appeals'}`}
               </p>
             </div>
@@ -86,13 +86,13 @@ const ReviewAppeals: React.FC = () => {
               <Loader2 className="h-8 w-8 text-primary-500 animate-spin mx-auto" />
             </div>
           ) : rows.length === 0 ? (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-10 text-center">
-              <p className="text-gray-600 dark:text-slate-400">No pending appeals.</p>
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
+              <p className="text-secondary-600 dark:text-slate-400">No pending appeals.</p>
             </div>
           ) : (
             <div className="space-y-4">
               {rows.map((r) => (
-                <article key={r.id} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5">
+                <article key={r.id} className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl p-5">
                   <header className="flex items-start justify-between gap-3 mb-3">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -101,7 +101,7 @@ const ReviewAppeals: React.FC = () => {
                             {r.company.name}
                           </HardLink>
                         )}
-                        <span className="text-xs text-gray-500 dark:text-slate-400">
+                        <span className="text-xs text-secondary-500 dark:text-slate-400">
                           Appealed {formatDistanceToNow(new Date(r.appeal_submitted_at), { addSuffix: true })}
                         </span>
                       </div>
@@ -122,19 +122,19 @@ const ReviewAppeals: React.FC = () => {
                   </div>
 
                   {r.pros && (
-                    <div className="text-sm text-gray-700 dark:text-slate-300 mb-2">
+                    <div className="text-sm text-secondary-700 dark:text-slate-300 mb-2">
                       <span className="font-semibold text-emerald-700 dark:text-emerald-400">Pros: </span>
                       <span className="whitespace-pre-line">{r.pros}</span>
                     </div>
                   )}
                   {r.cons && (
-                    <div className="text-sm text-gray-700 dark:text-slate-300 mb-3">
+                    <div className="text-sm text-secondary-700 dark:text-slate-300 mb-3">
                       <span className="font-semibold text-rose-700 dark:text-rose-400">Cons: </span>
                       <span className="whitespace-pre-line">{r.cons}</span>
                     </div>
                   )}
 
-                  <div className="flex gap-2 pt-3 border-t border-gray-100 dark:border-slate-700">
+                  <div className="flex gap-2 pt-3 border-t border-secondary-100 dark:border-slate-700">
                     <button
                       type="button"
                       disabled={actingId === r.id}
@@ -147,7 +147,7 @@ const ReviewAppeals: React.FC = () => {
                       type="button"
                       disabled={actingId === r.id}
                       onClick={() => decide(r, false)}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 disabled:opacity-60"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-700 border border-secondary-200 dark:border-slate-600 text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 disabled:opacity-60"
                     >
                       <X className="h-4 w-4" /> Deny
                     </button>

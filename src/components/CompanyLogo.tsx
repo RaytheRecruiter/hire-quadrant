@@ -21,11 +21,11 @@ const CompanyLogo: React.FC<Props> = ({ company, logoUrl, size = 'md', className
   const resolved = resolveLogoUrl(company, logoUrl);
   const s = sizeMap[size];
   const initials = getInitials(company);
-  const bgColor = company ? colorFromString(company) : 'bg-gray-100 text-gray-500';
+  const bgColor = company ? colorFromString(company) : 'bg-secondary-100 text-secondary-500';
 
   if (resolved && !failed) {
     return (
-      <div className={`${s.box} rounded-xl overflow-hidden bg-white border border-gray-100 flex items-center justify-center flex-shrink-0 ${className}`}>
+      <div className={`${s.box} rounded-xl overflow-hidden bg-white border border-secondary-100 flex items-center justify-center flex-shrink-0 ${className}`}>
         <img
           src={resolved}
           alt={company || 'Company logo'}

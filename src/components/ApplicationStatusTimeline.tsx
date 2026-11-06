@@ -44,12 +44,12 @@ const ApplicationStatusTimeline: React.FC<{ applicationId: string }> = ({ applic
   }, [applicationId]);
 
   if (loading) {
-    return <Loader2 className="h-4 w-4 animate-spin text-gray-400" />;
+    return <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />;
   }
 
   if (rows.length === 0) {
     return (
-      <p className="text-xs text-gray-500 dark:text-slate-400">
+      <p className="text-xs text-secondary-500 dark:text-slate-400">
         No status history yet.
       </p>
     );
@@ -68,11 +68,11 @@ const ApplicationStatusTimeline: React.FC<{ applicationId: string }> = ({ applic
               <p className="text-xs font-medium text-secondary-900 dark:text-white">
                 {r.to_status}
               </p>
-              <p className="text-xs text-gray-500 dark:text-slate-400">
+              <p className="text-xs text-secondary-500 dark:text-slate-400">
                 {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
               </p>
               {r.note && (
-                <p className="text-xs text-gray-600 dark:text-slate-400 mt-0.5 italic">{r.note}</p>
+                <p className="text-xs text-secondary-600 dark:text-slate-400 mt-0.5 italic">{r.note}</p>
               )}
             </div>
           </li>

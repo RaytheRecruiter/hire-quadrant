@@ -18,33 +18,33 @@ const SearchBar: React.FC = () => {
     <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-xl border border-white/20 dark:border-slate-700 rounded-2xl p-6 mb-8 hover:shadow-2xl transition-all duration-300">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
           <input
             type="text"
             placeholder="Job title, keywords, or company"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all duration-300 bg-gray-50/50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
+            className="w-full pl-12 pr-4 py-4 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all duration-300 bg-secondary-50/50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500"
           />
         </div>
 
         <div className="relative">
-          <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
           <input
             type="text"
             placeholder="City, state, or remote"
             value={locationFilter}
             onChange={(e) => setLocationFilter(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all duration-300 bg-gray-50/50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
+            className="w-full pl-12 pr-4 py-4 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all duration-300 bg-secondary-50/50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500"
           />
         </div>
 
         <div className="relative">
-          <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all duration-300 appearance-none bg-gray-50/50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 text-gray-900 dark:text-white"
+            className="w-full pl-12 pr-4 py-4 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all duration-300 appearance-none bg-secondary-50/50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 text-secondary-900 dark:text-white"
           >
             <option value="">All job types</option>
             <option value="full-time">Full Time</option>
@@ -56,11 +56,11 @@ const SearchBar: React.FC = () => {
         </div>
 
         <div className="relative">
-          <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
           <select
             value={minSalary}
             onChange={(e) => setMinSalary(Number(e.target.value))}
-            className="w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all duration-300 appearance-none bg-gray-50/50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 text-gray-900 dark:text-white"
+            className="w-full pl-12 pr-4 py-4 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all duration-300 appearance-none bg-secondary-50/50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 text-secondary-900 dark:text-white"
           >
             <option value="0">Any salary</option>
             <option value="40000">$40k+</option>

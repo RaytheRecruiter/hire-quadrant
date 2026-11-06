@@ -52,11 +52,11 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, placeh
     if (url) exec('createLink', url);
   };
 
-  const toolbarBtn = 'p-2 rounded-lg text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700';
+  const toolbarBtn = 'p-2 rounded-lg text-secondary-600 dark:text-slate-300 hover:bg-secondary-100 dark:hover:bg-slate-700';
 
   return (
-    <div className="border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden">
-      <div className="flex items-center gap-1 px-2 py-1.5 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/50">
+    <div className="border border-secondary-200 dark:border-slate-700 rounded-lg overflow-hidden">
+      <div className="flex items-center gap-1 px-2 py-1.5 border-b border-secondary-200 dark:border-slate-700 bg-secondary-50 dark:bg-slate-900/50">
         <button type="button" onClick={() => exec('bold')} className={toolbarBtn} title="Bold" aria-label="Bold">
           <Bold className="h-4 w-4" />
         </button>
@@ -83,7 +83,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, placeh
         onFocus={() => { isFocused.current = true; }}
         onBlur={() => { isFocused.current = false; }}
         data-placeholder={placeholder}
-        className="min-h-[200px] max-h-[420px] overflow-y-auto px-3 py-2 text-sm text-secondary-900 dark:text-white bg-white dark:bg-slate-900 focus:outline-none prose prose-sm max-w-none empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 dark:empty:before:text-slate-500"
+        className="min-h-[200px] max-h-[420px] overflow-y-auto px-3 py-2 text-sm text-secondary-900 dark:text-white bg-white dark:bg-slate-900 focus:outline-none prose prose-sm max-w-none empty:before:content-[attr(data-placeholder)] empty:before:text-secondary-400 dark:empty:before:text-slate-500"
       />
     </div>
   );

@@ -199,24 +199,24 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
       aria-label="Global search"
     >
       <div
-        className="w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-slate-700 overflow-hidden"
+        className="w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-secondary-100 dark:border-slate-700 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-slate-700">
-          <SearchIcon className="h-5 w-5 text-gray-400 dark:text-slate-500 flex-shrink-0" />
+        <header className="flex items-center gap-2 px-4 py-3 border-b border-secondary-100 dark:border-slate-700">
+          <SearchIcon className="h-5 w-5 text-secondary-400 dark:text-slate-500 flex-shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={term}
             onChange={(e) => setTerm(e.target.value)}
             placeholder="Search jobs, companies, articles…"
-            className="flex-1 bg-transparent border-0 focus:ring-0 text-base text-secondary-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
+            className="flex-1 bg-transparent border-0 focus:ring-0 text-base text-secondary-900 dark:text-white placeholder-secondary-400 dark:placeholder-slate-500"
           />
-          {loading && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
+          {loading && <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />}
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500"
+            className="p-1 rounded hover:bg-secondary-100 dark:hover:bg-slate-700 text-secondary-500"
             aria-label="Close search"
           >
             <X className="h-4 w-4" />
@@ -225,11 +225,11 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
 
         <div className="max-h-[60vh] overflow-auto">
           {term.trim().length < 2 ? (
-            <div className="px-4 py-8 text-center text-sm text-gray-500 dark:text-slate-400">
+            <div className="px-4 py-8 text-center text-sm text-secondary-500 dark:text-slate-400">
               Type at least 2 characters to search
             </div>
           ) : flat.length === 0 && !loading ? (
-            <div className="px-4 py-8 text-center text-sm text-gray-500 dark:text-slate-400">
+            <div className="px-4 py-8 text-center text-sm text-secondary-500 dark:text-slate-400">
               No results for "{term}"
             </div>
           ) : (
@@ -256,7 +256,7 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
                             className={`w-full text-left px-4 py-2.5 flex items-start gap-3 transition-colors ${
                               isActive
                                 ? 'bg-primary-50 dark:bg-primary-900/20'
-                                : 'hover:bg-gray-50 dark:hover:bg-slate-700/50'
+                                : 'hover:bg-secondary-50 dark:hover:bg-slate-700/50'
                             }`}
                           >
                             <Icon className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tone}`} />
@@ -264,7 +264,7 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
                               <p className="text-sm font-medium text-secondary-900 dark:text-white truncate">
                                 {r.title}
                               </p>
-                              <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
+                              <p className="text-xs text-secondary-500 dark:text-slate-400 truncate">
                                 {r.subtitle}
                               </p>
                             </div>
@@ -282,12 +282,12 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
           )}
         </div>
 
-        <footer className="px-4 py-2 border-t border-gray-100 dark:border-slate-700 flex items-center justify-between text-xs text-gray-500 dark:text-slate-400">
+        <footer className="px-4 py-2 border-t border-secondary-100 dark:border-slate-700 flex items-center justify-between text-xs text-secondary-500 dark:text-slate-400">
           <span>
-            <kbd className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 font-mono">↑↓</kbd> navigate · <kbd className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 font-mono">↵</kbd> open · <kbd className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 font-mono">esc</kbd> close
+            <kbd className="px-1.5 py-0.5 rounded bg-secondary-100 dark:bg-slate-700 font-mono">↑↓</kbd> navigate · <kbd className="px-1.5 py-0.5 rounded bg-secondary-100 dark:bg-slate-700 font-mono">↵</kbd> open · <kbd className="px-1.5 py-0.5 rounded bg-secondary-100 dark:bg-slate-700 font-mono">esc</kbd> close
           </span>
           <span className="hidden sm:inline">
-            <kbd className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 font-mono">⌘K</kbd> to open
+            <kbd className="px-1.5 py-0.5 rounded bg-secondary-100 dark:bg-slate-700 font-mono">⌘K</kbd> to open
           </span>
         </footer>
       </div>

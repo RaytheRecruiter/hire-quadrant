@@ -1,7 +1,7 @@
 import React from 'react';
 
 const JobCardSkeleton: React.FC = () => (
-  <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-gray-100 dark:border-slate-700 p-5 flex items-start gap-4">
+  <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-secondary-100 dark:border-slate-700 p-5 flex items-start gap-4">
     <div className="skeleton h-12 w-12 rounded-xl flex-shrink-0" />
     <div className="flex-1 space-y-2.5">
       <div className="skeleton h-5 w-2/3" />

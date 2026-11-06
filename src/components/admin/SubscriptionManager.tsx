@@ -151,10 +151,10 @@ const SubscriptionManager: React.FC = () => {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/3"></div>
-          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+          <div className="h-6 bg-secondary-200 dark:bg-slate-700 rounded w-1/3"></div>
+          <div className="h-4 bg-secondary-200 dark:bg-slate-700 rounded w-full"></div>
+          <div className="h-4 bg-secondary-200 dark:bg-slate-700 rounded w-full"></div>
+          <div className="h-4 bg-secondary-200 dark:bg-slate-700 rounded w-full"></div>
         </div>
       </div>
     );
@@ -162,8 +162,8 @@ const SubscriptionManager: React.FC = () => {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow">
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+      <div className="px-6 py-4 border-b border-secondary-200 dark:border-slate-700">
+        <h2 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2">
           <Building2 className="w-5 h-5 text-green-600" />
           Subscription Manager
         </h2>
@@ -185,13 +185,13 @@ const SubscriptionManager: React.FC = () => {
 
       <div className="px-6 pt-4">
         <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search companies…"
-            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-secondary-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-green-500 focus:border-green-500"
           />
         </div>
       </div>
@@ -209,52 +209,52 @@ const SubscriptionManager: React.FC = () => {
           if (companies.length === 0) {
             return (
               <div className="text-center py-8">
-                <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 dark:text-slate-400">No companies found</p>
+                <Building2 className="w-12 h-12 text-secondary-300 mx-auto mb-3" />
+                <p className="text-secondary-500 dark:text-slate-400">No companies found</p>
               </div>
             );
           }
           if (filteredCompanies.length === 0) {
             return (
               <div className="text-center py-8">
-                <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 dark:text-slate-400">No companies match "{searchTerm}"</p>
+                <Search className="w-12 h-12 text-secondary-300 mx-auto mb-3" />
+                <p className="text-secondary-500 dark:text-slate-400">No companies match "{searchTerm}"</p>
               </div>
             );
           }
           return (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+            <table className="min-w-full divide-y divide-secondary-200 dark:divide-slate-700">
               <thead>
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Company
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Primary User (Owner)
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Current Plan
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Job Limit
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Assign Plan
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider" title="Free trial/demo access, no Stripe charge">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider" title="Free trial/demo access, no Stripe charge">
                     Comp?
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
+              <tbody className="divide-y divide-secondary-200 dark:divide-slate-700">
                 {filteredCompanies.map((company) => (
-                  <tr key={company.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
+                  <tr key={company.id} className="hover:bg-secondary-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                      <div className="text-sm font-medium text-secondary-900 dark:text-white">
                         {company.display_name || company.name}
                       </div>
                     </td>
@@ -265,11 +265,11 @@ const SubscriptionManager: React.FC = () => {
                             <div className="flex items-center gap-1.5">
                               <Shield className="w-3.5 h-3.5 text-amber-500" />
                               <div>
-                                <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                <div className="text-sm font-medium text-secondary-900 dark:text-white">
                                   {company.ownerName || company.ownerEmail}
                                 </div>
                                 {company.ownerName && company.ownerEmail && (
-                                  <div className="text-xs text-gray-500 dark:text-slate-400">{company.ownerEmail}</div>
+                                  <div className="text-xs text-secondary-500 dark:text-slate-400">{company.ownerEmail}</div>
                                 )}
                               </div>
                             </div>
@@ -285,7 +285,7 @@ const SubscriptionManager: React.FC = () => {
                           </>
                         ) : (
                           <>
-                            <span className="text-xs text-gray-400 dark:text-slate-500">No primary user</span>
+                            <span className="text-xs text-secondary-400 dark:text-slate-500">No primary user</span>
                             <button
                               type="button"
                               onClick={() => setInviteTarget(company)}
@@ -303,11 +303,11 @@ const SubscriptionManager: React.FC = () => {
                       {company.currentPlanName ? (
                         <SubscriptionBadge planName={company.currentPlanName} />
                       ) : (
-                        <span className="text-sm text-gray-400 dark:text-slate-500">None</span>
+                        <span className="text-sm text-secondary-400 dark:text-slate-500">None</span>
                       )}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className="text-sm text-gray-600 dark:text-slate-400">
+                      <span className="text-sm text-secondary-600 dark:text-slate-400">
                         {company.currentPlanId ? getPlanJobLimit(company.currentPlanId) : '-'}
                       </span>
                     </td>
@@ -315,7 +315,7 @@ const SubscriptionManager: React.FC = () => {
                       <select
                         value={company.selectedPlanId}
                         onChange={(e) => handlePlanChange(company.id, e.target.value)}
-                        className="block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
+                        className="block w-full rounded-md border-secondary-300 dark:border-slate-600 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
                       >
                         <option value="">Select a plan</option>
                         {plans.map((plan) => (
@@ -444,21 +444,21 @@ const TransferOwnershipModal: React.FC<TransferModalProps> = ({ company, onClose
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full">
-        <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
+        <div className="p-6 border-b border-secondary-200 dark:border-slate-700 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-lg font-semibold text-secondary-900 dark:text-white">
               Transfer Ownership
             </h2>
-            <p className="text-xs text-gray-500 dark:text-slate-400">
+            <p className="text-xs text-secondary-500 dark:text-slate-400">
               {company.display_name || company.name}
             </p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-secondary-400 hover:text-secondary-600">
             <X className="h-5 w-5" />
           </button>
         </div>
         <div className="p-6 space-y-4">
-          <p className="text-sm text-gray-600 dark:text-slate-400">
+          <p className="text-sm text-secondary-600 dark:text-slate-400">
             Pick the new Primary User. The current Owner will be demoted to Admin
             so they keep operational access.
           </p>
@@ -481,7 +481,7 @@ const TransferOwnershipModal: React.FC<TransferModalProps> = ({ company, onClose
                     className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer ${
                       selectedUserId === m.user_id
                         ? 'border-primary-400 bg-primary-50'
-                        : 'border-gray-200 dark:border-slate-700'
+                        : 'border-secondary-200 dark:border-slate-700'
                     }`}
                   >
                     <input
@@ -491,13 +491,13 @@ const TransferOwnershipModal: React.FC<TransferModalProps> = ({ company, onClose
                       onChange={() => setSelectedUserId(m.user_id)}
                     />
                     <div className="min-w-0">
-                      <div className="font-medium text-gray-900 dark:text-white truncate">
+                      <div className="font-medium text-secondary-900 dark:text-white truncate">
                         {m.name || m.email || m.user_id}
                       </div>
                       {m.name && m.email && (
-                        <div className="text-xs text-gray-500 dark:text-slate-400 truncate">{m.email}</div>
+                        <div className="text-xs text-secondary-500 dark:text-slate-400 truncate">{m.email}</div>
                       )}
-                      <div className="text-xs text-gray-400 dark:text-slate-500 capitalize">
+                      <div className="text-xs text-secondary-400 dark:text-slate-500 capitalize">
                         Currently: {m.role}
                       </div>
                     </div>
@@ -511,10 +511,10 @@ const TransferOwnershipModal: React.FC<TransferModalProps> = ({ company, onClose
             </div>
           )}
         </div>
-        <div className="p-6 border-t border-gray-200 dark:border-slate-700 flex justify-end gap-3">
+        <div className="p-6 border-t border-secondary-200 dark:border-slate-700 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-slate-600 hover:bg-gray-50"
+            className="px-4 py-2 text-sm rounded-lg border border-secondary-300 dark:border-slate-600 hover:bg-secondary-50"
           >
             Cancel
           </button>
@@ -632,23 +632,23 @@ const InviteOwnerModal: React.FC<InviteOwnerModalProps> = ({ company, onClose, o
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full">
-        <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
+        <div className="p-6 border-b border-secondary-200 dark:border-slate-700 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Invite Owner</h2>
-            <p className="text-xs text-gray-500 dark:text-slate-400">{company.display_name || company.name}</p>
+            <h2 className="text-lg font-semibold text-secondary-900 dark:text-white">Invite Owner</h2>
+            <p className="text-xs text-secondary-500 dark:text-slate-400">{company.display_name || company.name}</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-secondary-400 hover:text-secondary-600">
             <X className="h-5 w-5" />
           </button>
         </div>
         <div className="p-6 space-y-4">
-          <p className="text-sm text-gray-600 dark:text-slate-400">
+          <p className="text-sm text-secondary-600 dark:text-slate-400">
             This company has no primary user. Enter an email and we'll invite them as
             Owner with full access — they'll get a signup link by email (or copy it
             below if delivery fails).
           </p>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -657,7 +657,7 @@ const InviteOwnerModal: React.FC<InviteOwnerModalProps> = ({ company, onClose, o
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && submit()}
               placeholder="owner@company.com"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
               autoFocus
             />
           </div>
@@ -665,10 +665,10 @@ const InviteOwnerModal: React.FC<InviteOwnerModalProps> = ({ company, onClose, o
             <div className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-2">{errorMsg}</div>
           )}
         </div>
-        <div className="p-6 border-t border-gray-200 dark:border-slate-700 flex justify-end gap-3">
+        <div className="p-6 border-t border-secondary-200 dark:border-slate-700 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-slate-600 hover:bg-gray-50"
+            className="px-4 py-2 text-sm rounded-lg border border-secondary-300 dark:border-slate-600 hover:bg-secondary-50"
           >
             Cancel
           </button>

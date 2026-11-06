@@ -132,7 +132,7 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
           <Activity className="h-5 w-5 text-primary-600" />
           <h2 className="text-lg font-semibold text-secondary-900 dark:text-white">Recruiter Activity</h2>
         </div>
-        <div className="inline-flex rounded-lg border border-gray-200 dark:border-slate-700 p-0.5">
+        <div className="inline-flex rounded-lg border border-secondary-200 dark:border-slate-700 p-0.5">
           {RANGES.map((r) => (
             <button
               key={r.days}
@@ -141,7 +141,7 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
               className={`px-3 py-1 text-xs rounded ${
                 days === r.days
                   ? 'bg-primary-600 text-white'
-                  : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-700'
+                  : 'text-secondary-600 dark:text-slate-400 hover:bg-secondary-100 dark:hover:bg-slate-700'
               }`}
             >
               {r.label}
@@ -165,20 +165,20 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
       )}
 
       {/* Per-member table */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 overflow-hidden">
         {loading ? (
           <div className="text-center py-12">
             <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
           </div>
         ) : rows.length === 0 ? (
-          <div className="text-center py-12 text-sm text-gray-500 dark:text-slate-400">
-            <Users className="h-8 w-8 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
+          <div className="text-center py-12 text-sm text-secondary-500 dark:text-slate-400">
+            <Users className="h-8 w-8 text-secondary-300 dark:text-slate-600 mx-auto mb-3" />
             No team activity in this window.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
-              <thead className="bg-gray-50 dark:bg-slate-900/30 text-xs uppercase tracking-wide text-gray-500 dark:text-slate-400">
+              <thead className="bg-secondary-50 dark:bg-slate-900/30 text-xs uppercase tracking-wide text-secondary-500 dark:text-slate-400">
                 <tr>
                   <th className="px-4 py-3 text-left">Team Member</th>
                   <th className="px-4 py-3 text-right">Jobs</th>
@@ -191,9 +191,9 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
+              <tbody className="divide-y divide-secondary-100 dark:divide-slate-700">
                 {rows.map((r) => (
-                  <tr key={r.user_id} className="hover:bg-gray-50 dark:hover:bg-slate-900/40">
+                  <tr key={r.user_id} className="hover:bg-secondary-50 dark:hover:bg-slate-900/40">
                     <td className="px-4 py-3">
                       <div className="font-medium text-secondary-900 dark:text-white">
                         {r.name || '—'}
@@ -202,7 +202,7 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
                     <td className="px-4 py-3 text-right tabular-nums">{r.jobs_posted}</td>
                     <td className="px-4 py-3 text-right tabular-nums">{r.applicants_reviewed}</td>
                     <td className="px-4 py-3 text-right tabular-nums">{r.messages_sent}</td>
-                    <td className="px-4 py-3 text-right text-gray-600 dark:text-slate-400 text-xs">
+                    <td className="px-4 py-3 text-right text-secondary-600 dark:text-slate-400 text-xs">
                       {r.last_active
                         ? formatDistanceToNow(new Date(r.last_active), { addSuffix: true })
                         : '—'}
@@ -215,7 +215,7 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
         )}
       </div>
 
-      <p className="text-xs text-gray-500 dark:text-slate-400">
+      <p className="text-xs text-secondary-500 dark:text-slate-400">
         Counts are scoped to your company. "Reviewed" tracks unique applications opened
         via the Review modal. Pre-existing job postings without a recorded poster show
         as 0 jobs until they are re-saved.
@@ -230,14 +230,14 @@ const SummaryCard: React.FC<{
   value: number;
   accent: string;
 }> = ({ icon: Icon, label, value, accent }) => (
-  <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+  <div className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
     <div className="flex items-center justify-between mb-2">
       <div className={`p-2 rounded-lg ${accent}`}>
         <Icon className="h-4 w-4" />
       </div>
     </div>
     <div className="text-2xl font-bold text-secondary-900 dark:text-white tabular-nums">{value}</div>
-    <div className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{label}</div>
+    <div className="text-xs text-secondary-500 dark:text-slate-400 mt-0.5">{label}</div>
   </div>
 );
 

@@ -75,27 +75,27 @@ const CronHealth: React.FC = () => {
       <Helmet>
         <title>Cron Health · Nexegin</title>
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6 flex items-center gap-2">
             <Activity className="h-6 w-6 text-primary-500" />
             <div>
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">Cron health</h1>
-              <p className="text-gray-600 dark:text-slate-400 text-sm">
+              <p className="text-secondary-600 dark:text-slate-400 text-sm">
                 Last 24 hours of scheduled job runs, from `cron_runs`.
               </p>
             </div>
           </header>
 
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
             {loading ? (
               <Loader2 className="h-5 w-5 animate-spin text-primary-500 mx-auto" />
             ) : summaries.length === 0 ? (
-              <p className="text-sm text-gray-500 dark:text-slate-400 italic">
+              <p className="text-sm text-secondary-500 dark:text-slate-400 italic">
                 No cron runs logged in the last 24 hours.
               </p>
             ) : (
-              <ul className="divide-y divide-gray-100 dark:divide-slate-700">
+              <ul className="divide-y divide-secondary-100 dark:divide-slate-700">
                 {summaries.map((s) => {
                   const ok = s.last_run?.status === 'success';
                   const failed = s.last_run?.status === 'failure';
@@ -108,13 +108,13 @@ const CronHealth: React.FC = () => {
                           ) : failed ? (
                             <XCircle className="h-4 w-4 text-rose-500" />
                           ) : (
-                            <Loader2 className="h-4 w-4 text-gray-400 animate-spin" />
+                            <Loader2 className="h-4 w-4 text-secondary-400 animate-spin" />
                           )}
                           <p className="text-sm font-medium text-secondary-900 dark:text-white">
                             {s.job_name}
                           </p>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+                        <p className="text-xs text-secondary-500 dark:text-slate-400 mt-0.5">
                           {s.last_run
                             ? `Last run ${formatDistanceToNow(new Date(s.last_run.started_at), {
                                 addSuffix: true,

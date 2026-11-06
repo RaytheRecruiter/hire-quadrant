@@ -104,11 +104,11 @@ const Support: React.FC = () => {
         <title>Support & Help Center — Nexegin</title>
         <meta name="description" content="Get help with your Nexegin account, job search, applications, and more." />
       </Helmet>
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-16">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-4">Support Center</h1>
-            <p className="text-lg text-gray-600 dark:text-slate-400 mb-8">
+            <p className="text-lg text-secondary-600 dark:text-slate-400 mb-8">
               Find answers to common questions or reach out to our support team.
             </p>
 
@@ -116,29 +116,29 @@ const Support: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
               <HardLink
                 to="/contact"
-                className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
+                className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-secondary-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
               >
                 <MessageCircle className="h-6 w-6 text-primary-500 mx-auto mb-2" />
                 <h3 className="font-semibold text-secondary-900 dark:text-white mb-1">Contact Us</h3>
-                <p className="text-sm text-gray-600 dark:text-slate-400">Send us a message</p>
+                <p className="text-sm text-secondary-600 dark:text-slate-400">Send us a message</p>
               </HardLink>
 
               <a
                 href="mailto:support@nexegin.com"
-                className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
+                className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-secondary-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
               >
                 <HelpCircle className="h-6 w-6 text-amber-500 mx-auto mb-2" />
                 <h3 className="font-semibold text-secondary-900 dark:text-white mb-1">Email Support</h3>
-                <p className="text-sm text-gray-600 dark:text-slate-400">support@nexegin.com</p>
+                <p className="text-sm text-secondary-600 dark:text-slate-400">support@nexegin.com</p>
               </a>
 
               <a
                 href="#faq"
-                className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
+                className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-secondary-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
               >
                 <BookOpen className="h-6 w-6 text-emerald-500 mx-auto mb-2" />
                 <h3 className="font-semibold text-secondary-900 dark:text-white mb-1">Browse FAQ</h3>
-                <p className="text-sm text-gray-600 dark:text-slate-400">See common questions</p>
+                <p className="text-sm text-secondary-600 dark:text-slate-400">See common questions</p>
               </a>
             </div>
           </div>
@@ -146,13 +146,13 @@ const Support: React.FC = () => {
           {/* Search FAQ */}
           <div id="faq" className="mb-12">
             <div className="relative mb-8">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Search help articles..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
+                className="w-full pl-12 pr-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500"
               />
             </div>
 
@@ -160,8 +160,8 @@ const Support: React.FC = () => {
             <div className="space-y-4">
               {filteredFAQ.length === 0 ? (
                 <div className="text-center py-12">
-                  <BookOpen className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-600 dark:text-slate-400">
+                  <BookOpen className="h-12 w-12 text-secondary-300 mx-auto mb-4" />
+                  <p className="text-secondary-600 dark:text-slate-400">
                     No results found. Try different search terms or contact us at support@nexegin.com
                   </p>
                 </div>
@@ -169,7 +169,7 @@ const Support: React.FC = () => {
                 filteredFAQ.map(category => (
                   <div
                     key={category.category}
-                    className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 overflow-hidden"
+                    className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 overflow-hidden"
                   >
                     <button
                       onClick={() =>
@@ -177,28 +177,28 @@ const Support: React.FC = () => {
                           expandedCategory === category.category ? null : category.category
                         )
                       }
-                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
+                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-secondary-50 dark:hover:bg-slate-700/50 transition-colors"
                     >
                       <h3 className="font-bold text-secondary-900 dark:text-white">{category.category}</h3>
                       <ChevronDown
-                        className={`h-5 w-5 text-gray-400 transition-transform ${
+                        className={`h-5 w-5 text-secondary-400 transition-transform ${
                           expandedCategory === category.category ? 'rotate-180' : ''
                         }`}
                       />
                     </button>
 
                     {expandedCategory === category.category && (
-                      <div className="border-t border-gray-100 dark:border-slate-700 space-y-4 px-6 py-4">
+                      <div className="border-t border-secondary-100 dark:border-slate-700 space-y-4 px-6 py-4">
                         {category.questions.map((item, idx) => (
                           <div key={idx}>
                             <h4 className="font-semibold text-secondary-900 dark:text-white mb-2">
                               {item.q}
                             </h4>
-                            <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
+                            <p className="text-secondary-600 dark:text-slate-400 text-sm leading-relaxed">
                               {item.a}
                             </p>
                             {idx < category.questions.length - 1 && (
-                              <div className="border-b border-gray-100 dark:border-slate-700 my-4" />
+                              <div className="border-b border-secondary-100 dark:border-slate-700 my-4" />
                             )}
                           </div>
                         ))}
@@ -215,7 +215,7 @@ const Support: React.FC = () => {
             <h3 className="text-2xl font-bold text-secondary-900 dark:text-white mb-2">
               Still need help?
             </h3>
-            <p className="text-gray-600 dark:text-slate-400 mb-6">
+            <p className="text-secondary-600 dark:text-slate-400 mb-6">
               Our support team is here to help. Reach out and we'll get back to you.
             </p>
             <HardLink

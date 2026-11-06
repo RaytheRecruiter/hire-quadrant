@@ -122,7 +122,7 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
   return (
     <div>
       {hasActiveFilters && (
-        <div className="mb-3 flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
+        <div className="mb-3 flex items-center gap-2 text-sm text-secondary-500 dark:text-slate-400">
           <span>Showing {processedData.length} of {data.length} rows</span>
           <button
             onClick={() => setFilters({})}
@@ -136,20 +136,20 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
         {canScrollRight && (
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 flex items-center">
             <div className="h-full w-12 bg-gradient-to-l from-white dark:from-slate-800 to-transparent" />
-            <div className="absolute right-1 flex items-center gap-0.5 text-xs font-medium text-gray-400 dark:text-slate-500 bg-white/90 dark:bg-slate-800/90 px-1 rounded">
+            <div className="absolute right-1 flex items-center gap-0.5 text-xs font-medium text-secondary-400 dark:text-slate-500 bg-white/90 dark:bg-slate-800/90 px-1 rounded">
               Scroll <ChevronRight className="h-3 w-3" />
             </div>
           </div>
         )}
         <div ref={scrollRef} className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
-          <thead className="bg-gray-50 dark:bg-slate-900/50">
+          <table className="min-w-full divide-y divide-secondary-200 dark:divide-slate-700">
+          <thead className="bg-secondary-50 dark:bg-slate-900/50">
             <tr>
               {columns.map(col => (
-                <th key={col.key} className={`px-6 py-3 ${alignClass(col.align)} text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider`}>
+                <th key={col.key} className={`px-6 py-3 ${alignClass(col.align)} text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider`}>
                   <div className={`flex flex-col gap-1 ${col.align === 'right' ? 'items-end' : col.align === 'center' ? 'items-center' : 'items-start'}`}>
                     <div
-                      className={`flex items-center gap-1 ${col.sortable !== false ? 'cursor-pointer select-none hover:text-gray-700 dark:text-slate-300' : ''}`}
+                      className={`flex items-center gap-1 ${col.sortable !== false ? 'cursor-pointer select-none hover:text-secondary-700 dark:text-slate-300' : ''}`}
                       onClick={() => col.sortable !== false && handleSort(col.key)}
                     >
                       {col.label}
@@ -160,14 +160,14 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
                           ) : sortKey === col.key && sortDir === 'desc' ? (
                             <ChevronDown className="h-3.5 w-3.5 text-primary-500" />
                           ) : (
-                            <ChevronsUpDown className="h-3.5 w-3.5 text-gray-300" />
+                            <ChevronsUpDown className="h-3.5 w-3.5 text-secondary-300" />
                           )}
                         </span>
                       )}
                       {col.filterable !== false && (
                         <button
                           onClick={(e) => { e.stopPropagation(); setActiveFilter(activeFilter === col.key ? null : col.key); }}
-                          className={`ml-1 ${filters[col.key] ? 'text-primary-500' : 'text-gray-300 hover:text-gray-500 dark:text-slate-400'}`}
+                          className={`ml-1 ${filters[col.key] ? 'text-primary-500' : 'text-secondary-300 hover:text-secondary-500 dark:text-slate-400'}`}
                         >
                           <Search className="h-3 w-3" />
                         </button>
@@ -180,13 +180,13 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
                           value={filters[col.key] || ''}
                           onChange={e => setFilters(prev => ({ ...prev, [col.key]: e.target.value }))}
                           placeholder={`Filter ${col.label.toLowerCase()}...`}
-                          className="w-full text-xs font-normal normal-case border border-gray-300 dark:border-slate-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary-300"
+                          className="w-full text-xs font-normal normal-case border border-secondary-300 dark:border-slate-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary-300"
                           autoFocus
                         />
                         {filters[col.key] && (
                           <button
                             onClick={() => setFilters(prev => ({ ...prev, [col.key]: '' }))}
-                            className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400"
+                            className="absolute right-1 top-1/2 -translate-y-1/2 text-secondary-400 dark:text-slate-500 hover:text-secondary-600 dark:text-slate-400"
                           >
                             <X className="h-3 w-3" />
                           </button>
@@ -198,20 +198,20 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
+          <tbody className="bg-white dark:bg-slate-800 divide-y divide-secondary-200 dark:divide-slate-700">
             {processedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-8 text-center text-gray-500 dark:text-slate-400">
+                <td colSpan={columns.length} className="px-6 py-8 text-center text-secondary-500 dark:text-slate-400">
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
               processedData.map(row => (
-                <tr key={rowKey(row)} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
+                <tr key={rowKey(row)} className="hover:bg-secondary-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
                   {columns.map(col => (
                     <td
                       key={col.key}
-                      className={`px-6 py-4 align-top whitespace-nowrap text-sm text-gray-600 dark:text-slate-400 ${alignClass(col.align)} ${col.align === 'right' ? 'tabular-nums' : ''}`}
+                      className={`px-6 py-4 align-top whitespace-nowrap text-sm text-secondary-600 dark:text-slate-400 ${alignClass(col.align)} ${col.align === 'right' ? 'tabular-nums' : ''}`}
                     >
                       {col.render ? col.render(row) : String(getValue(row, col))}
                     </td>

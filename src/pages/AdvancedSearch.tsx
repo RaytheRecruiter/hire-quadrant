@@ -34,13 +34,13 @@ const AdvancedSearch: React.FC = () => {
         <title>Advanced Job Search — Nexegin</title>
         <meta name="description" content="Search jobs by title, location, type, salary, and more. Find your perfect role." />
       </Helmet>
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-4">
               Advanced Job Search
             </h1>
-            <p className="text-lg text-gray-600 dark:text-slate-400">
+            <p className="text-lg text-secondary-600 dark:text-slate-400">
               Refine your search with detailed filters to find your perfect role
             </p>
           </div>
@@ -52,13 +52,13 @@ const AdvancedSearch: React.FC = () => {
                 Job Title
               </label>
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
                 <input
                   type="text"
                   value={filters.title}
                   onChange={(e) => setFilters({ ...filters, title: e.target.value })}
                   placeholder="e.g., Senior Software Engineer"
-                  className="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
+                  className="w-full pl-12 pr-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500"
                 />
               </div>
             </div>
@@ -69,13 +69,13 @@ const AdvancedSearch: React.FC = () => {
                 Location
               </label>
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
                 <input
                   type="text"
                   value={filters.location}
                   onChange={(e) => setFilters({ ...filters, location: e.target.value })}
                   placeholder="e.g., San Francisco, CA or Remote"
-                  className="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
+                  className="w-full pl-12 pr-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500"
                 />
               </div>
             </div>
@@ -87,11 +87,11 @@ const AdvancedSearch: React.FC = () => {
                   Job Type
                 </label>
                 <div className="relative">
-                  <Briefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Briefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
                   <select
                     value={filters.type}
                     onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white appearance-none"
+                    className="w-full pl-12 pr-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white appearance-none"
                   >
                     <option value="">All types</option>
                     <option value="full-time">Full Time</option>
@@ -108,11 +108,11 @@ const AdvancedSearch: React.FC = () => {
                   Minimum Salary
                 </label>
                 <div className="relative">
-                  <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
                   <select
                     value={filters.salary}
                     onChange={(e) => setFilters({ ...filters, salary: e.target.value })}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white appearance-none"
+                    className="w-full pl-12 pr-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white appearance-none"
                   >
                     <option value="0">Any salary</option>
                     <option value="40000">$40k+</option>
@@ -137,7 +137,7 @@ const AdvancedSearch: React.FC = () => {
                 value={filters.keyword}
                 onChange={(e) => setFilters({ ...filters, keyword: e.target.value })}
                 placeholder="e.g., React, AWS, Python"
-                className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
+                className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500"
               />
             </div>
 

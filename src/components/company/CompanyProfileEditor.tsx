@@ -145,7 +145,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Company Logo</label>
         <div className="flex items-center gap-4">
           <CompanyLogo company={formData.display_name} logoUrl={formData.logo} size="lg" />
-          <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm font-medium text-gray-700 dark:text-slate-300 ${canEdit ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-700' : 'cursor-not-allowed opacity-60'}`}>
+          <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 text-sm font-medium text-secondary-700 dark:text-slate-300 ${canEdit ? 'cursor-pointer hover:bg-secondary-50 dark:hover:bg-slate-700' : 'cursor-not-allowed opacity-60'}`}>
             {uploadingLogo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
             {uploadingLogo ? 'Uploading…' : formData.logo ? 'Replace logo' : 'Upload logo'}
             <input
@@ -157,7 +157,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
             />
           </label>
         </div>
-        <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">PNG or JPG, up to 2 MB. Saves immediately.</p>
+        <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">PNG or JPG, up to 2 MB. Saves immediately.</p>
       </div>
       <div>
         <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Display Name</label>
@@ -166,7 +166,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
           name="display_name"
           value={formData.display_name}
           onChange={handleChange}
-          className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all disabled:cursor-not-allowed"
         />
       </div>
 
@@ -177,7 +177,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
           value={formData.description}
           onChange={handleChange}
           rows={4}
-          className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+          className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
         />
       </div>
 
@@ -189,7 +189,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
             name="website"
             value={formData.website}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+            className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
 
@@ -200,7 +200,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
             name="industry"
             value={formData.industry}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+            className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
 
@@ -210,7 +210,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
             name="size"
             value={formData.size}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+            className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           >
             <option value="">Select size</option>
             <option value="1-10 employees">1-10 employees</option>
@@ -229,7 +229,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
             name="location"
             value={formData.location}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+            className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
 
@@ -241,7 +241,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
             value={formData.founded}
             onChange={handleChange}
             placeholder="e.g. 2015"
-            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+            className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
 
@@ -252,7 +252,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
             name="contact_email"
             value={formData.contact_email}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+            className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
           />
         </div>
       </div>
@@ -264,7 +264,7 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
           value={formData.culture}
           onChange={handleChange}
           rows={3}
-          className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
+          className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 transition-all"
         />
       </div>
 

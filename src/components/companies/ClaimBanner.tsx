@@ -75,7 +75,7 @@ const ClaimBanner: React.FC<Props> = ({ companySlug, companyName, emailDomain })
           type="button"
           onClick={handleClaim}
           disabled={claiming}
-          className="inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-5 py-2.5 rounded-xl hover:bg-gray-50 disabled:opacity-70 whitespace-nowrap"
+          className="inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-5 py-2.5 rounded-xl hover:bg-secondary-50 disabled:opacity-70 whitespace-nowrap"
         >
           {claiming ? (
             <Loader2 className="h-4 w-4 animate-spin" />

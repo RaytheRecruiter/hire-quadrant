@@ -57,7 +57,7 @@ const ProfileCompletenessScore: React.FC<{ inputs: ProfileCompletenessInputs }> 
     : 'bg-rose-500';
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 mb-5">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-4 mb-5">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary-500" />
@@ -67,7 +67,7 @@ const ProfileCompletenessScore: React.FC<{ inputs: ProfileCompletenessInputs }> 
         </div>
         <span className="text-sm font-bold text-secondary-900 dark:text-white">{score}%</span>
       </div>
-      <div className="w-full h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3">
+      <div className="w-full h-2 bg-secondary-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3">
         <div
           className={`h-full ${tone} transition-all`}
           style={{ width: `${score}%` }}
@@ -78,7 +78,7 @@ const ProfileCompletenessScore: React.FC<{ inputs: ProfileCompletenessInputs }> 
         />
       </div>
       {next ? (
-        <p className="text-xs text-gray-600 dark:text-slate-400">
+        <p className="text-xs text-secondary-600 dark:text-slate-400">
           Next step: <span className="font-medium text-secondary-900 dark:text-white">{next}</span>
         </p>
       ) : (
@@ -96,7 +96,7 @@ const ProfileCompletenessScore: React.FC<{ inputs: ProfileCompletenessInputs }> 
               className={`flex items-center gap-1.5 text-xs ${
                 done
                   ? 'text-emerald-600 dark:text-emerald-400'
-                  : 'text-gray-500 dark:text-slate-500'
+                  : 'text-secondary-500 dark:text-slate-500'
               }`}
             >
               <Icon className="h-3.5 w-3.5" />

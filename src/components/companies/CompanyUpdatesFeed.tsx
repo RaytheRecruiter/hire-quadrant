@@ -23,7 +23,7 @@ const CompanyUpdatesFeed: React.FC<Props> = ({ companyId, max = 3 }) => {
   const visible = updates.slice(0, max);
 
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
+    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
       <div className="flex items-center gap-2 mb-4">
         <Megaphone className="h-5 w-5 text-primary-600" />
         <h2 className="text-xl font-bold text-secondary-900 dark:text-white">Company Updates</h2>
@@ -42,11 +42,11 @@ const CompanyUpdatesFeed: React.FC<Props> = ({ companyId, max = 3 }) => {
                   Pinned
                 </span>
               )}
-              <span className="text-xs text-gray-500 dark:text-slate-400">
+              <span className="text-xs text-secondary-500 dark:text-slate-400">
                 {formatDistanceToNow(new Date(u.published_at), { addSuffix: true })}
               </span>
             </div>
-            <p className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-line">
+            <p className="text-sm text-secondary-700 dark:text-slate-300 whitespace-pre-line">
               {u.body}
             </p>
           </article>

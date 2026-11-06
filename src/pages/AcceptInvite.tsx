@@ -131,20 +131,20 @@ const AcceptInvite: React.FC = () => {
 
   if (loading || authLoading) {
     return (
-      <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-dvh flex items-center justify-center bg-secondary-50 dark:bg-slate-900">
         <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-dvh bg-gray-50 dark:bg-slate-900 flex items-center justify-center px-4 py-12">
+    <div className="min-h-dvh bg-secondary-50 dark:bg-slate-900 flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-primary-100 rounded-lg">
             <Shield className="h-6 w-6 text-primary-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Team Invitation</h1>
+          <h1 className="text-2xl font-bold text-secondary-900 dark:text-white">Team Invitation</h1>
         </div>
 
         {error ? (
@@ -157,21 +157,21 @@ const AcceptInvite: React.FC = () => {
           </div>
         ) : invite ? (
           <>
-            <p className="text-gray-600 dark:text-slate-400 mb-6">
+            <p className="text-secondary-600 dark:text-slate-400 mb-6">
               You've been invited to join{' '}
-              <span className="font-semibold text-gray-900 dark:text-white">
+              <span className="font-semibold text-secondary-900 dark:text-white">
                 {company?.display_name || company?.name || 'this company'}
               </span>{' '}
               as a{' '}
-              <span className="font-semibold text-gray-900 dark:text-white">
+              <span className="font-semibold text-secondary-900 dark:text-white">
                 {ROLE_LABEL[invite.role]}
               </span>
               .
             </p>
-            <div className="bg-gray-50 dark:bg-slate-900 rounded-lg p-4 mb-6 text-sm">
+            <div className="bg-secondary-50 dark:bg-slate-900 rounded-lg p-4 mb-6 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500 dark:text-slate-400">Email</span>
-                <span className="text-gray-900 dark:text-white font-medium">{invite.email}</span>
+                <span className="text-secondary-500 dark:text-slate-400">Email</span>
+                <span className="text-secondary-900 dark:text-white font-medium">{invite.email}</span>
               </div>
               {user && user.email?.toLowerCase() !== invite.email.toLowerCase() && (
                 <div className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">

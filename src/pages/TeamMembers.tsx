@@ -127,7 +127,7 @@ const TeamMembers: React.FC = () => {
 
   if (authLoading || permLoading) {
     return (
-      <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-dvh flex items-center justify-center bg-secondary-50 dark:bg-slate-900">
         <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
       </div>
     );
@@ -272,15 +272,15 @@ const TeamMembers: React.FC = () => {
     `${window.location.origin}/accept-invite?token=${token}`;
 
   return (
-    <div className="min-h-dvh bg-gray-50 dark:bg-slate-900 py-8">
+    <div className="min-h-dvh bg-secondary-50 dark:bg-slate-900 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-secondary-900 dark:text-white flex items-center gap-3">
               <Users className="h-8 w-8 text-primary-500" />
               Team Members & Permissions
             </h1>
-            <p className="text-gray-600 dark:text-slate-400 mt-2">
+            <p className="text-secondary-600 dark:text-slate-400 mt-2">
               Invite teammates, assign roles, and control what each member can access.
             </p>
           </div>
@@ -296,9 +296,9 @@ const TeamMembers: React.FC = () => {
         </div>
 
         {/* Members table */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 mb-8">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Members</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-secondary-200 dark:border-slate-700 mb-8">
+          <div className="px-6 py-4 border-b border-secondary-200 dark:border-slate-700">
+            <h2 className="text-lg font-semibold text-secondary-900 dark:text-white">Members</h2>
           </div>
           {loading ? (
             <div className="p-8 text-center">
@@ -307,7 +307,7 @@ const TeamMembers: React.FC = () => {
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
-                <thead className="bg-gray-50 dark:bg-slate-900/30 text-xs uppercase text-gray-500 dark:text-slate-400">
+                <thead className="bg-secondary-50 dark:bg-slate-900/30 text-xs uppercase text-secondary-500 dark:text-slate-400">
                   <tr>
                     <th className="px-6 py-3 text-left">Name</th>
                     <th className="px-6 py-3 text-left">Email</th>
@@ -317,20 +317,20 @@ const TeamMembers: React.FC = () => {
                     {canManageUsers && <th className="px-6 py-3 text-right">Actions</th>}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
+                <tbody className="divide-y divide-secondary-100 dark:divide-slate-700">
                   {members.map((m) => (
                     <tr key={m.id}>
-                      <td className="px-6 py-4 text-gray-900 dark:text-white font-medium">
+                      <td className="px-6 py-4 text-secondary-900 dark:text-white font-medium">
                         {m.profile?.name || '—'}
                         {m.user_id === user.id && (
-                          <span className="ml-2 text-xs text-gray-400 dark:text-slate-500">(you)</span>
+                          <span className="ml-2 text-xs text-secondary-400 dark:text-slate-500">(you)</span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-gray-600 dark:text-slate-400">{m.profile?.email || '—'}</td>
+                      <td className="px-6 py-4 text-secondary-600 dark:text-slate-400">{m.profile?.email || '—'}</td>
                       <td className="px-6 py-4">
                         <RoleBadge role={m.role} />
                       </td>
-                      <td className="px-6 py-4 text-gray-600 dark:text-slate-400">
+                      <td className="px-6 py-4 text-secondary-600 dark:text-slate-400">
                         {m.scope === 'all' ? 'All Jobs' : 'Assigned Jobs Only'}
                       </td>
                       <td className="px-6 py-4">
@@ -376,7 +376,7 @@ const TeamMembers: React.FC = () => {
                   ))}
                   {!members.length && (
                     <tr>
-                      <td colSpan={canManageUsers ? 6 : 5} className="px-6 py-8 text-center text-gray-500 dark:text-slate-400">
+                      <td colSpan={canManageUsers ? 6 : 5} className="px-6 py-8 text-center text-secondary-500 dark:text-slate-400">
                         No team members yet.
                       </td>
                     </tr>
@@ -389,38 +389,38 @@ const TeamMembers: React.FC = () => {
 
         {/* Pending invitations */}
         {canManageUsers && invitations.length > 0 && (
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <Mail className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-secondary-200 dark:border-slate-700">
+            <div className="px-6 py-4 border-b border-secondary-200 dark:border-slate-700">
+              <h2 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2">
+                <Mail className="h-5 w-5 text-secondary-400 dark:text-slate-500" />
                 Pending Invitations
               </h2>
-              <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+              <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">
                 Invitations are emailed automatically. You can also copy the
                 link below to share it manually.
               </p>
             </div>
-            <ul className="divide-y divide-gray-100 dark:divide-slate-700">
+            <ul className="divide-y divide-secondary-100 dark:divide-slate-700">
               {invitations.map((inv) => (
                 <li key={inv.id} className="p-6 flex items-center justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       {(inv.first_name || inv.last_name) && (
-                        <span className="font-medium text-gray-900 dark:text-white">
+                        <span className="font-medium text-secondary-900 dark:text-white">
                           {[inv.first_name, inv.last_name].filter(Boolean).join(' ')}
                         </span>
                       )}
-                      <span className={`text-${(inv.first_name || inv.last_name) ? 'sm text-gray-500 dark:text-slate-400' : 'sm font-medium text-gray-900 dark:text-white'}`}>{inv.email}</span>
+                      <span className={`text-${(inv.first_name || inv.last_name) ? 'sm text-secondary-500 dark:text-slate-400' : 'sm font-medium text-secondary-900 dark:text-white'}`}>{inv.email}</span>
                       <RoleBadge role={inv.role} />
-                      <span className="text-xs text-gray-400 dark:text-slate-500">
+                      <span className="text-xs text-secondary-400 dark:text-slate-500">
                         {inv.scope === 'all' ? 'All Jobs' : 'Assigned Jobs Only'}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                    <div className="text-xs text-secondary-500 dark:text-slate-400 mt-1">
                       Expires {format(new Date(inv.expires_at), 'MMM d, yyyy')}
                     </div>
                     <div className="mt-2 flex items-center gap-2">
-                      <code className="text-xs px-2 py-1 bg-gray-100 dark:bg-slate-900 rounded truncate max-w-md inline-block">
+                      <code className="text-xs px-2 py-1 bg-secondary-100 dark:bg-slate-900 rounded truncate max-w-md inline-block">
                         {inviteUrl(inv.token)}
                       </code>
                       <button
@@ -466,9 +466,9 @@ const TeamMembers: React.FC = () => {
 
         {/* Standard user — show read-only summary of own permissions */}
         {!canManageUsers && (
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Your access</h2>
-            <p className="text-sm text-gray-600 dark:text-slate-400 mb-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-secondary-200 dark:border-slate-700 p-6">
+            <h2 className="text-lg font-semibold text-secondary-900 dark:text-white mb-2">Your access</h2>
+            <p className="text-sm text-secondary-600 dark:text-slate-400 mb-4">
               These permissions were set by your company Owner or Admin. Contact them to request changes.
             </p>
             <PermissionSummary member={member} />
@@ -513,7 +513,7 @@ const RoleBadge: React.FC<{ role: CompanyRole }> = ({ role }) => {
     ? 'bg-amber-100 text-amber-800 border-amber-200'
     : role === 'admin'
     ? 'bg-blue-100 text-blue-800 border-blue-200'
-    : 'bg-gray-100 text-gray-800 border-gray-200';
+    : 'bg-secondary-100 text-secondary-800 border-secondary-200';
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border ${cls}`}>
       <Shield className="h-3 w-3" />
@@ -527,7 +527,7 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
     ? 'bg-green-100 text-green-800'
     : status === 'pending'
     ? 'bg-yellow-100 text-yellow-800'
-    : 'bg-gray-200 text-gray-700';
+    : 'bg-secondary-200 text-secondary-700';
   return (
     <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
       {status}
@@ -539,12 +539,12 @@ const PermissionSummary: React.FC<{ member: CompanyMember }> = ({ member }) => {
   return (
     <div className="space-y-3">
       <div className="text-sm">
-        <span className="font-medium text-gray-900 dark:text-white">Role: </span>
+        <span className="font-medium text-secondary-900 dark:text-white">Role: </span>
         <RoleBadge role={member.role} />
       </div>
       <div className="text-sm">
-        <span className="font-medium text-gray-900 dark:text-white">Scope: </span>
-        <span className="text-gray-600 dark:text-slate-400">
+        <span className="font-medium text-secondary-900 dark:text-white">Scope: </span>
+        <span className="text-secondary-600 dark:text-slate-400">
           {member.scope === 'all' ? 'All Jobs Across Account' : 'Assigned Jobs Only'}
         </span>
       </div>
@@ -559,9 +559,9 @@ const PermissionSummary: React.FC<{ member: CompanyMember }> = ({ member }) => {
               {enabled ? (
                 <Check className="h-4 w-4 text-green-500" />
               ) : (
-                <X className="h-4 w-4 text-gray-300 dark:text-slate-600" />
+                <X className="h-4 w-4 text-secondary-300 dark:text-slate-600" />
               )}
-              <span className={enabled ? 'text-gray-700 dark:text-slate-300' : 'text-gray-400 dark:text-slate-500'}>
+              <span className={enabled ? 'text-secondary-700 dark:text-slate-300' : 'text-secondary-400 dark:text-slate-500'}>
                 {PERMISSION_LABEL[k]}
               </span>
             </div>
@@ -687,48 +687,48 @@ const InviteModal: React.FC<{
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Invite Team Member</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+        <div className="p-6 border-b border-secondary-200 dark:border-slate-700 flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-secondary-900 dark:text-white">Invite Team Member</h2>
+          <button onClick={onClose} className="text-secondary-400 hover:text-secondary-600">
             <X className="h-5 w-5" />
           </button>
         </div>
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">First Name</label>
+              <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">First Name</label>
               <input
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400"
+                className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400"
                 placeholder="Sarah"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Last Name</label>
+              <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Last Name</label>
               <input
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400"
+                className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400"
                 placeholder="Lee"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Email <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Email <span className="text-red-500">*</span></label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400"
+              className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400"
               placeholder="recruiter@company.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Role</label>
+            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">Role</label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(['admin', 'standard'] as const).map((r) => {
                 // Admins can only invite Standards (cannot escalate).
@@ -742,11 +742,11 @@ const InviteModal: React.FC<{
                     className={`text-left p-3 rounded-lg border ${
                       role === r
                         ? 'border-primary-400 bg-primary-50'
-                        : 'border-gray-200 dark:border-slate-700'
+                        : 'border-secondary-200 dark:border-slate-700'
                     } ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:border-primary-300'}`}
                   >
-                    <div className="font-medium text-gray-900 dark:text-white">{ROLE_LABEL[r]}</div>
-                    <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                    <div className="font-medium text-secondary-900 dark:text-white">{ROLE_LABEL[r]}</div>
+                    <div className="text-xs text-secondary-500 dark:text-slate-400 mt-1">
                       {ROLE_DESCRIPTION[r]}
                     </div>
                   </button>
@@ -758,7 +758,7 @@ const InviteModal: React.FC<{
           {role === 'standard' && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">
                   Candidate Access
                 </label>
                 <div className="space-y-2">
@@ -771,10 +771,10 @@ const InviteModal: React.FC<{
                         className="mt-1"
                       />
                       <div>
-                        <div className="font-medium text-gray-900 dark:text-white">
+                        <div className="font-medium text-secondary-900 dark:text-white">
                           {s === 'assigned' ? 'Assigned Jobs Only' : 'All Jobs Across Account'}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-slate-400">
+                        <div className="text-xs text-secondary-500 dark:text-slate-400">
                           {s === 'assigned'
                             ? 'User can only view applicants tied to jobs assigned to them.'
                             : 'User can view/contact applicants across the entire company account.'}
@@ -787,11 +787,11 @@ const InviteModal: React.FC<{
 
               {PERMISSION_GROUPS.map((g) => (
                 <div key={g.title}>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+                  <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">
                     {g.title}
                   </label>
                   {g.description && (
-                    <p className="text-xs text-gray-500 dark:text-slate-400 mb-2">{g.description}</p>
+                    <p className="text-xs text-secondary-500 dark:text-slate-400 mb-2">{g.description}</p>
                   )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {g.keys.map((k) => (
@@ -801,7 +801,7 @@ const InviteModal: React.FC<{
                           checked={permissions[k]}
                           onChange={() => togglePerm(k)}
                         />
-                        <span className="text-gray-700 dark:text-slate-300">{PERMISSION_LABEL[k]}</span>
+                        <span className="text-secondary-700 dark:text-slate-300">{PERMISSION_LABEL[k]}</span>
                       </label>
                     ))}
                   </div>
@@ -810,10 +810,10 @@ const InviteModal: React.FC<{
             </>
           )}
         </div>
-        <div className="p-6 border-t border-gray-200 dark:border-slate-700 flex justify-end gap-3">
+        <div className="p-6 border-t border-secondary-200 dark:border-slate-700 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-slate-600 hover:bg-gray-50"
+            className="px-4 py-2 text-sm rounded-lg border border-secondary-300 dark:border-slate-600 hover:bg-secondary-50"
           >
             Cancel
           </button>
@@ -883,16 +883,16 @@ const EditMemberModal: React.FC<{
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
+        <div className="p-6 border-b border-secondary-200 dark:border-slate-700 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-secondary-900 dark:text-white">
               Edit Permissions
             </h2>
-            <p className="text-sm text-gray-500 dark:text-slate-400">
+            <p className="text-sm text-secondary-500 dark:text-slate-400">
               {member.profile?.name || member.profile?.email}
             </p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-secondary-400 hover:text-secondary-600">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -905,7 +905,7 @@ const EditMemberModal: React.FC<{
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Role</label>
+            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">Role</label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {availableRoles.map((r) => (
                 <button
@@ -916,11 +916,11 @@ const EditMemberModal: React.FC<{
                   className={`text-left p-3 rounded-lg border ${
                     role === r
                       ? 'border-primary-400 bg-primary-50'
-                      : 'border-gray-200 dark:border-slate-700'
+                      : 'border-secondary-200 dark:border-slate-700'
                   } ${lockedRole ? 'opacity-60' : 'hover:border-primary-300'}`}
                 >
-                  <div className="font-medium text-gray-900 dark:text-white">{ROLE_LABEL[r]}</div>
-                  <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                  <div className="font-medium text-secondary-900 dark:text-white">{ROLE_LABEL[r]}</div>
+                  <div className="text-xs text-secondary-500 dark:text-slate-400 mt-1">
                     {ROLE_DESCRIPTION[r]}
                   </div>
                 </button>
@@ -931,7 +931,7 @@ const EditMemberModal: React.FC<{
           {role === 'standard' && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">
                   Candidate Access
                 </label>
                 <div className="space-y-2">
@@ -939,7 +939,7 @@ const EditMemberModal: React.FC<{
                     <label key={s} className="flex items-start gap-3 cursor-pointer">
                       <input type="radio" checked={scope === s} onChange={() => setScope(s)} className="mt-1" />
                       <div>
-                        <div className="font-medium text-gray-900 dark:text-white">
+                        <div className="font-medium text-secondary-900 dark:text-white">
                           {s === 'assigned' ? 'Assigned Jobs Only' : 'All Jobs Across Account'}
                         </div>
                       </div>
@@ -950,14 +950,14 @@ const EditMemberModal: React.FC<{
 
               {PERMISSION_GROUPS.map((g) => (
                 <div key={g.title}>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">
                     {g.title}
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {g.keys.map((k) => (
                       <label key={k} className="flex items-center gap-2 cursor-pointer text-sm">
                         <input type="checkbox" checked={permissions[k]} onChange={() => togglePerm(k)} />
-                        <span className="text-gray-700 dark:text-slate-300">{PERMISSION_LABEL[k]}</span>
+                        <span className="text-secondary-700 dark:text-slate-300">{PERMISSION_LABEL[k]}</span>
                       </label>
                     ))}
                   </div>
@@ -966,10 +966,10 @@ const EditMemberModal: React.FC<{
             </>
           )}
         </div>
-        <div className="p-6 border-t border-gray-200 dark:border-slate-700 flex justify-end gap-3">
+        <div className="p-6 border-t border-secondary-200 dark:border-slate-700 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-slate-600 hover:bg-gray-50"
+            className="px-4 py-2 text-sm rounded-lg border border-secondary-300 dark:border-slate-600 hover:bg-secondary-50"
           >
             Cancel
           </button>

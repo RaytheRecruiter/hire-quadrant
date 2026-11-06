@@ -122,7 +122,7 @@ const ApplicantNotesAndTags: React.FC<{ applicationId: string }> = ({ applicatio
             </span>
           ))}
           {tags.length === 0 && (
-            <span className="text-xs text-gray-400 dark:text-slate-500">No tags yet.</span>
+            <span className="text-xs text-secondary-400 dark:text-slate-500">No tags yet.</span>
           )}
         </div>
         <div className="flex gap-2">
@@ -138,7 +138,7 @@ const ApplicantNotesAndTags: React.FC<{ applicationId: string }> = ({ applicatio
             }}
             placeholder="Add tag (e.g. top-choice)"
             maxLength={40}
-            className="flex-1 text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+            className="flex-1 text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
           />
           <button
             type="button"
@@ -165,7 +165,7 @@ const ApplicantNotesAndTags: React.FC<{ applicationId: string }> = ({ applicatio
           placeholder="Private note about this applicant (only your team can see this)"
           rows={2}
           maxLength={2000}
-          className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
+          className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
         />
         <button
           type="button"
@@ -178,15 +178,15 @@ const ApplicantNotesAndTags: React.FC<{ applicationId: string }> = ({ applicatio
         </button>
 
         {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+          <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />
         ) : notes.length === 0 ? (
-          <p className="text-xs text-gray-400 dark:text-slate-500">No notes yet.</p>
+          <p className="text-xs text-secondary-400 dark:text-slate-500">No notes yet.</p>
         ) : (
           <ul className="space-y-2">
             {notes.map((n) => (
               <li
                 key={n.id}
-                className="bg-gray-50 dark:bg-slate-900/40 rounded-lg border border-gray-100 dark:border-slate-700 p-2.5 text-sm"
+                className="bg-secondary-50 dark:bg-slate-900/40 rounded-lg border border-secondary-100 dark:border-slate-700 p-2.5 text-sm"
               >
                 <div className="flex justify-between items-start gap-2">
                   <p className="text-secondary-900 dark:text-white whitespace-pre-wrap min-w-0 flex-1">
@@ -203,7 +203,7 @@ const ApplicantNotesAndTags: React.FC<{ applicationId: string }> = ({ applicatio
                     </button>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">
                   {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
                 </p>
               </li>

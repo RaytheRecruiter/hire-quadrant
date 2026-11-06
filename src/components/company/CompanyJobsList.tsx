@@ -96,7 +96,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
     if (job.is_it_role === false) {
       return {
         label: 'Not public',
-        className: 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300',
+        className: 'bg-secondary-200 text-secondary-700 dark:bg-slate-700 dark:text-slate-300',
         title: 'Marked not eligible for this IT job board — hidden from Browse Jobs, the homepage, and your company page.',
       };
     }
@@ -206,9 +206,9 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
     return (
       <>
         <div className="text-center py-16">
-          <Briefcase className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">No Jobs Posted Yet</h3>
-          <p className="text-gray-500 dark:text-slate-400 mb-6">Your posted jobs will appear here.</p>
+          <Briefcase className="mx-auto h-12 w-12 text-secondary-300 mb-4" />
+          <h3 className="text-lg font-semibold text-secondary-700 dark:text-slate-300 mb-2">No Jobs Posted Yet</h3>
+          <p className="text-secondary-500 dark:text-slate-400 mb-6">Your posted jobs will appear here.</p>
           {canPostJobs ? (
             <button
               type="button"
@@ -218,7 +218,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
               <Plus className="h-4 w-4" /> Post your first job
             </button>
           ) : (
-            <p className="text-sm text-gray-400 dark:text-slate-500">
+            <p className="text-sm text-secondary-400 dark:text-slate-500">
               Ask your company Owner or Admin to grant you "Post jobs" permission.
             </p>
           )}
@@ -273,7 +273,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     {job.title}
                   </HardLink>
                   {qCount > 0 && (
-                    <div className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">
+                    <div className="text-xs text-secondary-400 dark:text-slate-500 mt-0.5">
                       {qCount} screening question{qCount === 1 ? '' : 's'}
                     </div>
                   )}
@@ -297,7 +297,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium disabled:opacity-60 ${
                         getStatus(job) === 'open'
                           ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                          : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-gray-300'
+                          : 'bg-secondary-200 text-secondary-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-secondary-300'
                       }`}
                       title={getStatus(job) === 'open' ? 'Close this job (stops new applications, keeps history)' : 'Reopen this job'}
                     >
@@ -312,7 +312,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     </button>
                   ) : (
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      getStatus(job) === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300'
+                      getStatus(job) === 'open' ? 'bg-green-100 text-green-800' : 'bg-secondary-200 text-secondary-700 dark:bg-slate-700 dark:text-slate-300'
                     }`}>
                       {getStatus(job) === 'open' ? 'Open' : 'Closed'}
                     </span>
@@ -335,16 +335,16 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
             getValue: (job) => `${job.location || 'Remote'} ${job.type || job.job_type || 'Full-time'}`,
             render: (job) => (
               <div className="space-y-1">
-                <div className="flex items-center text-gray-600 dark:text-slate-400">
-                  <MapPin className="h-3.5 w-3.5 mr-1 text-gray-400 dark:text-slate-500 flex-shrink-0" />
+                <div className="flex items-center text-secondary-600 dark:text-slate-400">
+                  <MapPin className="h-3.5 w-3.5 mr-1 text-secondary-400 dark:text-slate-500 flex-shrink-0" />
                   {job.location || 'Remote'}
                 </div>
                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                   <Clock className="h-3 w-3 mr-1" />
                   {job.type || job.job_type || 'Full-time'}
                 </span>
-                <div className="flex items-center text-gray-500 dark:text-slate-500">
-                  <DollarSign className="h-3.5 w-3.5 mr-1 text-gray-400 dark:text-slate-500 flex-shrink-0" />
+                <div className="flex items-center text-secondary-500 dark:text-slate-500">
+                  <DollarSign className="h-3.5 w-3.5 mr-1 text-secondary-400 dark:text-slate-500 flex-shrink-0" />
                   {job.salary || job.salary_range || 'Not specified'}
                 </div>
               </div>
@@ -356,7 +356,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
             getValue: (job) => job.created_at || '',
             render: (job) => (
               <div className="flex items-center">
-                <Calendar className="h-3.5 w-3.5 mr-1 text-gray-400 dark:text-slate-500" />
+                <Calendar className="h-3.5 w-3.5 mr-1 text-secondary-400 dark:text-slate-500" />
                 {job.created_at ? new Date(job.created_at).toLocaleDateString() : 'N/A'}
               </div>
             ),
@@ -403,7 +403,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     </button>
                   </>
                 ) : (
-                  <span className="text-xs text-gray-400 dark:text-slate-500 italic">View only</span>
+                  <span className="text-xs text-secondary-400 dark:text-slate-500 italic">View only</span>
                 )}
                 {getTier(job) > 0 && (
                   <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 dark:text-amber-300">
@@ -434,9 +434,9 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
       {editingJobId && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-0 sm:p-4">
           <div className="bg-white dark:bg-slate-800 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-2xl flex flex-col">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-secondary-200 dark:border-slate-700">
               <h2 className="text-lg font-bold text-secondary-900 dark:text-white">Manage Job</h2>
-              <button onClick={closeEditor} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400" aria-label="Close">
+              <button onClick={closeEditor} className="text-secondary-400 dark:text-slate-500 hover:text-secondary-600 dark:text-slate-400" aria-label="Close">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -450,7 +450,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     type="text"
                     value={jobForm.title}
                     onChange={(e) => setJobForm((f) => ({ ...f, title: e.target.value }))}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                    className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -462,7 +462,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                       type="text"
                       value={jobForm.location}
                       onChange={(e) => setJobForm((f) => ({ ...f, location: e.target.value }))}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                      className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                     />
                   </div>
                   <div>
@@ -472,7 +472,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                       value={jobForm.salary}
                       onChange={(e) => setJobForm((f) => ({ ...f, salary: e.target.value }))}
                       placeholder="$120k–$160k"
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                      className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                     />
                   </div>
                 </div>
@@ -482,7 +482,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     <select
                       value={jobForm.type}
                       onChange={(e) => setJobForm((f) => ({ ...f, type: e.target.value }))}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                      className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                     >
                       {JOB_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
@@ -492,7 +492,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     <select
                       value={jobForm.workplaceType}
                       onChange={(e) => setJobForm((f) => ({ ...f, workplaceType: e.target.value }))}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                      className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                     >
                       {WORKPLACE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
@@ -502,7 +502,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     <select
                       value={jobForm.experienceLevel}
                       onChange={(e) => setJobForm((f) => ({ ...f, experienceLevel: e.target.value }))}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                      className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                     >
                       {EXPERIENCE_LEVELS.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
@@ -520,21 +520,21 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-100 dark:border-slate-700">
+              <div className="pt-4 border-t border-secondary-100 dark:border-slate-700">
                 <h3 className="text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-3">Screening Questions</h3>
                 <ScreeningQuestionsEditor value={questions} onChange={setQuestions} />
               </div>
               {error && (
                 <div role="alert" className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>
               )}
-              <div className="pt-4 border-t border-gray-100 dark:border-slate-700">
+              <div className="pt-4 border-t border-secondary-100 dark:border-slate-700">
                 <CustomFieldsEditor jobId={editingJobId} />
               </div>
             </div>
-            <div className="border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex items-center justify-end gap-3">
+            <div className="border-t border-secondary-200 dark:border-slate-700 px-6 py-4 flex items-center justify-end gap-3">
               <button
                 onClick={closeEditor}
-                className="px-5 py-2.5 rounded-xl text-gray-600 dark:text-slate-400 font-medium hover:bg-gray-100 dark:hover:bg-slate-700 dark:bg-slate-700 transition-colors"
+                className="px-5 py-2.5 rounded-xl text-secondary-600 dark:text-slate-400 font-medium hover:bg-secondary-100 dark:hover:bg-slate-700 dark:bg-slate-700 transition-colors"
               >
                 Cancel
               </button>

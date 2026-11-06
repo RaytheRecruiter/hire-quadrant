@@ -126,7 +126,7 @@ const AIReviewSummary: React.FC<Props> = ({ companyId, companyName, minReviews =
           AI
         </span>
       </div>
-      <p className="text-sm text-gray-700 dark:text-slate-300 mb-3">{summary.summary}</p>
+      <p className="text-sm text-secondary-700 dark:text-slate-300 mb-3">{summary.summary}</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {summary.pros_themes?.length > 0 && (
@@ -135,7 +135,7 @@ const AIReviewSummary: React.FC<Props> = ({ companyId, companyName, minReviews =
               <ThumbsUp className="h-3 w-3" />
               Common praise
             </p>
-            <ul className="text-xs text-gray-700 dark:text-slate-300 space-y-0.5">
+            <ul className="text-xs text-secondary-700 dark:text-slate-300 space-y-0.5">
               {summary.pros_themes.slice(0, 4).map((t) => (
                 <li key={t}>· {t}</li>
               ))}
@@ -148,7 +148,7 @@ const AIReviewSummary: React.FC<Props> = ({ companyId, companyName, minReviews =
               <ThumbsDown className="h-3 w-3" />
               Common concerns
             </p>
-            <ul className="text-xs text-gray-700 dark:text-slate-300 space-y-0.5">
+            <ul className="text-xs text-secondary-700 dark:text-slate-300 space-y-0.5">
               {summary.cons_themes.slice(0, 4).map((t) => (
                 <li key={t}>· {t}</li>
               ))}
@@ -161,14 +161,14 @@ const AIReviewSummary: React.FC<Props> = ({ companyId, companyName, minReviews =
               <Users className="h-3 w-3" />
               Recommended for
             </p>
-            <p className="text-xs text-gray-700 dark:text-slate-300">
+            <p className="text-xs text-secondary-700 dark:text-slate-300">
               {summary.recommended_for.slice(0, 3).join(' · ')}
             </p>
           </div>
         )}
       </div>
 
-      <p className="text-xs text-gray-500 dark:text-slate-400 mt-3">
+      <p className="text-xs text-secondary-500 dark:text-slate-400 mt-3">
         Synthesized from {summary.based_on_count} approved reviews · regenerated every 30 days
       </p>
       {error && (

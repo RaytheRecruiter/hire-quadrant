@@ -9,7 +9,7 @@ const OAuthButtons: React.FC = () => {
     <div className="space-y-3">
       <button
         onClick={handleGoogleSignIn}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors text-secondary-900 dark:text-white font-medium"
+        className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-secondary-300 dark:border-slate-600 rounded-lg hover:bg-secondary-50 dark:hover:bg-slate-800 transition-colors text-secondary-900 dark:text-white font-medium"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -22,7 +22,7 @@ const OAuthButtons: React.FC = () => {
 
       <button
         onClick={handleGitHubSignIn}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors text-secondary-900 dark:text-white font-medium"
+        className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-secondary-300 dark:border-slate-600 rounded-lg hover:bg-secondary-50 dark:hover:bg-slate-800 transition-colors text-secondary-900 dark:text-white font-medium"
       >
         <Github className="w-5 h-5" />
         Continue with GitHub
@@ -30,7 +30,7 @@ const OAuthButtons: React.FC = () => {
 
       <button
         onClick={handleLinkedInSignIn}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors text-secondary-900 dark:text-white font-medium"
+        className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-secondary-300 dark:border-slate-600 rounded-lg hover:bg-secondary-50 dark:hover:bg-slate-800 transition-colors text-secondary-900 dark:text-white font-medium"
       >
         <Linkedin className="w-5 h-5" />
         Continue with LinkedIn
@@ -38,10 +38,10 @@ const OAuthButtons: React.FC = () => {
 
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300 dark:border-slate-600" />
+          <div className="w-full border-t border-secondary-300 dark:border-slate-600" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white dark:bg-slate-900 text-gray-500 dark:text-slate-400">Or continue with email</span>
+          <span className="px-2 bg-white dark:bg-slate-900 text-secondary-500 dark:text-slate-400">Or continue with email</span>
         </div>
       </div>
     </div>

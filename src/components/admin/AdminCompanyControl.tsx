@@ -182,41 +182,41 @@ const AdminCompanyControl: React.FC = () => {
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
-        <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+        <Loader2 className="w-5 h-5 animate-spin text-secondary-400" />
       </div>
     );
   }
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow">
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+      <div className="px-6 py-4 border-b border-secondary-200 dark:border-slate-700">
+        <h2 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2">
           <Building2 className="w-5 h-5 text-green-600" />
           Company Control
         </h2>
-        <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
+        <p className="text-sm text-secondary-500 dark:text-slate-400 mt-1">
           Take down a company's jobs or remove team members — for cases the company's own Owner/Admin can't or shouldn't handle themselves.
         </p>
       </div>
 
       <div className="px-6 pt-4">
         <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search companies…"
-            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-secondary-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-green-500 focus:border-green-500"
           />
         </div>
       </div>
 
       <div className="p-6">
         {filteredCompanies.length === 0 ? (
-          <p className="text-sm text-gray-500 dark:text-slate-400">No companies match "{searchTerm}"</p>
+          <p className="text-sm text-secondary-500 dark:text-slate-400">No companies match "{searchTerm}"</p>
         ) : (
-          <div className="divide-y divide-gray-100 dark:divide-slate-700 border border-gray-100 dark:border-slate-700 rounded-lg">
+          <div className="divide-y divide-secondary-100 dark:divide-slate-700 border border-secondary-100 dark:border-slate-700 rounded-lg">
             {filteredCompanies.map((company) => {
               const expanded = expandedId === company.id;
               const jobs = jobsByCompany[company.id];
@@ -226,42 +226,42 @@ const AdminCompanyControl: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => toggleExpand(company)}
-                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-slate-700/50 text-left"
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-secondary-50 dark:hover:bg-slate-700/50 text-left"
                   >
-                    <span className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
-                      {expanded ? <ChevronDown className="h-4 w-4 text-gray-400" /> : <ChevronRight className="h-4 w-4 text-gray-400" />}
+                    <span className="flex items-center gap-2 text-sm font-medium text-secondary-900 dark:text-white">
+                      {expanded ? <ChevronDown className="h-4 w-4 text-secondary-400" /> : <ChevronRight className="h-4 w-4 text-secondary-400" />}
                       {company.display_name || company.name}
                     </span>
                   </button>
 
                   {expanded && (
-                    <div className="px-4 pb-4 bg-gray-50/50 dark:bg-slate-900/30">
+                    <div className="px-4 pb-4 bg-secondary-50/50 dark:bg-slate-900/30">
                       {detailLoading === company.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin text-gray-400 ml-6" />
+                        <Loader2 className="h-4 w-4 animate-spin text-secondary-400 ml-6" />
                       ) : (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2">
                           {/* Jobs */}
-                          <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-100 dark:border-slate-700 p-3">
-                            <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                          <div className="bg-white dark:bg-slate-800 rounded-lg border border-secondary-100 dark:border-slate-700 p-3">
+                            <h4 className="text-xs font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                               <Briefcase className="h-3.5 w-3.5" />
                               Jobs ({jobs?.length ?? 0})
                             </h4>
                             {!jobs || jobs.length === 0 ? (
-                              <p className="text-xs text-gray-400 dark:text-slate-500">No jobs.</p>
+                              <p className="text-xs text-secondary-400 dark:text-slate-500">No jobs.</p>
                             ) : (
                               <ul className="space-y-1.5 max-h-64 overflow-y-auto">
                                 {jobs.map((job) => {
                                   const isClosed = job.status === 'closed';
                                   return (
                                     <li key={job.id} className="flex items-center justify-between gap-2 text-sm">
-                                      <span className="truncate text-gray-800 dark:text-slate-200">{job.title}</span>
+                                      <span className="truncate text-secondary-800 dark:text-slate-200">{job.title}</span>
                                       <button
                                         type="button"
                                         onClick={() => toggleJobStatus(company.id, job)}
                                         disabled={jobBusyId === job.id}
                                         className={`flex-shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium disabled:opacity-60 ${
                                           isClosed
-                                            ? 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-gray-300'
+                                            ? 'bg-secondary-200 text-secondary-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-secondary-300'
                                             : 'bg-green-100 text-green-800 hover:bg-green-200'
                                         }`}
                                       >
@@ -282,22 +282,22 @@ const AdminCompanyControl: React.FC = () => {
                           </div>
 
                           {/* Members */}
-                          <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-100 dark:border-slate-700 p-3">
-                            <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                          <div className="bg-white dark:bg-slate-800 rounded-lg border border-secondary-100 dark:border-slate-700 p-3">
+                            <h4 className="text-xs font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                               <Users className="h-3.5 w-3.5" />
                               Team ({members?.length ?? 0})
                             </h4>
                             {!members || members.length === 0 ? (
-                              <p className="text-xs text-gray-400 dark:text-slate-500">No team members.</p>
+                              <p className="text-xs text-secondary-400 dark:text-slate-500">No team members.</p>
                             ) : (
                               <ul className="space-y-1.5 max-h-64 overflow-y-auto">
                                 {members.map((member) => (
                                   <li key={member.id} className="flex items-center justify-between gap-2 text-sm">
                                     <div className="min-w-0">
-                                      <p className="truncate text-gray-800 dark:text-slate-200">
+                                      <p className="truncate text-secondary-800 dark:text-slate-200">
                                         {member.profile?.name || member.profile?.email || member.user_id}
                                       </p>
-                                      <p className="text-xs text-gray-400 dark:text-slate-500 capitalize">
+                                      <p className="text-xs text-secondary-400 dark:text-slate-500 capitalize">
                                         {member.role} · {member.status}
                                       </p>
                                     </div>
@@ -309,7 +309,7 @@ const AdminCompanyControl: React.FC = () => {
                                         }
                                         disabled={memberBusyId === member.id}
                                         title={member.status === 'active' ? 'Deactivate' : 'Reactivate'}
-                                        className="p-1 rounded text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-700 disabled:opacity-60"
+                                        className="p-1 rounded text-secondary-500 dark:text-slate-400 hover:bg-secondary-100 dark:hover:bg-slate-700 disabled:opacity-60"
                                       >
                                         {member.status === 'active' ? <UserX className="h-3.5 w-3.5" /> : <UserCheck className="h-3.5 w-3.5" />}
                                       </button>

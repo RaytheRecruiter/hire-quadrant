@@ -99,19 +99,19 @@ const JobList: React.FC = () => {
       <div className="md:hidden flex items-center justify-between">
         <button
           onClick={() => setMobileFiltersOpen(true)}
-          className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-semibold text-secondary-800 dark:text-slate-200 shadow-soft"
+          className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-semibold text-secondary-800 dark:text-slate-200 shadow-soft"
         >
           <SlidersHorizontal className="h-4 w-4" />
           Filters
         </button>
-        <p className="text-sm text-gray-500">{totalJobsCount} jobs</p>
+        <p className="text-sm text-secondary-500">{totalJobsCount} jobs</p>
       </div>
 
       {mobileFiltersOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-800 rounded-t-3xl p-6 max-h-[85vh] overflow-y-auto pb-safe animate-slide-up">
-            <div className="w-12 h-1.5 bg-gray-200 dark:bg-slate-700 rounded-full mx-auto mb-5" />
+            <div className="w-12 h-1.5 bg-secondary-200 dark:bg-slate-700 rounded-full mx-auto mb-5" />
             <h3 className="font-display text-xl font-bold text-secondary-900 dark:text-white mb-4">Filters</h3>
             <SearchBar />
             <button
@@ -129,7 +129,7 @@ const JobList: React.FC = () => {
           {totalJobsCount} open {totalJobsCount === 1 ? 'role' : 'roles'}
         </h2>
         {totalPages > 1 && (
-          <p className="text-gray-500 text-sm">
+          <p className="text-secondary-500 text-sm">
             Page {currentPage} of {totalPages}
           </p>
         )}
@@ -148,17 +148,17 @@ const JobList: React.FC = () => {
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
-            <span className="text-sm font-medium text-gray-600 dark:text-slate-300 min-w-24 text-center">
+            <span className="text-sm font-medium text-secondary-600 dark:text-slate-300 min-w-24 text-center">
               Page {currentPage} of {totalPages}
             </span>
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
@@ -169,7 +169,7 @@ const JobList: React.FC = () => {
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -178,11 +178,11 @@ const JobList: React.FC = () => {
               <>
                 <button
                   onClick={() => goToPage(1)}
-                  className="px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors text-sm font-medium"
+                  className="px-4 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700 transition-colors text-sm font-medium"
                 >
                   1
                 </button>
-                {getPageNumbers()[0] > 2 && <span className="px-2 text-gray-400">…</span>}
+                {getPageNumbers()[0] > 2 && <span className="px-2 text-secondary-400">…</span>}
               </>
             )}
 
@@ -193,7 +193,7 @@ const JobList: React.FC = () => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   page === currentPage
                     ? 'bg-amber-700 text-white shadow-soft'
-                    : 'border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700'
+                    : 'border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700'
                 }`}
               >
                 {page}
@@ -203,11 +203,11 @@ const JobList: React.FC = () => {
             {getPageNumbers()[getPageNumbers().length - 1] < totalPages && (
               <>
                 {getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1 && (
-                  <span className="px-2 text-gray-400">…</span>
+                  <span className="px-2 text-secondary-400">…</span>
                 )}
                 <button
                   onClick={() => goToPage(totalPages)}
-                  className="px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors text-sm font-medium"
+                  className="px-4 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700 transition-colors text-sm font-medium"
                 >
                   {totalPages}
                 </button>
@@ -217,7 +217,7 @@ const JobList: React.FC = () => {
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-600 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronRight className="h-5 w-5" />
             </button>

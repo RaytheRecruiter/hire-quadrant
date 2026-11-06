@@ -73,7 +73,7 @@ const CareerTransitionPage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <BreadcrumbSchema
             className="mb-4"
@@ -85,7 +85,7 @@ const CareerTransitionPage: React.FC = () => {
           />
 
           <header className="mb-8">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400 mb-1">
+            <div className="flex items-center gap-2 text-sm text-secondary-500 dark:text-slate-400 mb-1">
               <span>{fromRole}</span>
               <ArrowRight className="h-4 w-4" />
               <span>{toRole}</span>
@@ -93,17 +93,17 @@ const CareerTransitionPage: React.FC = () => {
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-1">
               From {fromRole} to {toRole}
             </h1>
-            <p className="text-gray-600 dark:text-slate-400">
+            <p className="text-secondary-600 dark:text-slate-400">
               A practical path to pivot, with real roles hiring right now.
             </p>
           </header>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
               <Sparkles className="h-4 w-4 text-primary-500" />
               Why this transition works
             </h2>
-            <p className="text-sm text-gray-700 dark:text-slate-300">
+            <p className="text-sm text-secondary-700 dark:text-slate-300">
               Moving from <strong>{fromRole}</strong> to <strong>{toRole}</strong> is
               increasingly common because many underlying skills transfer — communication,
               stakeholder management, and the ability to ship tangible outcomes. What changes
@@ -111,11 +111,11 @@ const CareerTransitionPage: React.FC = () => {
             </p>
           </section>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
               90-day plan
             </h2>
-            <ol className="space-y-3 text-sm text-gray-700 dark:text-slate-300 list-decimal list-inside">
+            <ol className="space-y-3 text-sm text-secondary-700 dark:text-slate-300 list-decimal list-inside">
               <li>
                 <span className="font-semibold">Weeks 1–2:</span> Shadow people currently doing{' '}
                 {toRole.toLowerCase()} work. Ask for their job descriptions and weekly calendars.
@@ -136,7 +136,7 @@ const CareerTransitionPage: React.FC = () => {
             </ol>
           </section>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
               <Briefcase className="h-4 w-4 text-primary-500" />
               {toRole} roles hiring now
@@ -144,7 +144,7 @@ const CareerTransitionPage: React.FC = () => {
             {loading ? (
               <Loader2 className="h-5 w-5 animate-spin text-primary-500" />
             ) : jobs.length === 0 ? (
-              <p className="text-xs text-gray-500 dark:text-slate-400 italic">
+              <p className="text-xs text-secondary-500 dark:text-slate-400 italic">
                 No {toRole} roles match right now — check back soon.
               </p>
             ) : (
@@ -153,12 +153,12 @@ const CareerTransitionPage: React.FC = () => {
                   <li key={j.id}>
                     <HardLink
                       to={`/jobs/${j.id}`}
-                      className="block p-3 rounded-lg border border-gray-100 dark:border-slate-700 hover:border-primary-300"
+                      className="block p-3 rounded-lg border border-secondary-100 dark:border-slate-700 hover:border-primary-300"
                     >
                       <p className="text-sm font-medium text-secondary-900 dark:text-white">
                         {j.title}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
+                      <p className="text-xs text-secondary-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
                         <span>{j.company}</span>
                         {j.location && (
                           <>
@@ -194,7 +194,7 @@ const CareerTransitionPage: React.FC = () => {
             </HardLink>
             <HardLink
               to={`/salaries/${toSlug}`}
-              className="text-gray-500 hover:text-primary-600"
+              className="text-secondary-500 hover:text-primary-600"
             >
               See {toRole} salaries →
             </HardLink>

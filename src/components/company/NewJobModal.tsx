@@ -104,13 +104,13 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-label="New job">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 rounded-t-2xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-secondary-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 rounded-t-2xl">
           <h2 className="text-xl font-semibold text-secondary-900 dark:text-white">Post a new job</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="text-gray-400 hover:text-gray-600 dark:text-slate-500 dark:hover:text-slate-300"
+            className="text-secondary-400 hover:text-secondary-600 dark:text-slate-500 dark:hover:text-slate-300"
           >
             <X className="h-5 w-5" />
           </button>
@@ -128,7 +128,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Senior Backend Engineer"
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+              className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
           </div>
 
@@ -144,7 +144,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="San Francisco, CA / Remote"
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
               />
             </div>
             <div>
@@ -157,7 +157,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
                 value={salary}
                 onChange={(e) => setSalary(e.target.value)}
                 placeholder="$120k–$160k"
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
               />
             </div>
           </div>
@@ -171,7 +171,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
                 id="job-type"
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
               >
                 {JOB_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
@@ -184,7 +184,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
                 id="job-workplace"
                 value={workplaceType}
                 onChange={(e) => setWorkplaceType(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
               >
                 {WORKPLACE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
@@ -197,7 +197,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
                 id="job-experience"
                 value={experienceLevel}
                 onChange={(e) => setExperienceLevel(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
               >
                 {EXPERIENCE_LEVELS.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
@@ -219,7 +219,7 @@ const NewJobModal: React.FC<NewJobModalProps> = ({ open, onClose, onCreated, com
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 font-medium"
+              className="px-4 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700 font-medium"
             >
               Cancel
             </button>

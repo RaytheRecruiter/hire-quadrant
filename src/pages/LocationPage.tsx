@@ -80,9 +80,9 @@ const LocationPage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         {itemListLd && <script type="application/ld+json">{JSON.stringify(itemListLd)}</script>}
       </Helmet>
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <nav className="mb-4 text-sm text-gray-500 dark:text-slate-400">
+          <nav className="mb-4 text-sm text-secondary-500 dark:text-slate-400">
             <HardLink to="/" className="hover:text-primary-600">Jobs</HardLink>
             <span className="mx-2">/</span>
             <span className="text-secondary-900 dark:text-white">{pretty}</span>
@@ -96,7 +96,7 @@ const LocationPage: React.FC = () => {
               <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-2">
                 Jobs in {pretty}
               </h1>
-              <p className="text-lg text-gray-600 dark:text-slate-400">
+              <p className="text-lg text-secondary-600 dark:text-slate-400">
                 {loading
                   ? 'Loading…'
                   : `${jobs.length} open ${jobs.length === 1 ? 'role' : 'roles'}`}
@@ -115,8 +115,8 @@ const LocationPage: React.FC = () => {
             </div>
           ) : jobs.length === 0 ? (
             <div className="text-center py-16">
-              <MapPin className="h-12 w-12 text-gray-300 dark:text-slate-600 mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-slate-400 mb-3">
+              <MapPin className="h-12 w-12 text-secondary-300 dark:text-slate-600 mx-auto mb-4" />
+              <p className="text-secondary-600 dark:text-slate-400 mb-3">
                 No open roles in {pretty} right now.
               </p>
               <HardLink to="/" className="text-primary-600 hover:text-primary-700 font-medium">

@@ -153,50 +153,50 @@ const ScheduleInterviewModal: React.FC<Props> = ({
         className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl max-w-lg w-full"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-slate-700">
+        <header className="flex items-center justify-between p-4 border-b border-secondary-100 dark:border-slate-700">
           <div className="flex items-center gap-2">
             <CalendarClock className="h-5 w-5 text-primary-500" />
             <h2 className="font-semibold text-secondary-900 dark:text-white">Schedule interview</h2>
           </div>
-          <button type="button" onClick={onClose} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-slate-700">
-            <X className="h-4 w-4 text-gray-500" />
+          <button type="button" onClick={onClose} className="p-1 rounded hover:bg-secondary-100 dark:hover:bg-slate-700">
+            <X className="h-4 w-4 text-secondary-500" />
           </button>
         </header>
 
         <div className="p-4 space-y-3">
           {candidateName && (
-            <p className="text-sm text-gray-600 dark:text-slate-400">
+            <p className="text-sm text-secondary-600 dark:text-slate-400">
               Candidate: <span className="font-medium text-secondary-900 dark:text-white">{candidateName}</span>
             </p>
           )}
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">Date</label>
+              <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Date</label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">Time</label>
+              <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Time</label>
               <input
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">Duration</label>
+            <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Duration</label>
             <select
               value={duration}
               onChange={(e) => setDuration(parseInt(e.target.value, 10))}
-              className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
             >
               {[15, 30, 45, 60, 90].map((m) => (
                 <option key={m} value={m}>
@@ -207,44 +207,44 @@ const ScheduleInterviewModal: React.FC<Props> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">Where</label>
+            <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Where</label>
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Video call, office, phone"
-              className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">Meeting link</label>
+            <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Meeting link</label>
             <input
               type="url"
               value={meetingUrl}
               onChange={(e) => setMeetingUrl(e.target.value)}
               placeholder="https://meet.google.com/..."
-              className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">Notes</label>
+            <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Notes</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={2}
               placeholder="What to prepare, who will attend..."
-              className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
         </div>
 
-        <footer className="flex items-center justify-end gap-2 p-4 border-t border-gray-100 dark:border-slate-700">
+        <footer className="flex items-center justify-end gap-2 p-4 border-t border-secondary-100 dark:border-slate-700">
           <button
             type="button"
             onClick={downloadInvite}
-            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700"
           >
             <Download className="h-3.5 w-3.5" />
             .ics
@@ -252,7 +252,7 @@ const ScheduleInterviewModal: React.FC<Props> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-3 py-1.5 text-sm rounded-lg text-gray-600 hover:text-gray-800"
+            className="px-3 py-1.5 text-sm rounded-lg text-secondary-600 hover:text-secondary-800"
           >
             Cancel
           </button>

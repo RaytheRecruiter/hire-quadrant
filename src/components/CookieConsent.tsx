@@ -50,7 +50,7 @@ const CookieConsent: React.FC = () => {
     <div
       role="dialog"
       aria-labelledby="cookie-consent-title"
-      className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-sm z-40 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl shadow-card-hover p-4"
+      className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-sm z-40 bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl shadow-card-hover p-4"
     >
       <div className="flex items-start gap-3">
         <div className="bg-primary-100 dark:bg-primary-900/30 p-2 rounded-lg flex-shrink-0">
@@ -60,7 +60,7 @@ const CookieConsent: React.FC = () => {
           <h2 id="cookie-consent-title" className="text-sm font-semibold text-secondary-900 dark:text-white">
             Cookies on Nexegin
           </h2>
-          <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">
+          <p className="text-xs text-secondary-600 dark:text-slate-400 mt-1">
             We use a small number of cookies — the strictly necessary ones to keep you signed in, plus Google
             Analytics for anonymous measurement. See our{' '}
             <HardLink to="/cookies" className="underline hover:text-primary-600">
@@ -79,7 +79,7 @@ const CookieConsent: React.FC = () => {
             <button
               type="button"
               onClick={rejectOptional}
-              className="px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+              className="px-3 py-1.5 text-xs rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700"
             >
               Necessary only
             </button>

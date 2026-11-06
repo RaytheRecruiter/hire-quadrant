@@ -137,21 +137,21 @@ const MessagesPage: React.FC = () => {
   return (
     <>
       <Helmet><title>Messages · Nexegin</title></Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-6">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-secondary-900 dark:text-white mb-4">Messages</h1>
 
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 overflow-hidden grid grid-cols-1 md:grid-cols-[320px_1fr] h-[70vh]">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 overflow-hidden grid grid-cols-1 md:grid-cols-[320px_1fr] h-[70vh]">
             {/* List */}
-            <aside className="border-r border-gray-100 dark:border-slate-700 overflow-y-auto">
+            <aside className="border-r border-secondary-100 dark:border-slate-700 overflow-y-auto">
               {loading ? (
                 <div className="p-6 text-center">
                   <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
                 </div>
               ) : conversations.length === 0 ? (
                 <div className="p-6 text-center">
-                  <MessageSquare className="h-10 w-10 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
-                  <p className="text-sm text-gray-600 dark:text-slate-400">
+                  <MessageSquare className="h-10 w-10 text-secondary-300 dark:text-slate-600 mx-auto mb-3" />
+                  <p className="text-sm text-secondary-600 dark:text-slate-400">
                     No conversations yet. When an employer reaches out, it'll show up here.
                   </p>
                 </div>
@@ -170,20 +170,20 @@ const MessagesPage: React.FC = () => {
                               return prev;
                             });
                           }}
-                          className={`w-full text-left p-4 border-b border-gray-100 dark:border-slate-700 transition-colors ${
-                            isActive ? 'bg-primary-50 dark:bg-primary-900/20' : 'hover:bg-gray-50 dark:hover:bg-slate-700/50'
+                          className={`w-full text-left p-4 border-b border-secondary-100 dark:border-slate-700 transition-colors ${
+                            isActive ? 'bg-primary-50 dark:bg-primary-900/20' : 'hover:bg-secondary-50 dark:hover:bg-slate-700/50'
                           }`}
                         >
                           <p className="font-semibold text-secondary-900 dark:text-white truncate">
                             {c.other_name || 'Conversation'}
                           </p>
                           {c.company && (
-                            <p className="text-xs text-gray-500 dark:text-slate-400 truncate flex items-center gap-1">
+                            <p className="text-xs text-secondary-500 dark:text-slate-400 truncate flex items-center gap-1">
                               <Building2 className="h-3 w-3" />
                               {c.company.name}
                             </p>
                           )}
-                          <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">
+                          <p className="text-xs text-secondary-400 dark:text-slate-500 mt-0.5">
                             {formatDistanceToNow(new Date(c.last_message_at), { addSuffix: true })}
                           </p>
                         </button>
@@ -197,17 +197,17 @@ const MessagesPage: React.FC = () => {
             {/* Thread */}
             <section className="flex flex-col">
               {!selected ? (
-                <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-slate-400 text-sm p-6 text-center">
+                <div className="flex-1 flex items-center justify-center text-secondary-500 dark:text-slate-400 text-sm p-6 text-center">
                   Select a conversation to read and reply.
                 </div>
               ) : (
                 <>
-                  <header className="p-4 border-b border-gray-100 dark:border-slate-700">
+                  <header className="p-4 border-b border-secondary-100 dark:border-slate-700">
                     <p className="font-semibold text-secondary-900 dark:text-white">
                       {selected.other_name || 'Conversation'}
                     </p>
                     {selected.company && (
-                      <p className="text-xs text-gray-500 dark:text-slate-400">About {selected.company.name}</p>
+                      <p className="text-xs text-secondary-500 dark:text-slate-400">About {selected.company.name}</p>
                     )}
                   </header>
 
@@ -217,7 +217,7 @@ const MessagesPage: React.FC = () => {
                         <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
                       </div>
                     ) : messages.length === 0 ? (
-                      <p className="text-sm text-gray-500 dark:text-slate-400 text-center py-6">
+                      <p className="text-sm text-secondary-500 dark:text-slate-400 text-center py-6">
                         No messages yet — say hi.
                       </p>
                     ) : (
@@ -228,10 +228,10 @@ const MessagesPage: React.FC = () => {
                             <div className={`max-w-[75%] rounded-2xl px-3 py-2 ${
                               mine
                                 ? 'bg-primary-600 text-white'
-                                : 'bg-gray-100 dark:bg-slate-700 text-secondary-900 dark:text-white'
+                                : 'bg-secondary-100 dark:bg-slate-700 text-secondary-900 dark:text-white'
                             }`}>
                               <p className="text-sm whitespace-pre-line">{m.body}</p>
-                              <p className={`text-xs mt-1 ${mine ? 'text-white/80' : 'text-gray-500 dark:text-slate-400'}`}>
+                              <p className={`text-xs mt-1 ${mine ? 'text-white/80' : 'text-secondary-500 dark:text-slate-400'}`}>
                                 {formatDistanceToNow(new Date(m.created_at), { addSuffix: true })}
                               </p>
                             </div>
@@ -241,7 +241,7 @@ const MessagesPage: React.FC = () => {
                     )}
                   </div>
 
-                  <div className="p-3 border-t border-gray-100 dark:border-slate-700 flex gap-2">
+                  <div className="p-3 border-t border-secondary-100 dark:border-slate-700 flex gap-2">
                     <textarea
                       rows={1}
                       value={draft}
@@ -253,7 +253,7 @@ const MessagesPage: React.FC = () => {
                         }
                       }}
                       placeholder="Write a reply… (Enter to send)"
-                      className="flex-1 resize-none px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="flex-1 resize-none px-3 py-2 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     />
                     <button
                       type="button"
