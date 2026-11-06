@@ -411,7 +411,7 @@ const JobDetails: React.FC = () => {
 
     return (
         <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 pb-24 md:pb-12">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <div className="max-w-4xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
                 <button
                     onClick={() => navigate(-1)}
                     className="inline-flex items-center gap-1 text-secondary-600 hover:text-primary-600 font-medium mb-6 text-sm transition-colors"
@@ -435,6 +435,8 @@ const JobDetails: React.FC = () => {
                     </div>
                 )}
 
+                <div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
+                <div className="lg:col-span-2">
                 <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-secondary-100 dark:border-slate-700 overflow-hidden">
                     {/* Header */}
                     <div className="p-6 md:p-10 border-b border-secondary-100 dark:border-slate-700">
@@ -498,7 +500,7 @@ const JobDetails: React.FC = () => {
                             </div>
 
                             {/* Desktop actions */}
-                            <div className="hidden md:flex flex-col gap-2 items-end flex-shrink-0">
+                            <div className="hidden md:flex lg:hidden flex-col gap-2 items-end flex-shrink-0">
                                 <button
                                     onClick={handleApply}
                                     disabled={applied || applying}
@@ -560,6 +562,57 @@ const JobDetails: React.FC = () => {
                             companyName={job.company ?? job.source_company ?? job.sourceCompany ?? ''}
                         />
                     </div>
+                </div>
+                </div>
+
+                {/* Desktop: summary + Apply stay in view while reading the description */}
+                <aside className="hidden lg:block lg:sticky lg:top-24" aria-label="Job summary">
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-secondary-100 dark:border-slate-700 p-6">
+                        <div className="flex items-center gap-3 mb-5">
+                            <CompanyLogo company={job.company} size="sm" />
+                            <div className="min-w-0">
+                                <p className="font-semibold text-secondary-900 dark:text-white line-clamp-2">{job.title}</p>
+                                {job.company && (
+                                    <p className="text-sm text-secondary-600 dark:text-slate-400 truncate">{job.company}</p>
+                                )}
+                            </div>
+                        </div>
+                        <ul className="space-y-2.5 text-sm text-secondary-700 dark:text-slate-300 mb-6">
+                            {job.location && (
+                                <li className="flex items-start gap-2"><MapPin className="h-4 w-4 mt-0.5 flex-shrink-0 text-secondary-400 dark:text-slate-500" aria-hidden="true" />{job.location}</li>
+                            )}
+                            {job.type && (
+                                <li className="flex items-center gap-2 capitalize"><Clock className="h-4 w-4 flex-shrink-0 text-secondary-400 dark:text-slate-500" aria-hidden="true" />{job.type}</li>
+                            )}
+                            {salaryDisplay && (
+                                <li className="flex items-center gap-2"><DollarSign className="h-4 w-4 flex-shrink-0 text-secondary-400 dark:text-slate-500" aria-hidden="true" />{salaryDisplay}</li>
+                            )}
+                            <li className="flex items-center gap-2"><Calendar className="h-4 w-4 flex-shrink-0 text-secondary-400 dark:text-slate-500" aria-hidden="true" />{formatPostedDate(job)}</li>
+                        </ul>
+                        <button
+                            onClick={handleApply}
+                            disabled={applied || applying}
+                            className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold shadow-soft transition-all ${
+                                applied
+                                    ? 'bg-emerald-100 text-emerald-700 cursor-default'
+                                    : 'bg-primary-500 hover:bg-primary-600 text-white hover:shadow-card-hover'
+                            }`}
+                        >
+                            {applied ? (<><CheckCircle className="h-4 w-4" /> Applied</>) : applying ? 'Applying…' : 'Apply now'}
+                        </button>
+                        <button
+                            onClick={handleSave}
+                            className={`mt-2 w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold border transition-colors ${
+                                saved
+                                    ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300'
+                                    : 'border-secondary-200 dark:border-slate-600 text-secondary-700 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700'
+                            }`}
+                        >
+                            {saved ? <BookmarkCheck className="h-4 w-4 fill-primary-500" /> : <Bookmark className="h-4 w-4" />}
+                            {saved ? 'Saved' : 'Save job'}
+                        </button>
+                    </div>
+                </aside>
                 </div>
 
                 <RelatedJobs
