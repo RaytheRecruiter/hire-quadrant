@@ -6,15 +6,15 @@ test.describe('D — Employer dashboard (logged in as test-employer-1)', () => {
     await signIn(page, 'employer');
   });
 
-  test('D.1 lands on /company-dashboard with 11 tabs @smoke', async ({ page }) => {
+  test('D.1 lands on /company-dashboard with its tabs @smoke', async ({ page }) => {
     if (!page.url().includes('/company-dashboard')) {
       await page.goto('/company-dashboard');
     }
     await expect(page, 'test-employer-1 may not have role=company in this DB').toHaveURL(/\/company-dashboard/);
     const tabs = ['My Jobs', 'Applicants', 'Analytics', 'Benchmarks', 'Reviews', 'Updates', 'Q&A', 'Why Join Us', 'AI Assistant', 'Company Profile', 'Subscription'];
-    const tabsNav = page.getByRole('navigation', { name: /tabs/i });
+    const tabsNav = page.getByRole('tablist', { name: /tabs/i });
     for (const tab of tabs) {
-      await expect(tabsNav.getByRole('button', { name: new RegExp(`^${tab}$`, 'i') }).first(), `tab "${tab}"`).toBeVisible();
+      await expect(tabsNav.getByRole('tab', { name: new RegExp(`^${tab}$`, 'i') }).first(), `tab "${tab}"`).toBeVisible();
     }
   });
 
@@ -24,8 +24,8 @@ test.describe('D — Employer dashboard (logged in as test-employer-1)', () => {
   // supabase/migrations/20260428_employer_jobs_rls.sql.
   test('D.2 my-jobs tab activates and shows new-job CTA', async ({ page }) => {
     await page.goto('/company-dashboard');
-    const tabsNav = page.getByRole('navigation', { name: /tabs/i });
-    await tabsNav.getByRole('button', { name: /^my jobs$/i }).click();
+    const tabsNav = page.getByRole('tablist', { name: /tabs/i });
+    await tabsNav.getByRole('tab', { name: /^my jobs$/i }).click();
     await expect(page).toHaveURL(/\/company-dashboard/);
     await expect(
       page.getByRole('button', { name: /new job|post your first job/i }).first()
@@ -34,32 +34,32 @@ test.describe('D — Employer dashboard (logged in as test-employer-1)', () => {
 
   test('D.3 applicants tab renders', async ({ page }) => {
     await page.goto('/company-dashboard');
-    const tabsNav = page.getByRole('navigation', { name: /tabs/i });
-    await tabsNav.getByRole('button', { name: /^applicants$/i }).click();
+    const tabsNav = page.getByRole('tablist', { name: /tabs/i });
+    await tabsNav.getByRole('tab', { name: /^applicants$/i }).click();
     await expect(page.getByRole('heading').first()).toBeVisible();
   });
 
   test('D.7 analytics tab renders', async ({ page }) => {
     await page.goto('/company-dashboard');
-    await page.getByRole('navigation', { name: /tabs/i }).getByRole('button', { name: /^analytics$/i }).click();
+    await page.getByRole('tablist', { name: /tabs/i }).getByRole('tab', { name: /^analytics$/i }).click();
     await expect(page.getByRole('heading').first()).toBeVisible();
   });
 
   test('D.8 benchmarks tab renders', async ({ page }) => {
     await page.goto('/company-dashboard');
-    await page.getByRole('navigation', { name: /tabs/i }).getByRole('button', { name: /^benchmarks$/i }).click();
+    await page.getByRole('tablist', { name: /tabs/i }).getByRole('tab', { name: /^benchmarks$/i }).click();
     await expect(page.getByRole('heading').first()).toBeVisible();
   });
 
   test('D.9 reviews tab renders', async ({ page }) => {
     await page.goto('/company-dashboard');
-    await page.getByRole('navigation', { name: /tabs/i }).getByRole('button', { name: /^reviews$/i }).click();
+    await page.getByRole('tablist', { name: /tabs/i }).getByRole('tab', { name: /^reviews$/i }).click();
     await expect(page.getByRole('heading').first()).toBeVisible();
   });
 
   test('D.13 AI assistant tab renders', async ({ page }) => {
     await page.goto('/company-dashboard');
-    await page.getByRole('navigation', { name: /tabs/i }).getByRole('button', { name: /^ai assistant$/i }).click();
+    await page.getByRole('tablist', { name: /tabs/i }).getByRole('tab', { name: /^ai assistant$/i }).click();
     await expect(page.getByRole('heading').first()).toBeVisible();
   });
 
