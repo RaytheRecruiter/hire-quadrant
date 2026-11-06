@@ -165,7 +165,7 @@ const InterviewPractice: React.FC = () => {
           content="Practice interview questions with AI feedback. Covers behavioral, technical, system design, and role-specific questions."
         />
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <BreadcrumbSchema
             className="mb-4"
@@ -249,7 +249,7 @@ const InterviewPractice: React.FC = () => {
               className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
             />
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] text-gray-500 dark:text-slate-400">
+              <span className="text-xs text-gray-500 dark:text-slate-400">
                 {answer.length} chars
               </span>
               {error && <span className="text-xs text-rose-600 dark:text-rose-400">{error}</span>}
@@ -329,7 +329,7 @@ const InterviewPractice: React.FC = () => {
                       <p className="text-sm text-secondary-900 dark:text-white truncate">
                         {s.question}
                       </p>
-                      <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                      <p className="text-xs text-gray-500 dark:text-slate-400">
                         {s.role_target} · {s.question_type} · {formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}
                       </p>
                     </div>

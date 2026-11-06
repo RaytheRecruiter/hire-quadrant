@@ -212,7 +212,7 @@ const CandidateHomeDashboard: React.FC = () => {
                         <p className="text-sm font-medium text-secondary-900 dark:text-white truncate">
                           {a.job?.title ?? 'Job'}
                         </p>
-                        <p className="text-[11px] text-gray-500 dark:text-slate-400 truncate">
+                        <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
                           {a.job?.company} ·{' '}
                           {formatDistanceToNow(new Date(a.applied_at), { addSuffix: true })}
                         </p>
@@ -235,7 +235,7 @@ const CandidateHomeDashboard: React.FC = () => {
                 Matched to your skills
               </h3>
               {radiusMiles != null && (
-                <span className="inline-flex items-center gap-1 text-[10px] text-gray-500 dark:text-slate-400 bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400 bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
                   <MapPin className="h-2.5 w-2.5" />
                   within {radiusMiles} mi
                 </span>
@@ -273,7 +273,7 @@ const CandidateHomeDashboard: React.FC = () => {
                   <p className="text-sm font-medium text-secondary-900 dark:text-white truncate">
                     {j.title}
                   </p>
-                  <p className="text-[11px] text-gray-500 dark:text-slate-400 truncate">
+                  <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
                     {j.company}
                     {j.distanceMiles != null
                       ? ` · ${j.distanceMiles.toFixed(0)} mi away`
@@ -284,7 +284,7 @@ const CandidateHomeDashboard: React.FC = () => {
                       {j.matchingSkills.slice(0, 3).map((s) => (
                         <span
                           key={s}
-                          className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300"
+                          className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300"
                         >
                           {s}
                         </span>
@@ -292,7 +292,7 @@ const CandidateHomeDashboard: React.FC = () => {
                     </div>
                   )}
                   {j.posted_date && (
-                    <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-1">
+                    <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
                       {formatDistanceToNow(new Date(j.posted_date), { addSuffix: true })}
                     </p>
                   )}
@@ -320,7 +320,7 @@ const StatCard: React.FC<{
   >
     <div className={`flex items-center gap-1.5 mb-1 ${tone}`}>
       {icon}
-      <span className="text-[11px] uppercase tracking-wide font-semibold">{label}</span>
+      <span className="text-xs uppercase tracking-wide font-semibold">{label}</span>
     </div>
     <p className="text-2xl font-bold text-secondary-900 dark:text-white">{value}</p>
     {badge && (
@@ -346,7 +346,7 @@ const STATUS_TONES: Record<string, string> = {
 
 const StatusPill: React.FC<{ status: string }> = ({ status }) => (
   <span
-    className={`px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize flex-shrink-0 ${
+    className={`px-2 py-0.5 rounded-full text-xs font-semibold capitalize flex-shrink-0 ${
       STATUS_TONES[status] ?? 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300'
     }`}
   >

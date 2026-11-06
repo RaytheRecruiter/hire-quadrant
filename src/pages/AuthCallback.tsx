@@ -84,7 +84,7 @@ const AuthCallback: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-dvh flex items-center justify-center">
       <div className="text-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary-500 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-secondary-900 mb-2">Completing sign-in...</h2>

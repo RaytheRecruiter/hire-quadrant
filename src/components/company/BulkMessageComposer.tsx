@@ -147,7 +147,7 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }
                     <p className="text-sm text-secondary-900 dark:text-white truncate">
                       {a.user_name ?? a.user_email ?? 'Applicant'}
                     </p>
-                    <p className="text-[11px] text-gray-500 dark:text-slate-400 capitalize">
+                    <p className="text-xs text-gray-500 dark:text-slate-400 capitalize">
                       {a.status}
                     </p>
                   </div>
@@ -173,7 +173,7 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }
               maxLength={5000}
               className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
             />
-            <p className="text-[11px] text-gray-500 dark:text-slate-400 mb-3">
+            <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">
               Sent as in-app direct message to each recipient. Email delivery depends on the recipient's notification preferences.
             </p>
             <div className="flex justify-end gap-2">

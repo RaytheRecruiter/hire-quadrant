@@ -122,7 +122,7 @@ const AIReviewSummary: React.FC<Props> = ({ companyId, companyName, minReviews =
         <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
           What people say about {companyName}
         </h3>
-        <span className="text-[10px] uppercase tracking-wide bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 px-1.5 py-0.5 rounded">
+        <span className="text-xs uppercase tracking-wide bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 px-1.5 py-0.5 rounded">
           AI
         </span>
       </div>
@@ -168,11 +168,11 @@ const AIReviewSummary: React.FC<Props> = ({ companyId, companyName, minReviews =
         )}
       </div>
 
-      <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-3">
+      <p className="text-xs text-gray-500 dark:text-slate-400 mt-3">
         Synthesized from {summary.based_on_count} approved reviews · regenerated every 30 days
       </p>
       {error && (
-        <p className="text-[10px] text-rose-600 dark:text-rose-400 mt-1">{error}</p>
+        <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">{error}</p>
       )}
     </section>
   );

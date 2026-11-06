@@ -75,7 +75,7 @@ const CronHealth: React.FC = () => {
       <Helmet>
         <title>Cron Health · Nexegin</title>
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6 flex items-center gap-2">
             <Activity className="h-6 w-6 text-primary-500" />
@@ -114,7 +114,7 @@ const CronHealth: React.FC = () => {
                             {s.job_name}
                           </p>
                         </div>
-                        <p className="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5">
+                        <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
                           {s.last_run
                             ? `Last run ${formatDistanceToNow(new Date(s.last_run.started_at), {
                                 addSuffix: true,
@@ -124,12 +124,12 @@ const CronHealth: React.FC = () => {
                             ` · ${(s.last_run.duration_ms / 1000).toFixed(1)}s`}
                         </p>
                         {s.last_run?.error_message && (
-                          <p className="text-[11px] text-rose-600 dark:text-rose-400 mt-0.5">
+                          <p className="text-xs text-rose-600 dark:text-rose-400 mt-0.5">
                             {s.last_run.error_message}
                           </p>
                         )}
                       </div>
-                      <div className="text-[11px] text-right flex flex-col items-end">
+                      <div className="text-xs text-right flex flex-col items-end">
                         <span className="text-emerald-600 dark:text-emerald-400">
                           {s.success_count_24h} ok
                         </span>

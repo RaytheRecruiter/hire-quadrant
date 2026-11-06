@@ -35,7 +35,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
 const ErrorFallback: React.FC<{ error: Error | null }> = ({ error }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950 px-4">
+    <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-slate-950 px-4">
       <div className="max-w-md text-center">
         <div className="w-16 h-16 mx-auto mb-6 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
           <AlertCircle className="h-8 w-8 text-red-600 dark:text-red-400" />

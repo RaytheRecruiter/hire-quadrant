@@ -62,7 +62,7 @@ const AdminAuditLog: React.FC = () => {
       <Helmet>
         <title>Audit Log · Nexegin</title>
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6 flex items-center gap-2">
             <Shield className="h-6 w-6 text-primary-500" />
@@ -114,11 +114,11 @@ const AdminAuditLog: React.FC = () => {
                             </>
                           )}
                         </p>
-                        <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                        <p className="text-xs text-gray-500 dark:text-slate-400">
                           {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
                         </p>
                         {r.metadata && Object.keys(r.metadata).length > 0 && (
-                          <pre className="text-[11px] text-gray-500 dark:text-slate-400 mt-1 overflow-x-auto">
+                          <pre className="text-xs text-gray-500 dark:text-slate-400 mt-1 overflow-x-auto">
                             {JSON.stringify(r.metadata, null, 2)}
                           </pre>
                         )}

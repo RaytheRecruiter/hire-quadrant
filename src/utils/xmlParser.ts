@@ -1,6 +1,7 @@
 // src/utils/xmlParser.ts
 import { JSDOM } from 'jsdom';
 import { Job } from '../contexts/JobContext';
+import { formatSalaryText } from './formatSalary';
 
 export interface XmlSource {
   url: string;
@@ -119,10 +120,10 @@ export const parseJobsXml = (xmlContent: string, sourceCompany?: string, sourceX
          
           if (rateMin && rateMax) {
             const suffix = ratePer ? `/${ratePer}` : '';
-            salary = `$${rateMin} - $${rateMax}${suffix}`;
+            salary = formatSalaryText(`$${rateMin} - $${rateMax}${suffix}`) ?? '';
           } else if (rateMin) {
             const suffix = ratePer ? `/${ratePer}` : '';
-            salary = `From $${rateMin}${suffix}`;
+            salary = formatSalaryText(`From $${rateMin}${suffix}`) ?? '';
           }
         }
         if (!salary) {

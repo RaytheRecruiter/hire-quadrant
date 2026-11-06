@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Lock, Eye, EyeOff, ArrowLeft, Check } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import toast from 'react-hot-toast';
@@ -61,7 +61,7 @@ const PasswordReset: React.FC = () => {
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12">
+      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12">
         <div className="w-full max-w-md">
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-8">
             <HardLink to="/login" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 text-sm font-medium mb-6">
@@ -110,19 +110,19 @@ const PasswordReset: React.FC = () => {
                   <p className="text-xs font-semibold text-gray-600 dark:text-slate-400">Password must contain:</p>
                   <ul className="space-y-1 text-xs text-gray-500 dark:text-slate-500">
                     <li className={password.length >= 8 ? 'text-green-600' : ''}>
-                      ✓ At least 8 characters
+                      <Check className="inline h-3 w-3 mr-1" aria-hidden="true" />At least 8 characters
                     </li>
                     <li className={/[A-Z]/.test(password) ? 'text-green-600' : ''}>
-                      ✓ One uppercase letter (A-Z)
+                      <Check className="inline h-3 w-3 mr-1" aria-hidden="true" />One uppercase letter (A-Z)
                     </li>
                     <li className={/[a-z]/.test(password) ? 'text-green-600' : ''}>
-                      ✓ One lowercase letter (a-z)
+                      <Check className="inline h-3 w-3 mr-1" aria-hidden="true" />One lowercase letter (a-z)
                     </li>
                     <li className={/[0-9]/.test(password) ? 'text-green-600' : ''}>
-                      ✓ One number (0-9)
+                      <Check className="inline h-3 w-3 mr-1" aria-hidden="true" />One number (0-9)
                     </li>
                     <li className={/[!@#$%^&*]/.test(password) ? 'text-green-600' : ''}>
-                      ✓ One special character (!@#$%^&*)
+                      <Check className="inline h-3 w-3 mr-1" aria-hidden="true" />One special character (!@#$%^&*)
                     </li>
                   </ul>
                 </div>

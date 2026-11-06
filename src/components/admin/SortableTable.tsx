@@ -136,7 +136,7 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
         {canScrollRight && (
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 flex items-center">
             <div className="h-full w-12 bg-gradient-to-l from-white dark:from-slate-800 to-transparent" />
-            <div className="absolute right-1 flex items-center gap-0.5 text-[11px] font-medium text-gray-400 dark:text-slate-500 bg-white/90 dark:bg-slate-800/90 px-1 rounded">
+            <div className="absolute right-1 flex items-center gap-0.5 text-xs font-medium text-gray-400 dark:text-slate-500 bg-white/90 dark:bg-slate-800/90 px-1 rounded">
               Scroll <ChevronRight className="h-3 w-3" />
             </div>
           </div>

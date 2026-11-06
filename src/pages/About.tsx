@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Check } from 'lucide-react';
 
 const About: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ const About: React.FC = () => {
         <meta property="og:title" content="About Nexegin" />
         <meta property="og:description" content="Nexegin is building the job board where every application gets real feedback." />
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-8">About Nexegin</h1>
 
@@ -36,19 +37,19 @@ const About: React.FC = () => {
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">How We're Different</h2>
               <ul className="space-y-3 text-lg text-gray-700 dark:text-slate-300">
                 <li className="flex gap-3">
-                  <span className="text-amber-500">✓</span>
+                  <Check className="h-6 w-6 flex-shrink-0 text-amber-500" aria-hidden="true" />
                   <span><strong>Real feedback:</strong> Every application is screened and tracked. You know where you stand.</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-amber-500">✓</span>
+                  <Check className="h-6 w-6 flex-shrink-0 text-amber-500" aria-hidden="true" />
                   <span><strong>Quality over quantity:</strong> Employers only post jobs they're actively hiring for.</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-amber-500">✓</span>
+                  <Check className="h-6 w-6 flex-shrink-0 text-amber-500" aria-hidden="true" />
                   <span><strong>AI-powered matching:</strong> We surface roles that actually fit your profile.</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-amber-500">✓</span>
+                  <Check className="h-6 w-6 flex-shrink-0 text-amber-500" aria-hidden="true" />
                   <span><strong>Transparency:</strong> See who's viewed your profile, when they shortlisted you, what they're looking for.</span>
                 </li>
               </ul>

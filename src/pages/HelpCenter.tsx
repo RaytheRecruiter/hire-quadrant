@@ -87,7 +87,7 @@ const HelpCenter: React.FC = () => {
         />
         <link rel="canonical" href="https://nexegin.com/help" />
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <BreadcrumbSchema
             className="mb-4"
@@ -158,7 +158,7 @@ const HelpCenter: React.FC = () => {
                     <h2 className="text-sm font-semibold text-secondary-900 dark:text-white">
                       {section}
                     </h2>
-                    <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                    <p className="text-xs text-gray-500 dark:text-slate-400">
                       {items.length} article{items.length === 1 ? '' : 's'}
                     </p>
                   </header>

@@ -196,7 +196,7 @@ const Header: React.FC = () => {
                       </HardLink>
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-gray-100"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border-t border-gray-100 dark:border-slate-700"
                       >
                         <LogOut className="h-4 w-4" /> Sign out
                       </button>

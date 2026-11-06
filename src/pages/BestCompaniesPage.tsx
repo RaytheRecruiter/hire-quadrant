@@ -86,7 +86,7 @@ const BestCompaniesPage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         {itemListLd && <script type="application/ld+json">{JSON.stringify(itemListLd)}</script>}
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-8 flex items-start gap-4">
             <div className="bg-amber-100 dark:bg-amber-900/30 p-3 rounded-xl">

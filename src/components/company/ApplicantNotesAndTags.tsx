@@ -203,7 +203,7 @@ const ApplicantNotesAndTags: React.FC<{ applicationId: string }> = ({ applicatio
                     </button>
                   )}
                 </div>
-                <p className="text-[11px] text-gray-500 dark:text-slate-400 mt-1">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
                   {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
                 </p>
               </li>

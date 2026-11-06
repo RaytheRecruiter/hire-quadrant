@@ -84,7 +84,7 @@ const SessionsPanel: React.FC = () => {
                 <p className="text-sm text-secondary-900 dark:text-white truncate">
                   {summarize(s.user_agent)}
                 </p>
-                <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                <p className="text-xs text-gray-500 dark:text-slate-400">
                   Last active {formatDistanceToNow(new Date(s.updated_at), { addSuffix: true })}
                   {s.ip && ` · ${s.ip}`}
                 </p>

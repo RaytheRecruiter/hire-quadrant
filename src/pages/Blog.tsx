@@ -99,7 +99,7 @@ const Blog: React.FC = () => {
   }, [category, jobTrade]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent flex items-center gap-3">

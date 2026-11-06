@@ -43,7 +43,7 @@ const SavedJobs: React.FC = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
       </div>
     );
@@ -54,10 +54,10 @@ const SavedJobs: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 py-12">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 to-primary-50/30 py-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
             Saved Jobs
           </h1>
           <p className="mt-2 text-gray-600 dark:text-slate-400">
@@ -72,7 +72,7 @@ const SavedJobs: React.FC = () => {
             <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500" />
           </div>
         ) : jobs.length === 0 ? (
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 p-12 text-center">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-12 text-center">
             <div className="bg-gray-100 dark:bg-slate-700 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
               <Bookmark className="h-12 w-12 text-gray-400 dark:text-slate-500" />
             </div>

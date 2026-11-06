@@ -48,7 +48,7 @@ const JobAlerts: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  if (authLoading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+  if (authLoading) return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
   if (!user) return <Navigate to="/login" replace />;
 
   const handleSave = async () => {
@@ -76,7 +76,7 @@ const JobAlerts: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 py-12">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 to-primary-50/30 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-secondary-900 dark:text-white flex items-center gap-3">

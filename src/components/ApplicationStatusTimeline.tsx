@@ -68,7 +68,7 @@ const ApplicationStatusTimeline: React.FC<{ applicationId: string }> = ({ applic
               <p className="text-xs font-medium text-secondary-900 dark:text-white">
                 {r.to_status}
               </p>
-              <p className="text-[11px] text-gray-500 dark:text-slate-400">
+              <p className="text-xs text-gray-500 dark:text-slate-400">
                 {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
               </p>
               {r.note && (

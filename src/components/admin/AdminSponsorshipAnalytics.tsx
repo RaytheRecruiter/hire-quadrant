@@ -260,7 +260,7 @@ const AdminSponsorshipAnalytics: React.FC = () => {
                 </tr>
               </tbody>
             </table>
-            <p className="text-[11px] text-gray-400 dark:text-slate-500 mt-3">
+            <p className="text-xs text-gray-400 dark:text-slate-500 mt-3">
               Current snapshot, not a before/after lift — views/applications aren't tracked over time yet.
             </p>
           </div>

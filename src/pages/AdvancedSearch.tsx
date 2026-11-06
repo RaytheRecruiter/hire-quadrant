@@ -34,7 +34,7 @@ const AdvancedSearch: React.FC = () => {
         <title>Advanced Job Search — Nexegin</title>
         <meta name="description" content="Search jobs by title, location, type, salary, and more. Find your perfect role." />
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
+      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-4">

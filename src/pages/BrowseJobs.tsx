@@ -265,7 +265,7 @@ const BrowseJobs: React.FC = () => {
         <title>Browse Jobs · Nexegin</title>
         <meta name="description" content="Browse thousands of open jobs. Filter by salary, experience level, workplace type, visa sponsorship, and security clearance." />
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-8">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white mb-1">
@@ -389,7 +389,7 @@ const BrowseJobs: React.FC = () => {
                             <div className="flex items-center gap-2 flex-wrap mb-1">
                               <h3 className="font-bold text-secondary-900 dark:text-white">{j.title}</h3>
                               {j.sponsored && (
-                                <span className="text-[10px] uppercase tracking-wide bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded">
+                                <span className="text-xs uppercase tracking-wide bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded">
                                   Sponsored
                                 </span>
                               )}

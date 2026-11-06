@@ -315,7 +315,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                   {getStatus(job) === 'open' && visibility && (
                     <span
                       title={visibility.title}
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${visibility.className}`}
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${visibility.className}`}
                     >
                       {visibility.label}
                     </span>

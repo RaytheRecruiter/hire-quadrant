@@ -239,7 +239,7 @@ const AdminResumePlans: React.FC = () => {
                 <tr key={plan.id} className="border-b border-gray-100 dark:border-slate-800">
                   <td className="py-2 pr-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                     {plan.name}
-                    <div className="text-[10px] text-gray-400 font-mono">{plan.slug}</div>
+                    <div className="text-xs text-gray-400 font-mono">{plan.slug}</div>
                   </td>
                   <td className="py-2 pr-3">
                     <input
@@ -397,7 +397,7 @@ const AdminResumePlans: React.FC = () => {
                 <tr key={plan.id} className="border-b border-gray-100 dark:border-slate-800">
                   <td className="py-2 pr-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                     {plan.name}
-                    <div className="text-[10px] text-gray-400">tier {plan.tier}</div>
+                    <div className="text-xs text-gray-400">tier {plan.tier}</div>
                   </td>
                   <td className="py-2 pr-3">
                     <input
@@ -472,7 +472,7 @@ const AdminResumePlans: React.FC = () => {
                 <tr key={addon.id} className="border-b border-gray-100 dark:border-slate-800">
                   <td className="py-2 pr-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                     {addon.name}
-                    <div className="text-[10px] text-gray-400 font-mono">{addon.key}</div>
+                    <div className="text-xs text-gray-400 font-mono">{addon.key}</div>
                   </td>
                   <td className="py-2 pr-3">
                     <input

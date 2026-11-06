@@ -54,7 +54,7 @@ const AIJobDescriptionGenerator: React.FC<Props> = ({ title: initialTitle = '', 
   };
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-primary-200 p-6">
+    <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl shadow-lg border border-primary-200 dark:border-primary-800 p-6">
       <div className="flex items-center gap-2 mb-4">
         <div className="p-2 bg-primary-100 rounded-lg">
           <Sparkles className="h-5 w-5 text-primary-600" />

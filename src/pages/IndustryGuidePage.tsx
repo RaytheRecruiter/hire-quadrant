@@ -101,7 +101,7 @@ const IndustryGuidePage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <BreadcrumbSchema
             className="mb-4"
