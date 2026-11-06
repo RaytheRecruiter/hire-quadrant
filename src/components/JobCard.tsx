@@ -5,7 +5,8 @@ import { useJobs } from '../contexts/JobContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
 import { useJobMatchScore } from '../hooks/useJobMatchScore';
 import { Job } from '../contexts/JobContext';
-import { MapPin, DollarSign, Bookmark, BookmarkCheck, Zap, CheckCircle, Clock, Flame } from 'lucide-react';
+import { MapPin, DollarSign, Bookmark, BookmarkCheck, Zap, CheckCircle, Clock, Flame, Sparkles } from 'lucide-react';
+import { formatSalaryText } from '../utils/formatSalary';
 import toast from 'react-hot-toast';
 import { formatPostedDate } from '../utils/formatPostedDate';
 import CompanyLogo from './CompanyLogo';
@@ -34,7 +35,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     const maxSalary = job.max_salary;
     const salaryDisplay = minSalary && maxSalary
         ? `$${(minSalary / 1000).toFixed(0)}k – $${(maxSalary / 1000).toFixed(0)}k`
-        : job.salary;
+        : formatSalaryText(job.salary);
 
     const handleBookmark = async (e: React.MouseEvent) => {
         e.preventDefault();
@@ -93,12 +94,12 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                                     {job.title}
                                 </h3>
                                 {job.is_sponsored && (
-                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 flex-shrink-0">
+                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-semibold uppercase tracking-wide bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 flex-shrink-0">
                                         Sponsored
                                     </span>
                                 )}
                                 {job.is_urgent && (!job.urgent_until || new Date(job.urgent_until) > new Date()) && (
-                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-200 flex-shrink-0">
+                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-semibold uppercase tracking-wide bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-200 flex-shrink-0">
                                         <Flame className="h-2.5 w-2.5" />
                                         Urgent
                                     </span>
@@ -152,7 +153,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/30 animate-pulse w-16 h-5" />
                             ) : matchScore !== null ? (
                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300">
-                                    ✨ {matchScore}% match
+                                    <Sparkles className="h-3 w-3" aria-hidden="true" /> {matchScore}% match
                                 </span>
                             ) : null
                         )}

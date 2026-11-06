@@ -95,7 +95,7 @@ const Demographics: React.FC = () => {
   return (
     <>
       <Helmet><title>My Demographics · Nexegin</title></Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">My Demographics</h1>

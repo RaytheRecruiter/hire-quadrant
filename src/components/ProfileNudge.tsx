@@ -25,18 +25,18 @@ const ProfileNudge: React.FC = () => {
   };
 
   return (
-    <div className="relative bg-gradient-to-r from-primary-50 via-primary-100 to-primary-50 border-b border-primary-200">
+    <div className="relative bg-gradient-to-r from-primary-50 via-primary-100 to-primary-50 dark:from-primary-900/40 dark:via-primary-900/60 dark:to-primary-900/40 border-b border-primary-200 dark:border-primary-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <div className="p-1.5 bg-white rounded-lg flex-shrink-0 shadow-soft">
+          <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg flex-shrink-0 shadow-soft">
             <Sparkles className="h-4 w-4 text-primary-600" />
           </div>
           <div className="min-w-0">
-            <span className="text-sm font-semibold text-primary-900">
+            <span className="text-sm font-semibold text-primary-900 dark:text-primary-100">
               Your profile is {completion}% complete.
             </span>
             {next && (
-              <span className="text-sm text-primary-800 ml-1 hidden sm:inline">
+              <span className="text-sm text-primary-800 dark:text-primary-200 ml-1 hidden sm:inline">
                 Add {next.toLowerCase()} so employers can find you.
               </span>
             )}
@@ -58,7 +58,7 @@ const ProfileNudge: React.FC = () => {
           </a>
           <button
             onClick={handleDismiss}
-            className="h-7 w-7 flex items-center justify-center rounded-md text-primary-700 hover:bg-primary-200"
+            className="h-7 w-7 flex items-center justify-center rounded-md text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800"
             aria-label="Dismiss"
           >
             <X className="h-4 w-4" />

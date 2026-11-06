@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Mail, Send, Phone, MapPin } from 'lucide-react';
+import { Mail, Send, Phone, MapPin, Lightbulb } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabaseClient';
 
@@ -62,7 +62,7 @@ const Contact: React.FC = () => {
         <title>Contact Us — Nexegin</title>
         <meta name="description" content="Get in touch with the Nexegin team. We'd love to hear from you." />
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-16">
+      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-4">Contact Us</h1>
@@ -169,7 +169,7 @@ const Contact: React.FC = () => {
                   placeholder="Tell us more. Please include as much detail as possible..."
                 />
                 <p className="text-xs text-gray-500 dark:text-slate-500 mt-2">
-                  💡 Tip: Be specific about your issue. Include error messages or steps to reproduce if applicable.
+                  <Lightbulb className="inline h-3.5 w-3.5 mr-1 -mt-0.5" aria-hidden="true" />Tip: Be specific about your issue. Include error messages or steps to reproduce if applicable.
                 </p>
               </div>
 

@@ -124,7 +124,7 @@ const Pricing: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
       <Helmet>
         <title>Pricing — Nexegin</title>
         <meta
@@ -152,7 +152,7 @@ const Pricing: React.FC = () => {
 
       {/* POST — always free */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-6 flex items-center justify-between flex-wrap gap-4">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 shadow-lg p-6 flex items-center justify-between flex-wrap gap-4">
           <div>
             <p className="text-xs uppercase tracking-wide text-emerald-600 font-semibold mb-1">Post</p>
             <h2 className="text-xl font-bold text-secondary-900 dark:text-white">Job postings are always free</h2>
@@ -184,12 +184,12 @@ const Pricing: React.FC = () => {
                   return (
                     <div
                       key={plan.id}
-                      className={`relative rounded-2xl border p-6 bg-white/90 backdrop-blur-sm shadow-lg ${
+                      className={`relative rounded-2xl border p-6 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg ${
                         isPopular ? 'border-primary-400 ring-2 ring-primary-200' : 'border-white/20'
                       }`}
                     >
                       {isPopular && (
-                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-primary-500 text-white">
+                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-primary-500 text-white">
                           Most Popular
                         </span>
                       )}
@@ -250,12 +250,12 @@ const Pricing: React.FC = () => {
                   return (
                     <div
                       key={plan.id}
-                      className={`relative rounded-2xl border p-6 bg-white/90 backdrop-blur-sm shadow-lg ${
+                      className={`relative rounded-2xl border p-6 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg ${
                         isPopular ? 'border-primary-400 ring-2 ring-primary-200' : 'border-white/20'
                       }`}
                     >
                       {isPopular && (
-                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-primary-500 text-white">
+                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-primary-500 text-white">
                           Most Popular
                         </span>
                       )}

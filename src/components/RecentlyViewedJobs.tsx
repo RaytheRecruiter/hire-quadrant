@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from './HardLink';
 import { Clock, MapPin, Building2 } from 'lucide-react';
+import { formatSalaryText } from '../utils/formatSalary';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
 import { useAuth } from '../contexts/AuthContext';
 import { generateSlug } from '../utils/slugGenerator';
@@ -48,7 +49,7 @@ const RecentlyViewedJobs: React.FC<Props> = ({ excludeJobId }) => {
               </div>
               {(job as any).salary && (
                 <span className="text-sm font-semibold text-primary-600 dark:text-primary-400 flex-shrink-0">
-                  {(job as any).salary}
+                  {formatSalaryText((job as any).salary)}
                 </span>
               )}
             </div>

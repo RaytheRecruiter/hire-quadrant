@@ -239,7 +239,7 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
               const { label, icon: Icon, tone } = KIND_CONFIG[kind];
               return (
                 <section key={kind} className="py-2">
-                  <h3 className={`px-4 text-[10px] uppercase tracking-wide font-semibold ${tone} flex items-center gap-1.5 mb-1`}>
+                  <h3 className={`px-4 text-xs uppercase tracking-wide font-semibold ${tone} flex items-center gap-1.5 mb-1`}>
                     <Icon className="h-3 w-3" />
                     {label}
                   </h3>
@@ -282,7 +282,7 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
           )}
         </div>
 
-        <footer className="px-4 py-2 border-t border-gray-100 dark:border-slate-700 flex items-center justify-between text-[11px] text-gray-500 dark:text-slate-400">
+        <footer className="px-4 py-2 border-t border-gray-100 dark:border-slate-700 flex items-center justify-between text-xs text-gray-500 dark:text-slate-400">
           <span>
             <kbd className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 font-mono">↑↓</kbd> navigate · <kbd className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 font-mono">↵</kbd> open · <kbd className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 font-mono">esc</kbd> close
           </span>

@@ -119,7 +119,7 @@ const ApplicantKanban: React.FC<Props> = ({ applications, jobs, onStatusUpdate, 
               <p className="text-xs font-semibold text-gray-700 dark:text-slate-300 uppercase tracking-wide">
                 {stage.label}
               </p>
-              <span className="text-[10px] text-gray-500 dark:text-slate-400">
+              <span className="text-xs text-gray-500 dark:text-slate-400">
                 {grouped[stage.id].length}
               </span>
             </div>
@@ -143,11 +143,11 @@ const ApplicantKanban: React.FC<Props> = ({ applications, jobs, onStatusUpdate, 
                         {a.user_name ?? a.user_email ?? 'Applicant'}
                       </p>
                       {a.job_id && (
-                        <p className="text-[10px] text-gray-500 dark:text-slate-400 truncate">
+                        <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
                           {jobTitle.get(a.job_id) ?? 'Job'}
                         </p>
                       )}
-                      <p className="text-[10px] text-gray-400 dark:text-slate-500">
+                      <p className="text-xs text-gray-400 dark:text-slate-500">
                         {formatDistanceToNow(new Date(a.applied_at), { addSuffix: true })}
                       </p>
                       {/* QA04: keyboard-accessible alternative to dragging -- a
@@ -161,7 +161,7 @@ const ApplicantKanban: React.FC<Props> = ({ applications, jobs, onStatusUpdate, 
                           void moveApplicant(a.id, e.target.value);
                         }}
                         aria-label={`Move ${a.user_name ?? a.user_email ?? 'applicant'} to a different stage`}
-                        className="mt-1.5 w-full text-[10px] rounded border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 py-0.5"
+                        className="mt-1.5 w-full text-xs rounded border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 py-0.5"
                       >
                         {STAGES.map((s) => (
                           <option key={s.id} value={s.id}>
@@ -174,7 +174,7 @@ const ApplicantKanban: React.FC<Props> = ({ applications, jobs, onStatusUpdate, 
                 </li>
               ))}
               {grouped[stage.id].length === 0 && (
-                <li className="text-[11px] text-gray-400 dark:text-slate-500 text-center py-4">
+                <li className="text-xs text-gray-400 dark:text-slate-500 text-center py-4">
                   Drop here
                 </li>
               )}

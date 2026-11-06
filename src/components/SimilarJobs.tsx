@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from './HardLink';
 import { Sparkles, MapPin, Building2, Clock } from 'lucide-react';
+import { formatSalaryText } from '../utils/formatSalary';
 import { supabase } from '../utils/supabaseClient';
 import { generateSlug } from '../utils/slugGenerator';
 
@@ -52,8 +53,8 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
   if (loading || jobs.length === 0) return null;
 
   return (
-    <div className="mt-8 bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 p-6">
-      <h3 className="text-lg font-bold text-secondary-900 mb-4 flex items-center gap-2">
+    <div className="mt-8 bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-6">
+      <h3 className="text-lg font-bold text-secondary-900 dark:text-white mb-4 flex items-center gap-2">
         <Sparkles className="h-5 w-5 text-primary-500" />
         Similar Jobs You Might Like
       </h3>
@@ -62,12 +63,12 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
           <HardLink
             key={j.id}
             to={`/job/${generateSlug(j.title, j.company, j.id)}`}
-            className="block p-4 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
+            className="block p-4 rounded-xl border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:bg-primary-50/30 dark:hover:bg-slate-700/50 transition-colors"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-secondary-900 truncate">{j.title}</h4>
-                <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-500">
+                <h4 className="font-semibold text-secondary-900 dark:text-white truncate">{j.title}</h4>
+                <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-500 dark:text-slate-400">
                   <span className="flex items-center gap-1"><Building2 className="h-3 w-3" />{j.company}</span>
                   <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{j.location}</span>
                   <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{j.type}</span>
@@ -75,12 +76,12 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
               </div>
               <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
                 {j.similarity_score > 0 && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-violet-50 text-violet-700 text-xs font-semibold whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-semibold whitespace-nowrap">
                     {Math.round(j.similarity_score)}% similar
                   </span>
                 )}
                 {j.salary && (
-                  <span className="text-sm font-semibold text-primary-600">{j.salary}</span>
+                  <span className="text-sm font-semibold text-primary-600 dark:text-primary-400">{formatSalaryText(j.salary)}</span>
                 )}
               </div>
             </div>

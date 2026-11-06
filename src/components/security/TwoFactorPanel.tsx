@@ -147,7 +147,7 @@ const TwoFactorPanel: React.FC = () => {
           Two-factor authentication
         </h2>
         {enabled && (
-          <span className="text-[10px] uppercase tracking-wide bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded">
+          <span className="text-xs uppercase tracking-wide bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded">
             On
           </span>
         )}
@@ -201,7 +201,7 @@ const TwoFactorPanel: React.FC = () => {
               className="w-44 h-44 mx-auto mb-3 rounded-lg border border-gray-100 dark:border-slate-700 bg-white"
             />
           )}
-          <p className="text-[10px] text-center text-gray-500 dark:text-slate-400 font-mono mb-3 break-all">
+          <p className="text-xs text-center text-gray-500 dark:text-slate-400 font-mono mb-3 break-all">
             {pendingSecret}
           </p>
           <div className="flex gap-2">

@@ -86,11 +86,11 @@ const BlogPost: React.FC = () => {
     fetchPost();
   }, [slug]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+  if (loading) return <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-slate-950"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
 
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-center bg-gray-50 dark:bg-slate-950">
+      <div className="min-h-dvh flex items-center justify-center text-center bg-gray-50 dark:bg-slate-950">
         <div>
           <BookOpen className="mx-auto h-12 w-12 text-gray-300 dark:text-slate-600 mb-3" />
           <h2 className="text-xl font-bold mb-2 text-secondary-900 dark:text-white">Post not found</h2>
@@ -110,7 +110,7 @@ const BlogPost: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
       <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <HardLink to="/blog" className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium mb-6">

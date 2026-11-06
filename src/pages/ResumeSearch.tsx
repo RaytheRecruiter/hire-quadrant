@@ -226,7 +226,7 @@ const ResumeSearch: React.FC = () => {
   };
 
   if (authLoading || permLoading) {
-    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+    return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
   }
 
   if (!isCompany && !isAdmin) {
@@ -235,7 +235,7 @@ const ResumeSearch: React.FC = () => {
 
   if (!canSearch) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="min-h-dvh flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-xl border border-amber-200 shadow-md p-8">
           <div className="flex items-start gap-3 mb-4">
             <div className="p-2 bg-amber-100 rounded-lg">
@@ -256,7 +256,7 @@ const ResumeSearch: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 py-12">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
           <div>
@@ -282,7 +282,7 @@ const ResumeSearch: React.FC = () => {
           )}
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm shadow-lg border border-white/20 rounded-2xl p-6 mb-8">
+        <div className="bg-white/90 backdrop-blur-sm shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 rounded-2xl p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <div className="md:col-span-2 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
@@ -495,7 +495,7 @@ const ResumeSearch: React.FC = () => {
               const isUnlocked = c.user_id ? unlockedSet.has(c.user_id) : false;
               const noCredits = unlocks ? unlocks.remaining <= 0 && unlocks.purchased_remaining <= 0 : false;
               return (
-                <div key={c.user_id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 flex items-start justify-between gap-4">
+                <div key={c.user_id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-6 flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <div className={`h-12 w-12 rounded-full flex items-center justify-center ${
@@ -543,13 +543,13 @@ const ResumeSearch: React.FC = () => {
                     {(c.workplace_types?.length || c.work_types?.length || c.work_authorization) && (
                       <div className="flex flex-wrap gap-1.5 mt-2">
                         {c.workplace_types?.map((w) => (
-                          <span key={w} className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-[11px]">{w}</span>
+                          <span key={w} className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs">{w}</span>
                         ))}
                         {c.work_types?.map((w) => (
-                          <span key={w} className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[11px]">{w}</span>
+                          <span key={w} className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-xs">{w}</span>
                         ))}
                         {c.work_authorization && (
-                          <span className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full text-[11px]">{c.work_authorization}</span>
+                          <span className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full text-xs">{c.work_authorization}</span>
                         )}
                       </div>
                     )}

@@ -125,7 +125,7 @@ const TeamMembers: React.FC = () => {
 
   if (authLoading || permLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
       </div>
     );
@@ -270,7 +270,7 @@ const TeamMembers: React.FC = () => {
     `${window.location.origin}/accept-invite?token=${token}`;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 py-8">
+    <div className="min-h-dvh bg-gray-50 dark:bg-slate-900 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <div>

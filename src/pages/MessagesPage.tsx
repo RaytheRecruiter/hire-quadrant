@@ -137,7 +137,7 @@ const MessagesPage: React.FC = () => {
   return (
     <>
       <Helmet><title>Messages · Nexegin</title></Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-6">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-secondary-900 dark:text-white mb-4">Messages</h1>
 
@@ -231,7 +231,7 @@ const MessagesPage: React.FC = () => {
                                 : 'bg-gray-100 dark:bg-slate-700 text-secondary-900 dark:text-white'
                             }`}>
                               <p className="text-sm whitespace-pre-line">{m.body}</p>
-                              <p className={`text-[10px] mt-1 ${mine ? 'text-white/80' : 'text-gray-500 dark:text-slate-400'}`}>
+                              <p className={`text-xs mt-1 ${mine ? 'text-white/80' : 'text-gray-500 dark:text-slate-400'}`}>
                                 {formatDistanceToNow(new Date(m.created_at), { addSuffix: true })}
                               </p>
                             </div>

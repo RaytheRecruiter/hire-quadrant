@@ -50,7 +50,7 @@ const Companies: React.FC = () => {
           content="Discover companies actively hiring. Read reviews, see ratings, and explore open roles across industries."
         />
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <header className="mb-8">
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-3">Browse Companies</h1>

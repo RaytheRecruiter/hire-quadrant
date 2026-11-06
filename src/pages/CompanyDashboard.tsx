@@ -51,7 +51,7 @@ const CompanyDashboard: React.FC = () => {
   // Auth guard
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
       </div>
     );
@@ -67,7 +67,7 @@ const CompanyDashboard: React.FC = () => {
   const isApproved = user?.isApproved !== false;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
@@ -89,7 +89,7 @@ const CompanyDashboard: React.FC = () => {
             </HardLink>
             <HardLink
               to="/company-dashboard/team"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:text-primary-600 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-800 dark:text-slate-200 hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 transition"
             >
               <Shield className="h-4 w-4" />
               Team Members
@@ -135,7 +135,7 @@ const CompanyDashboard: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-6">
           {loading ? (
             <div className="flex items-center justify-center py-16">
               <Loader2 className="h-8 w-8 animate-spin text-primary-500" />

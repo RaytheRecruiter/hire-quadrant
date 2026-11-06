@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Search, MapPin, Sparkles, ArrowRight, Users, Building2, CheckCircle2, Briefcase } from 'lucide-react';
+import {
+  Search, MapPin, Sparkles, ArrowRight, Users, Building2, CheckCircle2, Briefcase,
+  Code2, Lock, Cloud, BarChart3, Wrench, Server, Scale, BookOpen, LifeBuoy, ShieldCheck,
+} from 'lucide-react';
 import { useJobs } from '../contexts/JobContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../utils/supabaseClient';
@@ -59,12 +62,12 @@ function writeCache<T>(key: string, value: T): void {
 // "Cybersecurity" or "IT Support", so category-based matching would also
 // return nothing for the four buckets with no equivalent there.
 const CATEGORIES = [
-  { label: 'Software', icon: '💻', keyword: 'software' },
-  { label: 'Cybersecurity', icon: '🔒', keyword: 'security' },
-  { label: 'Cloud', icon: '☁️', keyword: 'cloud' },
-  { label: 'Data', icon: '📊', keyword: 'data' },
-  { label: 'IT Support', icon: '🛠️', keyword: 'support' },
-  { label: 'Infrastructure', icon: '🖥️', keyword: 'infrastructure' },
+  { label: 'Software', icon: Code2, keyword: 'software' },
+  { label: 'Cybersecurity', icon: Lock, keyword: 'security' },
+  { label: 'Cloud', icon: Cloud, keyword: 'cloud' },
+  { label: 'Data', icon: BarChart3, keyword: 'data' },
+  { label: 'IT Support', icon: Wrench, keyword: 'support' },
+  { label: 'Infrastructure', icon: Server, keyword: 'infrastructure' },
 ] as const;
 
 const Home: React.FC = () => {
@@ -266,7 +269,7 @@ const Home: React.FC = () => {
   return (
     <>
       {helmet}
-      <div className="min-h-screen">
+      <div className="min-h-dvh">
       {user && <CandidateHomeDashboard />}
       {/* Hero */}
       <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50/60 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 pt-16 pb-20 overflow-hidden">
@@ -288,7 +291,7 @@ const Home: React.FC = () => {
             </p>
 
             {/* Hero search */}
-            <form onSubmit={handleHeroSearch} className="mt-10 bg-white dark:bg-slate-800 rounded-2xl shadow-card-hover border border-gray-100 dark:border-slate-700 p-2 max-w-3xl mx-auto">
+            <form onSubmit={handleHeroSearch} className="mt-10 bg-white dark:bg-slate-800 rounded-2xl shadow-card-hover border border-gray-100 dark:border-slate-700 p-2 max-w-3xl mx-auto focus-within:ring-2 focus-within:ring-primary-400">
               <div className="flex flex-col md:flex-row gap-2">
                 <div className="flex-1 flex items-center gap-2 px-4 py-2 md:border-r md:border-gray-100 dark:md:border-slate-700">
                   <Search className="h-5 w-5 text-gray-400 flex-shrink-0" />
@@ -456,7 +459,7 @@ const Home: React.FC = () => {
                 to={`/?keyword=${encodeURIComponent(cat.keyword)}`}
                 className="flex items-center gap-3 bg-gray-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 rounded-xl p-4 transition-all group"
               >
-                <span className="text-2xl">{cat.icon}</span>
+                <cat.icon className="h-6 w-6 text-primary-600 dark:text-primary-400" aria-hidden="true" />
                 <span className="font-semibold text-secondary-700 dark:text-slate-300 group-hover:text-primary-700 dark:group-hover:text-primary-300 text-sm">
                   {cat.label}
                 </span>
@@ -678,7 +681,7 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
               <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🔒</span>
+                <Lock className="h-8 w-8 text-primary-600 dark:text-primary-400" aria-hidden="true" />
               </div>
               <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Encrypted in Transit</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
@@ -688,7 +691,7 @@ const Home: React.FC = () => {
 
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
               <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">✓</span>
+                <ShieldCheck className="h-8 w-8 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               </div>
               <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Privacy First</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
@@ -698,7 +701,7 @@ const Home: React.FC = () => {
 
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
               <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">⚖️</span>
+                <Scale className="h-8 w-8 text-amber-600 dark:text-amber-400" aria-hidden="true" />
               </div>
               <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2">Your Data, Your Call</h3>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
@@ -738,25 +741,25 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: '📖',
+                icon: BookOpen,
                 title: 'About Us',
                 description: 'Learn our story, mission, and values',
                 link: '/about',
               },
               {
-                icon: '🛟',
+                icon: LifeBuoy,
                 title: 'Support',
                 description: 'Get help with your account and questions',
                 link: '/support',
               },
               {
-                icon: '🔐',
+                icon: Lock,
                 title: 'Privacy Policy',
                 description: 'How we protect your personal data',
                 link: '/privacy',
               },
               {
-                icon: '⚖️',
+                icon: Scale,
                 title: 'Terms of Service',
                 description: 'Our terms and conditions',
                 link: '/terms',
@@ -767,7 +770,7 @@ const Home: React.FC = () => {
                 to={item.link}
                 className="group bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
               >
-                <div className="text-4xl mb-4">{item.icon}</div>
+                <item.icon className="h-9 w-9 mb-4 text-primary-600 dark:text-primary-400" aria-hidden="true" />
                 <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                   {item.title}
                 </h3>

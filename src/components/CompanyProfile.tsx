@@ -56,7 +56,7 @@ const CompanyProfile: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
         <Building2 className="h-10 w-10 text-primary-500 animate-pulse" />
       </div>
     );
@@ -64,7 +64,7 @@ const CompanyProfile: React.FC = () => {
 
   if (error || !company) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
         <div className="text-center px-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Company Not Found</h2>
           {error && <p className="text-sm text-gray-500 dark:text-slate-400 mb-4">{error}</p>}
@@ -101,7 +101,7 @@ const CompanyProfile: React.FC = () => {
     `See open roles, company info, and employee reviews for ${company.display_name || company.name} on Nexegin.`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
       <Helmet>
         <title>{metaTitle}</title>
         <meta name="description" content={metaDesc} />

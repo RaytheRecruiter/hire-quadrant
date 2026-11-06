@@ -7,7 +7,7 @@ const ContentPolicy: React.FC = () => (
       <title>Content Policy · Nexegin</title>
       <meta name="description" content="Rules for content posted on Nexegin — reviews, Q&A, company updates, messages." />
     </Helmet>
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-dvh bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-secondary-900 mb-2">Content Policy</h1>
         <p className="text-sm text-gray-500 mb-8">Last updated: April 2026</p>

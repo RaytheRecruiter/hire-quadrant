@@ -56,7 +56,7 @@ const ReviewCard: React.FC<Props> = ({ review, companyName, companySlug }) => {
           if (!val) return null;
           return (
             <div key={key} className="bg-gray-50 dark:bg-slate-900/50 rounded-lg px-2 py-1.5">
-              <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-slate-500 mb-0.5">
+              <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-slate-500 mb-0.5">
                 {label}
               </div>
               <RatingStars value={val} size="sm" />

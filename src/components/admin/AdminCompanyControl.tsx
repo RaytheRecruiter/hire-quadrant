@@ -257,7 +257,7 @@ const AdminCompanyControl: React.FC = () => {
                                         type="button"
                                         onClick={() => toggleJobStatus(company.id, job)}
                                         disabled={jobBusyId === job.id}
-                                        className={`flex-shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium disabled:opacity-60 ${
+                                        className={`flex-shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium disabled:opacity-60 ${
                                           isClosed
                                             ? 'bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-slate-300 hover:bg-gray-300'
                                             : 'bg-green-100 text-green-800 hover:bg-green-200'
@@ -295,7 +295,7 @@ const AdminCompanyControl: React.FC = () => {
                                       <p className="truncate text-gray-800 dark:text-slate-200">
                                         {member.profile?.name || member.profile?.email || member.user_id}
                                       </p>
-                                      <p className="text-[10px] text-gray-400 dark:text-slate-500 capitalize">
+                                      <p className="text-xs text-gray-400 dark:text-slate-500 capitalize">
                                         {member.role} · {member.status}
                                       </p>
                                     </div>

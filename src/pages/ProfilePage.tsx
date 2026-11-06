@@ -433,7 +433,7 @@ const ProfilePage = () => {
     // initial render (user=null, authLoading=true) bounces logged-in users to /login.
     if (authLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-dvh flex items-center justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500" />
             </div>
         );
@@ -444,7 +444,7 @@ const ProfilePage = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-dvh flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
                     <p className="text-gray-500 dark:text-slate-400">Loading profile...</p>
@@ -455,7 +455,7 @@ const ProfilePage = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900/50 py-12">
+            <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-slate-900/50 py-12">
                 <div className="max-w-md w-full mx-auto px-4">
                     <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-6">
                         <div className="flex items-start gap-3">
@@ -478,7 +478,7 @@ const ProfilePage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 py-12">
+        <div className="min-h-dvh bg-gray-50 dark:bg-slate-900/50 py-12">
             <div className="max-w-3xl mx-auto px-4">
                 {/* Header */}
                 <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
@@ -754,7 +754,7 @@ const ProfilePage = () => {
                             </label>
                             {resumeTextValue && (
                                 <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-violet-50 text-violet-700 text-xs font-semibold rounded-full">
-                                    ✨ AI matching enabled
+                                    <Sparkles className="h-3 w-3" aria-hidden="true" /> AI matching enabled
                                 </span>
                             )}
                         </div>

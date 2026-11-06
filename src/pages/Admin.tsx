@@ -44,7 +44,7 @@ const Admin: React.FC = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
         <Loader2 className="h-8 w-8 text-primary-300 animate-spin" />
       </div>
     );
@@ -58,7 +58,7 @@ const Admin: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-12 w-12 text-primary-300 animate-spin mx-auto mb-4" />
           <p className="text-gray-600 dark:text-slate-400 text-lg">Loading admin dashboard...</p>
@@ -69,7 +69,7 @@ const Admin: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-900/50 flex items-center justify-center">
         <div className="text-center max-w-md">
           <div className="bg-red-100 text-red-700 p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-2">Error Loading Dashboard</h2>
@@ -357,7 +357,7 @@ const Admin: React.FC = () => {
   }));
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900/50 font-sans">
+    <div className="min-h-dvh bg-gray-50 dark:bg-slate-900/50 font-sans">
       {importResult && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-8 max-w-sm w-full mx-4">
@@ -580,7 +580,7 @@ const Admin: React.FC = () => {
             >
               IT Review
               {jobs.filter((j) => j.is_it_role === null).length > 0 && (
-                <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-800">
+                <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
                   {jobs.filter((j) => j.is_it_role === null).length}
                 </span>
               )}

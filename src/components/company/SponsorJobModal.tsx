@@ -137,7 +137,7 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
                     {Array.isArray(plan.features) && plan.features.length > 0 && (
                       <ul className="mt-2 space-y-1">
                         {plan.features.slice(0, 3).map((f, i) => (
-                          <li key={i} className="text-[11px] text-gray-600 dark:text-slate-400">
+                          <li key={i} className="text-xs text-gray-600 dark:text-slate-400">
                             {f}
                           </li>
                         ))}

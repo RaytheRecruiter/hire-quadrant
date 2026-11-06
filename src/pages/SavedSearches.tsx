@@ -95,7 +95,7 @@ const SavedSearches: React.FC = () => {
       <Helmet>
         <title>Saved searches · Nexegin</title>
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6 flex items-center gap-2">
             <Bell className="h-6 w-6 text-primary-500" />
@@ -189,7 +189,7 @@ const SavedSearches: React.FC = () => {
                           <p className="text-sm font-medium text-secondary-900 dark:text-white">
                             {r.name}
                           </p>
-                          <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                          <p className="text-xs text-gray-500 dark:text-slate-400">
                             {hasQ && `"${r.search_term}"`}
                             {hasQ && hasLoc && ' · '}
                             {hasLoc && r.location_filter}

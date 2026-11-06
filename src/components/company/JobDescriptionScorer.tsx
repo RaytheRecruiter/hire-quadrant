@@ -116,7 +116,7 @@ const JobDescriptionScorer: React.FC<Props> = ({ title, description }) => {
                 key={label}
                 className="bg-gray-50 dark:bg-slate-900/40 rounded-lg p-2.5 text-center"
               >
-                <p className="text-[10px] text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-0.5">
+                <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-0.5">
                   {label}
                 </p>
                 <p className={`text-lg font-bold ${tone(n)}`}>{n}</p>

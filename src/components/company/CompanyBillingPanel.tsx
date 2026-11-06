@@ -245,13 +245,13 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                   {STATUS_BADGE[currentSubscription.status].label}
                 </span>
                 {currentSubscription.is_comp && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-100 text-purple-800">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
                     <ShieldCheck className="h-3 w-3" />
                     Comp account
                   </span>
                 )}
                 {currentSubscription.cancel_at_period_end && (
-                  <span className="text-[10px] text-rose-600 font-medium">Cancels at period end</span>
+                  <span className="text-xs text-rose-600 font-medium">Cancels at period end</span>
                 )}
               </div>
             </div>
@@ -366,7 +366,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                     <div className="flex items-center justify-between mb-1">
                       <h4 className="font-bold text-secondary-900 dark:text-white">{plan.name}</h4>
                       {isCurrent && (
-                        <span className="text-[10px] uppercase tracking-wide bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-1.5 py-0.5 rounded">
+                        <span className="text-xs uppercase tracking-wide bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-1.5 py-0.5 rounded">
                           Current
                         </span>
                       )}

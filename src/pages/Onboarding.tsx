@@ -17,7 +17,7 @@ const Onboarding: React.FC = () => {
   const [resumeUploaded, setResumeUploaded] = useState(false);
 
   if (authLoading) {
-    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+    return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
   }
   if (!user) return <Navigate to="/login" replace />;
   if (isCompany || isAdmin) return <Navigate to="/" replace />;
@@ -55,7 +55,7 @@ const Onboarding: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50/60 py-12">
+    <div className="min-h-dvh bg-gradient-to-br from-primary-50 via-white to-primary-50/60 py-12">
       <div className="max-w-xl mx-auto px-4">
         {/* Progress */}
         <div className="flex items-center gap-2 mb-10">

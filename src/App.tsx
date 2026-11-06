@@ -92,7 +92,7 @@ function App() {
               <Router>
                 <ScrollToTop />
                 <PageTracker>
-                  <div className="min-h-screen bg-gray-50">
+                  <div className="min-h-dvh bg-gray-50">
                     {/* Rendered first so its fixed-position buttons are
                         early in tab order -- confirmed live via manual
                         keyboard testing (2026-10-19): CookieConsent was
@@ -100,9 +100,16 @@ function App() {
                         58 of 60 on the homepage despite being visible
                         from page load. Fixed positioning means DOM order
                         doesn't affect where it renders visually. */}
+                    <a
+                      href="#main-content"
+                      className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary-600 focus:text-white focus:font-semibold focus:shadow-lg"
+                    >
+                      Skip to main content
+                    </a>
                     <CookieConsent />
                     <Header />
                     <ProfileNudge />
+                    <main id="main-content" tabIndex={-1} className="focus:outline-none">
                     <Suspense fallback={<RouteFallback />}>
                       <Routes>
                 <Route path="/" element={<Home />} />
@@ -167,6 +174,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
                       </Routes>
                     </Suspense>
+                    </main>
                     <Footer />
                   </div>
                 </PageTracker>

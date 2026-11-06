@@ -49,7 +49,7 @@ const SalaryInsightsPage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         {occupationLd && <script type="application/ld+json">{JSON.stringify(occupationLd)}</script>}
       </Helmet>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="mb-4 text-sm text-gray-500 dark:text-slate-400">
             <HardLink to="/" className="hover:text-primary-600">Jobs</HardLink>

@@ -7,7 +7,8 @@ import { useCompanies } from '../contexts/CompanyContext';
 import { useSavedJobs } from '../hooks/useSavedJobs';
 import { useJobMatchScore } from '../hooks/useJobMatchScore';
 import { supabase } from '../utils/supabaseClient';
-import { MapPin, Calendar, Clock, ArrowLeft, CheckCircle, DollarSign, Bookmark, BookmarkCheck, Share2 } from 'lucide-react';
+import { MapPin, Calendar, Clock, ArrowLeft, CheckCircle, DollarSign, Bookmark, BookmarkCheck, Share2, Sparkles } from 'lucide-react';
+import { formatSalaryText } from '../utils/formatSalary';
 import toast from 'react-hot-toast';
 import { formatPostedDate } from '../utils/formatPostedDate';
 import RelatedJobs from '../components/RelatedJobs';
@@ -303,7 +304,7 @@ const JobDetails: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+            <div className="min-h-dvh flex items-center justify-center bg-gray-50 px-4">
                 <div className="text-center">
                     <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary-100 mb-4">
                         <div className="h-6 w-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
@@ -316,7 +317,7 @@ const JobDetails: React.FC = () => {
 
     if (!job) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+            <div className="min-h-dvh flex items-center justify-center bg-gray-50 px-4">
                 <div className="text-center">
                     <h2 className="font-display text-2xl font-bold text-secondary-900 mb-2">Job not found</h2>
                     <p className="text-gray-500 mb-6">This job may have been removed or expired.</p>
@@ -406,10 +407,10 @@ const JobDetails: React.FC = () => {
     const maxSalary = (job as any).max_salary;
     const salaryDisplay = minSalary && maxSalary
         ? `$${(minSalary / 1000).toFixed(0)}k – $${(maxSalary / 1000).toFixed(0)}k`
-        : job.salary;
+        : formatSalaryText(job.salary);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-slate-950 pb-24 md:pb-12">
+        <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 pb-24 md:pb-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
                 <button
                     onClick={() => navigate(-1)}
@@ -482,7 +483,7 @@ const JobDetails: React.FC = () => {
                                     )}
                                     {matchScore !== null && (
                                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
-                                            ✨ {matchScore}% match
+                                            <Sparkles className="h-3 w-3" aria-hidden="true" /> {matchScore}% match
                                         </span>
                                     )}
                                     {tags.map(t => (
