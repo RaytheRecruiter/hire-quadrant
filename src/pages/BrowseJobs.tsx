@@ -265,13 +265,13 @@ const BrowseJobs: React.FC = () => {
         <title>Browse Jobs · Nexegin</title>
         <meta name="description" content="Browse thousands of open jobs. Filter by salary, experience level, workplace type, visa sponsorship, and security clearance." />
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-8">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white mb-1">
               Browse Jobs
             </h1>
-            <p className="text-gray-600 dark:text-slate-400 text-sm">{resultsCopy}</p>
+            <p className="text-secondary-600 dark:text-slate-400 text-sm">{resultsCopy}</p>
           </header>
 
           <form
@@ -331,7 +331,7 @@ const BrowseJobs: React.FC = () => {
                     setRadiusActive(true);
                     setPage(0);
                   }}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-primary-300 hover:text-primary-600"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-secondary-200 dark:border-slate-700 text-secondary-600 dark:text-slate-400 hover:border-primary-300 hover:text-primary-600"
                 >
                   <MapPin className="h-3.5 w-3.5" />
                   Filter to within {radiusPref.miles} mi of {radiusPref.zip || 'your ZIP'}
@@ -358,7 +358,7 @@ const BrowseJobs: React.FC = () => {
                   <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
                 </div>
               ) : rows.length === 0 ? (
-                <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-8 text-center text-sm text-gray-500 dark:text-slate-400">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-8 text-center text-sm text-secondary-500 dark:text-slate-400">
                   {filters.securityClearance === 'none' ? (
                     <>
                       No jobs in our current listings explicitly state &ldquo;no clearance required.&rdquo; Most
@@ -382,7 +382,7 @@ const BrowseJobs: React.FC = () => {
                     <li key={j.id}>
                       <HardLink
                         to={`/jobs/${j.id}`}
-                        className="block bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 hover:border-primary-300 transition-colors"
+                        className="block bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 hover:border-primary-300 transition-colors"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
@@ -395,7 +395,7 @@ const BrowseJobs: React.FC = () => {
                               )}
                             </div>
                             <p className="text-sm text-secondary-700 dark:text-slate-300">{j.company}</p>
-                            <div className="flex items-center gap-3 flex-wrap mt-2 text-xs text-gray-500 dark:text-slate-400">
+                            <div className="flex items-center gap-3 flex-wrap mt-2 text-xs text-secondary-500 dark:text-slate-400">
                               {j.location && (
                                 <span className="inline-flex items-center gap-1">
                                   <MapPin className="h-3 w-3" />
@@ -435,18 +435,18 @@ const BrowseJobs: React.FC = () => {
                     type="button"
                     disabled={page === 0}
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
-                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-40"
+                    className="px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40"
                   >
                     Previous
                   </button>
-                  <span className="text-xs text-gray-500 dark:text-slate-400">
+                  <span className="text-xs text-secondary-500 dark:text-slate-400">
                     Page {page + 1} of {totalPages}
                   </span>
                   <button
                     type="button"
                     disabled={page + 1 >= totalPages}
                     onClick={() => setPage((p) => p + 1)}
-                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-40"
+                    className="px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40"
                   >
                     Next
                   </button>

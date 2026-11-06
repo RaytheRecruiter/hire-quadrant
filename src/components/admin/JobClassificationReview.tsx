@@ -54,16 +54,16 @@ const JobClassificationReview: React.FC<Props> = ({ jobs }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-secondary-200 dark:border-slate-700">
       <div className="p-6">
         <div className="flex items-center gap-2 mb-1">
           <HelpCircle className="h-5 w-5 text-amber-500" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">IT Classification Review</h3>
+          <h3 className="text-lg font-semibold text-secondary-900 dark:text-white">IT Classification Review</h3>
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
             {unclassified.length} unreviewed
           </span>
         </div>
-        <p className="text-sm text-gray-500 dark:text-slate-400 mb-4">
+        <p className="text-sm text-secondary-500 dark:text-slate-400 mb-4">
           Jobs the title classifier couldn&rsquo;t confidently place as IT/technical or not. They&rsquo;re invisible
           on every public surface (Browse Jobs, homepage, company pages) until reviewed here &mdash; this isn&rsquo;t
           a bug, it&rsquo;s the classifier correctly declining to guess. Approve marks a job as IT/technical
@@ -71,8 +71,8 @@ const JobClassificationReview: React.FC<Props> = ({ jobs }) => {
         </p>
         {unclassified.length === 0 ? (
           <div className="text-center py-8">
-            <CheckCircle2 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-slate-400">Nothing left to review.</p>
+            <CheckCircle2 className="w-12 h-12 text-secondary-300 mx-auto mb-3" />
+            <p className="text-secondary-500 dark:text-slate-400">Nothing left to review.</p>
           </div>
         ) : (
           <SortableTable
@@ -114,7 +114,7 @@ const JobClassificationReview: React.FC<Props> = ({ jobs }) => {
                       type="button"
                       disabled={busyId === job.id}
                       onClick={() => classify(job, false)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-white bg-gray-500 hover:bg-gray-600 rounded-md disabled:opacity-50"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-white bg-secondary-500 hover:bg-secondary-600 rounded-md disabled:opacity-50"
                     >
                       <XCircle className="w-3 h-3" />
                       Not IT

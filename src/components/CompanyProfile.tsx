@@ -56,7 +56,7 @@ const CompanyProfile: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 flex items-center justify-center">
         <Building2 className="h-10 w-10 text-primary-500 animate-pulse" />
       </div>
     );
@@ -64,10 +64,10 @@ const CompanyProfile: React.FC = () => {
 
   if (error || !company) {
     return (
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 flex items-center justify-center">
         <div className="text-center px-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Company Not Found</h2>
-          {error && <p className="text-sm text-gray-500 dark:text-slate-400 mb-4">{error}</p>}
+          <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">Company Not Found</h2>
+          {error && <p className="text-sm text-secondary-500 dark:text-slate-400 mb-4">{error}</p>}
           <button
             onClick={() => navigate('/companies')}
             className="text-primary-600 hover:text-primary-700 font-medium"
@@ -101,7 +101,7 @@ const CompanyProfile: React.FC = () => {
     `See open roles, company info, and employee reviews for ${company.display_name || company.name} on Nexegin.`;
 
   return (
-    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+    <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
       <Helmet>
         <title>{metaTitle}</title>
         <meta name="description" content={metaDesc} />
@@ -130,7 +130,7 @@ const CompanyProfile: React.FC = () => {
         )}
 
         {/* Header */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden mb-8">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-secondary-100 dark:border-slate-700 overflow-hidden mb-8">
           <div
             className="h-40 bg-gradient-to-r from-primary-400 to-primary-600 bg-cover bg-center"
             style={company.header_image_url ? { backgroundImage: `url(${company.header_image_url})` } : undefined}
@@ -158,10 +158,10 @@ const CompanyProfile: React.FC = () => {
                   {company.display_name || company.name}
                 </h1>
                 {company.industry && (
-                  <p className="text-lg text-gray-600 dark:text-slate-400 mt-1">{company.industry}</p>
+                  <p className="text-lg text-secondary-600 dark:text-slate-400 mt-1">{company.industry}</p>
                 )}
 
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-slate-400 mt-4">
+                <div className="flex flex-wrap gap-4 text-sm text-secondary-600 dark:text-slate-400 mt-4">
                   {company.location && (
                     <span className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" />
@@ -199,14 +199,14 @@ const CompanyProfile: React.FC = () => {
                   <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                     {company.job_count}
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-slate-400">Open roles</div>
+                  <div className="text-xs text-secondary-600 dark:text-slate-400">Open roles</div>
                 </div>
                 <div className="bg-amber-50 dark:bg-amber-900/20 rounded-xl px-4 py-3 min-w-[130px]">
                   <div className="flex items-center justify-center gap-1 text-2xl font-bold text-amber-600 dark:text-amber-400">
                     {company.review_count > 0 ? company.avg_rating.toFixed(1) : '—'}
                     <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-slate-400">
+                  <div className="text-xs text-secondary-600 dark:text-slate-400">
                     {company.review_count} {company.review_count === 1 ? 'review' : 'reviews'}
                   </div>
                 </div>
@@ -230,35 +230,35 @@ const CompanyProfile: React.FC = () => {
             <WhyJoinUsSection companyId={company.id} companyName={company.display_name || company.name} />
             <AIReviewSummary companyId={company.id} companyName={company.display_name || company.name} />
             {company.description && (
-              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
+              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
                 <h2 className="text-xl font-bold text-secondary-900 dark:text-white mb-3">
                   About {company.display_name || company.name}
                 </h2>
-                <p className="text-gray-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                <p className="text-secondary-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
                   {company.description}
                 </p>
               </section>
             )}
 
             {company.culture && (
-              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
+              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <Heart className="h-5 w-5 text-primary-600" />
                   <h2 className="text-xl font-bold text-secondary-900 dark:text-white">Our Culture</h2>
                 </div>
-                <p className="text-gray-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                <p className="text-secondary-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
                   {company.culture}
                 </p>
               </section>
             )}
 
-            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 space-y-5">
+            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6 space-y-5">
               <div className="flex items-center justify-between gap-3 flex-wrap">
                 <h2 className="text-xl font-bold text-secondary-900 dark:text-white">Employee Reviews</h2>
                 {company.review_count > 0 && (
                   <div className="flex items-center gap-2">
                     <RatingStars value={company.avg_rating} size="md" />
-                    <span className="text-sm text-gray-600 dark:text-slate-400">
+                    <span className="text-sm text-secondary-600 dark:text-slate-400">
                       {company.avg_rating.toFixed(1)} · {company.review_count}{' '}
                       {company.review_count === 1 ? 'review' : 'reviews'}
                     </span>
@@ -286,7 +286,7 @@ const CompanyProfile: React.FC = () => {
               companyName={company.display_name || company.name}
             />
 
-            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
+            <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Briefcase className="h-5 w-5 text-primary-600" />
                 <h2 className="text-xl font-bold text-secondary-900 dark:text-white">
@@ -300,7 +300,7 @@ const CompanyProfile: React.FC = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500 dark:text-slate-400">
+                <p className="text-sm text-secondary-500 dark:text-slate-400">
                   No open roles at the moment. Check back soon.
                 </p>
               )}
@@ -309,7 +309,7 @@ const CompanyProfile: React.FC = () => {
 
           <aside className="space-y-6">
             {Array.isArray(company.specialties) && company.specialties.length > 0 && (
-              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Award className="h-5 w-5 text-primary-600" />
                   <h3 className="font-semibold text-secondary-900 dark:text-white">Specialties</h3>
@@ -328,9 +328,9 @@ const CompanyProfile: React.FC = () => {
             )}
 
             {Array.isArray(company.benefits) && company.benefits.length > 0 && (
-              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                 <h3 className="font-semibold text-secondary-900 dark:text-white mb-3">Benefits & Perks</h3>
-                <ul className="space-y-1.5 text-sm text-gray-700 dark:text-slate-300">
+                <ul className="space-y-1.5 text-sm text-secondary-700 dark:text-slate-300">
                   {company.benefits.map((b, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="text-primary-400">•</span>

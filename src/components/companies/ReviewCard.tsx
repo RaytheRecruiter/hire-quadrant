@@ -31,13 +31,13 @@ const ReviewCard: React.FC<Props> = ({ review, companyName, companySlug }) => {
     : null;
 
   return (
-    <article className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5">
+    <article className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl p-5">
       <header className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
           <h3 className="text-lg font-semibold text-secondary-900 dark:text-white">
             {review.title}
           </h3>
-          <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-secondary-500 dark:text-slate-400 mt-0.5">
             {authorLine}
             {review.job_title ? ` · ${review.job_title}` : ''}
             {statusLabel ? ` · ${statusLabel}` : ''}
@@ -55,8 +55,8 @@ const ReviewCard: React.FC<Props> = ({ review, companyName, companySlug }) => {
           const val = (review[key] as number | null) ?? 0;
           if (!val) return null;
           return (
-            <div key={key} className="bg-gray-50 dark:bg-slate-900/50 rounded-lg px-2 py-1.5">
-              <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-slate-500 mb-0.5">
+            <div key={key} className="bg-secondary-50 dark:bg-slate-900/50 rounded-lg px-2 py-1.5">
+              <div className="text-xs uppercase tracking-wide text-secondary-500 dark:text-slate-500 mb-0.5">
                 {label}
               </div>
               <RatingStars value={val} size="sm" />
@@ -71,7 +71,7 @@ const ReviewCard: React.FC<Props> = ({ review, companyName, companySlug }) => {
             <ThumbsUp className="h-4 w-4" />
             Pros
           </div>
-          <p className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-line">{review.pros}</p>
+          <p className="text-sm text-secondary-700 dark:text-slate-300 whitespace-pre-line">{review.pros}</p>
         </div>
       )}
 
@@ -81,12 +81,12 @@ const ReviewCard: React.FC<Props> = ({ review, companyName, companySlug }) => {
             <ThumbsDown className="h-4 w-4" />
             Cons
           </div>
-          <p className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-line">{review.cons}</p>
+          <p className="text-sm text-secondary-700 dark:text-slate-300 whitespace-pre-line">{review.cons}</p>
         </div>
       )}
 
       {companySlug && (
-        <div className="flex items-center justify-between gap-3 pt-2 border-t border-gray-100 dark:border-slate-700 mt-3">
+        <div className="flex items-center justify-between gap-3 pt-2 border-t border-secondary-100 dark:border-slate-700 mt-3">
           <ReviewVoteButtons
             reviewId={review.id}
             initialHelpful={review.helpful_count ?? 0}
@@ -104,7 +104,7 @@ const ReviewCard: React.FC<Props> = ({ review, companyName, companySlug }) => {
             Response from {companyName ?? 'the employer'} ·{' '}
             {formatDistanceToNow(new Date(review.response.created_at), { addSuffix: true })}
           </div>
-          <p className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-line">
+          <p className="text-sm text-secondary-700 dark:text-slate-300 whitespace-pre-line">
             {review.response.body}
           </p>
         </aside>

@@ -35,7 +35,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
 const ErrorFallback: React.FC<{ error: Error | null }> = ({ error }) => {
   return (
-    <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-slate-950 px-4">
+    <div className="min-h-dvh flex items-center justify-center bg-secondary-50 dark:bg-slate-950 px-4">
       <div className="max-w-md text-center">
         <div className="w-16 h-16 mx-auto mb-6 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
           <AlertCircle className="h-8 w-8 text-red-600 dark:text-red-400" />
@@ -62,7 +62,7 @@ const ErrorFallback: React.FC<{ error: Error | null }> = ({ error }) => {
           </button>
           <button
             onClick={() => { window.location.href = '/'; }}
-            className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 font-semibold rounded-lg hover:bg-secondary-50 dark:hover:bg-slate-800 transition-colors"
           >
             <Home className="h-4 w-4" />
             Home

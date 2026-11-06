@@ -10,7 +10,7 @@ export interface Strength {
 
 export function scorePassword(pw: string): Strength {
   const hints: string[] = [];
-  if (!pw) return { score: 0, label: '', color: 'bg-gray-200', hints: [] };
+  if (!pw) return { score: 0, label: '', color: 'bg-secondary-200', hints: [] };
 
   let score = 0;
   if (pw.length >= 8) score++; else hints.push('Use at least 8 characters');

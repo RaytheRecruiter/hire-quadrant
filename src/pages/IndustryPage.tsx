@@ -62,9 +62,9 @@ const IndustryPage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         {itemListLd && <script type="application/ld+json">{JSON.stringify(itemListLd)}</script>}
       </Helmet>
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <nav className="mb-4 text-sm text-gray-500 dark:text-slate-400">
+          <nav className="mb-4 text-sm text-secondary-500 dark:text-slate-400">
             <HardLink to="/companies" className="hover:text-primary-600">Companies</HardLink>
             <span className="mx-2">/</span>
             <span className="text-secondary-900 dark:text-white">{pretty}</span>
@@ -74,7 +74,7 @@ const IndustryPage: React.FC = () => {
             <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-3">
               {pretty} Companies
             </h1>
-            <p className="text-lg text-gray-600 dark:text-slate-400">
+            <p className="text-lg text-secondary-600 dark:text-slate-400">
               {loading
                 ? 'Loading…'
                 : `${filtered.length} ${filtered.length === 1 ? 'company' : 'companies'} in ${pretty}`}
@@ -92,8 +92,8 @@ const IndustryPage: React.FC = () => {
             </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-16">
-              <Building2 className="h-12 w-12 text-gray-300 dark:text-slate-600 mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-slate-400">
+              <Building2 className="h-12 w-12 text-secondary-300 dark:text-slate-600 mx-auto mb-4" />
+              <p className="text-secondary-600 dark:text-slate-400">
                 No companies listed in {pretty} yet.
               </p>
               <HardLink to="/companies" className="text-primary-600 hover:text-primary-700 font-medium mt-3 inline-block">
@@ -112,7 +112,7 @@ const IndustryPage: React.FC = () => {
                       <HardLink
                         key={c.id}
                         to={`/companies/${c.slug}`}
-                        className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4 hover:shadow-card-hover transition-all"
+                        className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4 hover:shadow-card-hover transition-all"
                       >
                         <div className="text-xs font-semibold text-primary-600 mb-2">#{i + 1}</div>
                         <div className="font-semibold text-secondary-900 dark:text-white mb-1 truncate">
@@ -133,7 +133,7 @@ const IndustryPage: React.FC = () => {
                   <HardLink
                     key={c.id}
                     to={`/companies/${c.slug}`}
-                    className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card hover:shadow-card-hover border border-gray-100 dark:border-slate-700 transition-all"
+                    className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card hover:shadow-card-hover border border-secondary-100 dark:border-slate-700 transition-all"
                   >
                     <div className="flex items-start gap-4 mb-4">
                       <CompanyLogo company={c.name} logoUrl={c.logo ?? undefined} size="lg" />
@@ -142,7 +142,7 @@ const IndustryPage: React.FC = () => {
                           {c.display_name || c.name}
                         </h3>
                         {c.location && (
-                          <p className="text-sm text-gray-600 dark:text-slate-400 flex items-center gap-1 mt-1">
+                          <p className="text-sm text-secondary-600 dark:text-slate-400 flex items-center gap-1 mt-1">
                             <MapPin className="h-3 w-3" />
                             {c.location}
                           </p>
@@ -157,7 +157,7 @@ const IndustryPage: React.FC = () => {
                       {c.review_count > 0 ? (
                         <RatingStars value={c.avg_rating} size="sm" showValue />
                       ) : (
-                        <span className="text-xs text-gray-400 dark:text-slate-500">No reviews</span>
+                        <span className="text-xs text-secondary-400 dark:text-slate-500">No reviews</span>
                       )}
                     </div>
                   </HardLink>

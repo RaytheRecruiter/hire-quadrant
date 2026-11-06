@@ -131,14 +131,14 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
       </div>
 
       {(creating || editing) && (
-        <div className="bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
+        <div className="bg-secondary-50 dark:bg-slate-900/50 border border-secondary-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
           <input
             type="text"
             maxLength={120}
             value={form.title}
             onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
             placeholder="Headline (e.g. 'Raised Series B')"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <textarea
             rows={4}
@@ -146,14 +146,14 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
             value={form.body}
             onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
             placeholder="What's new?"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <label className="flex items-center gap-2 text-sm text-secondary-900 dark:text-white">
             <input
               type="checkbox"
               checked={form.pinned}
               onChange={(e) => setForm((f) => ({ ...f, pinned: e.target.checked }))}
-              className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
             />
             Pin to top of feed
           </label>
@@ -161,7 +161,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
             <button
               type="button"
               onClick={closeForm}
-              className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+              className="px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-secondary-100 dark:hover:bg-slate-700"
             >
               Cancel
             </button>
@@ -183,7 +183,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
           <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
         </div>
       ) : updates.length === 0 ? (
-        <p className="text-sm text-gray-500 dark:text-slate-400 py-8 text-center">
+        <p className="text-sm text-secondary-500 dark:text-slate-400 py-8 text-center">
           No updates yet. Publish announcements here — they'll appear on your public profile and (soon) in followers' feeds.
         </p>
       ) : (
@@ -191,7 +191,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
           {updates.map((u) => (
             <article
               key={u.id}
-              className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4"
+              className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-xl p-4"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
@@ -203,11 +203,11 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
                         Pinned
                       </span>
                     )}
-                    <span className="text-xs text-gray-500 dark:text-slate-400">
+                    <span className="text-xs text-secondary-500 dark:text-slate-400">
                       {formatDistanceToNow(new Date(u.published_at), { addSuffix: true })}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-line">
+                  <p className="text-sm text-secondary-700 dark:text-slate-300 whitespace-pre-line">
                     {u.body}
                   </p>
                 </div>
@@ -217,7 +217,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
                     onClick={() => togglePin(u)}
                     disabled={busyId === u.id}
                     title={u.pinned ? 'Unpin' : 'Pin'}
-                    className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400"
+                    className="p-1.5 rounded hover:bg-secondary-100 dark:hover:bg-slate-700 text-secondary-600 dark:text-slate-400"
                   >
                     {u.pinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
                   </button>
@@ -225,7 +225,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
                     type="button"
                     onClick={() => openEdit(u)}
                     title="Edit"
-                    className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400"
+                    className="p-1.5 rounded hover:bg-secondary-100 dark:hover:bg-slate-700 text-secondary-600 dark:text-slate-400"
                   >
                     <Edit2 className="h-4 w-4" />
                   </button>

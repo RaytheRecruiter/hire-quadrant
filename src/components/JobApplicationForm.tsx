@@ -220,19 +220,19 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   };
 
   const inputClass =
-    'w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white';
+    'w-full px-4 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white';
   const labelClass = 'block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1';
 
   return (
     <section
       id="apply-form"
-      className="mt-10 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-6 sm:p-8 shadow-soft scroll-mt-24"
+      className="mt-10 bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl p-6 sm:p-8 shadow-soft scroll-mt-24"
     >
       <div className="mb-6">
         <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white">
           Apply for this role
         </h2>
-        <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
+        <p className="text-sm text-secondary-600 dark:text-slate-400 mt-1">
           {company ? `Submit your application to ${company}.` : 'Submit your application below.'}
         </p>
       </div>
@@ -252,7 +252,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
             </a>
             <a
               href={`/register?returnTo=${encodeURIComponent(`/jobs/${jobId}#apply-form`)}&intent=apply`}
-              className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-primary-700 border border-primary-200 dark:bg-slate-800 dark:text-primary-300 dark:border-primary-700 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold"
+              className="inline-flex items-center gap-2 bg-white hover:bg-secondary-50 text-primary-700 border border-primary-200 dark:bg-slate-800 dark:text-primary-300 dark:border-primary-700 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold"
             >
               Create an account
             </a>
@@ -313,9 +313,9 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               Resume <span className="text-red-500">*</span>
             </label>
             {existingResumePath && !resumeFile ? (
-              <div className="flex items-center gap-3 px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-900/50">
-                <FileText className="h-5 w-5 text-gray-500 dark:text-slate-400 flex-shrink-0" />
-                <span className="text-sm text-gray-700 dark:text-slate-300 truncate flex-1" title={existingResumeName || undefined}>
+              <div className="flex items-center gap-3 px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl bg-secondary-50 dark:bg-slate-900/50">
+                <FileText className="h-5 w-5 text-secondary-500 dark:text-slate-400 flex-shrink-0" />
+                <span className="text-sm text-secondary-700 dark:text-slate-300 truncate flex-1" title={existingResumeName || undefined}>
                   {existingResumeName}
                 </span>
                 <button
@@ -334,9 +334,9 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                 </button>
               </div>
             ) : null}
-            <label className="flex items-center gap-3 px-4 py-3 border border-dashed border-gray-300 dark:border-slate-600 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors mt-2">
-              <Upload className="h-5 w-5 text-gray-500 dark:text-slate-400 flex-shrink-0" />
-              <span className="text-sm text-gray-700 dark:text-slate-300 truncate">
+            <label className="flex items-center gap-3 px-4 py-3 border border-dashed border-secondary-300 dark:border-slate-600 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-secondary-50 dark:hover:bg-slate-700/50 transition-colors mt-2">
+              <Upload className="h-5 w-5 text-secondary-500 dark:text-slate-400 flex-shrink-0" />
+              <span className="text-sm text-secondary-700 dark:text-slate-300 truncate">
                 {resumeFile
                   ? resumeFile.name
                   : existingResumePath
@@ -350,11 +350,11 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                 className="hidden"
               />
             </label>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-secondary-500 mt-1">
               Accepted file types: pdf, docx, doc, txt. Max. file size: 50 MB.
             </p>
             {existingResumePath && !resumeFile && (
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-secondary-500 mt-1">
                 This resume will be submitted with your application unless you replace it above.
               </p>
             )}
@@ -362,7 +362,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               <button
                 type="button"
                 onClick={() => setResumeFile(null)}
-                className="text-xs font-semibold text-gray-500 hover:text-gray-700 mt-1"
+                className="text-xs font-semibold text-secondary-500 hover:text-secondary-700 mt-1"
               >
                 Cancel — use {existingResumePath ? 'previous resume' : 'no resume'} instead
               </button>
@@ -383,7 +383,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               className={inputClass}
             />
             {!profileLoaded && (
-              <p className="text-xs text-gray-500 mt-1">Loading your saved profile…</p>
+              <p className="text-xs text-secondary-500 mt-1">Loading your saved profile…</p>
             )}
           </div>
 
@@ -403,7 +403,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
           {/* Cover letter */}
           <div>
             <label className={labelClass}>
-              Cover letter <span className="text-gray-400 font-normal">(optional)</span>
+              Cover letter <span className="text-secondary-400 font-normal">(optional)</span>
             </label>
             <textarea
               value={coverLetter}
@@ -416,7 +416,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
           {/* Screening questions */}
           {screeningQuestions.length > 0 && (
-            <div className="border-t border-gray-200 dark:border-slate-700 pt-5 space-y-4">
+            <div className="border-t border-secondary-200 dark:border-slate-700 pt-5 space-y-4">
               <p className="text-sm font-semibold text-secondary-800 dark:text-slate-200">
                 Screening questions
               </p>
@@ -442,8 +442,8 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
           )}
 
           {/* Privacy consent */}
-          <div className="border-t border-gray-200 dark:border-slate-700 pt-5">
-            <p className="text-xs text-gray-500 dark:text-slate-400 mb-2">
+          <div className="border-t border-secondary-200 dark:border-slate-700 pt-5">
+            <p className="text-xs text-secondary-500 dark:text-slate-400 mb-2">
               Submitting shares your name, contact info, resume, cover letter, and screening
               answers above with {company || 'this employer'} so they can review your application.
             </p>
@@ -453,7 +453,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                 checked={privacyAccepted}
                 onChange={(e) => setPrivacyAccepted(e.target.checked)}
                 required
-                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary-500 focus:ring-primary-400"
+                className="mt-0.5 h-4 w-4 rounded border-secondary-300 text-primary-500 focus:ring-primary-400"
               />
               <span>
                 By submitting you agree to our{' '}

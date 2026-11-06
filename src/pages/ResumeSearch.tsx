@@ -242,8 +242,8 @@ const ResumeSearch: React.FC = () => {
               <Lock className="h-5 w-5 text-amber-600" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">Database Search restricted</h1>
-              <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
+              <h1 className="text-xl font-bold text-secondary-900 dark:text-white">Database Search restricted</h1>
+              <p className="text-sm text-secondary-600 dark:text-slate-400 mt-1">
                 Resume Database is a paid feature on your company plan. Ask your
                 Owner or Admin to grant you the "Search the candidate database"
                 permission, or upgrade your subscription.
@@ -256,25 +256,25 @@ const ResumeSearch: React.FC = () => {
   }
 
   return (
-    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 to-primary-50/30 py-12">
+    <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 to-primary-50/30 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
               Resume Database
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-slate-400">Search candidates open to new opportunities.</p>
+            <p className="mt-2 text-secondary-600 dark:text-slate-400">Search candidates open to new opportunities.</p>
           </div>
           {unlocks && (
-            <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm">
-              <div className="flex items-center gap-2 text-gray-600 dark:text-slate-400">
+            <div className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm">
+              <div className="flex items-center gap-2 text-secondary-600 dark:text-slate-400">
                 <KeyRound className="h-4 w-4 text-amber-500" />
                 <span>Unlock credits</span>
               </div>
               <div className="mt-1 text-base font-semibold text-secondary-900 dark:text-white">
-                {unlocks.remaining} <span className="text-gray-400 dark:text-slate-500 font-normal">/ {unlocks.total} remaining</span>
+                {unlocks.remaining} <span className="text-secondary-400 dark:text-slate-500 font-normal">/ {unlocks.total} remaining</span>
               </div>
-              <div className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+              <div className="text-xs text-secondary-500 dark:text-slate-400 mt-0.5">
                 Resets each billing period
                 {unlocks.purchased_remaining > 0 && ` · +${unlocks.purchased_remaining} purchased`}
               </div>
@@ -285,31 +285,31 @@ const ResumeSearch: React.FC = () => {
         <div className="bg-white/90 backdrop-blur-sm shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 rounded-2xl p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <div className="md:col-span-2 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Skill, headline, or keyword"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="w-full pl-10 pr-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
               />
             </div>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Location"
                 value={location}
                 onChange={e => setLocation(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="w-full pl-10 pr-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
               />
             </div>
             <div className="relative">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
               <select
                 value={minYears}
                 onChange={e => setMinYears(Number(e.target.value))}
-                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
+                className="w-full pl-10 pr-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
               >
                 <option value="0">Any experience</option>
                 <option value="1">1+ years</option>
@@ -319,21 +319,21 @@ const ResumeSearch: React.FC = () => {
               </select>
             </div>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Current job title"
                 value={titleFilter}
                 onChange={e => setTitleFilter(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="w-full pl-10 pr-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
               />
             </div>
             <div className="relative md:col-span-1">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
               <select
                 value={updatedWithinDays}
                 onChange={e => setUpdatedWithinDays(Number(e.target.value))}
-                className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
+                className="w-full pl-10 pr-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
               >
                 <option value="0">Any time profile updated</option>
                 <option value="30">Updated in last 30 days</option>
@@ -353,7 +353,7 @@ const ResumeSearch: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowMoreFilters((s) => !s)}
-              className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-slate-400 hover:text-primary-600"
+              className="inline-flex items-center gap-1.5 text-sm text-secondary-600 dark:text-slate-400 hover:text-primary-600"
             >
               <SlidersHorizontal className="h-4 w-4" />
               {showMoreFilters ? 'Hide more filters' : 'More filters'}
@@ -361,32 +361,32 @@ const ResumeSearch: React.FC = () => {
           </div>
 
           {showMoreFilters && (
-            <div className="mt-5 pt-5 border-t border-gray-100 dark:border-slate-700 space-y-5">
+            <div className="mt-5 pt-5 border-t border-secondary-100 dark:border-slate-700 space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
                   <input
                     type="number"
                     placeholder="Min desired salary"
                     value={minSalary}
                     onChange={(e) => setMinSalary(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                    className="w-full pl-10 pr-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
                   />
                 </div>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
                   <input
                     type="number"
                     placeholder="Max desired salary"
                     value={maxSalary}
                     onChange={(e) => setMaxSalary(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                    className="w-full pl-10 pr-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
                   />
                 </div>
                 <select
                   value={workAuth}
                   onChange={(e) => setWorkAuth(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
+                  className="w-full px-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
                 >
                   <option value="">Any work authorization</option>
                   {AUTH_OPTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
@@ -396,25 +396,25 @@ const ResumeSearch: React.FC = () => {
                   placeholder="Degree (e.g. Bachelor's)"
                   value={degree}
                   onChange={(e) => setDegree(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  className="w-full px-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className="relative">
-                  <Navigation className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+                  <Navigation className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400 dark:text-slate-500" />
                   <input
                     type="text"
                     placeholder="Distance from city or ZIP"
                     value={distanceLocation}
                     onChange={(e) => setDistanceLocation(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
+                    className="w-full pl-10 pr-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400"
                   />
                 </div>
                 <select
                   value={distanceMiles}
                   onChange={(e) => setDistanceMiles(Number(e.target.value))}
-                  className="w-full px-3 py-2.5 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
+                  className="w-full px-3 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 appearance-none"
                 >
                   <option value={0}>No radius</option>
                   {RADIUS_OPTIONS.map((r) => <option key={r} value={r}>Within {r} miles</option>)}
@@ -422,7 +422,7 @@ const ResumeSearch: React.FC = () => {
               </div>
 
               <div>
-                <span className="block text-xs font-medium text-gray-600 dark:text-slate-400 mb-1.5">Workplace</span>
+                <span className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1.5">Workplace</span>
                 <div className="flex flex-wrap gap-2">
                   {WORKPLACE_OPTIONS.map((o) => (
                     <button
@@ -430,7 +430,7 @@ const ResumeSearch: React.FC = () => {
                       type="button"
                       onClick={() => toggleMulti(setWorkplaceTypes, o)}
                       className={`px-3 py-1 rounded-full text-xs transition-colors ${
-                        workplaceTypes.includes(o) ? 'bg-primary-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300'
+                        workplaceTypes.includes(o) ? 'bg-primary-600 text-white' : 'bg-secondary-100 dark:bg-slate-700 text-secondary-700 dark:text-slate-300'
                       }`}
                     >
                       {o}
@@ -440,7 +440,7 @@ const ResumeSearch: React.FC = () => {
               </div>
 
               <div>
-                <span className="block text-xs font-medium text-gray-600 dark:text-slate-400 mb-1.5">Employment type</span>
+                <span className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1.5">Employment type</span>
                 <div className="flex flex-wrap gap-2">
                   {WORK_TYPE_OPTIONS.map((o) => (
                     <button
@@ -448,7 +448,7 @@ const ResumeSearch: React.FC = () => {
                       type="button"
                       onClick={() => toggleMulti(setWorkTypes, o)}
                       className={`px-3 py-1 rounded-full text-xs transition-colors ${
-                        workTypes.includes(o) ? 'bg-primary-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300'
+                        workTypes.includes(o) ? 'bg-primary-600 text-white' : 'bg-secondary-100 dark:bg-slate-700 text-secondary-700 dark:text-slate-300'
                       }`}
                     >
                       {o}
@@ -458,7 +458,7 @@ const ResumeSearch: React.FC = () => {
               </div>
 
               <div>
-                <span className="block text-xs font-medium text-gray-600 dark:text-slate-400 mb-1.5">Industry</span>
+                <span className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1.5">Industry</span>
                 <div className="flex flex-wrap gap-2">
                   {INDUSTRY_OPTIONS.map((o) => (
                     <button
@@ -466,7 +466,7 @@ const ResumeSearch: React.FC = () => {
                       type="button"
                       onClick={() => toggleMulti(setIndustries, o)}
                       className={`px-3 py-1 rounded-full text-xs transition-colors ${
-                        industries.includes(o) ? 'bg-primary-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300'
+                        industries.includes(o) ? 'bg-primary-600 text-white' : 'bg-secondary-100 dark:bg-slate-700 text-secondary-700 dark:text-slate-300'
                       }`}
                     >
                       {o}
@@ -482,8 +482,8 @@ const ResumeSearch: React.FC = () => {
           <div className="text-center py-16"><Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500" /></div>
         ) : candidates.length === 0 ? (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-12 text-center">
-            <User className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-            <p className="text-gray-500 dark:text-slate-400">No candidates match your search.</p>
+            <User className="mx-auto h-12 w-12 text-secondary-300 mb-3" />
+            <p className="text-secondary-500 dark:text-slate-400">No candidates match your search.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -512,7 +512,7 @@ const ResumeSearch: React.FC = () => {
                           {isUnlocked && c.name ? c.name : `Candidate ${idx + 1}`}
                         </h3>
                         {isUnlocked && c.email && (
-                          <p className="text-xs text-gray-500 dark:text-slate-400">{c.email}</p>
+                          <p className="text-xs text-secondary-500 dark:text-slate-400">{c.email}</p>
                         )}
                         {c.current_role && (
                           <p className="text-xs font-semibold text-amber-600 mt-1">
@@ -521,7 +521,7 @@ const ResumeSearch: React.FC = () => {
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-slate-400 mt-2">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-secondary-500 dark:text-slate-400 mt-2">
                       {c.location && (
                         <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{c.location}</span>
                       )}
@@ -572,7 +572,7 @@ const ResumeSearch: React.FC = () => {
                           Resume
                         </button>
                       ) : (
-                        <span className="text-xs text-gray-400 dark:text-slate-500 italic">No resume</span>
+                        <span className="text-xs text-secondary-400 dark:text-slate-500 italic">No resume</span>
                       )
                     ) : (
                       <button

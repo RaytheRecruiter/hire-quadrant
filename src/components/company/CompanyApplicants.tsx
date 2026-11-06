@@ -141,9 +141,9 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   if (!canViewApplicants) {
     return (
       <div className="text-center py-16">
-        <Users className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">Applicants are restricted</h3>
-        <p className="text-gray-500 dark:text-slate-400">Ask your company Owner or Admin to grant you the "View applicants" permission.</p>
+        <Users className="mx-auto h-12 w-12 text-secondary-300 mb-4" />
+        <h3 className="text-lg font-semibold text-secondary-700 dark:text-slate-300 mb-2">Applicants are restricted</h3>
+        <p className="text-secondary-500 dark:text-slate-400">Ask your company Owner or Admin to grant you the "View applicants" permission.</p>
       </div>
     );
   }
@@ -151,9 +151,9 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
   if (applications.length === 0) {
     return (
       <div className="text-center py-16">
-        <Users className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-2">No Applicants Yet</h3>
-        <p className="text-gray-500 dark:text-slate-400">Applicants for your jobs will appear here.</p>
+        <Users className="mx-auto h-12 w-12 text-secondary-300 mb-4" />
+        <h3 className="text-lg font-semibold text-secondary-700 dark:text-slate-300 mb-2">No Applicants Yet</h3>
+        <p className="text-secondary-500 dark:text-slate-400">Applicants for your jobs will appear here.</p>
       </div>
     );
   }
@@ -162,14 +162,14 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
     <div>
       {/* View toggle + bulk */}
       <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
-        <div className="inline-flex rounded-lg border border-gray-200 dark:border-slate-700 p-0.5">
+        <div className="inline-flex rounded-lg border border-secondary-200 dark:border-slate-700 p-0.5">
           <button
             type="button"
             onClick={() => setView('list')}
             className={`inline-flex items-center gap-1 px-3 py-1 text-xs rounded ${
               view === 'list'
                 ? 'bg-primary-600 text-white'
-                : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-700'
+                : 'text-secondary-600 dark:text-slate-400 hover:bg-secondary-100 dark:hover:bg-slate-700'
             }`}
           >
             <List className="h-3.5 w-3.5" />
@@ -181,7 +181,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
             className={`inline-flex items-center gap-1 px-3 py-1 text-xs rounded ${
               view === 'kanban'
                 ? 'bg-primary-600 text-white'
-                : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-700'
+                : 'text-secondary-600 dark:text-slate-400 hover:bg-secondary-100 dark:hover:bg-slate-700'
             }`}
           >
             <LayoutGrid className="h-3.5 w-3.5" />
@@ -192,7 +192,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
           <button
             type="button"
             onClick={() => setShowBulk(true)}
-            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700"
           >
             <MessageSquare className="h-3.5 w-3.5" />
             Bulk message
@@ -224,7 +224,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
           <select
             value={jobFilter}
             onChange={(e) => setJobFilter(e.target.value)}
-            className="rounded-lg border border-gray-200 dark:border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+            className="rounded-lg border border-secondary-200 dark:border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
           >
             <option value="all">All Jobs</option>
             {jobs.map((job) => (
@@ -241,46 +241,46 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
             onChange={(e) => setShowShortlistedOnly(e.target.checked)}
             className="rounded text-primary-500 focus:ring-primary-400"
           />
-          <Bookmark className={`h-4 w-4 ${showShortlistedOnly ? 'fill-primary-500 text-primary-500' : 'text-gray-400 dark:text-slate-500'}`} />
-          <span className="text-sm text-gray-700 dark:text-slate-300">Shortlisted only</span>
+          <Bookmark className={`h-4 w-4 ${showShortlistedOnly ? 'fill-primary-500 text-primary-500' : 'text-secondary-400 dark:text-slate-500'}`} />
+          <span className="text-sm text-secondary-700 dark:text-slate-300">Shortlisted only</span>
         </label>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
-          <thead className="bg-gray-50 dark:bg-slate-900/50">
+        <table className="min-w-full divide-y divide-secondary-200 dark:divide-slate-700">
+          <thead className="bg-secondary-50 dark:bg-slate-900/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Candidate</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Job</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Applied</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Stage</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Rating</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Resume</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">Candidate</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">Job</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">Applied</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">Stage</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">Rating</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">Resume</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
+          <tbody className="bg-white dark:bg-slate-800 divide-y divide-secondary-200 dark:divide-slate-700">
             {filteredApplications.map((app) => {
               const candidate = candidateInfo[app.user_id];
               return (
-                <tr key={app.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50 transition-colors">
+                <tr key={app.id} className="hover:bg-secondary-50 dark:hover:bg-slate-700 dark:bg-slate-900/50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                      <div className="text-sm font-semibold text-secondary-900 dark:text-white">
                         {app.user_name || candidate?.name || 'Unknown'}
                       </div>
-                      <div className="text-sm text-gray-500 dark:text-slate-400">
+                      <div className="text-sm text-secondary-500 dark:text-slate-400">
                         {canViewContact
                           ? (app.user_email || candidate?.email || '')
-                          : <span className="italic text-gray-400 dark:text-slate-500">Contact info hidden</span>}
+                          : <span className="italic text-secondary-400 dark:text-slate-500">Contact info hidden</span>}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary-600 dark:text-slate-400">
                     {getJobTitle(app.job_id)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-slate-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary-600 dark:text-slate-400">
                     {app.created_at
                       ? new Date(app.created_at).toLocaleDateString()
                       : 'N/A'}
@@ -290,18 +290,18 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       {app.employer_rating ? (
                         <>
                           {[1, 2, 3, 4, 5].map(n => (
-                            <Star key={n} className={`h-3.5 w-3.5 ${n <= app.employer_rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
+                            <Star key={n} className={`h-3.5 w-3.5 ${n <= app.employer_rating ? 'fill-yellow-400 text-yellow-400' : 'text-secondary-200'}`} />
                           ))}
                         </>
                       ) : (
-                        <span className="text-gray-300 text-xs">Not rated</span>
+                        <span className="text-secondary-300 text-xs">Not rated</span>
                       )}
                       {app.is_shortlisted && <Bookmark className="h-3.5 w-3.5 fill-primary-500 text-primary-500 ml-1" />}
                     </div>
                     {app.employer_tags && app.employer_tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {app.employer_tags.slice(0, 3).map((tag: string) => (
-                          <span key={tag} className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400 text-xs">{tag}</span>
+                          <span key={tag} className="px-1.5 py-0.5 rounded bg-secondary-100 dark:bg-slate-700 text-secondary-600 dark:text-slate-400 text-xs">{tag}</span>
                         ))}
                       </div>
                     )}
@@ -315,7 +315,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                     <select
                       value={app.status}
                       onChange={(e) => onStatusUpdate(app.id, e.target.value)}
-                      className={`text-xs font-medium rounded-full px-2.5 py-1 border-0 focus:outline-none focus:ring-2 focus:ring-primary-400 ${statusColors[app.status] || 'bg-gray-100 text-gray-800'}`}
+                      className={`text-xs font-medium rounded-full px-2.5 py-1 border-0 focus:outline-none focus:ring-2 focus:ring-primary-400 ${statusColors[app.status] || 'bg-secondary-100 text-secondary-800'}`}
                     >
                       {STATUS_OPTIONS.map((s) => (
                         <option key={s} value={s}>{s}</option>
@@ -332,7 +332,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                         <Download className="h-4 w-4" />
                       </button>
                     ) : (
-                      <span className="text-gray-300 dark:text-slate-600 text-xs italic" title="Restricted">—</span>
+                      <span className="text-secondary-300 dark:text-slate-600 text-xs italic" title="Restricted">—</span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -355,7 +355,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
       </div>
 
       {filteredApplications.length === 0 && (
-        <div className="text-center py-8 text-gray-500 dark:text-slate-400">
+        <div className="text-center py-8 text-secondary-500 dark:text-slate-400">
           No applicants match the selected filters.
         </div>
       )}

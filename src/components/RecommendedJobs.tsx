@@ -36,7 +36,7 @@ const RecommendedJobs: React.FC = () => {
         {recommended.map(job => (
           <div
             key={job.id}
-            className="group relative bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
+            className="group relative bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
           >
             <HardLink
               to={`/job/${generateSlug(job.title, job.company, job.id)}`}
@@ -47,7 +47,7 @@ const RecommendedJobs: React.FC = () => {
                   <h4 className="font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors line-clamp-2">
                     {job.title}
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-slate-400 font-medium mt-0.5">
+                  <p className="text-sm text-secondary-600 dark:text-slate-400 font-medium mt-0.5">
                     {job.company}
                   </p>
                 </div>
@@ -58,7 +58,7 @@ const RecommendedJobs: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-secondary-500 dark:text-slate-400">
                 {job.location && (
                   <span className="flex items-center gap-1">
                     <MapPin className="h-3 w-3" />
@@ -80,7 +80,7 @@ const RecommendedJobs: React.FC = () => {
                 e.preventDefault();
                 skipJob(job.id);
               }}
-              className="absolute top-3 right-3 p-1.5 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+              className="absolute top-3 right-3 p-1.5 rounded-lg bg-secondary-100 dark:bg-slate-700 hover:bg-secondary-200 dark:hover:bg-slate-600 text-secondary-600 dark:text-slate-400 hover:text-secondary-900 dark:hover:text-white transition-colors opacity-0 group-hover:opacity-100"
               title="Not interested in this job"
             >
               <X className="h-4 w-4" />

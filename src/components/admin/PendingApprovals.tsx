@@ -99,9 +99,9 @@ const PendingApprovals: React.FC = () => {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/3"></div>
-          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+          <div className="h-6 bg-secondary-200 dark:bg-slate-700 rounded w-1/3"></div>
+          <div className="h-4 bg-secondary-200 dark:bg-slate-700 rounded w-full"></div>
+          <div className="h-4 bg-secondary-200 dark:bg-slate-700 rounded w-full"></div>
         </div>
       </div>
     );
@@ -109,9 +109,9 @@ const PendingApprovals: React.FC = () => {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow">
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+      <div className="px-6 py-4 border-b border-secondary-200 dark:border-slate-700">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2">
             <Clock className="w-5 h-5 text-yellow-500" />
             Pending Approvals
           </h2>
@@ -140,33 +140,33 @@ const PendingApprovals: React.FC = () => {
       <div className="p-6">
         {pendingCompanies.length === 0 ? (
           <div className="text-center py-8">
-            <CheckCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-slate-400">No pending approvals</p>
+            <CheckCircle className="w-12 h-12 text-secondary-300 mx-auto mb-3" />
+            <p className="text-secondary-500 dark:text-slate-400">No pending approvals</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+            <table className="min-w-full divide-y divide-secondary-200 dark:divide-slate-700">
               <thead>
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Registration Date
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-xs font-medium text-secondary-500 dark:text-slate-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
+              <tbody className="divide-y divide-secondary-200 dark:divide-slate-700">
                 {pendingCompanies.map((company) => (
-                  <tr key={company.id} className="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
+                  <tr key={company.id} className="hover:bg-secondary-50 dark:hover:bg-slate-700 dark:bg-slate-900/50">
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">{company.name}</div>
+                      <div className="text-sm font-medium text-secondary-900 dark:text-white">{company.name}</div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm text-gray-500 dark:text-slate-400">
+                      <div className="text-sm text-secondary-500 dark:text-slate-400">
                         {new Date(company.created_at).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'short',

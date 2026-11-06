@@ -304,12 +304,12 @@ const JobDetails: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-dvh flex items-center justify-center bg-gray-50 px-4">
+            <div className="min-h-dvh flex items-center justify-center bg-secondary-50 px-4">
                 <div className="text-center">
                     <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary-100 mb-4">
                         <div className="h-6 w-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
                     </div>
-                    <p className="text-gray-500">Loading job details...</p>
+                    <p className="text-secondary-500">Loading job details...</p>
                 </div>
             </div>
         );
@@ -317,10 +317,10 @@ const JobDetails: React.FC = () => {
 
     if (!job) {
         return (
-            <div className="min-h-dvh flex items-center justify-center bg-gray-50 px-4">
+            <div className="min-h-dvh flex items-center justify-center bg-secondary-50 px-4">
                 <div className="text-center">
                     <h2 className="font-display text-2xl font-bold text-secondary-900 mb-2">Job not found</h2>
-                    <p className="text-gray-500 mb-6">This job may have been removed or expired.</p>
+                    <p className="text-secondary-500 mb-6">This job may have been removed or expired.</p>
                     <button
                         onClick={() => navigate('/')}
                         className="bg-primary-500 hover:bg-primary-600 text-white px-5 py-2.5 rounded-xl font-semibold shadow-soft"
@@ -410,7 +410,7 @@ const JobDetails: React.FC = () => {
         : formatSalaryText(job.salary);
 
     return (
-        <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 pb-24 md:pb-12">
+        <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 pb-24 md:pb-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
                 <button
                     onClick={() => navigate(-1)}
@@ -435,9 +435,9 @@ const JobDetails: React.FC = () => {
                     </div>
                 )}
 
-                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-gray-100 dark:border-slate-700 overflow-hidden">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-secondary-100 dark:border-slate-700 overflow-hidden">
                     {/* Header */}
-                    <div className="p-6 md:p-10 border-b border-gray-100 dark:border-slate-700">
+                    <div className="p-6 md:p-10 border-b border-secondary-100 dark:border-slate-700">
                         <div className="flex items-start gap-4">
                             <CompanyLogo company={job.company} logoUrl={(companyProfile as any)?.logo_url} size="lg" />
                             <div className="flex-1 min-w-0">
@@ -487,7 +487,7 @@ const JobDetails: React.FC = () => {
                                         </span>
                                     )}
                                     {tags.map(t => (
-                                        <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                        <span key={t} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-100 text-secondary-600">
                                             {t}
                                         </span>
                                     ))}
@@ -514,7 +514,7 @@ const JobDetails: React.FC = () => {
                                     onClick={handleSave}
                                     title={saved ? 'Saved' : 'Save'}
                                     className={`h-9 w-9 flex items-center justify-center rounded-lg transition-colors ${
-                                        saved ? 'bg-primary-50 text-primary-600' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
+                                        saved ? 'bg-primary-50 text-primary-600' : 'text-secondary-400 hover:bg-secondary-100 hover:text-secondary-700'
                                     }`}
                                 >
                                     {saved ? <BookmarkCheck className="h-4.5 w-4.5 fill-primary-500" /> : <Bookmark className="h-4.5 w-4.5" />}
@@ -531,11 +531,11 @@ const JobDetails: React.FC = () => {
                     {/* Inline application form */}
                     <div className="px-6 md:px-10 pb-10">
                         {isCompany ? (
-                            <div className="rounded-xl bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 p-5 text-sm text-gray-600 dark:text-slate-400">
+                            <div className="rounded-xl bg-secondary-50 dark:bg-slate-900/50 border border-secondary-200 dark:border-slate-700 p-5 text-sm text-secondary-600 dark:text-slate-400">
                                 Company accounts can't apply to jobs. Sign in with a candidate account to apply.
                             </div>
                         ) : job.status === 'closed' && !applied ? (
-                            <div className="rounded-xl bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 p-5 text-sm text-gray-600 dark:text-slate-400">
+                            <div className="rounded-xl bg-secondary-50 dark:bg-slate-900/50 border border-secondary-200 dark:border-slate-700 p-5 text-sm text-secondary-600 dark:text-slate-400">
                                 This job is no longer accepting applications.
                             </div>
                         ) : (
@@ -575,12 +575,12 @@ const JobDetails: React.FC = () => {
             </div>
 
             {/* Sticky mobile apply bar — hidden when the inline form is on screen */}
-            <div className={`md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 p-4 pb-safe shadow-card-hover z-30 transition-opacity duration-200 ${applyFormVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-secondary-200 dark:border-slate-800 p-4 pb-safe shadow-card-hover z-30 transition-opacity duration-200 ${applyFormVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <div className="flex items-center gap-2 max-w-4xl mx-auto">
                     <button
                         onClick={handleSave}
                         className={`h-11 w-11 flex items-center justify-center rounded-xl border ${
-                            saved ? 'bg-primary-50 border-primary-200 text-primary-600' : 'border-gray-200 text-gray-500'
+                            saved ? 'bg-primary-50 border-primary-200 text-primary-600' : 'border-secondary-200 text-secondary-500'
                         }`}
                     >
                         {saved ? <BookmarkCheck className="h-5 w-5 fill-primary-500" /> : <Bookmark className="h-5 w-5" />}

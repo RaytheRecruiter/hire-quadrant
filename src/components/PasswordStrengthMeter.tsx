@@ -13,7 +13,7 @@ const PasswordStrengthMeter: React.FC<Props> = ({ password, className = '' }) =>
 
   return (
     <div className={`mt-1 ${className}`}>
-      <div className="h-1.5 w-full bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-secondary-200 dark:bg-slate-700 rounded-full overflow-hidden">
         <div
           className={`h-full ${s.color} transition-all`}
           style={{ width: `${pct}%` }}
@@ -21,9 +21,9 @@ const PasswordStrengthMeter: React.FC<Props> = ({ password, className = '' }) =>
         />
       </div>
       <div className="flex items-center justify-between mt-1">
-        <span className="text-xs text-gray-600 dark:text-slate-400">{s.label}</span>
+        <span className="text-xs text-secondary-600 dark:text-slate-400">{s.label}</span>
         {s.hints.length > 0 && (
-          <span className="text-xs text-gray-500 dark:text-slate-500 text-right">
+          <span className="text-xs text-secondary-500 dark:text-slate-500 text-right">
             {s.hints[0]}
           </span>
         )}

@@ -138,8 +138,8 @@ const ExperienceSection: React.FC = () => {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 flex items-center gap-2">
-          <Briefcase className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+        <h2 className="text-lg font-semibold text-secondary-800 dark:text-slate-200 flex items-center gap-2">
+          <Briefcase className="h-5 w-5 text-secondary-400 dark:text-slate-500" />
           Work Experience
         </h2>
         {!editing && (
@@ -169,24 +169,24 @@ const ExperienceSection: React.FC = () => {
           <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
         </div>
       ) : rows.length === 0 && !editing ? (
-        <p className="text-sm text-gray-500 dark:text-slate-400">No experience added yet. Click <strong>Add</strong> to create your first entry.</p>
+        <p className="text-sm text-secondary-500 dark:text-slate-400">No experience added yet. Click <strong>Add</strong> to create your first entry.</p>
       ) : (
         <ul className="space-y-4">
           {rows.map((r) => (
-            <li key={r.id} className="border-l-2 border-gray-200 dark:border-slate-700 pl-4 group">
+            <li key={r.id} className="border-l-2 border-secondary-200 dark:border-slate-700 pl-4 group">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">{r.title}</h3>
-                  <p className="text-sm text-gray-700 dark:text-slate-300">{r.company}{r.location ? ` · ${r.location}` : ''}</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+                  <h3 className="font-semibold text-secondary-900 dark:text-white">{r.title}</h3>
+                  <p className="text-sm text-secondary-700 dark:text-slate-300">{r.company}{r.location ? ` · ${r.location}` : ''}</p>
+                  <p className="text-xs text-secondary-500 dark:text-slate-400 mt-0.5">
                     {fmtMonth(r.start_date) || '—'} – {r.is_current ? 'Present' : fmtMonth(r.end_date) || '—'}
                   </p>
                   {r.description && (
-                    <p className="text-sm text-gray-700 dark:text-slate-300 mt-2 whitespace-pre-line">{r.description}</p>
+                    <p className="text-sm text-secondary-700 dark:text-slate-300 mt-2 whitespace-pre-line">{r.description}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button type="button" onClick={() => openEdit(r)} className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:bg-slate-700 text-gray-500 dark:text-slate-400" aria-label="Edit">
+                  <button type="button" onClick={() => openEdit(r)} className="p-1.5 rounded hover:bg-secondary-100 dark:hover:bg-slate-700 dark:bg-slate-700 text-secondary-500 dark:text-slate-400" aria-label="Edit">
                     <Edit2 className="h-4 w-4" />
                   </button>
                   <button type="button" onClick={() => remove(r.id)} className="p-1.5 rounded hover:bg-rose-50 text-rose-600" aria-label="Delete">
@@ -212,55 +212,55 @@ interface FormProps {
 }
 
 const ExperienceForm: React.FC<FormProps> = ({ form, setForm, onCancel, onSave, saving, isEdit }) => (
-  <div className="bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-xl p-4 mb-4 space-y-3">
+  <div className="bg-secondary-50 dark:bg-slate-900/50 border border-secondary-200 dark:border-slate-700 rounded-xl p-4 mb-4 space-y-3">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
       <input
         type="text"
         value={form.title}
         onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
         placeholder="Job title *"
-        className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+        className="px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
       />
       <input
         type="text"
         value={form.company}
         onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
         placeholder="Company *"
-        className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+        className="px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
       />
       <input
         type="text"
         value={form.location}
         onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))}
         placeholder="Location (optional)"
-        className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+        className="px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
       />
-      <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-slate-300">
+      <label className="flex items-center gap-2 text-sm text-secondary-700 dark:text-slate-300">
         <input
           type="checkbox"
           checked={form.is_current}
           onChange={(e) => setForm((f) => ({ ...f, is_current: e.target.checked }))}
-          className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+          className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
         />
         I currently work here
       </label>
       <div>
-        <label className="block text-xs text-gray-500 dark:text-slate-400 mb-0.5">Start</label>
+        <label className="block text-xs text-secondary-500 dark:text-slate-400 mb-0.5">Start</label>
         <input
           type="month"
           value={form.start_date}
           onChange={(e) => setForm((f) => ({ ...f, start_date: e.target.value }))}
-          className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+          className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
         />
       </div>
       <div>
-        <label className="block text-xs text-gray-500 dark:text-slate-400 mb-0.5">End</label>
+        <label className="block text-xs text-secondary-500 dark:text-slate-400 mb-0.5">End</label>
         <input
           type="month"
           value={form.end_date}
           disabled={form.is_current}
           onChange={(e) => setForm((f) => ({ ...f, end_date: e.target.value }))}
-          className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 disabled:bg-gray-100 dark:bg-slate-700"
+          className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 disabled:bg-secondary-100 dark:bg-slate-700"
         />
       </div>
     </div>
@@ -270,10 +270,10 @@ const ExperienceForm: React.FC<FormProps> = ({ form, setForm, onCancel, onSave, 
       value={form.description}
       onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
       placeholder="What did you do? (optional)"
-      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+      className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
     />
     <div className="flex justify-end gap-2">
-      <button type="button" onClick={onCancel} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-white dark:bg-slate-800">
+      <button type="button" onClick={onCancel} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-white dark:bg-slate-800">
         <X className="h-4 w-4" /> Cancel
       </button>
       <button type="button" onClick={onSave} disabled={saving} className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60">

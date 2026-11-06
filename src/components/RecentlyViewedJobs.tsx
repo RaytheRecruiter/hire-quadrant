@@ -29,12 +29,12 @@ const RecentlyViewedJobs: React.FC<Props> = ({ excludeJobId }) => {
           <HardLink
             key={job.id}
             to={`/job/${generateSlug(job.title, job.company, job.id)}`}
-            className="block p-4 rounded-xl border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:bg-primary-50/30 dark:hover:bg-primary-900/10 transition-colors"
+            className="block p-4 rounded-xl border border-secondary-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:bg-primary-50/30 dark:hover:bg-primary-900/10 transition-colors"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <h4 className="font-semibold text-secondary-900 dark:text-white truncate">{job.title}</h4>
-                <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-500 dark:text-slate-400">
+                <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-secondary-500 dark:text-slate-400">
                   <span className="flex items-center gap-1">
                     <Building2 className="h-3 w-3" />
                     {job.company || 'Company'}

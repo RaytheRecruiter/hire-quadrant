@@ -94,7 +94,7 @@ function App() {
               <Router>
                 <ScrollToTop />
                 <PageTracker>
-                  <div className="min-h-dvh bg-gray-50">
+                  <div className="min-h-dvh bg-secondary-50">
                     {/* Rendered first so its fixed-position buttons are
                         early in tab order -- confirmed live via manual
                         keyboard testing (2026-10-19): CookieConsent was

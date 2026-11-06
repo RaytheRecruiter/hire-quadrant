@@ -33,38 +33,38 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({ title, url }) => {
     <div className="relative">
       <button
         onClick={() => setShowDropdown(!showDropdown)}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-700 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700 transition-colors"
       >
         <Share2 className="h-4 w-4" />
         Share
       </button>
 
       {showDropdown && (
-        <div className="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 p-2 z-10 w-48">
+        <div className="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-secondary-200 dark:border-slate-700 p-2 z-10 w-48">
           <button
             onClick={handleCopy}
-            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-secondary-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded transition-colors"
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-secondary-700 dark:text-slate-300 hover:bg-secondary-100 dark:hover:bg-slate-700 rounded transition-colors"
           >
             <Copy className="h-4 w-4" />
             Copy link
           </button>
           <button
             onClick={handleLinkedIn}
-            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-secondary-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded transition-colors"
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-secondary-700 dark:text-slate-300 hover:bg-secondary-100 dark:hover:bg-slate-700 rounded transition-colors"
           >
             <Linkedin className="h-4 w-4" />
             Share on LinkedIn
           </button>
           <button
             onClick={handleTwitter}
-            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-secondary-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded transition-colors"
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-secondary-700 dark:text-slate-300 hover:bg-secondary-100 dark:hover:bg-slate-700 rounded transition-colors"
           >
             <Twitter className="h-4 w-4" />
             Share on Twitter
           </button>
           <button
             onClick={handleEmail}
-            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-secondary-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded transition-colors"
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-secondary-700 dark:text-slate-300 hover:bg-secondary-100 dark:hover:bg-slate-700 rounded transition-colors"
           >
             <Mail className="h-4 w-4" />
             Share via Email

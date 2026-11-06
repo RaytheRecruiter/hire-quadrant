@@ -63,11 +63,11 @@ const TopSkillsSection: React.FC = () => {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
-      <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 flex items-center gap-2 mb-1">
+      <h2 className="text-lg font-semibold text-secondary-800 dark:text-slate-200 flex items-center gap-2 mb-1">
         <Star className="h-5 w-5 text-amber-400" />
         Top Skills
       </h2>
-      <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
+      <p className="text-xs text-secondary-500 dark:text-slate-400 mb-4">
         Pick 3–5 standout skills. Shown prominently on your profile and in employer search results.
       </p>
 
@@ -79,7 +79,7 @@ const TopSkillsSection: React.FC = () => {
         <>
           <div className="flex flex-wrap gap-2 mb-3">
             {topSkills.length === 0 ? (
-              <p className="text-sm text-gray-500 dark:text-slate-400">
+              <p className="text-sm text-secondary-500 dark:text-slate-400">
                 No top skills yet. Upload a resume to auto-fill, or add manually below.
               </p>
             ) : (
@@ -115,7 +115,7 @@ const TopSkillsSection: React.FC = () => {
                 }
               }}
               placeholder="Add a top skill (e.g. React, AWS, Python)"
-              className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 text-sm"
+              className="flex-1 px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 text-sm"
               maxLength={40}
               disabled={topSkills.length >= MAX_TOP_SKILLS}
             />
@@ -129,7 +129,7 @@ const TopSkillsSection: React.FC = () => {
               Add
             </button>
           </div>
-          <p className="text-xs text-gray-400 dark:text-slate-500 mt-2">
+          <p className="text-xs text-secondary-400 dark:text-slate-500 mt-2">
             {topSkills.length}/{MAX_TOP_SKILLS}
           </p>
         </>

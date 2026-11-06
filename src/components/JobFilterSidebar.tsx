@@ -81,7 +81,7 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
 
   return (
     <aside
-      className={`bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 ${className ?? ''}`}
+      className={`bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 ${className ?? ''}`}
       aria-label="Advanced filters"
     >
       <div className="flex items-center justify-between mb-4">
@@ -98,7 +98,7 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
           <button
             type="button"
             onClick={onReset}
-            className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+            className="text-xs text-secondary-500 hover:text-secondary-700 flex items-center gap-1"
           >
             <X className="h-3 w-3" />
             Reset
@@ -108,7 +108,7 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
 
       <div className="space-y-5">
         <div>
-          <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1.5">
+          <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1.5">
             Minimum salary
           </label>
           <input
@@ -120,7 +120,7 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
             onChange={(e) => onChange({ minSalary: parseInt(e.target.value, 10) })}
             className="w-full accent-primary-500"
           />
-          <div className="flex justify-between text-xs text-gray-500 dark:text-slate-400 mt-1">
+          <div className="flex justify-between text-xs text-secondary-500 dark:text-slate-400 mt-1">
             <span>$0</span>
             <span className="font-semibold text-secondary-900 dark:text-white">
               {value.minSalary === 0 ? 'Any' : `$${Math.round(value.minSalary / 1000)}k+`}
@@ -159,9 +159,9 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
             type="checkbox"
             checked={value.visaSponsor}
             onChange={(e) => onChange({ visaSponsor: e.target.checked })}
-            className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
           />
-          <span className="text-sm text-gray-700 dark:text-slate-300">Visa sponsorship</span>
+          <span className="text-sm text-secondary-700 dark:text-slate-300">Visa sponsorship</span>
         </label>
 
         <label className="flex items-center gap-2 cursor-pointer">
@@ -169,9 +169,9 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
             type="checkbox"
             checked={value.includeOconus}
             onChange={(e) => onChange({ includeOconus: e.target.checked })}
-            className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
           />
-          <span className="text-sm text-gray-700 dark:text-slate-300">Include international (OCONUS)</span>
+          <span className="text-sm text-secondary-700 dark:text-slate-300">Include international (OCONUS)</span>
         </label>
       </div>
     </aside>
@@ -185,13 +185,13 @@ const SelectField: React.FC<{
   onChange: (v: string) => void;
 }> = ({ label, value, options, onChange }) => (
   <div>
-    <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">
+    <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
       {label}
     </label>
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+      className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>

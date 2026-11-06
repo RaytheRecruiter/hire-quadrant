@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
               <NexeginMark className="h-7 w-7" />
               <h3 className="text-lg font-bold">Nexegin</h3>
             </div>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-secondary-300">
               Find your next IT role.
             </p>
           </div>
@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
           {/* For Candidates */}
           <div>
             <h4 className="font-semibold mb-4 text-white">For Candidates</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
+            <ul className="space-y-2 text-sm text-secondary-300">
               <li><HardLink to="/" className="hover:text-white transition">Browse Jobs</HardLink></li>
               <li><HardLink to="/saved" className="hover:text-white transition">Saved Jobs</HardLink></li>
               <li><HardLink to="/alerts" className="hover:text-white transition">Job Alerts</HardLink></li>
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
           {/* For Employers */}
           <div>
             <h4 className="font-semibold mb-4 text-white">For Employers</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
+            <ul className="space-y-2 text-sm text-secondary-300">
               <li><a href="mailto:employers@nexegin.com" className="hover:text-white transition">Post a Job</a></li>
               <li><HardLink to="/pricing" className="hover:text-white transition">Pricing</HardLink></li>
               <li><a href="mailto:sales@nexegin.com" className="hover:text-white transition">Contact Sales</a></li>
@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
           {/* Company */}
           <div>
             <h4 className="font-semibold mb-4 text-white">Company</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
+            <ul className="space-y-2 text-sm text-secondary-300">
               <li><HardLink to="/about" className="hover:text-white transition">About</HardLink></li>
               <li><HardLink to="/contact" className="hover:text-white transition">Contact</HardLink></li>
               <li><HardLink to="/privacy" className="hover:text-white transition">Privacy</HardLink></li>
@@ -59,8 +59,8 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Social + Copyright */}
-        <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-gray-300 mb-4 md:mb-0">
+        <div className="border-t border-secondary-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-sm text-secondary-300 mb-4 md:mb-0">
             © {currentYear} Nexegin. All rights reserved.
           </p>
           <div className="flex gap-4">
@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
                 profiles -- misleading rather than broken. Per the audit's
                 own guidance, omit the icon rather than link somewhere
                 wrong; add them back once real profile URLs exist. */}
-            <a href="mailto:hello@nexegin.com" aria-label="Email hello@nexegin.com" className="text-gray-300 hover:text-white transition">
+            <a href="mailto:hello@nexegin.com" aria-label="Email hello@nexegin.com" className="text-secondary-300 hover:text-white transition">
               <Mail className="h-5 w-5" />
             </a>
           </div>

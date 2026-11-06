@@ -81,24 +81,24 @@ const CompanyQAPanel: React.FC<Props> = ({ companyId }) => {
   }
 
   const QuestionRow: React.FC<{ q: Question }> = ({ q }) => (
-    <article className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4">
-      <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
+    <article className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-xl p-4">
+      <p className="text-xs text-secondary-500 dark:text-slate-400 mb-1">
         {q.is_anonymous ? 'Anonymous candidate' : 'A candidate'} · {formatDistanceToNow(new Date(q.created_at), { addSuffix: true })}
       </p>
       <p className="text-secondary-900 dark:text-white font-medium whitespace-pre-line mb-3">{q.body}</p>
 
       {editing === q.id ? (
-        <div className="bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg p-3 space-y-2">
+        <div className="bg-secondary-50 dark:bg-slate-900/50 border border-secondary-200 dark:border-slate-700 rounded-lg p-3 space-y-2">
           <textarea
             rows={3}
             maxLength={2000}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Write a clear, public answer"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={() => setEditing(null)} className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700">
+            <button type="button" onClick={() => setEditing(null)} className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700">
               <X className="h-3.5 w-3.5" /> Cancel
             </button>
             <button type="button" onClick={() => saveAnswer(q)} disabled={saving} className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60">
@@ -134,7 +134,7 @@ const CompanyQAPanel: React.FC<Props> = ({ companyId }) => {
           Unanswered ({unanswered.length})
         </h3>
         {unanswered.length === 0 ? (
-          <p className="text-sm text-gray-500 dark:text-slate-400">No pending questions.</p>
+          <p className="text-sm text-secondary-500 dark:text-slate-400">No pending questions.</p>
         ) : (
           <div className="space-y-3">
             {unanswered.map((q) => <QuestionRow key={q.id} q={q} />)}

@@ -195,20 +195,20 @@ const AdminSponsorshipAnalytics: React.FC = () => {
           Sponsorship performance
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
-            <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
+            <p className="text-xs text-secondary-500 dark:text-slate-400 flex items-center gap-1">
               <DollarSign className="h-3 w-3" /> Total sponsorship revenue
             </p>
             <p className="text-2xl font-bold text-secondary-900 dark:text-white mt-1">{fmtDollars(totalRevenueCents)}</p>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
-            <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
+            <p className="text-xs text-secondary-500 dark:text-slate-400 flex items-center gap-1">
               <ShoppingBag className="h-3 w-3" /> Paid purchases
             </p>
             <p className="text-2xl font-bold text-secondary-900 dark:text-white mt-1">{realOrders.length}</p>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
-            <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
+            <p className="text-xs text-secondary-500 dark:text-slate-400 flex items-center gap-1">
               <ShieldCheck className="h-3 w-3" /> Comp'd sponsorships
             </p>
             <p className="text-2xl font-bold text-secondary-900 dark:text-white mt-1">{orders.length - realOrders.length}</p>
@@ -216,17 +216,17 @@ const AdminSponsorshipAnalytics: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
             <p className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">Revenue by tier</p>
             {revenueByTier.size === 0 ? (
-              <p className="text-xs text-gray-400 dark:text-slate-500">No paid purchases yet.</p>
+              <p className="text-xs text-secondary-400 dark:text-slate-500">No paid purchases yet.</p>
             ) : (
               <table className="w-full text-sm">
                 <tbody>
                   {[...revenueByTier.entries()].sort((a, b) => a[0] - b[0]).map(([tier, v]) => (
-                    <tr key={tier} className="border-b border-gray-50 dark:border-slate-800 last:border-0">
-                      <td className="py-1.5 text-gray-600 dark:text-slate-400">Tier {tier}</td>
-                      <td className="py-1.5 text-right text-gray-500 dark:text-slate-400">{v.count} purchases</td>
+                    <tr key={tier} className="border-b border-secondary-50 dark:border-slate-800 last:border-0">
+                      <td className="py-1.5 text-secondary-600 dark:text-slate-400">Tier {tier}</td>
+                      <td className="py-1.5 text-right text-secondary-500 dark:text-slate-400">{v.count} purchases</td>
                       <td className="py-1.5 text-right font-semibold text-secondary-900 dark:text-white">{fmtDollars(v.cents)}</td>
                     </tr>
                   ))}
@@ -235,46 +235,46 @@ const AdminSponsorshipAnalytics: React.FC = () => {
             )}
           </div>
 
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
             <p className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
               Sponsored vs. non-sponsored (platform average)
             </p>
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-xs text-gray-400 dark:text-slate-500">
+                <tr className="text-xs text-secondary-400 dark:text-slate-500">
                   <th className="text-left font-normal"></th>
                   <th className="text-right font-normal">Views</th>
                   <th className="text-right font-normal">Applications</th>
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b border-gray-50 dark:border-slate-800">
-                  <td className="py-1.5 text-gray-600 dark:text-slate-400">Sponsored ({sponsoredJobs.length})</td>
+                <tr className="border-b border-secondary-50 dark:border-slate-800">
+                  <td className="py-1.5 text-secondary-600 dark:text-slate-400">Sponsored ({sponsoredJobs.length})</td>
                   <td className="py-1.5 text-right font-semibold text-amber-600">{avg(sponsoredJobs, 'views').toFixed(1)}</td>
                   <td className="py-1.5 text-right font-semibold text-amber-600">{avg(sponsoredJobs, 'applications').toFixed(1)}</td>
                 </tr>
                 <tr>
-                  <td className="py-1.5 text-gray-600 dark:text-slate-400">Non-sponsored ({nonSponsoredJobs.length})</td>
-                  <td className="py-1.5 text-right text-gray-500 dark:text-slate-400">{avg(nonSponsoredJobs, 'views').toFixed(1)}</td>
-                  <td className="py-1.5 text-right text-gray-500 dark:text-slate-400">{avg(nonSponsoredJobs, 'applications').toFixed(1)}</td>
+                  <td className="py-1.5 text-secondary-600 dark:text-slate-400">Non-sponsored ({nonSponsoredJobs.length})</td>
+                  <td className="py-1.5 text-right text-secondary-500 dark:text-slate-400">{avg(nonSponsoredJobs, 'views').toFixed(1)}</td>
+                  <td className="py-1.5 text-right text-secondary-500 dark:text-slate-400">{avg(nonSponsoredJobs, 'applications').toFixed(1)}</td>
                 </tr>
               </tbody>
             </table>
-            <p className="text-xs text-gray-400 dark:text-slate-500 mt-3">
+            <p className="text-xs text-secondary-400 dark:text-slate-500 mt-3">
               Current snapshot, not a before/after lift — views/applications aren't tracked over time yet.
             </p>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
           <p className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">Recent purchases</p>
           {orders.length === 0 ? (
-            <p className="text-xs text-gray-400 dark:text-slate-500">No sponsorship purchases yet.</p>
+            <p className="text-xs text-secondary-400 dark:text-slate-500">No sponsorship purchases yet.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-xs uppercase text-gray-500 dark:text-slate-400 border-b border-gray-200 dark:border-slate-700">
+                  <tr className="text-left text-xs uppercase text-secondary-500 dark:text-slate-400 border-b border-secondary-200 dark:border-slate-700">
                     <th className="py-2 pr-3">Job</th>
                     <th className="py-2 pr-3">Company</th>
                     <th className="py-2 pr-3">Tier</th>
@@ -285,7 +285,7 @@ const AdminSponsorshipAnalytics: React.FC = () => {
                 </thead>
                 <tbody>
                   {orders.slice(0, 30).map((o) => (
-                    <tr key={o.id} className="border-b border-gray-100 dark:border-slate-800">
+                    <tr key={o.id} className="border-b border-secondary-100 dark:border-slate-800">
                       <td className="py-2 pr-3">{jobTitleById[o.job_id] || o.job_id}</td>
                       <td className="py-2 pr-3">{companyNameById[o.company_id] || '—'}</td>
                       <td className="py-2 pr-3">{o.tier ?? '—'}</td>
@@ -297,7 +297,7 @@ const AdminSponsorshipAnalytics: React.FC = () => {
                           fmtDollars(o.price_cents_paid + (o.addon_price_cents || 0))
                         )}
                       </td>
-                      <td className="py-2 pr-3 text-gray-500 dark:text-slate-400">
+                      <td className="py-2 pr-3 text-secondary-500 dark:text-slate-400">
                         {new Date(o.purchased_at).toLocaleDateString()}
                       </td>
                     </tr>
@@ -314,12 +314,12 @@ const AdminSponsorshipAnalytics: React.FC = () => {
           <Sparkles className="h-4 w-4 text-primary-600" />
           Comp a job sponsorship
         </h2>
-        <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
+        <p className="text-xs text-secondary-500 dark:text-slate-400 mb-4">
           Grants sponsorship for free — for demo/trial jobs, so sales doesn't have to go through Stripe.
         </p>
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4 space-y-3">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4 space-y-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400" />
             <input
               type="text"
               placeholder="Search job by title…"
@@ -328,10 +328,10 @@ const AdminSponsorshipAnalytics: React.FC = () => {
                 setSelectedJob(null);
                 setJobSearch(e.target.value);
               }}
-              className="w-full pl-10 pr-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg text-sm"
+              className="w-full pl-10 pr-3 py-2 border border-secondary-200 dark:border-slate-700 rounded-lg text-sm"
             />
             {jobResults.length > 0 && !selectedJob && (
-              <div className="absolute z-10 mt-1 w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+              <div className="absolute z-10 mt-1 w-full bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                 {jobResults.map((j) => (
                   <button
                     key={j.id}
@@ -340,10 +340,10 @@ const AdminSponsorshipAnalytics: React.FC = () => {
                       setSelectedJob(j);
                       setJobResults([]);
                     }}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-slate-700 flex items-center justify-between"
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-secondary-50 dark:hover:bg-slate-700 flex items-center justify-between"
                   >
                     <span>{j.title}</span>
-                    <span className="text-xs text-gray-400">{j.company}</span>
+                    <span className="text-xs text-secondary-400">{j.company}</span>
                   </button>
                 ))}
               </div>
@@ -360,13 +360,13 @@ const AdminSponsorshipAnalytics: React.FC = () => {
                 <select
                   value={compTier}
                   onChange={(e) => setCompTier(Number(e.target.value))}
-                  className="px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg text-sm"
+                  className="px-3 py-2 border border-secondary-200 dark:border-slate-700 rounded-lg text-sm"
                 >
                   {plans.map((p) => (
                     <option key={p.tier} value={p.tier}>{p.name} ({p.duration_days}d)</option>
                   ))}
                 </select>
-                <label className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-slate-400">
+                <label className="flex items-center gap-1.5 text-sm text-secondary-600 dark:text-slate-400">
                   <input type="checkbox" checked={compUrgent} onChange={(e) => setCompUrgent(e.target.checked)} />
                   + Urgent Hiring
                 </label>

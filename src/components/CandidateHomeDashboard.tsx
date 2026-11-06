@@ -82,13 +82,13 @@ const CandidateHomeDashboard: React.FC = () => {
   const completenessScore = computeProfileScore(inputs).score;
 
   return (
-    <section className="bg-gradient-to-br from-primary-50/60 via-white to-white dark:from-primary-900/20 dark:via-slate-950 dark:to-slate-950 border-b border-gray-100 dark:border-slate-800">
+    <section className="bg-gradient-to-br from-primary-50/60 via-white to-white dark:from-primary-900/20 dark:via-slate-950 dark:to-slate-950 border-b border-secondary-100 dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <header className="mb-6">
           <h1 className="text-2xl font-bold text-secondary-900 dark:text-white">
             Welcome back, {user.name?.split(' ')[0] ?? 'there'}
           </h1>
-          <p className="text-sm text-gray-600 dark:text-slate-400">
+          <p className="text-sm text-secondary-600 dark:text-slate-400">
             Your job search at a glance.
           </p>
         </header>
@@ -128,7 +128,7 @@ const CandidateHomeDashboard: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Profile strength */}
-          <aside className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+          <aside className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="h-4 w-4 text-primary-500" />
               <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
@@ -137,8 +137,8 @@ const CandidateHomeDashboard: React.FC = () => {
             </div>
             {completenessLoading ? (
               <>
-                <div className="h-9 w-16 bg-gray-100 dark:bg-slate-700 rounded animate-pulse mb-2" />
-                <div className="w-full h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3 animate-pulse" />
+                <div className="h-9 w-16 bg-secondary-100 dark:bg-slate-700 rounded animate-pulse mb-2" />
+                <div className="w-full h-2 bg-secondary-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3 animate-pulse" />
               </>
             ) : (
               <>
@@ -147,10 +147,10 @@ const CandidateHomeDashboard: React.FC = () => {
                     {completenessScore}%
                   </span>
                   {completenessScore < 100 && (
-                    <span className="text-xs text-gray-500 dark:text-slate-400">complete</span>
+                    <span className="text-xs text-secondary-500 dark:text-slate-400">complete</span>
                   )}
                 </div>
-                <div className="w-full h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3">
+                <div className="w-full h-2 bg-secondary-100 dark:bg-slate-700 rounded-full overflow-hidden mb-3">
                   <div
                     className={`h-full transition-all ${
                       completenessScore >= 90
@@ -176,7 +176,7 @@ const CandidateHomeDashboard: React.FC = () => {
           </aside>
 
           {/* Recent applications */}
-          <aside className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 lg:col-span-2">
+          <aside className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 lg:col-span-2">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Briefcase className="h-4 w-4 text-primary-500" />
@@ -192,27 +192,27 @@ const CandidateHomeDashboard: React.FC = () => {
               </HardLink>
             </div>
             {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+              <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />
             ) : applications.length === 0 ? (
-              <p className="text-xs text-gray-500 dark:text-slate-400">
+              <p className="text-xs text-secondary-500 dark:text-slate-400">
                 No applications yet.{' '}
                 <HardLink to="/jobs" className="text-primary-600 hover:text-primary-700 font-medium">
                   Browse jobs →
                 </HardLink>
               </p>
             ) : (
-              <ul className="divide-y divide-gray-100 dark:divide-slate-700">
+              <ul className="divide-y divide-secondary-100 dark:divide-slate-700">
                 {applications.map((a) => (
                   <li key={a.id} className="py-2">
                     <HardLink
                       to={a.job?.id ? `/jobs/${a.job.id}` : '/my-jobs'}
-                      className="flex items-center justify-between gap-3 hover:bg-gray-50 dark:hover:bg-slate-700/50 -mx-2 px-2 py-1 rounded"
+                      className="flex items-center justify-between gap-3 hover:bg-secondary-50 dark:hover:bg-slate-700/50 -mx-2 px-2 py-1 rounded"
                     >
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-secondary-900 dark:text-white truncate">
                           {a.job?.title ?? 'Job'}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
+                        <p className="text-xs text-secondary-500 dark:text-slate-400 truncate">
                           {a.job?.company} ·{' '}
                           {formatDistanceToNow(new Date(a.applied_at), { addSuffix: true })}
                         </p>
@@ -227,7 +227,7 @@ const CandidateHomeDashboard: React.FC = () => {
         </div>
 
         {/* Skills match */}
-        <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mt-4">
+        <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mt-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Target className="h-4 w-4 text-primary-500" />
@@ -235,7 +235,7 @@ const CandidateHomeDashboard: React.FC = () => {
                 Matched to your skills
               </h3>
               {radiusMiles != null && (
-                <span className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400 bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-xs text-secondary-500 dark:text-slate-400 bg-secondary-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
                   <MapPin className="h-2.5 w-2.5" />
                   within {radiusMiles} mi
                 </span>
@@ -249,9 +249,9 @@ const CandidateHomeDashboard: React.FC = () => {
             </HardLink>
           </div>
           {matchLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+            <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />
           ) : !hasSignals ? (
-            <p className="text-xs text-gray-500 dark:text-slate-400">
+            <p className="text-xs text-secondary-500 dark:text-slate-400">
               Add your resume or top skills to your{' '}
               <HardLink to="/profile" className="text-primary-600 hover:text-primary-700 font-medium">
                 profile
@@ -259,7 +259,7 @@ const CandidateHomeDashboard: React.FC = () => {
               to get jobs matched to you.
             </p>
           ) : matchedJobs.length === 0 ? (
-            <p className="text-xs text-gray-500 dark:text-slate-400">
+            <p className="text-xs text-secondary-500 dark:text-slate-400">
               No matches yet — check back as new jobs are posted.
             </p>
           ) : (
@@ -268,12 +268,12 @@ const CandidateHomeDashboard: React.FC = () => {
                 <HardLink
                   key={j.id}
                   to={`/jobs/${j.id}`}
-                  className="block p-3 rounded-lg border border-gray-100 dark:border-slate-700 hover:border-primary-300 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
+                  className="block p-3 rounded-lg border border-secondary-100 dark:border-slate-700 hover:border-primary-300 hover:bg-secondary-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
                   <p className="text-sm font-medium text-secondary-900 dark:text-white truncate">
                     {j.title}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400 truncate">
+                  <p className="text-xs text-secondary-500 dark:text-slate-400 truncate">
                     {j.company}
                     {j.distanceMiles != null
                       ? ` · ${j.distanceMiles.toFixed(0)} mi away`
@@ -292,7 +292,7 @@ const CandidateHomeDashboard: React.FC = () => {
                     </div>
                   )}
                   {j.posted_date && (
-                    <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
+                    <p className="text-xs text-secondary-400 dark:text-slate-500 mt-1">
                       {formatDistanceToNow(new Date(j.posted_date), { addSuffix: true })}
                     </p>
                   )}
@@ -316,7 +316,7 @@ const StatCard: React.FC<{
 }> = ({ label, value, icon, href, tone, badge }) => (
   <HardLink
     to={href}
-    className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-3 hover:border-primary-300 dark:hover:border-primary-500 transition-colors relative"
+    className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-3 hover:border-primary-300 dark:hover:border-primary-500 transition-colors relative"
   >
     <div className={`flex items-center gap-1.5 mb-1 ${tone}`}>
       {icon}
@@ -347,7 +347,7 @@ const STATUS_TONES: Record<string, string> = {
 const StatusPill: React.FC<{ status: string }> = ({ status }) => (
   <span
     className={`px-2 py-0.5 rounded-full text-xs font-semibold capitalize flex-shrink-0 ${
-      STATUS_TONES[status] ?? 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300'
+      STATUS_TONES[status] ?? 'bg-secondary-100 dark:bg-slate-700 text-secondary-600 dark:text-slate-300'
     }`}
   >
     {status}

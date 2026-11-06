@@ -57,11 +57,11 @@ const TrendingSection: React.FC = () => {
               <button
                 key={c.company}
                 onClick={() => setSearchTerm(c.company)}
-                className="group flex items-center gap-2 bg-gray-50 dark:bg-slate-900/50 hover:bg-primary-50 px-3 py-2 rounded-full text-sm text-gray-700 dark:text-slate-300 hover:text-primary-700 transition-colors"
+                className="group flex items-center gap-2 bg-secondary-50 dark:bg-slate-900/50 hover:bg-primary-50 px-3 py-2 rounded-full text-sm text-secondary-700 dark:text-slate-300 hover:text-primary-700 transition-colors"
               >
-                <Building2 className="h-3.5 w-3.5 text-gray-400 dark:text-slate-500 group-hover:text-primary-500" />
+                <Building2 className="h-3.5 w-3.5 text-secondary-400 dark:text-slate-500 group-hover:text-primary-500" />
                 <span className="font-medium">{c.company}</span>
-                <span className="text-xs text-gray-400 dark:text-slate-500">{c.job_count}</span>
+                <span className="text-xs text-secondary-400 dark:text-slate-500">{c.job_count}</span>
               </button>
             ))}
           </div>
@@ -79,11 +79,11 @@ const TrendingSection: React.FC = () => {
               <button
                 key={l.location}
                 onClick={() => setLocationFilter(l.location)}
-                className="group flex items-center gap-2 bg-gray-50 dark:bg-slate-900/50 hover:bg-primary-50 px-3 py-2 rounded-full text-sm text-gray-700 dark:text-slate-300 hover:text-primary-700 transition-colors"
+                className="group flex items-center gap-2 bg-secondary-50 dark:bg-slate-900/50 hover:bg-primary-50 px-3 py-2 rounded-full text-sm text-secondary-700 dark:text-slate-300 hover:text-primary-700 transition-colors"
               >
-                <MapPin className="h-3.5 w-3.5 text-gray-400 dark:text-slate-500 group-hover:text-primary-500" />
+                <MapPin className="h-3.5 w-3.5 text-secondary-400 dark:text-slate-500 group-hover:text-primary-500" />
                 <span className="font-medium">{l.location}</span>
-                <span className="text-xs text-gray-400 dark:text-slate-500">{l.job_count}</span>
+                <span className="text-xs text-secondary-400 dark:text-slate-500">{l.job_count}</span>
               </button>
             ))}
           </div>

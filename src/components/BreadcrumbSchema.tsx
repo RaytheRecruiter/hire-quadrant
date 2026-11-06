@@ -33,7 +33,7 @@ const BreadcrumbSchema: React.FC<Props> = ({ items, className }) => {
       </Helmet>
       <nav
         aria-label="Breadcrumb"
-        className={`text-sm text-gray-500 dark:text-slate-400 ${className ?? ''}`}
+        className={`text-sm text-secondary-500 dark:text-slate-400 ${className ?? ''}`}
       >
         <ol className="flex items-center gap-1 flex-wrap">
           {items.map((item, i) => (
@@ -45,7 +45,7 @@ const BreadcrumbSchema: React.FC<Props> = ({ items, className }) => {
               ) : (
                 <span className="text-secondary-900 dark:text-white">{item.name}</span>
               )}
-              {i < items.length - 1 && <span className="mx-1 text-gray-300">/</span>}
+              {i < items.length - 1 && <span className="mx-1 text-secondary-300">/</span>}
             </li>
           ))}
         </ol>

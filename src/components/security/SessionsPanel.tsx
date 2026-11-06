@@ -54,7 +54,7 @@ const SessionsPanel: React.FC = () => {
   };
 
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Monitor className="h-4 w-4 text-primary-500" />
@@ -75,18 +75,18 @@ const SessionsPanel: React.FC = () => {
       </div>
 
       {loading ? (
-        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+        <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />
       ) : rows.length === 0 ? (
-        <p className="text-xs text-gray-500 dark:text-slate-400">No other active sessions.</p>
+        <p className="text-xs text-secondary-500 dark:text-slate-400">No other active sessions.</p>
       ) : (
-        <ul className="divide-y divide-gray-100 dark:divide-slate-700">
+        <ul className="divide-y divide-secondary-100 dark:divide-slate-700">
           {rows.map((s) => (
             <li key={s.id} className="py-2 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-sm text-secondary-900 dark:text-white truncate">
                   {summarize(s.user_agent)}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-slate-400">
+                <p className="text-xs text-secondary-500 dark:text-slate-400">
                   Last active {formatDistanceToNow(new Date(s.updated_at), { addSuffix: true })}
                   {s.ip && ` · ${s.ip}`}
                 </p>

@@ -186,26 +186,26 @@ const JobPreferencesSection: React.FC = () => {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
-      <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 flex items-center gap-2 mb-4">
-        <Target className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+      <h2 className="text-lg font-semibold text-secondary-800 dark:text-slate-200 flex items-center gap-2 mb-4">
+        <Target className="h-5 w-5 text-secondary-400 dark:text-slate-500" />
         Job Preferences
       </h2>
 
       <div className="space-y-5">
         <div>
-          <label htmlFor="pref-titles" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Desired job titles</label>
+          <label htmlFor="pref-titles" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Desired job titles</label>
           <input
             id="pref-titles"
             type="text"
             value={titlesInput}
             onChange={(e) => setTitlesInput(e.target.value)}
             placeholder="Comma-separated (e.g. Software Engineer, Product Manager)"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
           />
         </div>
 
         <div>
-          <label htmlFor="pref-zip" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+          <label htmlFor="pref-zip" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">
             ZIP code <span className="text-red-500">*</span>
           </label>
           <input
@@ -220,66 +220,66 @@ const JobPreferencesSection: React.FC = () => {
             value={prefs.zip_code}
             onChange={(e) => setPrefs((p) => ({ ...p, zip_code: e.target.value }))}
             placeholder="e.g. 22030"
-            className="w-full max-w-xs px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+            className="w-full max-w-xs px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
           />
-          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">
             Used for distance-based job matching.
           </p>
         </div>
 
         <div>
-          <label htmlFor="pref-radius" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 flex items-center gap-1">
-            <MapPin className="h-4 w-4 text-gray-400 dark:text-slate-500" />
+          <label htmlFor="pref-radius" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1 flex items-center gap-1">
+            <MapPin className="h-4 w-4 text-secondary-400 dark:text-slate-500" />
             Search radius
           </label>
           <select
             id="pref-radius"
             value={prefs.mile_radius}
             onChange={(e) => setPrefs((p) => ({ ...p, mile_radius: Number(e.target.value) }))}
-            className="w-full max-w-xs px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+            className="w-full max-w-xs px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
           >
             {RADIUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
-          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">
             Filter the Jobs page to roles within this distance from your ZIP.
           </p>
         </div>
 
         <div>
-          <label htmlFor="pref-locations" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Desired locations</label>
+          <label htmlFor="pref-locations" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Desired locations</label>
           <input
             id="pref-locations"
             type="text"
             value={locationsInput}
             onChange={(e) => setLocationsInput(e.target.value)}
             placeholder="Comma-separated (e.g. Remote, New York, Austin)"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label htmlFor="pref-salary-min" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Salary min ($)</label>
+            <label htmlFor="pref-salary-min" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Salary min ($)</label>
             <input
               id="pref-salary-min"
               type="number"
               value={prefs.desired_salary_min ?? ''}
               onChange={(e) => setPrefs((p) => ({ ...p, desired_salary_min: e.target.value ? Number(e.target.value) : null }))}
               placeholder="e.g. 80000"
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
             />
           </div>
           <div>
-            <label htmlFor="pref-salary-max" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Salary max ($)</label>
+            <label htmlFor="pref-salary-max" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Salary max ($)</label>
             <input
               id="pref-salary-max"
               type="number"
               value={prefs.desired_salary_max ?? ''}
               onChange={(e) => setPrefs((p) => ({ ...p, desired_salary_max: e.target.value ? Number(e.target.value) : null }))}
               placeholder="e.g. 140000"
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
             />
           </div>
         </div>
@@ -290,12 +290,12 @@ const JobPreferencesSection: React.FC = () => {
         <ChipGroup label="Industries" options={INDUSTRIES} selected={prefs.industries} onToggle={(v) => toggle('industries', v)} />
 
         <div>
-          <label htmlFor="pref-auth" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Work authorization</label>
+          <label htmlFor="pref-auth" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Work authorization</label>
           <select
             id="pref-auth"
             value={prefs.work_authorization}
             onChange={(e) => setPrefs((p) => ({ ...p, work_authorization: e.target.value }))}
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
           >
             <option value="">—</option>
             {AUTH_OPTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
@@ -303,21 +303,21 @@ const JobPreferencesSection: React.FC = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-slate-300">
+          <label className="flex items-center gap-2 text-sm text-secondary-700 dark:text-slate-300">
             <input
               type="checkbox"
               checked={prefs.open_to_relocation}
               onChange={(e) => setPrefs((p) => ({ ...p, open_to_relocation: e.target.checked }))}
-              className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
             />
             Open to relocation
           </label>
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-slate-300">
+          <label className="flex items-center gap-2 text-sm text-secondary-700 dark:text-slate-300">
             <input
               type="checkbox"
               checked={prefs.ready_to_interview}
               onChange={(e) => setPrefs((p) => ({ ...p, ready_to_interview: e.target.checked }))}
-              className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
             />
             Ready to interview (signals employers you're actively looking)
           </label>
@@ -346,7 +346,7 @@ const ChipGroup: React.FC<{
   onToggle: (v: string) => void;
 }> = ({ label, options, selected, onToggle }) => (
   <div>
-    <span className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{label}</span>
+    <span className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">{label}</span>
     <div className="flex flex-wrap gap-2">
       {options.map((o) => {
         const active = selected.includes(o);
@@ -358,7 +358,7 @@ const ChipGroup: React.FC<{
             className={`px-3 py-1 rounded-full text-sm transition-colors ${
               active
                 ? 'bg-primary-600 text-white'
-                : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-200'
+                : 'bg-secondary-100 dark:bg-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-secondary-200'
             }`}
           >
             {o}

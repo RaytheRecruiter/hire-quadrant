@@ -72,7 +72,7 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
             aria-modal="true"
             aria-labelledby="confirm-title"
             aria-describedby={options.message ? 'confirm-message' : undefined}
-            className="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-100 dark:border-slate-700"
+            className="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-xl border border-secondary-100 dark:border-slate-700"
           >
             <div className="flex items-start gap-3">
               {options.destructive && (
@@ -96,7 +96,7 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 ref={cancelRef}
                 type="button"
                 onClick={() => close(false)}
-                className="px-4 py-2.5 text-sm font-semibold rounded-lg border border-gray-200 dark:border-slate-600 text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
+                className="px-4 py-2.5 text-sm font-semibold rounded-lg border border-secondary-200 dark:border-slate-600 text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
               >
                 {options.cancelLabel ?? 'Cancel'}
               </button>

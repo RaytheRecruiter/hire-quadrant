@@ -66,7 +66,7 @@ const ReportReviewButton: React.FC<Props> = ({ reviewId, returnTo }) => {
 
   if (reported) {
     return (
-      <span className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400">
+      <span className="inline-flex items-center gap-1 text-xs text-secondary-500 dark:text-slate-400">
         <Flag className="h-3 w-3" />
         Reported
       </span>
@@ -78,7 +78,7 @@ const ReportReviewButton: React.FC<Props> = ({ reviewId, returnTo }) => {
       <button
         type="button"
         onClick={handleClick}
-        className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
+        className="inline-flex items-center gap-1 text-xs text-secondary-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
         aria-label="Report this review"
       >
         <Flag className="h-3 w-3" />
@@ -107,7 +107,7 @@ const ReportReviewButton: React.FC<Props> = ({ reviewId, returnTo }) => {
                   id="report-reason"
                   value={reason}
                   onChange={(e) => setReason(e.target.value as Reason)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   {Object.entries(REASON_LABELS).map(([v, label]) => (
                     <option key={v} value={v}>
@@ -127,7 +127,7 @@ const ReportReviewButton: React.FC<Props> = ({ reviewId, returnTo }) => {
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                   placeholder="Add any context that'll help our moderators"
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -135,7 +135,7 @@ const ReportReviewButton: React.FC<Props> = ({ reviewId, returnTo }) => {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+                className="px-4 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700"
               >
                 Cancel
               </button>

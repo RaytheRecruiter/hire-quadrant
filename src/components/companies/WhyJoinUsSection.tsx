@@ -36,7 +36,7 @@ const WhyJoinUsSection: React.FC<Props> = ({ companyId, companyName }) => {
   if (loading || blocks.length === 0) return null;
 
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
+    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
       <h2 className="text-xl font-bold text-secondary-900 dark:text-white mb-5">
         Why join {companyName}?
       </h2>
@@ -58,7 +58,7 @@ const BlockRenderer: React.FC<{ block: Block }> = ({ block }) => {
           loading="lazy"
         />
         {block.heading && (
-          <figcaption className="text-sm text-gray-500 dark:text-slate-400 mt-2">{block.heading}</figcaption>
+          <figcaption className="text-sm text-secondary-500 dark:text-slate-400 mt-2">{block.heading}</figcaption>
         )}
       </figure>
     );
@@ -93,18 +93,18 @@ const BlockRenderer: React.FC<{ block: Block }> = ({ block }) => {
         <Quote className="h-5 w-5 text-primary-400 mb-2" />
         <p className="text-secondary-900 dark:text-white italic whitespace-pre-line">{block.body}</p>
         {block.heading && (
-          <footer className="text-sm text-gray-600 dark:text-slate-400 mt-2">— {block.heading}</footer>
+          <footer className="text-sm text-secondary-600 dark:text-slate-400 mt-2">— {block.heading}</footer>
         )}
       </blockquote>
     );
   }
   if (block.kind === 'stat' && block.body) {
     return (
-      <div className="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-4 flex items-start gap-3">
+      <div className="bg-secondary-50 dark:bg-slate-900/50 rounded-xl p-4 flex items-start gap-3">
         <TrendingUp className="h-5 w-5 text-primary-600 flex-shrink-0 mt-0.5" />
         <div>
           <p className="text-2xl font-bold text-secondary-900 dark:text-white">{block.body}</p>
-          {block.heading && <p className="text-sm text-gray-600 dark:text-slate-400">{block.heading}</p>}
+          {block.heading && <p className="text-sm text-secondary-600 dark:text-slate-400">{block.heading}</p>}
         </div>
       </div>
     );
@@ -117,7 +117,7 @@ const BlockRenderer: React.FC<{ block: Block }> = ({ block }) => {
         <h3 className="text-lg font-semibold text-secondary-900 dark:text-white mb-1">{block.heading}</h3>
       )}
       {block.body && (
-        <p className="text-gray-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">{block.body}</p>
+        <p className="text-secondary-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">{block.body}</p>
       )}
     </div>
   );

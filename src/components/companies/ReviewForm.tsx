@@ -259,7 +259,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5 space-y-4"
+      className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl p-5 space-y-4"
     >
       <h3 className="text-lg font-semibold text-secondary-900 dark:text-white">
         {existing ? 'Edit your review' : 'Write a review'}
@@ -285,7 +285,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
                   >
                     <Star
                       className={`h-6 w-6 transition-colors ${
-                        active ? 'fill-amber-400 text-amber-400' : 'text-gray-300 dark:text-slate-600 hover:text-amber-300'
+                        active ? 'fill-amber-400 text-amber-400' : 'text-secondary-300 dark:text-slate-600 hover:text-amber-300'
                       }`}
                     />
                   </button>
@@ -295,7 +295,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
                 <button
                   type="button"
                   onClick={() => setRating(key, 0)}
-                  className="ml-2 text-xs text-gray-500 dark:text-slate-400 hover:underline"
+                  className="ml-2 text-xs text-secondary-500 dark:text-slate-400 hover:underline"
                 >
                   clear
                 </button>
@@ -318,7 +318,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
           value={form.title}
           onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
           placeholder="Summarize your experience in one line"
-          className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         />
       </div>
 
@@ -334,7 +334,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
             value={form.pros}
             onChange={(e) => setForm((f) => ({ ...f, pros: e.target.value }))}
             placeholder="What did you like?"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
         <div>
@@ -348,7 +348,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
             value={form.cons}
             onChange={(e) => setForm((f) => ({ ...f, cons: e.target.value }))}
             placeholder="What didn't work?"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -364,7 +364,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
             onChange={(e) =>
               setForm((f) => ({ ...f, employment_status: e.target.value as FormState['employment_status'] }))
             }
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           >
             <option value="">Prefer not to say</option>
             <option value="current">Current employee</option>
@@ -382,7 +382,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
             value={form.job_title}
             onChange={(e) => setForm((f) => ({ ...f, job_title: e.target.value }))}
             placeholder="e.g. Software Engineer"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -392,13 +392,13 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
           type="checkbox"
           checked={form.is_anonymous}
           onChange={(e) => setForm((f) => ({ ...f, is_anonymous: e.target.checked }))}
-          className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+          className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
         />
         Post anonymously
       </label>
 
-      <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700">
-        <p className="text-xs text-gray-500 dark:text-slate-400">
+      <div className="flex items-center justify-between pt-2 border-t border-secondary-100 dark:border-slate-700">
+        <p className="text-xs text-secondary-500 dark:text-slate-400">
           Reviews are held for moderation before publishing.
         </p>
         <div className="flex gap-2">
@@ -406,7 +406,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
             <button
               type="button"
               onClick={() => setExpanded(false)}
-              className="px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+              className="px-4 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-700"
             >
               Cancel
             </button>

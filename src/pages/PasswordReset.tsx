@@ -61,9 +61,9 @@ const PasswordReset: React.FC = () => {
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12">
         <div className="w-full max-w-md">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-8">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-secondary-100 dark:border-slate-700 p-8">
             <HardLink to="/login" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 text-sm font-medium mb-6">
               <ArrowLeft className="h-4 w-4" /> Back to Login
             </HardLink>
@@ -75,7 +75,7 @@ const PasswordReset: React.FC = () => {
             <h1 className="text-2xl font-bold text-secondary-900 dark:text-white mb-2">
               Create New Password
             </h1>
-            <p className="text-gray-600 dark:text-slate-400 mb-8">
+            <p className="text-secondary-600 dark:text-slate-400 mb-8">
               Enter a strong password to secure your account.
             </p>
 
@@ -93,13 +93,13 @@ const PasswordReset: React.FC = () => {
                     value={password}
                     onChange={(e) => handlePasswordChange(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
+                    className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-400 hover:text-secondary-600"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -107,8 +107,8 @@ const PasswordReset: React.FC = () => {
 
                 {/* Password Requirements */}
                 <div className="mt-3 space-y-2">
-                  <p className="text-xs font-semibold text-gray-600 dark:text-slate-400">Password must contain:</p>
-                  <ul className="space-y-1 text-xs text-gray-500 dark:text-slate-500">
+                  <p className="text-xs font-semibold text-secondary-600 dark:text-slate-400">Password must contain:</p>
+                  <ul className="space-y-1 text-xs text-secondary-500 dark:text-slate-500">
                     <li className={password.length >= 8 ? 'text-green-600' : ''}>
                       <Check className="inline h-3 w-3 mr-1" aria-hidden="true" />At least 8 characters
                     </li>
@@ -141,13 +141,13 @@ const PasswordReset: React.FC = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500"
+                    className="w-full px-4 py-3 border border-secondary-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-400 hover:text-secondary-600"
                   >
                     {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -166,7 +166,7 @@ const PasswordReset: React.FC = () => {
               </button>
             </form>
 
-            <p className="text-xs text-gray-500 dark:text-slate-500 text-center mt-6">
+            <p className="text-xs text-secondary-500 dark:text-slate-500 text-center mt-6">
               If the reset link has expired, <HardLink to="/login?tab=forgot" className="text-primary-600 hover:underline">request a new one</HardLink>.
             </p>
           </div>

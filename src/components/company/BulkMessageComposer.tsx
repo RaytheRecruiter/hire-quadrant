@@ -119,35 +119,35 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }
         className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-slate-700">
+        <header className="flex items-center justify-between p-4 border-b border-secondary-100 dark:border-slate-700">
           <div className="flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-primary-500" />
             <h2 className="font-semibold text-secondary-900 dark:text-white">Bulk message</h2>
-            <span className="text-xs text-gray-500 dark:text-slate-400">
+            <span className="text-xs text-secondary-500 dark:text-slate-400">
               {selected.size} of {applicants.length} selected
             </span>
           </div>
-          <button type="button" onClick={onClose} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-slate-700">
-            <X className="h-4 w-4 text-gray-500" />
+          <button type="button" onClick={onClose} className="p-1 rounded hover:bg-secondary-100 dark:hover:bg-slate-700">
+            <X className="h-4 w-4 text-secondary-500" />
           </button>
         </header>
 
         <div className="p-4 grid md:grid-cols-[240px_1fr] gap-4">
-          <aside className="max-h-80 overflow-auto border border-gray-100 dark:border-slate-700 rounded-lg">
-            <ul className="divide-y divide-gray-100 dark:divide-slate-700">
+          <aside className="max-h-80 overflow-auto border border-secondary-100 dark:border-slate-700 rounded-lg">
+            <ul className="divide-y divide-secondary-100 dark:divide-slate-700">
               {applicants.map((a) => (
                 <li key={a.id} className="px-3 py-2 flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={selected.has(a.user_id)}
                     onChange={() => toggle(a.user_id)}
-                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
                   />
                   <div className="min-w-0">
                     <p className="text-sm text-secondary-900 dark:text-white truncate">
                       {a.user_name ?? a.user_email ?? 'Applicant'}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-slate-400 capitalize">
+                    <p className="text-xs text-secondary-500 dark:text-slate-400 capitalize">
                       {a.status}
                     </p>
                   </div>
@@ -163,7 +163,7 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Subject (optional)"
               maxLength={100}
-              className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
+              className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
             />
             <textarea
               value={body}
@@ -171,16 +171,16 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }
               placeholder="Write your message..."
               rows={10}
               maxLength={5000}
-              className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
+              className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500 mb-2"
             />
-            <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">
+            <p className="text-xs text-secondary-500 dark:text-slate-400 mb-3">
               Sent as in-app direct message to each recipient. Email delivery depends on the recipient's notification preferences.
             </p>
             <div className="flex justify-end gap-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+                className="px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700"
               >
                 Cancel
               </button>

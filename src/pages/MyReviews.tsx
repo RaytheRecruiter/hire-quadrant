@@ -85,11 +85,11 @@ const MyReviews: React.FC = () => {
   return (
     <>
       <Helmet><title>My Reviews · Nexegin</title></Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">My Reviews</h1>
-            <p className="text-gray-600 dark:text-slate-400">
+            <p className="text-secondary-600 dark:text-slate-400">
               Reviews you've written for companies on Nexegin.
             </p>
           </header>
@@ -99,9 +99,9 @@ const MyReviews: React.FC = () => {
               <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
             </div>
           ) : rows.length === 0 ? (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-10 text-center">
-              <Star className="h-12 w-12 text-gray-300 dark:text-slate-600 mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-slate-400 mb-3">You haven't written any reviews yet.</p>
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
+              <Star className="h-12 w-12 text-secondary-300 dark:text-slate-600 mx-auto mb-4" />
+              <p className="text-secondary-600 dark:text-slate-400 mb-3">You haven't written any reviews yet.</p>
               <HardLink to="/companies" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
                 Browse companies →
               </HardLink>
@@ -112,7 +112,7 @@ const MyReviews: React.FC = () => {
                 const s = STATUS_STYLE[r.status];
                 const StatusIcon = s.icon;
                 return (
-                  <article key={r.id} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4">
+                  <article key={r.id} className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-xl p-4">
                     <header className="flex items-start justify-between gap-3 mb-2">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -125,7 +125,7 @@ const MyReviews: React.FC = () => {
                               {r.company.name}
                             </HardLink>
                           )}
-                          <span className="text-xs text-gray-500 dark:text-slate-400">
+                          <span className="text-xs text-secondary-500 dark:text-slate-400">
                             {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
                           </span>
                         </div>
@@ -150,17 +150,17 @@ const MyReviews: React.FC = () => {
                       </button>
                     )}
                     {r.status === 'rejected' && appealingId === r.id && (
-                      <div className="mt-3 bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg p-3 space-y-2">
+                      <div className="mt-3 bg-secondary-50 dark:bg-slate-900/50 border border-secondary-200 dark:border-slate-700 rounded-lg p-3 space-y-2">
                         <textarea
                           rows={3}
                           value={appealText}
                           onChange={(e) => setAppealText(e.target.value)}
                           placeholder="Explain why you think this review meets our content policy (min 20 chars)"
                           maxLength={1500}
-                          className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         />
                         <div className="flex justify-end gap-2">
-                          <button type="button" onClick={() => setAppealingId(null)} className="px-3 py-1.5 text-xs rounded border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700">
+                          <button type="button" onClick={() => setAppealingId(null)} className="px-3 py-1.5 text-xs rounded border border-secondary-200 dark:border-slate-700 text-secondary-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700">
                             Cancel
                           </button>
                           <button type="button" onClick={() => submitAppeal(r.id)} disabled={submittingAppeal} className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60">

@@ -31,31 +31,31 @@ const SettingsPage: React.FC = () => {
   return (
     <>
       <Helmet><title>Settings · Nexegin</title></Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">Settings</h1>
-            <p className="text-gray-600 dark:text-slate-400">Account and privacy controls.</p>
+            <p className="text-secondary-600 dark:text-slate-400">Account and privacy controls.</p>
           </header>
 
           <div className="space-y-3">
-            <section className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex items-start justify-between gap-4">
+            <section className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <Mail className="h-4 w-4 text-gray-400" />
+                  <Mail className="h-4 w-4 text-secondary-400" />
                   <h2 className="font-semibold text-secondary-900 dark:text-white">Email</h2>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-slate-400 truncate">{user.email}</p>
+                <p className="text-sm text-secondary-600 dark:text-slate-400 truncate">{user.email}</p>
               </div>
             </section>
 
-            <section className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex items-start justify-between gap-4">
+            <section className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <Key className="h-4 w-4 text-gray-400" />
+                  <Key className="h-4 w-4 text-secondary-400" />
                   <h2 className="font-semibold text-secondary-900 dark:text-white">Password</h2>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-slate-400">
+                <p className="text-sm text-secondary-600 dark:text-slate-400">
                   We'll send a password reset link to your email.
                 </p>
               </div>
@@ -63,7 +63,7 @@ const SettingsPage: React.FC = () => {
                 type="button"
                 onClick={handlePasswordReset}
                 disabled={sending}
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-60 whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-60 whitespace-nowrap"
               >
                 {sending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                 Send reset email
@@ -72,10 +72,10 @@ const SettingsPage: React.FC = () => {
 
             <HardLink
               to="/profile"
-              className="block bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-5 hover:bg-gray-50 dark:hover:bg-slate-700/50"
+              className="block bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-5 hover:bg-secondary-50 dark:hover:bg-slate-700/50"
             >
               <h2 className="font-semibold text-secondary-900 dark:text-white mb-0.5">Edit profile</h2>
-              <p className="text-sm text-gray-600 dark:text-slate-400">Name, photo, resume, and more</p>
+              <p className="text-sm text-secondary-600 dark:text-slate-400">Name, photo, resume, and more</p>
             </HardLink>
 
             <NotificationPreferencesPanel />
@@ -86,18 +86,18 @@ const SettingsPage: React.FC = () => {
 
             <GDPRPanel />
 
-            <section className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex items-start justify-between gap-4">
+            <section className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <LogOut className="h-4 w-4 text-gray-400" />
+                  <LogOut className="h-4 w-4 text-secondary-400" />
                   <h2 className="font-semibold text-secondary-900 dark:text-white">Sign out</h2>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-slate-400">Log out of this device.</p>
+                <p className="text-sm text-secondary-600 dark:text-slate-400">Log out of this device.</p>
               </div>
               <button
                 type="button"
                 onClick={() => logout()}
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700 whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700 whitespace-nowrap"
               >
                 Sign out
               </button>

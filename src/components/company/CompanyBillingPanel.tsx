@@ -66,7 +66,7 @@ const STATUS_BADGE: Record<
   trialing: { label: 'Trial', className: 'bg-blue-100 text-blue-800' },
   past_due: { label: 'Past due', className: 'bg-amber-100 text-amber-800' },
   canceled: { label: 'Canceled', className: 'bg-rose-100 text-rose-800' },
-  inactive: { label: 'Inactive', className: 'bg-gray-100 text-gray-700' },
+  inactive: { label: 'Inactive', className: 'bg-secondary-100 text-secondary-700' },
 };
 
 const fmtPrice = (cents: number, suffix: string) => {
@@ -207,13 +207,13 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
         {canManageBilling ? (
           <a
             href="mailto:billing@nexegin.com?subject=Plan%20change%20request"
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary-400 hover:text-primary-600 transition"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary-400 hover:text-primary-600 transition"
           >
             <Mail className="h-4 w-4" />
             Contact billing
           </a>
         ) : (
-          <span className="inline-flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
+          <span className="inline-flex items-center gap-2 text-xs text-secondary-500 dark:text-slate-400">
             <Lock className="h-3.5 w-3.5" />
             Billing managed by Owner
           </span>
@@ -227,14 +227,14 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
       )}
 
       {/* Current plan card */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
         {currentSubscription && currentPlan ? (
           <>
             <div className="flex items-start justify-between mb-4 gap-4 flex-wrap">
               <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-slate-400 mb-1">Current plan</p>
+                <p className="text-xs uppercase tracking-wide text-secondary-500 dark:text-slate-400 mb-1">Current plan</p>
                 <h3 className="text-2xl font-bold text-secondary-900 dark:text-white">{currentPlan.name}</h3>
-                <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                <p className="text-sm text-secondary-600 dark:text-slate-400 mt-1">
                   {fmtPrice(currentPlan.price_monthly, '/mo')}
                   {currentPlan.price_yearly > 0 && ` · ${fmtPrice(currentPlan.price_yearly, '/yr')}`}
                 </p>
@@ -260,27 +260,27 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-2">
-              <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
-                <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
+              <div className="bg-secondary-50 dark:bg-slate-900/50 rounded-lg p-3">
+                <p className="text-xs text-secondary-500 dark:text-slate-400 flex items-center gap-1">
                   <KeyRound className="h-3 w-3" /> Monthly unlocks
                 </p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
+                <p className="text-sm font-semibold text-secondary-900 dark:text-white mt-1">
                   {unlocks ? `${unlocks.used} / ${unlocks.total}` : '—'}
                 </p>
               </div>
-              <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
-                <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
+              <div className="bg-secondary-50 dark:bg-slate-900/50 rounded-lg p-3">
+                <p className="text-xs text-secondary-500 dark:text-slate-400 flex items-center gap-1">
                   <Plus className="h-3 w-3" /> Purchased contacts remaining
                 </p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
+                <p className="text-sm font-semibold text-secondary-900 dark:text-white mt-1">
                   {unlocks ? unlocks.purchased_remaining : '—'}
                 </p>
               </div>
-              <div className="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3">
-                <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
+              <div className="bg-secondary-50 dark:bg-slate-900/50 rounded-lg p-3">
+                <p className="text-xs text-secondary-500 dark:text-slate-400 flex items-center gap-1">
                   <Calendar className="h-3 w-3" /> Period ends
                 </p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
+                <p className="text-sm font-semibold text-secondary-900 dark:text-white mt-1">
                   {currentSubscription.current_period_end
                     ? format(new Date(currentSubscription.current_period_end), 'MMM d, yyyy')
                     : '—'}
@@ -289,7 +289,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
             </div>
 
             {canManageBilling && currentSubscription.stripe_subscription_id && !currentSubscription.is_comp && (
-              <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-end">
+              <div className="mt-4 pt-4 border-t border-secondary-100 dark:border-slate-700 flex justify-end">
                 {currentSubscription.cancel_at_period_end ? (
                   <button
                     onClick={handleResume}
@@ -314,9 +314,9 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
           </>
         ) : (
           <div className="text-center py-8">
-            <CreditCard className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-sm font-semibold text-gray-700 dark:text-slate-300">No active subscription</p>
-            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+            <CreditCard className="h-10 w-10 text-secondary-300 mx-auto mb-3" />
+            <p className="text-sm font-semibold text-secondary-700 dark:text-slate-300">No active subscription</p>
+            <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">
               Subscribe to a Resume Database plan below to search and unlock candidates.
             </p>
           </div>
@@ -331,7 +331,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
               <Sparkles className="h-4 w-4 text-primary-600" />
               Resume Database plans
             </h3>
-            <div className="inline-flex rounded-lg border border-gray-200 dark:border-slate-700 p-0.5 bg-gray-50 dark:bg-slate-900/50">
+            <div className="inline-flex rounded-lg border border-secondary-200 dark:border-slate-700 p-0.5 bg-secondary-50 dark:bg-slate-900/50">
               {(['monthly', 'annual'] as const).map((freq) => (
                 <button
                   key={freq}
@@ -340,7 +340,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                   className={`px-3 py-1 text-xs font-medium rounded-md transition ${
                     billingFrequency === freq
                       ? 'bg-white dark:bg-slate-800 shadow text-primary-600'
-                      : 'text-gray-500 dark:text-slate-400'
+                      : 'text-secondary-500 dark:text-slate-400'
                   }`}
                 >
                   {freq === 'monthly' ? 'Monthly' : 'Annual (save ~17%)'}
@@ -363,7 +363,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                     className={`rounded-2xl border p-5 ${
                       isCurrent
                         ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800'
+                        : 'border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
@@ -378,7 +378,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                       {fmtPrice(priceCents, billingFrequency === 'monthly' ? '/mo' : '/yr')}
                     </p>
                     {plan.monthly_unlock_credits != null && (
-                      <p className="text-xs text-gray-500 dark:text-slate-400 mb-3 flex items-center gap-1">
+                      <p className="text-xs text-secondary-500 dark:text-slate-400 mb-3 flex items-center gap-1">
                         <KeyRound className="h-3 w-3 text-amber-500" />
                         {plan.monthly_unlock_credits} unlock credits / mo
                       </p>
@@ -386,7 +386,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                     {Array.isArray(plan.features) && plan.features.length > 0 && (
                       <ul className="space-y-1.5 mb-4">
                         {plan.features.slice(0, 5).map((f, i) => (
-                          <li key={i} className="flex items-start gap-1.5 text-xs text-gray-700 dark:text-slate-300">
+                          <li key={i} className="flex items-start gap-1.5 text-xs text-secondary-700 dark:text-slate-300">
                             <CheckCircle2 className="h-3 w-3 text-emerald-500 mt-0.5 flex-shrink-0" />
                             <span>{f}</span>
                           </li>
@@ -414,7 +414,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                       </a>
                     )}
                     {!isCurrent && !canManageBilling && (
-                      <p className="text-xs text-center text-gray-400 dark:text-slate-500 italic">
+                      <p className="text-xs text-center text-secondary-400 dark:text-slate-500 italic">
                         Owner can request upgrade
                       </p>
                     )}
@@ -422,7 +422,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                 );
               })}
           </div>
-          <div className="mt-3 rounded-xl border border-dashed border-gray-300 dark:border-slate-700 p-4 text-center text-xs text-gray-500 dark:text-slate-400">
+          <div className="mt-3 rounded-xl border border-dashed border-secondary-300 dark:border-slate-700 p-4 text-center text-xs text-secondary-500 dark:text-slate-400">
             Need more than 200 unlocks/month or multiple team seats?{' '}
             <a href="mailto:billing@nexegin.com?subject=Enterprise%20Resume%20Database" className="text-primary-600 font-medium">
               Contact sales for Enterprise
@@ -439,7 +439,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
             <Plus className="h-4 w-4 text-primary-600" />
             Buy more contacts
           </h3>
-          <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">
+          <p className="text-xs text-secondary-500 dark:text-slate-400 mb-3">
             Purchased contacts never expire and are used only after your monthly allowance runs out.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -448,10 +448,10 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
               return (
                 <div
                   key={pack.id}
-                  className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 text-center"
+                  className="rounded-2xl border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 text-center"
                 >
                   <p className="text-2xl font-bold text-secondary-900 dark:text-white">{pack.credits}</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-2">contacts</p>
+                  <p className="text-xs text-secondary-500 dark:text-slate-400 mb-2">contacts</p>
                   <p className="text-lg font-semibold text-primary-600 mb-3">{fmtPrice(pack.price_cents, '')}</p>
                   {canManageBilling && canCheckout && (
                     <button

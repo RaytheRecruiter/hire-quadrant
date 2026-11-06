@@ -102,7 +102,7 @@ const AutocompleteField: React.FC<Props> = ({
   return (
     <div className={`relative ${className ?? ''}`} ref={boxRef}>
       {icon && (
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-secondary-400">
           {icon}
         </span>
       )}
@@ -122,11 +122,11 @@ const AutocompleteField: React.FC<Props> = ({
         role="combobox"
         aria-expanded={open && suggestions.length > 0}
         aria-autocomplete="list"
-        className={`w-full ${icon ? 'pl-9' : 'pl-3'} pr-3 py-2 text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500`}
+        className={`w-full ${icon ? 'pl-9' : 'pl-3'} pr-3 py-2 text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500`}
       />
       {open && suggestions.length > 0 && (
         <ul
-          className="absolute z-30 top-full mt-1 w-full bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 shadow-lg max-h-64 overflow-auto"
+          className="absolute z-30 top-full mt-1 w-full bg-white dark:bg-slate-800 rounded-lg border border-secondary-200 dark:border-slate-700 shadow-lg max-h-64 overflow-auto"
           role="listbox"
         >
           {suggestions.map((s, i) => (
@@ -142,7 +142,7 @@ const AutocompleteField: React.FC<Props> = ({
               className={`px-3 py-2 text-sm cursor-pointer ${
                 i === activeIdx
                   ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                  : 'text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700'
+                  : 'text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700'
               }`}
             >
               {s}

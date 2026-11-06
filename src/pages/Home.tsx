@@ -291,26 +291,26 @@ const Home: React.FC = () => {
             </p>
 
             {/* Hero search */}
-            <form onSubmit={handleHeroSearch} className="mt-10 bg-white dark:bg-slate-800 rounded-2xl shadow-card-hover border border-gray-100 dark:border-slate-700 p-2 max-w-3xl mx-auto focus-within:ring-2 focus-within:ring-primary-400">
+            <form onSubmit={handleHeroSearch} className="mt-10 bg-white dark:bg-slate-800 rounded-2xl shadow-card-hover border border-secondary-100 dark:border-slate-700 p-2 max-w-3xl mx-auto focus-within:ring-2 focus-within:ring-primary-400">
               <div className="flex flex-col md:flex-row gap-2">
-                <div className="flex-1 flex items-center gap-2 px-4 py-2 md:border-r md:border-gray-100 dark:md:border-slate-700">
-                  <Search className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                <div className="flex-1 flex items-center gap-2 px-4 py-2 md:border-r md:border-secondary-100 dark:md:border-slate-700">
+                  <Search className="h-5 w-5 text-secondary-400 flex-shrink-0" />
                   <input
                     type="text"
                     value={heroSearch}
                     onChange={(e) => setHeroSearch(e.target.value)}
                     placeholder="Role, skill, or company"
-                    className="w-full py-2 focus:outline-none text-secondary-900 dark:text-white bg-transparent placeholder-gray-400 dark:placeholder-slate-500"
+                    className="w-full py-2 focus:outline-none text-secondary-900 dark:text-white bg-transparent placeholder-secondary-400 dark:placeholder-slate-500"
                   />
                 </div>
                 <div className="flex-1 flex items-center gap-2 px-4 py-2">
-                  <MapPin className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                  <MapPin className="h-5 w-5 text-secondary-400 flex-shrink-0" />
                   <input
                     type="text"
                     value={heroLocation}
                     onChange={(e) => setHeroLocation(e.target.value)}
                     placeholder="City, state, or remote"
-                    className="w-full py-2 focus:outline-none text-secondary-900 dark:text-white bg-transparent placeholder-gray-400 dark:placeholder-slate-500"
+                    className="w-full py-2 focus:outline-none text-secondary-900 dark:text-white bg-transparent placeholder-secondary-400 dark:placeholder-slate-500"
                   />
                 </div>
                 <button
@@ -332,14 +332,14 @@ const Home: React.FC = () => {
                   </strong>
                   open jobs
                 </span>
-                <span className="hidden sm:inline text-gray-300">·</span>
+                <span className="hidden sm:inline text-secondary-300">·</span>
                 <span>
                   <strong className="text-secondary-900 dark:text-white font-display font-bold text-xl mr-1">
                     {stats.companies.toLocaleString()}
                   </strong>
                   companies hiring
                 </span>
-                <span className="hidden sm:inline text-gray-300">·</span>
+                <span className="hidden sm:inline text-secondary-300">·</span>
                 <span>
                   <strong className="text-secondary-900 dark:text-white font-display font-bold text-xl mr-1">
                     {stats.postedThisWeek.toLocaleString()}
@@ -414,7 +414,7 @@ const Home: React.FC = () => {
 
       {/* Featured Employers */}
       {featuredCompanies.length > 0 && (
-        <section className="py-16 bg-gray-50 dark:bg-slate-900">
+        <section className="py-16 bg-secondary-50 dark:bg-slate-900">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <p className="text-center text-sm font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-widest mb-10">
               Trusted by companies of all sizes
@@ -423,7 +423,7 @@ const Home: React.FC = () => {
               {featuredCompanies.map((company) => (
                 <div
                   key={company.name}
-                  className="bg-white dark:bg-slate-800 rounded-2xl p-4 flex items-center justify-center border border-gray-100 dark:border-slate-700 h-20"
+                  className="bg-white dark:bg-slate-800 rounded-2xl p-4 flex items-center justify-center border border-secondary-100 dark:border-slate-700 h-20"
                 >
                   <CompanyLogo company={company.name} logoUrl={company.logo_url} size="md" />
                 </div>
@@ -444,7 +444,7 @@ const Home: React.FC = () => {
               <HardLink
                 key={cat.label}
                 to={`/?keyword=${encodeURIComponent(cat.keyword)}`}
-                className="flex items-center gap-3 bg-gray-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 rounded-xl p-4 transition-all group"
+                className="flex items-center gap-3 bg-secondary-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-secondary-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 rounded-xl p-4 transition-all group"
               >
                 <cat.icon className="h-6 w-6 text-primary-600 dark:text-primary-400" aria-hidden="true" />
                 <span className="font-semibold text-secondary-700 dark:text-slate-300 group-hover:text-primary-700 dark:group-hover:text-primary-300 text-sm">
@@ -466,7 +466,7 @@ const Home: React.FC = () => {
           targets this same #jobs-section id, so every "search"/category/
           "Browse Jobs" action already scrolls here -- moving the section
           itself up means that scroll is now short, not most of the page). */}
-      <div id="jobs-section" className="py-16 bg-gray-50 dark:bg-slate-900">
+      <div id="jobs-section" className="py-16 bg-secondary-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white">
@@ -493,7 +493,7 @@ const Home: React.FC = () => {
                 <HardLink
                   key={job.id}
                   to={`/jobs/${job.id}`}
-                  className="group bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-200 dark:border-slate-700 hover:shadow-card-hover transition-all hover:border-primary-300"
+                  className="group bg-white dark:bg-slate-800 rounded-2xl p-6 border border-secondary-200 dark:border-slate-700 hover:shadow-card-hover transition-all hover:border-primary-300"
                 >
                   <h3 className="font-bold text-lg text-secondary-900 dark:text-white group-hover:text-primary-600 mb-2 line-clamp-2">
                     {job.title}
@@ -503,13 +503,13 @@ const Home: React.FC = () => {
                   </p>
                   <div className="flex flex-col gap-2">
                     {job.location && (
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+                      <div className="flex items-center gap-2 text-xs text-secondary-500 dark:text-slate-500">
                         <MapPin className="h-3 w-3 flex-shrink-0" />
                         <span className="line-clamp-1">{job.location}</span>
                       </div>
                     )}
                     {job.type && (
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+                      <div className="flex items-center gap-2 text-xs text-secondary-500 dark:text-slate-500">
                         <Briefcase className="h-3 w-3 flex-shrink-0" />
                         <span>{job.type}</span>
                       </div>
@@ -519,7 +519,7 @@ const Home: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-gray-600 dark:text-slate-400">
+            <div className="text-center py-12 text-secondary-600 dark:text-slate-400">
               <p>No jobs available yet. Check back soon!</p>
             </div>
           )}
@@ -527,7 +527,7 @@ const Home: React.FC = () => {
       </div>
 
       {/* How It Works */}
-      <section className="py-20 bg-gray-50 dark:bg-slate-900">
+      <section className="py-20 bg-secondary-50 dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
@@ -546,7 +546,7 @@ const Home: React.FC = () => {
               { num: '4', title: 'Get Hired', desc: 'Receive real feedback and land your dream role.' },
             ].map((step, idx) => (
               <div key={idx} className="relative">
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 h-full border border-gray-100 dark:border-slate-700 hover:shadow-card-hover transition-all">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 h-full border border-secondary-100 dark:border-slate-700 hover:shadow-card-hover transition-all">
                   <div className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold mb-4 flex-shrink-0">
                     {step.num}
                   </div>
@@ -554,7 +554,7 @@ const Home: React.FC = () => {
                   <p className="text-secondary-600 dark:text-slate-400 text-sm leading-relaxed">{step.desc}</p>
                 </div>
                 {idx < 3 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-gray-300 dark:text-slate-700 text-2xl">
+                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-secondary-300 dark:text-slate-700 text-2xl">
                     →
                   </div>
                 )}
@@ -635,7 +635,7 @@ const Home: React.FC = () => {
               { q: 'How do I track my applications?', a: 'Go to your profile to see all applications with real-time status updates.' },
               { q: 'Can I receive job recommendations?', a: 'Yes! Subscribe to our newsletter for weekly jobs matched to your skills.' },
             ].map((item, idx) => (
-              <div key={idx} className="bg-gray-50 dark:bg-slate-800 rounded-xl p-6 border border-gray-100 dark:border-slate-700">
+              <div key={idx} className="bg-secondary-50 dark:bg-slate-800 rounded-xl p-6 border border-secondary-100 dark:border-slate-700">
                 <h3 className="font-semibold text-secondary-900 dark:text-white mb-2">{item.q}</h3>
                 <p className="text-secondary-600 dark:text-slate-400">{item.a}</p>
               </div>
@@ -654,7 +654,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Trust & Security */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+      <section className="py-20 bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
@@ -666,7 +666,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-secondary-100 dark:border-slate-700 text-center">
               <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Lock className="h-8 w-8 text-primary-600 dark:text-primary-400" aria-hidden="true" />
               </div>
@@ -676,7 +676,7 @@ const Home: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-secondary-100 dark:border-slate-700 text-center">
               <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <ShieldCheck className="h-8 w-8 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               </div>
@@ -686,7 +686,7 @@ const Home: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-gray-100 dark:border-slate-700 text-center">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-secondary-100 dark:border-slate-700 text-center">
               <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Scale className="h-8 w-8 text-amber-600 dark:text-amber-400" aria-hidden="true" />
               </div>
@@ -701,11 +701,11 @@ const Home: React.FC = () => {
             <HardLink to="/privacy" className="text-primary-600 hover:text-primary-800 font-semibold">
               Privacy Policy
             </HardLink>
-            <span className="text-gray-300">•</span>
+            <span className="text-secondary-300">•</span>
             <HardLink to="/terms" className="text-primary-600 hover:text-primary-800 font-semibold">
               Terms of Service
             </HardLink>
-            <span className="text-gray-300">•</span>
+            <span className="text-secondary-300">•</span>
             <HardLink to="/support" className="text-primary-600 hover:text-primary-800 font-semibold">
               Security & Support
             </HardLink>
@@ -755,7 +755,7 @@ const Home: React.FC = () => {
               <HardLink
                 key={idx}
                 to={item.link}
-                className="group bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
+                className="group bg-secondary-50 dark:bg-slate-800 rounded-2xl p-6 border border-secondary-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-card-hover transition-all"
               >
                 <item.icon className="h-9 w-9 mb-4 text-primary-600 dark:text-primary-400" aria-hidden="true" />
                 <h3 className="font-bold text-lg text-secondary-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">

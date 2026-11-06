@@ -29,7 +29,7 @@ const RatingStars: React.FC<Props> = ({ value, size = 'md', showValue = false, c
             <Star
               key={i}
               className={`${SIZE_CLASS[size]} ${
-                filled || half ? 'fill-amber-400 text-amber-400' : 'text-gray-300 dark:text-slate-600'
+                filled || half ? 'fill-amber-400 text-amber-400' : 'text-secondary-300 dark:text-slate-600'
               }`}
               aria-hidden="true"
             />

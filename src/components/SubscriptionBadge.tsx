@@ -6,14 +6,14 @@ interface SubscriptionBadgeProps {
 }
 
 const planColors: Record<string, string> = {
-  Free: 'bg-gray-100 text-gray-700',
+  Free: 'bg-secondary-100 text-secondary-700',
   Basic: 'bg-blue-100 text-blue-700',
   Premium: 'bg-purple-100 text-purple-700',
   Enterprise: 'bg-yellow-100 text-yellow-800',
 };
 
 const SubscriptionBadge: React.FC<SubscriptionBadgeProps> = ({ planName, className = '' }) => {
-  const colorClasses = planColors[planName] || 'bg-gray-100 text-gray-700';
+  const colorClasses = planColors[planName] || 'bg-secondary-100 text-secondary-700';
 
   return (
     <span

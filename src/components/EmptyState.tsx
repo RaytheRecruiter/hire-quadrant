@@ -13,7 +13,7 @@ interface Props {
 
 const EmptyState: React.FC<Props> = ({ illustration, icon, title, description, primaryAction, secondaryAction }) => {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-soft p-10 md:p-14 text-center animate-fade-in">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 shadow-soft p-10 md:p-14 text-center animate-fade-in">
       <div className="mx-auto w-40 h-40 mb-6">
         {illustration || (
           <div className="w-full h-full bg-primary-50 dark:bg-primary-900/30 rounded-3xl flex items-center justify-center text-primary-400 dark:text-primary-300">
@@ -22,7 +22,7 @@ const EmptyState: React.FC<Props> = ({ illustration, icon, title, description, p
         )}
       </div>
       <h3 className="font-display text-2xl font-bold text-secondary-900 dark:text-white mb-2 text-balance">{title}</h3>
-      <p className="text-gray-500 dark:text-slate-400 mb-7 max-w-md mx-auto text-balance leading-relaxed">{description}</p>
+      <p className="text-secondary-500 dark:text-slate-400 mb-7 max-w-md mx-auto text-balance leading-relaxed">{description}</p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         {primaryAction && (
           primaryAction.to ? (

@@ -129,8 +129,8 @@ const TwoFactorPanel: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
-        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
+        <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />
       </div>
     );
   }
@@ -138,12 +138,12 @@ const TwoFactorPanel: React.FC = () => {
   const enabled = factor?.verified;
 
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
       <div className="flex items-center gap-2 mb-3">
         {enabled ? (
           <ShieldCheck className="h-4 w-4 text-emerald-500" />
         ) : (
-          <Shield className="h-4 w-4 text-gray-400" />
+          <Shield className="h-4 w-4 text-secondary-400" />
         )}
         <h2 className="text-sm font-semibold text-secondary-900 dark:text-white">
           Two-factor authentication
@@ -157,13 +157,13 @@ const TwoFactorPanel: React.FC = () => {
 
       {enabled ? (
         <>
-          <p className="text-xs text-gray-600 dark:text-slate-400 mb-3">
+          <p className="text-xs text-secondary-600 dark:text-slate-400 mb-3">
             Your account is protected by an authenticator app. Keep your recovery codes somewhere safe.
           </p>
           {factor?.recovery_codes && (
-            <div className="bg-gray-50 dark:bg-slate-900/40 rounded-lg p-3 mb-3">
+            <div className="bg-secondary-50 dark:bg-slate-900/40 rounded-lg p-3 mb-3">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-gray-700 dark:text-slate-300">
+                <span className="text-xs font-semibold text-secondary-700 dark:text-slate-300">
                   Recovery codes
                 </span>
                 <button
@@ -175,7 +175,7 @@ const TwoFactorPanel: React.FC = () => {
                   {copied ? 'Copied' : 'Copy all'}
                 </button>
               </div>
-              <ul className="grid grid-cols-2 gap-1 text-xs font-mono text-gray-700 dark:text-slate-300">
+              <ul className="grid grid-cols-2 gap-1 text-xs font-mono text-secondary-700 dark:text-slate-300">
                 {factor.recovery_codes.map((c) => (
                   <li key={c}>{c}</li>
                 ))}
@@ -192,7 +192,7 @@ const TwoFactorPanel: React.FC = () => {
         </>
       ) : pendingSecret ? (
         <>
-          <p className="text-xs text-gray-600 dark:text-slate-400 mb-3">
+          <p className="text-xs text-secondary-600 dark:text-slate-400 mb-3">
             1. Scan this QR in your authenticator app (Google Authenticator, 1Password, Authy).
             2. Enter the 6-digit code it shows.
           </p>
@@ -200,10 +200,10 @@ const TwoFactorPanel: React.FC = () => {
             <img
               src={qrDataUrl}
               alt="TOTP QR code"
-              className="w-44 h-44 mx-auto mb-3 rounded-lg border border-gray-100 dark:border-slate-700 bg-white"
+              className="w-44 h-44 mx-auto mb-3 rounded-lg border border-secondary-100 dark:border-slate-700 bg-white"
             />
           )}
-          <p className="text-xs text-center text-gray-500 dark:text-slate-400 font-mono mb-3 break-all">
+          <p className="text-xs text-center text-secondary-500 dark:text-slate-400 font-mono mb-3 break-all">
             {pendingSecret}
           </p>
           <div className="flex gap-2">
@@ -215,7 +215,7 @@ const TwoFactorPanel: React.FC = () => {
               value={token}
               onChange={(e) => setToken(e.target.value.replace(/\D/g, ''))}
               placeholder="123456"
-              className="flex-1 text-center text-lg tracking-widest rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+              className="flex-1 text-center text-lg tracking-widest rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
             />
             <button
               type="button"
@@ -230,20 +230,20 @@ const TwoFactorPanel: React.FC = () => {
           <button
             type="button"
             onClick={() => setPendingSecret(null)}
-            className="mt-2 text-xs text-gray-500 hover:text-gray-700"
+            className="mt-2 text-xs text-secondary-500 hover:text-secondary-700"
           >
             Cancel
           </button>
         </>
       ) : (
         <>
-          <p className="text-xs text-gray-600 dark:text-slate-400 mb-3">
+          <p className="text-xs text-secondary-600 dark:text-slate-400 mb-3">
             Add an extra layer of security. Required for admin accounts.
           </p>
           <button
             type="button"
             onClick={startSetup}
-            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700"
           >
             Enable two-factor
           </button>

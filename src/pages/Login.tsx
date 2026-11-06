@@ -106,7 +106,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           {intent === 'apply' && (
@@ -117,7 +117,7 @@ const Login: React.FC = () => {
           <h2 className="mt-6 text-center text-4xl font-bold text-secondary-900 dark:text-white">
             {isForgotMode ? 'Reset your password' : 'Sign in to your account'}
           </h2>
-          <p className="mt-4 text-center text-gray-600 dark:text-slate-400">
+          <p className="mt-4 text-center text-secondary-600 dark:text-slate-400">
             {isForgotMode ? (
               <>
                 Remembered it?{' '}
@@ -142,7 +142,7 @@ const Login: React.FC = () => {
               <div className="text-center space-y-4">
                 <Mail className="mx-auto h-12 w-12 text-primary-500" />
                 <h3 className="text-xl font-semibold text-secondary-900 dark:text-white">Check your email</h3>
-                <p className="text-gray-600 dark:text-slate-400">
+                <p className="text-secondary-600 dark:text-slate-400">
                   We sent a password reset link to <span className="font-semibold">{forgotEmail}</span>. The link expires in 1 hour.
                 </p>
                 <HardLink to="/login" className="inline-block mt-4 font-semibold text-primary-500 hover:text-primary-600">
@@ -154,7 +154,7 @@ const Login: React.FC = () => {
                 {error && (
                   <div role="alert" className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl font-medium">{error}</div>
                 )}
-                <p className="text-sm text-gray-600 dark:text-slate-400">
+                <p className="text-sm text-secondary-600 dark:text-slate-400">
                   Enter your account email and we'll send you a link to set a new password.
                 </p>
                 <div>
@@ -162,7 +162,7 @@ const Login: React.FC = () => {
                     Email address
                   </label>
                   <div className="mt-1 relative">
-                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-slate-500" />
                     <input
                       id="forgot-email"
                       name="email"
@@ -171,7 +171,7 @@ const Login: React.FC = () => {
                       required
                       value={forgotEmail}
                       onChange={(e) => setForgotEmail(e.target.value)}
-                      className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
+                      className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-secondary-200 dark:border-slate-700 placeholder-secondary-500 dark:placeholder-slate-500 text-secondary-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
                       placeholder="you@example.com"
                     />
                   </div>
@@ -190,9 +190,9 @@ const Login: React.FC = () => {
           <GoogleSignInButton label="Continue with Google" />
 
           <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-200 dark:bg-slate-700" />
-            <span className="text-xs uppercase tracking-wide text-gray-400 dark:text-slate-500">or</span>
-            <div className="flex-1 h-px bg-gray-200 dark:bg-slate-700" />
+            <div className="flex-1 h-px bg-secondary-200 dark:bg-slate-700" />
+            <span className="text-xs uppercase tracking-wide text-secondary-400 dark:text-slate-500">or</span>
+            <div className="flex-1 h-px bg-secondary-200 dark:bg-slate-700" />
           </div>
 
           <form className="space-y-8" onSubmit={handleSubmit}>
@@ -207,7 +207,7 @@ const Login: React.FC = () => {
                 Email address
               </label>
               <div className="mt-1 relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-slate-500" />
                 <input
                   id="email"
                   name="email"
@@ -216,7 +216,7 @@ const Login: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
+                  className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-secondary-200 dark:border-slate-700 placeholder-secondary-500 dark:placeholder-slate-500 text-secondary-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
                   placeholder="Enter your email"
                 />
               </div>
@@ -235,7 +235,7 @@ const Login: React.FC = () => {
                 </HardLink>
               </div>
               <div className="mt-1 relative">
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-slate-500" />
                 <input
                   id="password"
                   name="password"
@@ -244,13 +244,13 @@ const Login: React.FC = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full pl-12 pr-12 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
+                  className="appearance-none relative block w-full pl-12 pr-12 py-4 border border-secondary-200 dark:border-slate-700 placeholder-secondary-500 dark:placeholder-slate-500 text-secondary-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800 sm:text-sm"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400 transition-colors duration-300"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-secondary-400 dark:text-slate-500 hover:text-secondary-600 dark:text-slate-400 transition-colors duration-300"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>

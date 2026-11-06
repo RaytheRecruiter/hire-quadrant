@@ -66,14 +66,14 @@ const Header: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
   const navClass = (path: string) =>
     `px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-      isActive(path) ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30' : 'text-secondary-700 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-slate-800'
+      isActive(path) ? 'text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30' : 'text-secondary-700 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-secondary-50 dark:hover:bg-slate-800'
     }`;
 
   const initials = user ? getInitials(user.name) : '';
-  const avatarColor = user ? colorFromString(user.name || user.email) : 'bg-gray-100 text-gray-500';
+  const avatarColor = user ? colorFromString(user.name || user.email) : 'bg-secondary-100 text-secondary-500';
 
   return (
-    <header className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 sticky top-0 z-40">
+    <header className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-secondary-100 dark:border-slate-800 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -129,14 +129,14 @@ const Header: React.FC = () => {
               <div className="flex items-center gap-1">
                 {!isAdmin && !isCompany && (
                   <>
-                    <HardLink to="/my-jobs" title="My jobs" className="hidden md:flex items-center gap-1.5 h-9 px-3 rounded-lg text-sm font-medium text-secondary-700 hover:bg-gray-50 transition-colors">
+                    <HardLink to="/my-jobs" title="My jobs" className="hidden md:flex items-center gap-1.5 h-9 px-3 rounded-lg text-sm font-medium text-secondary-700 hover:bg-secondary-50 transition-colors">
                       <Briefcase className="h-4 w-4" />
                       My jobs
                     </HardLink>
-                    <HardLink to="/messages" title="Messages" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
+                    <HardLink to="/messages" title="Messages" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-secondary-50 transition-colors">
                       <MessageSquare className="h-5 w-5" />
                     </HardLink>
-                    <HardLink to="/notifications" title="Notifications" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50 transition-colors">
+                    <HardLink to="/notifications" title="Notifications" className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-secondary-700 hover:bg-secondary-50 transition-colors">
                       <Bell className="h-5 w-5" />
                     </HardLink>
                   </>
@@ -145,7 +145,7 @@ const Header: React.FC = () => {
                 <div className="relative" ref={userMenuRef}>
                   <button
                     onClick={() => setUserMenuOpen(v => !v)}
-                    className={`h-9 w-9 rounded-full overflow-hidden flex items-center justify-center font-display font-bold text-sm hover:ring-2 hover:ring-primary-300 transition-all ${user?.avatarUrl ? 'bg-gray-100' : avatarColor}`}
+                    className={`h-9 w-9 rounded-full overflow-hidden flex items-center justify-center font-display font-bold text-sm hover:ring-2 hover:ring-primary-300 transition-all ${user?.avatarUrl ? 'bg-secondary-100' : avatarColor}`}
                     aria-label="Account menu"
                   >
                     {user?.avatarUrl ? (
@@ -159,44 +159,44 @@ const Header: React.FC = () => {
                     )}
                   </button>
                   {userMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-card-hover border border-gray-100 dark:border-slate-700 py-1 animate-fade-in">
-                      <div className="px-4 py-2 border-b border-gray-100">
+                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-card-hover border border-secondary-100 dark:border-slate-700 py-1 animate-fade-in">
+                      <div className="px-4 py-2 border-b border-secondary-100">
                         <div className="text-sm font-semibold text-secondary-900 truncate">{user?.name}</div>
-                        <div className="text-xs text-gray-500 truncate">{user?.email}</div>
+                        <div className="text-xs text-secondary-500 truncate">{user?.email}</div>
                       </div>
-                      <HardLink to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
-                        <User className="h-4 w-4 text-gray-400" /> Profile
+                      <HardLink to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                        <User className="h-4 w-4 text-secondary-400" /> Profile
                       </HardLink>
                       {!isCompany && (
                         <>
-                          <HardLink to="/my-reviews" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
-                            <Star className="h-4 w-4 text-gray-400" /> My Reviews
+                          <HardLink to="/my-reviews" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                            <Star className="h-4 w-4 text-secondary-400" /> My Reviews
                           </HardLink>
-                          <HardLink to="/saved" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
-                            <Bookmark className="h-4 w-4 text-gray-400" /> Saved Jobs
+                          <HardLink to="/saved" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                            <Bookmark className="h-4 w-4 text-secondary-400" /> Saved Jobs
                           </HardLink>
-                          <HardLink to="/alerts" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
-                            <Bell className="h-4 w-4 text-gray-400" /> Job Alerts
+                          <HardLink to="/alerts" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                            <Bell className="h-4 w-4 text-secondary-400" /> Job Alerts
                           </HardLink>
                         </>
                       )}
                       {isCompany && (
-                        <HardLink to="/company-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
-                          <Briefcase className="h-4 w-4 text-gray-400" /> Company Dashboard
+                        <HardLink to="/company-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                          <Briefcase className="h-4 w-4 text-secondary-400" /> Company Dashboard
                         </HardLink>
                       )}
-                      <HardLink to="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-t border-gray-100" onClick={() => setUserMenuOpen(false)}>
-                        <Settings className="h-4 w-4 text-gray-400" /> Settings
+                      <HardLink to="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700 border-t border-secondary-100" onClick={() => setUserMenuOpen(false)}>
+                        <Settings className="h-4 w-4 text-secondary-400" /> Settings
                       </HardLink>
-                      <HardLink to="/help" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
-                        <HelpCircle className="h-4 w-4 text-gray-400" /> Help
+                      <HardLink to="/help" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                        <HelpCircle className="h-4 w-4 text-secondary-400" /> Help
                       </HardLink>
-                      <HardLink to="/reset-password" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
-                        <Key className="h-4 w-4 text-gray-400" /> Reset Password
+                      <HardLink to="/reset-password" className="flex items-center gap-2 px-4 py-2 text-sm text-secondary-800 dark:text-slate-200 hover:bg-secondary-50 dark:hover:bg-slate-700" onClick={() => setUserMenuOpen(false)}>
+                        <Key className="h-4 w-4 text-secondary-400" /> Reset Password
                       </HardLink>
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border-t border-gray-100 dark:border-slate-700"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border-t border-secondary-100 dark:border-slate-700"
                       >
                         <LogOut className="h-4 w-4" /> Sign out
                       </button>
@@ -220,7 +220,7 @@ const Header: React.FC = () => {
               onClick={() => setMobileOpen(v => !v)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
-              className="lg:hidden h-9 w-9 flex items-center justify-center rounded-lg text-secondary-700 hover:bg-gray-50"
+              className="lg:hidden h-9 w-9 flex items-center justify-center rounded-lg text-secondary-700 hover:bg-secondary-50"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -230,40 +230,40 @@ const Header: React.FC = () => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 animate-fade-in">
+        <div className="lg:hidden border-t border-secondary-100 dark:border-slate-800 bg-white dark:bg-slate-900 animate-fade-in">
           <div className="max-w-7xl mx-auto px-4 py-4 space-y-1">
-            <HardLink to="/jobs" onClick={handleJobsClick} className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Jobs</HardLink>
-            <HardLink to="/companies" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Companies</HardLink>
-            <HardLink to="/advanced-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Search</HardLink>
-            <HardLink to="/blog" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Blog</HardLink>
+            <HardLink to="/jobs" onClick={handleJobsClick} className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Jobs</HardLink>
+            <HardLink to="/companies" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Companies</HardLink>
+            <HardLink to="/advanced-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Search</HardLink>
+            <HardLink to="/blog" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Blog</HardLink>
             {isAuthenticated && !isAdmin && !isCompany && (
               <>
-                <HardLink to="/saved" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">
-                  <Bookmark className="h-4 w-4 text-gray-400" /> Saved Jobs
+                <HardLink to="/saved" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">
+                  <Bookmark className="h-4 w-4 text-secondary-400" /> Saved Jobs
                 </HardLink>
-                <HardLink to="/alerts" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">
-                  <Bell className="h-4 w-4 text-gray-400" /> Job Alerts
+                <HardLink to="/alerts" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">
+                  <Bell className="h-4 w-4 text-secondary-400" /> Job Alerts
                 </HardLink>
               </>
             )}
             {isCompany && (
               <>
-                <HardLink to="/company-dashboard" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Dashboard</HardLink>
-                <HardLink to="/talent-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Talent Search</HardLink>
+                <HardLink to="/company-dashboard" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Dashboard</HardLink>
+                <HardLink to="/talent-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Talent Search</HardLink>
               </>
             )}
             {isAdmin && (
               <>
-                <div className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">Admin</div>
-                <HardLink to="/admin" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Admin Dashboard</HardLink>
-                <HardLink to="/talent-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Talent Search</HardLink>
-                <HardLink to="/xml-feeder" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">XML Feeder</HardLink>
-                <HardLink to="/company-sources" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-gray-50">Company Sources</HardLink>
+                <div className="px-4 pt-3 pb-1 text-xs font-semibold text-secondary-400 uppercase tracking-wide">Admin</div>
+                <HardLink to="/admin" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Admin Dashboard</HardLink>
+                <HardLink to="/talent-search" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Talent Search</HardLink>
+                <HardLink to="/xml-feeder" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">XML Feeder</HardLink>
+                <HardLink to="/company-sources" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold hover:bg-secondary-50">Company Sources</HardLink>
               </>
             )}
             {!isAuthenticated && (
-              <div className="pt-3 mt-3 border-t border-gray-100 flex flex-col gap-2">
-                <HardLink to="/login" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold text-center border border-gray-200 hover:bg-gray-50">
+              <div className="pt-3 mt-3 border-t border-secondary-100 flex flex-col gap-2">
+                <HardLink to="/login" className="block px-4 py-2.5 rounded-lg text-secondary-800 font-semibold text-center border border-secondary-200 hover:bg-secondary-50">
                   Sign in
                 </HardLink>
                 <HardLink to="/register" className="block px-4 py-2.5 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold text-center shadow-soft">

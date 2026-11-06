@@ -25,14 +25,14 @@ const Stat: React.FC<{
   icon: React.ComponentType<{ className?: string }>;
   accent: string;
 }> = ({ label, value, icon: Icon, accent }) => (
-  <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6">
+  <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
     <div className="flex items-center justify-between mb-3">
       <div className={`p-2.5 rounded-lg ${accent}`}>
         <Icon className="h-5 w-5" />
       </div>
     </div>
     <div className="text-3xl font-bold text-secondary-900 dark:text-white">{value}</div>
-    <div className="text-sm text-gray-600 dark:text-slate-400 mt-1">{label}</div>
+    <div className="text-sm text-secondary-600 dark:text-slate-400 mt-1">{label}</div>
   </div>
 );
 
@@ -123,7 +123,7 @@ const CompanyAnalyticsPanel: React.FC<Props> = ({ companyId }) => {
       )}
       {canViewFull && (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+        <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
           <h3 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
             Daily page views · last 30 days
           </h3>
@@ -156,7 +156,7 @@ const CompanyAnalyticsPanel: React.FC<Props> = ({ companyId }) => {
           )}
         </section>
 
-        <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+        <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
           <h3 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
             New followers · last 30 days
           </h3>

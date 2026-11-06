@@ -427,7 +427,7 @@ const ProfilePage = () => {
             case 'Interview': return 'bg-purple-100 text-purple-800';
             case 'Offer': return 'bg-green-100 text-green-800';
             case 'Rejected': return 'bg-red-100 text-red-800';
-            default: return 'bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-200';
+            default: return 'bg-secondary-100 dark:bg-slate-700 text-secondary-800 dark:text-slate-200';
         }
     };
 
@@ -449,7 +449,7 @@ const ProfilePage = () => {
             <div className="min-h-dvh flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
-                    <p className="text-gray-500 dark:text-slate-400">Loading profile...</p>
+                    <p className="text-secondary-500 dark:text-slate-400">Loading profile...</p>
                 </div>
             </div>
         );
@@ -457,7 +457,7 @@ const ProfilePage = () => {
 
     if (error) {
         return (
-            <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-slate-900/50 py-12">
+            <div className="min-h-dvh flex items-center justify-center bg-secondary-50 dark:bg-slate-900/50 py-12">
                 <div className="max-w-md w-full mx-auto px-4">
                     <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-6">
                         <div className="flex items-start gap-3">
@@ -480,7 +480,7 @@ const ProfilePage = () => {
     }
 
     return (
-        <div className="min-h-dvh bg-gray-50 dark:bg-slate-900/50 py-12">
+        <div className="min-h-dvh bg-secondary-50 dark:bg-slate-900/50 py-12">
             <div className="max-w-3xl mx-auto px-4">
                 {/* Header */}
                 <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
@@ -489,7 +489,7 @@ const ProfilePage = () => {
                             <label
                                 htmlFor="avatar-upload"
                                 className={`h-20 w-20 rounded-full overflow-hidden flex items-center justify-center cursor-pointer group ${
-                                    user.avatarUrl ? 'bg-gray-100 dark:bg-slate-700' : colorFromString(user.name || user.email)
+                                    user.avatarUrl ? 'bg-secondary-100 dark:bg-slate-700' : colorFromString(user.name || user.email)
                                 }`}
                                 title="Click to upload a photo"
                             >
@@ -535,11 +535,11 @@ const ProfilePage = () => {
                                         }
                                     }}
                                     placeholder="Your full name"
-                                    className="text-2xl font-bold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-200 dark:border-slate-700 focus:border-primary-400 focus:outline-none min-w-0 flex-1 max-w-md"
+                                    className="text-2xl font-bold text-secondary-900 dark:text-white bg-transparent border-b border-transparent hover:border-secondary-200 dark:border-slate-700 focus:border-primary-400 focus:outline-none min-w-0 flex-1 max-w-md"
                                 />
-                                {savingName && <Loader2 className="h-4 w-4 text-gray-400 dark:text-slate-500 animate-spin" />}
+                                {savingName && <Loader2 className="h-4 w-4 text-secondary-400 dark:text-slate-500 animate-spin" />}
                             </div>
-                            <p className="text-gray-500 dark:text-slate-400">{user.email}</p>
+                            <p className="text-secondary-500 dark:text-slate-400">{user.email}</p>
                             <div className="mt-2 flex items-center gap-2 flex-wrap">
                                 <span className="inline-block px-2 py-0.5 bg-primary-50 text-primary-700 text-xs font-medium rounded-full capitalize">
                                     {user.role}
@@ -549,7 +549,7 @@ const ProfilePage = () => {
                                         type="button"
                                         onClick={handleRemoveAvatar}
                                         disabled={uploadingAvatar}
-                                        className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400 hover:text-rose-600"
+                                        className="inline-flex items-center gap-1 text-xs text-secondary-500 dark:text-slate-400 hover:text-rose-600"
                                     >
                                         <Trash2 className="h-3 w-3" />
                                         Remove photo
@@ -572,50 +572,50 @@ const ProfilePage = () => {
 
                 {/* Personal Information */}
                 <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
-                    <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <MapPin className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+                    <h2 className="text-lg font-semibold text-secondary-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <MapPin className="h-5 w-5 text-secondary-400 dark:text-slate-500" />
                         Personal Information
                     </h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Location</label>
+                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Location</label>
                             <input
                                 type="text"
                                 value={locationValue}
                                 onChange={(e) => setLocationValue(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                                className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                                 placeholder="e.g. Washington, DC"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Phone Number</label>
+                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Phone Number</label>
                             <input
                                 type="tel"
                                 value={phoneValue}
                                 onChange={(e) => setPhoneValue(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                                className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                                 placeholder="e.g. (555) 123-4567"
                             />
                         </div>
                         {!isCompany && (
                         <>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Current Role</label>
+                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Current Role</label>
                             <input
                                 type="text"
                                 value={currentRoleValue}
                                 onChange={(e) => setCurrentRoleValue(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                                className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                                 placeholder="e.g. Software Engineer"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Target Role</label>
+                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Target Role</label>
                             <input
                                 type="text"
                                 value={targetRoleValue}
                                 onChange={(e) => setTargetRoleValue(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                                className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                                 placeholder="e.g. Engineering Manager"
                             />
                         </div>
@@ -636,8 +636,8 @@ const ProfilePage = () => {
                     company-management surface (Company Dashboard). */}
                 {isCompany && (
                     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
-                        <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                            <Building2 className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+                        <h2 className="text-lg font-semibold text-secondary-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                            <Building2 className="h-5 w-5 text-secondary-400 dark:text-slate-500" />
                             Company Account
                         </h2>
                         {companyInfo ? (
@@ -648,7 +648,7 @@ const ProfilePage = () => {
                                     size="lg"
                                 />
                                 <div className="min-w-0">
-                                    <p className="font-semibold text-gray-900 dark:text-white truncate">
+                                    <p className="font-semibold text-secondary-900 dark:text-white truncate">
                                         {companyInfo.display_name || companyInfo.name}
                                     </p>
                                     {companyMember && (
@@ -669,7 +669,7 @@ const ProfilePage = () => {
                                 </div>
                             </div>
                         ) : (
-                            <p className="text-sm text-gray-500 dark:text-slate-400">
+                            <p className="text-sm text-secondary-500 dark:text-slate-400">
                                 Your account isn't linked to a company yet.
                             </p>
                         )}
@@ -692,15 +692,15 @@ const ProfilePage = () => {
 
                 {/* Resume */}
                 <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6">
-                    <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <FileText className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+                    <h2 className="text-lg font-semibold text-secondary-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-secondary-400 dark:text-slate-500" />
                         Resume
                     </h2>
                     {profile?.resume_url ? (
-                        <div className="mb-4 p-3 bg-gray-50 dark:bg-slate-900/50 rounded-lg flex items-center justify-between">
+                        <div className="mb-4 p-3 bg-secondary-50 dark:bg-slate-900/50 rounded-lg flex items-center justify-between">
                             <div className="flex items-center gap-2 min-w-0">
                                 <FileText className="h-4 w-4 text-primary-500 flex-shrink-0" />
-                                <span className="text-sm text-gray-700 dark:text-slate-300 truncate">
+                                <span className="text-sm text-secondary-700 dark:text-slate-300 truncate">
                                     {profile.resume_url.split('/').pop()?.replace(/^\d+_/, '') || 'Resume uploaded'}
                                 </span>
                             </div>
@@ -727,10 +727,10 @@ const ProfilePage = () => {
                             </div>
                         </div>
                     ) : (
-                        <p className="text-gray-500 dark:text-slate-400 mb-4">No resume uploaded yet.</p>
+                        <p className="text-secondary-500 dark:text-slate-400 mb-4">No resume uploaded yet.</p>
                     )}
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                        <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">
                             {profile?.resume_url ? 'Upload New Resume' : 'Upload Resume'}
                         </label>
                         <input
@@ -738,9 +738,9 @@ const ProfilePage = () => {
                             accept=".pdf,.doc,.docx"
                             onChange={handleFileUpload}
                             disabled={uploading}
-                            className="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+                            className="block w-full text-sm text-secondary-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
                         />
-                        {uploading && <p className="text-sm text-gray-500 dark:text-slate-400 mt-2">Uploading...</p>}
+                        {uploading && <p className="text-sm text-secondary-500 dark:text-slate-400 mt-2">Uploading...</p>}
                     </div>
 
                     <div>
@@ -751,7 +751,7 @@ const ProfilePage = () => {
                             </p>
                         </div>
                         <div className="flex items-center gap-2 mb-2">
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
+                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300">
                                 Resume Text (paste your resume for AI job matching)
                             </label>
                             {resumeTextValue && (
@@ -764,7 +764,7 @@ const ProfilePage = () => {
                             value={resumeTextValue}
                             onChange={(e) => setResumeTextValue(e.target.value)}
                             placeholder="Paste your resume content here to unlock AI match scores on every job..."
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 font-mono text-sm"
+                            className="w-full px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 font-mono text-sm"
                             rows={8}
                         />
                     </div>
@@ -789,8 +789,8 @@ const ProfilePage = () => {
                                     className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col"
                                     onClick={(e) => e.stopPropagation()}
                                 >
-                                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
-                                        <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-200">Resume Preview</h3>
+                                    <div className="flex items-center justify-between px-6 py-4 border-b border-secondary-200 dark:border-slate-700">
+                                        <h3 className="text-lg font-semibold text-secondary-800 dark:text-slate-200">Resume Preview</h3>
                                         <div className="flex items-center gap-3">
                                             <a
                                                 href={resumeViewUrl}
@@ -803,13 +803,13 @@ const ProfilePage = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowResumeViewer(false)}
-                                                className="text-sm text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 font-medium"
+                                                className="text-sm text-secondary-500 dark:text-slate-400 hover:text-secondary-700 dark:hover:text-slate-200 font-medium"
                                             >
                                                 Close
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="flex-1 overflow-hidden p-2 bg-gray-50 dark:bg-slate-900">
+                                    <div className="flex-1 overflow-hidden p-2 bg-secondary-50 dark:bg-slate-900">
                                         {isPdf ? (
                                             <object
                                                 data={resumeViewUrl}
@@ -839,14 +839,14 @@ const ProfilePage = () => {
 
                 {/* Applied Jobs */}
                 <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6">
-                    <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <Briefcase className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+                    <h2 className="text-lg font-semibold text-secondary-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <Briefcase className="h-5 w-5 text-secondary-400 dark:text-slate-500" />
                         Applied Jobs ({applications.length})
                     </h2>
                     {applications.length === 0 ? (
                         <div className="text-center py-8">
-                            <Briefcase className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-                            <p className="text-gray-500 dark:text-slate-400 mb-2">You haven't applied to any jobs yet.</p>
+                            <Briefcase className="h-10 w-10 text-secondary-300 mx-auto mb-3" />
+                            <p className="text-secondary-500 dark:text-slate-400 mb-2">You haven't applied to any jobs yet.</p>
                             {/* Per Scott 2026-04-28: pass profile preferences as
                                 filters so the Browse Jobs button lands on
                                 pre-filtered results, not a fresh /jobs page. */}
@@ -869,14 +869,14 @@ const ProfilePage = () => {
                                 <HardLink
                                     key={app.id}
                                     to={`/jobs/${app.job_id}`}
-                                    className="block p-4 rounded-lg border border-gray-100 dark:border-slate-700 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
+                                    className="block p-4 rounded-lg border border-secondary-100 dark:border-slate-700 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
                                 >
                                     <div className="flex items-start justify-between">
                                         <div>
-                                            <h3 className="font-medium text-gray-900 dark:text-white">
+                                            <h3 className="font-medium text-secondary-900 dark:text-white">
                                                 {app.job?.title || `Job ${app.job_id}`}
                                             </h3>
-                                            <div className="flex items-center gap-3 mt-1 text-sm text-gray-500 dark:text-slate-400">
+                                            <div className="flex items-center gap-3 mt-1 text-sm text-secondary-500 dark:text-slate-400">
                                                 {app.job?.company && (
                                                     <span className="flex items-center gap-1">
                                                         <Building2 className="h-3 w-3" />
@@ -894,16 +894,16 @@ const ProfilePage = () => {
                                                     Applied {formatDate(app.applied_at)}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center gap-1 mt-2 text-xs text-gray-500 dark:text-slate-400">
+                                            <div className="flex items-center gap-1 mt-2 text-xs text-secondary-500 dark:text-slate-400">
                                                 <Eye className="h-3 w-3" />
                                                 {(app.employer_views?.length ?? 0) === 0 ? (
-                                                    <span className="italic text-gray-400 dark:text-slate-500">Not yet reviewed</span>
+                                                    <span className="italic text-secondary-400 dark:text-slate-500">Not yet reviewed</span>
                                                 ) : (
                                                     <>
                                                         <span>
                                                             Viewed {app.employer_views!.length} time{app.employer_views!.length === 1 ? '' : 's'}
                                                         </span>
-                                                        <span className="text-gray-400 dark:text-slate-500">
+                                                        <span className="text-secondary-400 dark:text-slate-500">
                                                             • last {formatDistanceToNow(new Date(app.employer_views![app.employer_views!.length - 1]), { addSuffix: true })}
                                                         </span>
                                                     </>

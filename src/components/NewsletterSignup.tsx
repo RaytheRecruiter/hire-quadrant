@@ -70,7 +70,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
               <h3 className="text-xl font-bold text-secondary-900 dark:text-white">{title}</h3>
             )}
             {description && (
-              <p className="text-gray-600 dark:text-slate-400 text-sm mt-1">{description}</p>
+              <p className="text-secondary-600 dark:text-slate-400 text-sm mt-1">{description}</p>
             )}
           </div>
         </div>
@@ -80,7 +80,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="flex-1 min-w-0 px-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="flex-1 min-w-0 px-4 py-2.5 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <input
             type="text"
@@ -101,7 +101,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             {subscribing ? 'Subscribing...' : 'Subscribe'}
           </button>
         </form>
-        <p className="text-xs text-gray-500 dark:text-slate-500 mt-3">
+        <p className="text-xs text-secondary-500 dark:text-slate-500 mt-3">
           No spam. Unsubscribe anytime. We respect your privacy.
         </p>
       </div>
@@ -118,7 +118,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
-            className="flex-1 min-w-0 px-3 py-2 rounded text-sm border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="flex-1 min-w-0 px-3 py-2 rounded text-sm border border-secondary-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <input
             type="text"
@@ -150,7 +150,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your email"
-        className="flex-1 min-w-0 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="flex-1 min-w-0 px-4 py-3 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white placeholder-secondary-500 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
       />
       <input
         type="text"

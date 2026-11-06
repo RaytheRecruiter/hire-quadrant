@@ -95,7 +95,7 @@ const SavedSearches: React.FC = () => {
       <Helmet>
         <title>Saved searches · Nexegin</title>
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6 flex items-center gap-2">
             <Bell className="h-6 w-6 text-primary-500" />
@@ -103,13 +103,13 @@ const SavedSearches: React.FC = () => {
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">
                 Saved searches
               </h1>
-              <p className="text-gray-600 dark:text-slate-400 text-sm">
+              <p className="text-secondary-600 dark:text-slate-400 text-sm">
                 Get notified when new jobs match your criteria.
               </p>
             </div>
           </header>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
               <Plus className="h-4 w-4 text-primary-500" />
               Create a saved search
@@ -120,17 +120,17 @@ const SavedSearches: React.FC = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Name — e.g. Remote senior dev roles"
-                className="text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                className="text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
               />
               <div className="grid grid-cols-2 gap-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-400" />
                   <input
                     type="text"
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                     placeholder="Keyword"
-                    className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
                 <input
@@ -138,14 +138,14 @@ const SavedSearches: React.FC = () => {
                   value={loc}
                   onChange={(e) => setLoc(e.target.value)}
                   placeholder="Location"
-                  className="text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                  className="text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               <div className="flex items-center justify-between gap-2">
                 <select
                   value={frequency}
                   onChange={(e) => setFrequency(e.target.value as 'never' | 'daily' | 'weekly')}
-                  className="text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                  className="text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="never">No alerts</option>
                   <option value="daily">Daily alerts</option>
@@ -164,18 +164,18 @@ const SavedSearches: React.FC = () => {
             </div>
           </section>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
               Your saved searches
             </h2>
             {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+              <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />
             ) : rows.length === 0 ? (
-              <p className="text-xs text-gray-500 dark:text-slate-400 italic">
+              <p className="text-xs text-secondary-500 dark:text-slate-400 italic">
                 No saved searches yet.
               </p>
             ) : (
-              <ul className="divide-y divide-gray-100 dark:divide-slate-700">
+              <ul className="divide-y divide-secondary-100 dark:divide-slate-700">
                 {rows.map((r) => {
                   const hasQ = Boolean(r.search_term);
                   const hasLoc = Boolean(r.location_filter);
@@ -184,12 +184,12 @@ const SavedSearches: React.FC = () => {
                       <div className="min-w-0 flex-1">
                         <HardLink
                           to={`/jobs?${new URLSearchParams({ q: r.search_term ?? '', loc: r.location_filter ?? '' }).toString()}`}
-                          className="block hover:bg-gray-50 dark:hover:bg-slate-700/50 rounded -mx-2 px-2 py-1"
+                          className="block hover:bg-secondary-50 dark:hover:bg-slate-700/50 rounded -mx-2 px-2 py-1"
                         >
                           <p className="text-sm font-medium text-secondary-900 dark:text-white">
                             {r.name}
                           </p>
-                          <p className="text-xs text-gray-500 dark:text-slate-400">
+                          <p className="text-xs text-secondary-500 dark:text-slate-400">
                             {hasQ && `"${r.search_term}"`}
                             {hasQ && hasLoc && ' · '}
                             {hasLoc && r.location_filter}
@@ -209,7 +209,7 @@ const SavedSearches: React.FC = () => {
                           onChange={(e) =>
                             updateFrequency(r.id, e.target.value as 'never' | 'daily' | 'weekly')
                           }
-                          className="text-xs rounded border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                          className="text-xs rounded border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                         >
                           <option value="never">Off</option>
                           <option value="daily">Daily</option>

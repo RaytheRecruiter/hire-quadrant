@@ -54,7 +54,7 @@ const EmployerBenchmarkPanel: React.FC<{ companyId: string }> = ({ companyId }) 
 
   if (error || !data) {
     return (
-      <div className="py-10 text-center text-sm text-gray-500 dark:text-slate-400">
+      <div className="py-10 text-center text-sm text-secondary-500 dark:text-slate-400">
         {error ?? 'Benchmarks unavailable.'}
       </div>
     );
@@ -75,7 +75,7 @@ const EmployerBenchmarkPanel: React.FC<{ companyId: string }> = ({ companyId }) 
           Benchmarks
         </h3>
       </div>
-      <p className="text-sm text-gray-600 dark:text-slate-400 mb-6">
+      <p className="text-sm text-secondary-600 dark:text-slate-400 mb-6">
         {data.industry
           ? `How you compare to other ${data.industry} companies on Nexegin.`
           : 'Peer industry is not set — add an industry in Company Profile to unlock richer benchmarks.'}
@@ -93,7 +93,7 @@ const EmployerBenchmarkPanel: React.FC<{ companyId: string }> = ({ companyId }) 
           return (
             <section
               key={r.key}
-              className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4"
+              className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4"
             >
               <div className="flex items-center justify-between mb-2">
                 <p className="text-sm font-medium text-secondary-900 dark:text-white">
@@ -105,7 +105,7 @@ const EmployerBenchmarkPanel: React.FC<{ companyId: string }> = ({ companyId }) 
                       ? 'text-emerald-600 dark:text-emerald-400'
                       : trend === 'down'
                       ? 'text-rose-600 dark:text-rose-400'
-                      : 'text-gray-500 dark:text-slate-400'
+                      : 'text-secondary-500 dark:text-slate-400'
                   }`}
                 >
                   {trend === 'up' ? <TrendingUp className="h-3.5 w-3.5" /> : trend === 'down' ? <TrendingDown className="h-3.5 w-3.5" /> : <Minus className="h-3.5 w-3.5" />}
@@ -117,14 +117,14 @@ const EmployerBenchmarkPanel: React.FC<{ companyId: string }> = ({ companyId }) 
 
               <div className="space-y-2">
                 <Bar label="You" value={r.format(mine)} pct={myPct} tone="bg-primary-500" />
-                <Bar label="Peer median" value={r.format(peer)} pct={peerPct} tone="bg-gray-300 dark:bg-slate-600" />
+                <Bar label="Peer median" value={r.format(peer)} pct={peerPct} tone="bg-secondary-300 dark:bg-slate-600" />
               </div>
             </section>
           );
         })}
       </div>
 
-      <p className="mt-6 text-xs text-gray-500 dark:text-slate-400 italic">
+      <p className="mt-6 text-xs text-secondary-500 dark:text-slate-400 italic">
         Peer median is calculated across all companies in your industry on Nexegin. A 0 peer value means there isn't enough data yet — the benchmark fills in as more companies join.
       </p>
     </div>
@@ -138,11 +138,11 @@ const Bar: React.FC<{ label: string; value: string; pct: number; tone: string }>
   tone,
 }) => (
   <div>
-    <div className="flex items-center justify-between text-xs text-gray-600 dark:text-slate-400 mb-1">
+    <div className="flex items-center justify-between text-xs text-secondary-600 dark:text-slate-400 mb-1">
       <span>{label}</span>
       <span className="font-mono font-semibold text-secondary-900 dark:text-white">{value}</span>
     </div>
-    <div className="h-2 rounded-full bg-gray-100 dark:bg-slate-900 overflow-hidden">
+    <div className="h-2 rounded-full bg-secondary-100 dark:bg-slate-900 overflow-hidden">
       <div
         className={`h-full ${tone} transition-all`}
         style={{ width: `${pct}%` }}

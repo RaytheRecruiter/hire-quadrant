@@ -11,31 +11,31 @@ const About: React.FC = () => {
         <meta property="og:title" content="About Nexegin" />
         <meta property="og:description" content="Nexegin is building the job board where every application gets real feedback." />
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-8">About Nexegin</h1>
 
           <div className="prose dark:prose-invert max-w-none">
             <section className="mb-12">
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">Our Mission</h2>
-              <p className="text-lg text-gray-700 dark:text-slate-300 mb-4">
+              <p className="text-lg text-secondary-700 dark:text-slate-300 mb-4">
                 We're building the job board for people who deserve better. No black holes. No ghosting. Just real opportunities with employers who actually show up.
               </p>
             </section>
 
             <section className="mb-12">
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">The Problem</h2>
-              <p className="text-lg text-gray-700 dark:text-slate-300 mb-4">
+              <p className="text-lg text-secondary-700 dark:text-slate-300 mb-4">
                 Job seekers apply to dozens of roles and hear nothing back. Employers waste time sifting through unqualified candidates. Traditional job boards benefit from this broken system — more applications means more revenue, regardless of quality.
               </p>
-              <p className="text-lg text-gray-700 dark:text-slate-300">
+              <p className="text-lg text-secondary-700 dark:text-slate-300">
                 We built Nexegin to change that.
               </p>
             </section>
 
             <section className="mb-12">
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">How We're Different</h2>
-              <ul className="space-y-3 text-lg text-gray-700 dark:text-slate-300">
+              <ul className="space-y-3 text-lg text-secondary-700 dark:text-slate-300">
                 <li className="flex gap-3">
                   <Check className="h-6 w-6 flex-shrink-0 text-amber-500" aria-hidden="true" />
                   <span><strong>Real feedback:</strong> Every application is screened and tracked. You know where you stand.</span>
@@ -57,7 +57,7 @@ const About: React.FC = () => {
 
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">Get in Touch</h2>
-              <p className="text-lg text-gray-700 dark:text-slate-300">
+              <p className="text-lg text-secondary-700 dark:text-slate-300">
                 Questions? Ideas? <a href="mailto:hello@nexegin.com" className="text-primary-500 hover:text-primary-600 font-semibold">Email us</a> — we read every message.
               </p>
             </section>

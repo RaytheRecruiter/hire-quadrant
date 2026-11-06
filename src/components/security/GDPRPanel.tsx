@@ -49,31 +49,31 @@ const GDPRPanel: React.FC = () => {
   };
 
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 space-y-5">
+    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 space-y-5">
       <div>
         <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-1">
           Download your data
         </h2>
-        <p className="text-xs text-gray-600 dark:text-slate-400 mb-2">
+        <p className="text-xs text-secondary-600 dark:text-slate-400 mb-2">
           Get a JSON archive of your profile, resume, applications, reviews, saved jobs, and notifications.
         </p>
         <button
           type="button"
           onClick={exportData}
           disabled={exporting}
-          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-40"
+          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40"
         >
           {exporting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
           Download data
         </button>
       </div>
 
-      <div className="pt-4 border-t border-gray-100 dark:border-slate-700">
+      <div className="pt-4 border-t border-secondary-100 dark:border-slate-700">
         <h2 className="text-sm font-semibold text-rose-700 dark:text-rose-400 mb-1 flex items-center gap-1.5">
           <AlertTriangle className="h-4 w-4" />
           Delete my data
         </h2>
-        <p className="text-xs text-gray-600 dark:text-slate-400 mb-2">
+        <p className="text-xs text-secondary-600 dark:text-slate-400 mb-2">
           Permanently removes your profile, applications, saved jobs, and notifications.
           Reviews you wrote will be anonymized to preserve company ratings.
         </p>
@@ -104,7 +104,7 @@ const GDPRPanel: React.FC = () => {
                   setShowDelete(false);
                   setConfirmInput('');
                 }}
-                className="px-3 py-1.5 text-sm rounded-lg text-gray-600 hover:text-gray-800"
+                className="px-3 py-1.5 text-sm rounded-lg text-secondary-600 hover:text-secondary-800"
               >
                 Cancel
               </button>

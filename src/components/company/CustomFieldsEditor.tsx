@@ -110,14 +110,14 @@ const CustomFieldsEditor: React.FC<{ jobId: string }> = ({ jobId }) => {
           <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
             Custom application fields
           </h3>
-          <p className="text-xs text-gray-500 dark:text-slate-400">
+          <p className="text-xs text-secondary-500 dark:text-slate-400">
             Collect extra answers from applicants beyond resume + cover letter.
           </p>
         </div>
         <button
           type="button"
           onClick={addField}
-          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700"
         >
           <Plus className="h-3.5 w-3.5" />
           Add field
@@ -125,7 +125,7 @@ const CustomFieldsEditor: React.FC<{ jobId: string }> = ({ jobId }) => {
       </div>
 
       {fields.length === 0 ? (
-        <p className="text-xs text-gray-400 dark:text-slate-500 italic py-4">
+        <p className="text-xs text-secondary-400 dark:text-slate-500 italic py-4">
           No custom fields yet. Candidates will only submit the default resume + cover letter.
         </p>
       ) : (
@@ -133,10 +133,10 @@ const CustomFieldsEditor: React.FC<{ jobId: string }> = ({ jobId }) => {
           {fields.map((f, i) => (
             <li
               key={f.id ?? `new-${i}`}
-              className="bg-gray-50 dark:bg-slate-900/40 rounded-lg border border-gray-100 dark:border-slate-700 p-3"
+              className="bg-secondary-50 dark:bg-slate-900/40 rounded-lg border border-secondary-100 dark:border-slate-700 p-3"
             >
               <div className="flex items-start gap-2">
-                <GripVertical className="h-4 w-4 text-gray-300 dark:text-slate-600 mt-2 flex-shrink-0" />
+                <GripVertical className="h-4 w-4 text-secondary-300 dark:text-slate-600 mt-2 flex-shrink-0" />
                 <div className="min-w-0 flex-1 space-y-2">
                   <div className="flex gap-2">
                     <input
@@ -144,12 +144,12 @@ const CustomFieldsEditor: React.FC<{ jobId: string }> = ({ jobId }) => {
                       value={f.label}
                       onChange={(e) => update(i, { label: e.target.value })}
                       placeholder="Question label"
-                      className="flex-1 text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                      className="flex-1 text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                     />
                     <select
                       value={f.field_type}
                       onChange={(e) => update(i, { field_type: e.target.value as FieldType })}
-                      className="text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                      className="text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                     >
                       {Object.entries(FIELD_TYPE_LABELS).map(([v, label]) => (
                         <option key={v} value={v}>
@@ -172,16 +172,16 @@ const CustomFieldsEditor: React.FC<{ jobId: string }> = ({ jobId }) => {
                         })
                       }
                       placeholder="Comma-separated choices"
-                      className="w-full text-sm rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
                     />
                   )}
 
-                  <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-slate-300">
+                  <label className="flex items-center gap-2 text-xs text-secondary-700 dark:text-slate-300">
                     <input
                       type="checkbox"
                       checked={f.required}
                       onChange={(e) => update(i, { required: e.target.checked })}
-                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
                     />
                     Required
                   </label>

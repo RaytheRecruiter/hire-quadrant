@@ -93,7 +93,7 @@ const InterviewPrepPage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <BreadcrumbSchema
             className="mb-4"
@@ -112,13 +112,13 @@ const InterviewPrepPage: React.FC = () => {
               <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-1">
                 {roleName} interview prep
               </h1>
-              <p className="text-gray-600 dark:text-slate-400">
+              <p className="text-secondary-600 dark:text-slate-400">
                 Practice the questions employers actually ask.
               </p>
             </div>
           </header>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
               <Target className="h-4 w-4 text-primary-500" />
               Role-specific questions
@@ -127,7 +127,7 @@ const InterviewPrepPage: React.FC = () => {
               {roleQuestions.map((q) => (
                 <li
                   key={q}
-                  className="flex items-start gap-2 text-sm text-gray-700 dark:text-slate-300"
+                  className="flex items-start gap-2 text-sm text-secondary-700 dark:text-slate-300"
                 >
                   <CheckCircle2 className="h-4 w-4 text-primary-500 mt-0.5 flex-shrink-0" />
                   {q}
@@ -136,7 +136,7 @@ const InterviewPrepPage: React.FC = () => {
             </ul>
           </section>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
               <Lightbulb className="h-4 w-4 text-amber-500" />
               Behavioral bank (works for any role)
@@ -145,7 +145,7 @@ const InterviewPrepPage: React.FC = () => {
               {BEHAVIORAL.map((q) => (
                 <li
                   key={q}
-                  className="flex items-start gap-2 text-sm text-gray-700 dark:text-slate-300"
+                  className="flex items-start gap-2 text-sm text-secondary-700 dark:text-slate-300"
                 >
                   <CheckCircle2 className="h-4 w-4 text-primary-500 mt-0.5 flex-shrink-0" />
                   {q}
@@ -154,11 +154,11 @@ const InterviewPrepPage: React.FC = () => {
             </ul>
           </section>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5 mb-5">
+          <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3">
               How to prepare in one week
             </h2>
-            <ol className="space-y-3 text-sm text-gray-700 dark:text-slate-300 list-decimal list-inside">
+            <ol className="space-y-3 text-sm text-secondary-700 dark:text-slate-300 list-decimal list-inside">
               <li>
                 <span className="font-semibold">Days 1–2:</span> Rewrite your resume bullets using
                 STAR (Situation, Task, Action, Result). Quantify every outcome.
@@ -191,7 +191,7 @@ const InterviewPrepPage: React.FC = () => {
             </HardLink>
             <HardLink
               to={`/salaries/${roleSlug}`}
-              className="text-sm text-gray-500 hover:text-primary-600"
+              className="text-sm text-secondary-500 hover:text-primary-600"
             >
               See {roleName} salaries →
             </HardLink>

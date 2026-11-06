@@ -93,7 +93,7 @@ const Register: React.FC = () => {
   // Show confirmation page after successful registration
   if (registered) {
     return (
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full">
           <div className="bg-white/90 backdrop-blur-sm p-10 rounded-3xl shadow-2xl border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 text-center">
             <div className="flex justify-center mb-6">
@@ -102,10 +102,10 @@ const Register: React.FC = () => {
             <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">
               Check Your Email
             </h2>
-            <p className="text-gray-600 dark:text-slate-400 mb-6">
+            <p className="text-secondary-600 dark:text-slate-400 mb-6">
               We've sent a confirmation link to <strong>{email}</strong>. Please check your inbox and click the link to verify your account.
             </p>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mb-8">
+            <p className="text-sm text-secondary-500 dark:text-slate-400 mb-8">
               Didn't receive the email? Check your spam folder or try registering again.
             </p>
             <HardLink
@@ -121,13 +121,13 @@ const Register: React.FC = () => {
   }
 
   return (
-    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-4xl font-bold text-secondary-900 dark:text-white">
             Create your account
           </h2>
-          <p className="mt-4 text-center text-gray-600 dark:text-slate-400">
+          <p className="mt-4 text-center text-secondary-600 dark:text-slate-400">
             Or{' '}
             <HardLink
               to={loginHref}
@@ -142,9 +142,9 @@ const Register: React.FC = () => {
           <GoogleSignInButton role={userType} label="Sign up with Google" />
 
           <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-200 dark:bg-slate-700" />
-            <span className="text-xs uppercase tracking-wide text-gray-400 dark:text-slate-500">or</span>
-            <div className="flex-1 h-px bg-gray-200 dark:bg-slate-700" />
+            <div className="flex-1 h-px bg-secondary-200 dark:bg-slate-700" />
+            <span className="text-xs uppercase tracking-wide text-secondary-400 dark:text-slate-500">or</span>
+            <div className="flex-1 h-px bg-secondary-200 dark:bg-slate-700" />
           </div>
 
           <form className="space-y-8" onSubmit={handleSubmit}>
@@ -165,10 +165,10 @@ const Register: React.FC = () => {
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 ${
                     userType === 'candidate'
                       ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md'
-                      : 'border-gray-200 dark:border-slate-700 bg-gray-50/50 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50'
+                      : 'border-secondary-200 dark:border-slate-700 bg-secondary-50/50 text-secondary-600 dark:text-slate-400 hover:border-secondary-300 dark:border-slate-600 hover:bg-secondary-50 dark:hover:bg-slate-700 dark:bg-slate-900/50'
                   }`}
                 >
-                  <Briefcase className={`h-6 w-6 ${userType === 'candidate' ? 'text-primary-500' : 'text-gray-400 dark:text-slate-500'}`} />
+                  <Briefcase className={`h-6 w-6 ${userType === 'candidate' ? 'text-primary-500' : 'text-secondary-400 dark:text-slate-500'}`} />
                   <span className="text-sm font-semibold">Job Seeker</span>
                   <span className="text-xs opacity-70">Find your next role</span>
                 </button>
@@ -178,10 +178,10 @@ const Register: React.FC = () => {
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 ${
                     userType === 'company'
                       ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md'
-                      : 'border-gray-200 dark:border-slate-700 bg-gray-50/50 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-900/50'
+                      : 'border-secondary-200 dark:border-slate-700 bg-secondary-50/50 text-secondary-600 dark:text-slate-400 hover:border-secondary-300 dark:border-slate-600 hover:bg-secondary-50 dark:hover:bg-slate-700 dark:bg-slate-900/50'
                   }`}
                 >
-                  <Building2 className={`h-6 w-6 ${userType === 'company' ? 'text-primary-500' : 'text-gray-400 dark:text-slate-500'}`} />
+                  <Building2 className={`h-6 w-6 ${userType === 'company' ? 'text-primary-500' : 'text-secondary-400 dark:text-slate-500'}`} />
                   <span className="text-sm font-semibold">Employer</span>
                   <span className="text-xs opacity-70">Post jobs & hire</span>
                 </button>
@@ -193,7 +193,7 @@ const Register: React.FC = () => {
                 Full Name
               </label>
               <div className="mt-1 relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-slate-500" />
                 <input
                   id="name"
                   name="name"
@@ -202,7 +202,7 @@ const Register: React.FC = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800"
+                  className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-secondary-200 dark:border-slate-700 placeholder-secondary-500 dark:placeholder-slate-500 text-secondary-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800"
                   placeholder="Enter your full name"
                 />
               </div>
@@ -213,7 +213,7 @@ const Register: React.FC = () => {
                 Email address
               </label>
               <div className="mt-1 relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-slate-500" />
                 <input
                   id="email"
                   name="email"
@@ -222,7 +222,7 @@ const Register: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800"
+                  className="appearance-none relative block w-full pl-12 pr-4 py-4 border border-secondary-200 dark:border-slate-700 placeholder-secondary-500 dark:placeholder-slate-500 text-secondary-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800"
                   placeholder="Enter your email"
                 />
               </div>
@@ -233,7 +233,7 @@ const Register: React.FC = () => {
                 Password
               </label>
               <div className="mt-1 relative">
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-slate-500" />
                 <input
                   id="password"
                   name="password"
@@ -242,13 +242,13 @@ const Register: React.FC = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full pl-12 pr-12 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800"
+                  className="appearance-none relative block w-full pl-12 pr-12 py-4 border border-secondary-200 dark:border-slate-700 placeholder-secondary-500 dark:placeholder-slate-500 text-secondary-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800"
                   placeholder="Create a password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400 transition-colors duration-300"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-secondary-400 dark:text-slate-500 hover:text-secondary-600 dark:text-slate-400 transition-colors duration-300"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -273,7 +273,7 @@ const Register: React.FC = () => {
                 Confirm Password
               </label>
               <div className="mt-1 relative">
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-slate-500" />
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -282,13 +282,13 @@ const Register: React.FC = () => {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="appearance-none relative block w-full pl-12 pr-12 py-4 border border-gray-200 dark:border-slate-700 placeholder-gray-500 dark:placeholder-slate-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-gray-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800"
+                  className="appearance-none relative block w-full pl-12 pr-12 py-4 border border-secondary-200 dark:border-slate-700 placeholder-secondary-500 dark:placeholder-slate-500 text-secondary-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-secondary-50/50 hover:bg-white dark:bg-slate-800 focus:bg-white dark:bg-slate-800"
                   placeholder="Confirm your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400 transition-colors duration-300"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-secondary-400 dark:text-slate-500 hover:text-secondary-600 dark:text-slate-400 transition-colors duration-300"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>

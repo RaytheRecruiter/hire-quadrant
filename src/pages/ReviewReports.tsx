@@ -105,7 +105,7 @@ const ReviewReports: React.FC = () => {
       <Helmet>
         <title>Review Reports · Admin · Nexegin</title>
       </Helmet>
-      <div className="min-h-dvh bg-gradient-to-br from-gray-50 to-primary-50/30 dark:from-slate-900 dark:to-slate-950">
+      <div className="min-h-dvh bg-gradient-to-br from-secondary-50 to-primary-50/30 dark:from-slate-900 dark:to-slate-950">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <HardLink to="/admin" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 mb-6 text-sm">
             <ArrowLeft className="h-4 w-4" />
@@ -118,7 +118,7 @@ const ReviewReports: React.FC = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-secondary-900 dark:text-white">Review Reports</h1>
-              <p className="text-sm text-gray-600 dark:text-slate-400">
+              <p className="text-sm text-secondary-600 dark:text-slate-400">
                 {loading ? 'Loading…' : `${reports.length} open ${reports.length === 1 ? 'report' : 'reports'}`}
               </p>
             </div>
@@ -129,15 +129,15 @@ const ReviewReports: React.FC = () => {
               <Loader2 className="h-8 w-8 text-primary-500 animate-spin mx-auto" />
             </div>
           ) : reports.length === 0 ? (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-10 text-center">
-              <p className="text-gray-600 dark:text-slate-400">No open reports.</p>
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
+              <p className="text-secondary-600 dark:text-slate-400">No open reports.</p>
             </div>
           ) : (
             <div className="space-y-4">
               {reports.map((r) => (
                 <article
                   key={r.id}
-                  className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5"
+                  className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl p-5"
                 >
                   <header className="flex items-start justify-between gap-3 mb-3">
                     <div className="min-w-0">
@@ -146,7 +146,7 @@ const ReviewReports: React.FC = () => {
                           <AlertTriangle className="h-3 w-3" />
                           {REASON_LABELS[r.reason] ?? r.reason}
                         </span>
-                        <span className="text-xs text-gray-500 dark:text-slate-400">
+                        <span className="text-xs text-secondary-500 dark:text-slate-400">
                           Reported {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
                         </span>
                         {r.review?.company && (
@@ -162,7 +162,7 @@ const ReviewReports: React.FC = () => {
                         {r.review?.title ?? '(review deleted)'}
                       </h3>
                       {r.note && (
-                        <p className="text-sm text-gray-700 dark:text-slate-300 mt-1 italic">
+                        <p className="text-sm text-secondary-700 dark:text-slate-300 mt-1 italic">
                           "{r.note}"
                         </p>
                       )}
@@ -173,19 +173,19 @@ const ReviewReports: React.FC = () => {
                   </header>
 
                   {r.review?.pros && (
-                    <div className="text-sm text-gray-700 dark:text-slate-300 mb-2">
+                    <div className="text-sm text-secondary-700 dark:text-slate-300 mb-2">
                       <span className="font-semibold text-emerald-700 dark:text-emerald-400">Pros: </span>
                       <span className="whitespace-pre-line">{r.review.pros}</span>
                     </div>
                   )}
                   {r.review?.cons && (
-                    <div className="text-sm text-gray-700 dark:text-slate-300 mb-3">
+                    <div className="text-sm text-secondary-700 dark:text-slate-300 mb-3">
                       <span className="font-semibold text-rose-700 dark:text-rose-400">Cons: </span>
                       <span className="whitespace-pre-line">{r.review.cons}</span>
                     </div>
                   )}
 
-                  <div className="flex flex-wrap gap-2 pt-3 border-t border-gray-100 dark:border-slate-700">
+                  <div className="flex flex-wrap gap-2 pt-3 border-t border-secondary-100 dark:border-slate-700">
                     <button
                       type="button"
                       disabled={actingId === r.id}
@@ -199,7 +199,7 @@ const ReviewReports: React.FC = () => {
                       type="button"
                       disabled={actingId === r.id}
                       onClick={() => decide(r, 'dismissed')}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 disabled:opacity-60"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-700 border border-secondary-200 dark:border-slate-600 text-secondary-700 dark:text-slate-300 hover:bg-secondary-50 dark:hover:bg-slate-600 disabled:opacity-60"
                     >
                       <Check className="h-4 w-4" />
                       Dismiss report

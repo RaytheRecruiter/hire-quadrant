@@ -215,14 +215,14 @@ const AdminResumePlans: React.FC = () => {
           <DollarSign className="h-4 w-4 text-primary-600" />
           Resume Database plans
         </h2>
-        <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
+        <p className="text-xs text-secondary-500 dark:text-slate-400 mb-4">
           Prices are in whole dollars. Paste Stripe Price IDs here after creating the matching Products/Prices in the
           Stripe Dashboard.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs uppercase text-gray-500 dark:text-slate-400 border-b border-gray-200 dark:border-slate-700">
+              <tr className="text-left text-xs uppercase text-secondary-500 dark:text-slate-400 border-b border-secondary-200 dark:border-slate-700">
                 <th className="py-2 pr-3">Plan</th>
                 <th className="py-2 pr-3">$/mo</th>
                 <th className="py-2 pr-3">$/yr</th>
@@ -236,17 +236,17 @@ const AdminResumePlans: React.FC = () => {
             </thead>
             <tbody>
               {plans.map((plan) => (
-                <tr key={plan.id} className="border-b border-gray-100 dark:border-slate-800">
-                  <td className="py-2 pr-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr key={plan.id} className="border-b border-secondary-100 dark:border-slate-800">
+                  <td className="py-2 pr-3 font-medium text-secondary-900 dark:text-white whitespace-nowrap">
                     {plan.name}
-                    <div className="text-xs text-gray-400 font-mono">{plan.slug}</div>
+                    <div className="text-xs text-secondary-400 font-mono">{plan.slug}</div>
                   </td>
                   <td className="py-2 pr-3">
                     <input
                       type="number"
                       value={dollars(plan.price_monthly)}
                       onChange={(e) => updatePlan(plan.id, { price_monthly: Math.round(Number(e.target.value) * 100) })}
-                      className="w-20 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded"
+                      className="w-20 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -254,7 +254,7 @@ const AdminResumePlans: React.FC = () => {
                       type="number"
                       value={dollars(plan.price_yearly)}
                       onChange={(e) => updatePlan(plan.id, { price_yearly: Math.round(Number(e.target.value) * 100) })}
-                      className="w-20 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded"
+                      className="w-20 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -262,7 +262,7 @@ const AdminResumePlans: React.FC = () => {
                       type="number"
                       value={plan.monthly_unlock_credits}
                       onChange={(e) => updatePlan(plan.id, { monthly_unlock_credits: Number(e.target.value) })}
-                      className="w-20 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded"
+                      className="w-20 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -271,7 +271,7 @@ const AdminResumePlans: React.FC = () => {
                       placeholder="price_..."
                       value={plan.stripe_price_id_monthly || ''}
                       onChange={(e) => updatePlan(plan.id, { stripe_price_id_monthly: e.target.value })}
-                      className="w-36 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded font-mono text-xs"
+                      className="w-36 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded font-mono text-xs"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -280,7 +280,7 @@ const AdminResumePlans: React.FC = () => {
                       placeholder="price_..."
                       value={plan.stripe_price_id_annual || ''}
                       onChange={(e) => updatePlan(plan.id, { stripe_price_id_annual: e.target.value })}
-                      className="w-36 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded font-mono text-xs"
+                      className="w-36 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded font-mono text-xs"
                     />
                   </td>
                   <td className="py-2 pr-3 text-center">
@@ -316,11 +316,11 @@ const AdminResumePlans: React.FC = () => {
 
       <div>
         <h2 className="text-lg font-semibold text-secondary-900 dark:text-white mb-1">Contact credit packs</h2>
-        <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">One-time "buy more contacts" add-ons.</p>
+        <p className="text-xs text-secondary-500 dark:text-slate-400 mb-4">One-time "buy more contacts" add-ons.</p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs uppercase text-gray-500 dark:text-slate-400 border-b border-gray-200 dark:border-slate-700">
+              <tr className="text-left text-xs uppercase text-secondary-500 dark:text-slate-400 border-b border-secondary-200 dark:border-slate-700">
                 <th className="py-2 pr-3">Pack</th>
                 <th className="py-2 pr-3">Price ($)</th>
                 <th className="py-2 pr-3">Stripe price</th>
@@ -330,8 +330,8 @@ const AdminResumePlans: React.FC = () => {
             </thead>
             <tbody>
               {packs.map((pack) => (
-                <tr key={pack.id} className="border-b border-gray-100 dark:border-slate-800">
-                  <td className="py-2 pr-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr key={pack.id} className="border-b border-secondary-100 dark:border-slate-800">
+                  <td className="py-2 pr-3 font-medium text-secondary-900 dark:text-white whitespace-nowrap">
                     {pack.name}
                   </td>
                   <td className="py-2 pr-3">
@@ -339,7 +339,7 @@ const AdminResumePlans: React.FC = () => {
                       type="number"
                       value={dollars(pack.price_cents)}
                       onChange={(e) => updatePack(pack.id, { price_cents: Math.round(Number(e.target.value) * 100) })}
-                      className="w-20 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded"
+                      className="w-20 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -348,7 +348,7 @@ const AdminResumePlans: React.FC = () => {
                       placeholder="price_..."
                       value={pack.stripe_price_id || ''}
                       onChange={(e) => updatePack(pack.id, { stripe_price_id: e.target.value })}
-                      className="w-36 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded font-mono text-xs"
+                      className="w-36 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded font-mono text-xs"
                     />
                   </td>
                   <td className="py-2 pr-3 text-center">
@@ -377,13 +377,13 @@ const AdminResumePlans: React.FC = () => {
 
       <div>
         <h2 className="text-lg font-semibold text-secondary-900 dark:text-white mb-1">Job sponsorship tiers</h2>
-        <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
+        <p className="text-xs text-secondary-500 dark:text-slate-400 mb-4">
           One-time "Promote this job" purchases (PROMOTE). Tier number drives ranking in jobScoring.ts — don't edit it here.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs uppercase text-gray-500 dark:text-slate-400 border-b border-gray-200 dark:border-slate-700">
+              <tr className="text-left text-xs uppercase text-secondary-500 dark:text-slate-400 border-b border-secondary-200 dark:border-slate-700">
                 <th className="py-2 pr-3">Tier</th>
                 <th className="py-2 pr-3">Price ($)</th>
                 <th className="py-2 pr-3">Duration (days)</th>
@@ -394,10 +394,10 @@ const AdminResumePlans: React.FC = () => {
             </thead>
             <tbody>
               {sponsorshipPlans.map((plan) => (
-                <tr key={plan.id} className="border-b border-gray-100 dark:border-slate-800">
-                  <td className="py-2 pr-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr key={plan.id} className="border-b border-secondary-100 dark:border-slate-800">
+                  <td className="py-2 pr-3 font-medium text-secondary-900 dark:text-white whitespace-nowrap">
                     {plan.name}
-                    <div className="text-xs text-gray-400">tier {plan.tier}</div>
+                    <div className="text-xs text-secondary-400">tier {plan.tier}</div>
                   </td>
                   <td className="py-2 pr-3">
                     <input
@@ -406,7 +406,7 @@ const AdminResumePlans: React.FC = () => {
                       onChange={(e) =>
                         updateSponsorshipPlan(plan.id, { price_cents: Math.round(Number(e.target.value) * 100) })
                       }
-                      className="w-20 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded"
+                      className="w-20 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -414,7 +414,7 @@ const AdminResumePlans: React.FC = () => {
                       type="number"
                       value={plan.duration_days}
                       onChange={(e) => updateSponsorshipPlan(plan.id, { duration_days: Number(e.target.value) })}
-                      className="w-20 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded"
+                      className="w-20 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -423,7 +423,7 @@ const AdminResumePlans: React.FC = () => {
                       placeholder="price_..."
                       value={plan.stripe_price_id || ''}
                       onChange={(e) => updateSponsorshipPlan(plan.id, { stripe_price_id: e.target.value })}
-                      className="w-36 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded font-mono text-xs"
+                      className="w-36 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded font-mono text-xs"
                     />
                   </td>
                   <td className="py-2 pr-3 text-center">
@@ -452,13 +452,13 @@ const AdminResumePlans: React.FC = () => {
 
       <div>
         <h2 className="text-lg font-semibold text-secondary-900 dark:text-white mb-1">Job add-ons</h2>
-        <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
+        <p className="text-xs text-secondary-500 dark:text-slate-400 mb-4">
           Optional bundled add-ons on top of a sponsorship tier (e.g. Urgent Hiring).
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs uppercase text-gray-500 dark:text-slate-400 border-b border-gray-200 dark:border-slate-700">
+              <tr className="text-left text-xs uppercase text-secondary-500 dark:text-slate-400 border-b border-secondary-200 dark:border-slate-700">
                 <th className="py-2 pr-3">Add-on</th>
                 <th className="py-2 pr-3">Price ($)</th>
                 <th className="py-2 pr-3">Duration (days)</th>
@@ -469,17 +469,17 @@ const AdminResumePlans: React.FC = () => {
             </thead>
             <tbody>
               {jobAddons.map((addon) => (
-                <tr key={addon.id} className="border-b border-gray-100 dark:border-slate-800">
-                  <td className="py-2 pr-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr key={addon.id} className="border-b border-secondary-100 dark:border-slate-800">
+                  <td className="py-2 pr-3 font-medium text-secondary-900 dark:text-white whitespace-nowrap">
                     {addon.name}
-                    <div className="text-xs text-gray-400 font-mono">{addon.key}</div>
+                    <div className="text-xs text-secondary-400 font-mono">{addon.key}</div>
                   </td>
                   <td className="py-2 pr-3">
                     <input
                       type="number"
                       value={dollars(addon.price_cents)}
                       onChange={(e) => updateJobAddon(addon.id, { price_cents: Math.round(Number(e.target.value) * 100) })}
-                      className="w-20 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded"
+                      className="w-20 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -487,7 +487,7 @@ const AdminResumePlans: React.FC = () => {
                       type="number"
                       value={addon.duration_days}
                       onChange={(e) => updateJobAddon(addon.id, { duration_days: Number(e.target.value) })}
-                      className="w-20 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded"
+                      className="w-20 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded"
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -496,7 +496,7 @@ const AdminResumePlans: React.FC = () => {
                       placeholder="price_..."
                       value={addon.stripe_price_id || ''}
                       onChange={(e) => updateJobAddon(addon.id, { stripe_price_id: e.target.value })}
-                      className="w-36 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded font-mono text-xs"
+                      className="w-36 px-2 py-1 border border-secondary-200 dark:border-slate-700 rounded font-mono text-xs"
                     />
                   </td>
                   <td className="py-2 pr-3 text-center">

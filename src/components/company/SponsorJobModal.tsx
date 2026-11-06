@@ -99,15 +99,15 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-slate-700">
+        <div className="flex items-center justify-between p-5 border-b border-secondary-100 dark:border-slate-700">
           <div>
             <h2 className="text-lg font-bold text-secondary-900 dark:text-white flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-amber-500" />
               Promote "{jobTitle}"
             </h2>
-            <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">Boost visibility with a paid sponsorship tier.</p>
+            <p className="text-xs text-secondary-500 dark:text-slate-400 mt-0.5">Boost visibility with a paid sponsorship tier.</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300">
+          <button onClick={onClose} className="text-secondary-400 hover:text-secondary-600 dark:hover:text-slate-300">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -128,16 +128,16 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
                     className={`text-left rounded-xl border p-4 transition ${
                       selectedTier === plan.tier
                         ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-gray-200 dark:border-slate-700 hover:border-primary-300'
+                        : 'border-secondary-200 dark:border-slate-700 hover:border-primary-300'
                     }`}
                   >
                     <p className="font-bold text-secondary-900 dark:text-white">{plan.name}</p>
                     <p className="text-xl font-bold text-primary-600 mt-1">{fmt(plan.price_cents)}</p>
-                    <p className="text-xs text-gray-500 dark:text-slate-400">{plan.duration_days} days</p>
+                    <p className="text-xs text-secondary-500 dark:text-slate-400">{plan.duration_days} days</p>
                     {Array.isArray(plan.features) && plan.features.length > 0 && (
                       <ul className="mt-2 space-y-1">
                         {plan.features.slice(0, 3).map((f, i) => (
-                          <li key={i} className="text-xs text-gray-600 dark:text-slate-400">
+                          <li key={i} className="text-xs text-secondary-600 dark:text-slate-400">
                             {f}
                           </li>
                         ))}
@@ -160,16 +160,16 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
                       <Zap className="h-3.5 w-3.5 text-amber-600" />
                       {urgentAddon.name} — +{fmt(urgentAddon.price_cents)}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-slate-400">
+                    <p className="text-xs text-secondary-500 dark:text-slate-400">
                       Adds an "Urgent Hiring" badge for {urgentAddon.duration_days} days.
                     </p>
                   </div>
                 </label>
               )}
 
-              <div className="flex items-center justify-between border-t border-gray-100 dark:border-slate-700 pt-4">
+              <div className="flex items-center justify-between border-t border-secondary-100 dark:border-slate-700 pt-4">
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Total</p>
+                  <p className="text-xs text-secondary-500 dark:text-slate-400">Total</p>
                   <p className="text-xl font-bold text-secondary-900 dark:text-white">{fmt(totalCents)}</p>
                 </div>
                 {canCheckout ? (
@@ -192,7 +192,7 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
                 )}
               </div>
               {!isStripeEnabled() && (
-                <p className="text-xs text-gray-400 dark:text-slate-500 mt-2">
+                <p className="text-xs text-secondary-400 dark:text-slate-500 mt-2">
                   Online checkout is coming soon — use "Request sponsorship" in the meantime.
                 </p>
               )}

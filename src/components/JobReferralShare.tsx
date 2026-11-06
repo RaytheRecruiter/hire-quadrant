@@ -65,7 +65,7 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
             <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
               Refer someone, earn a reward
             </h3>
-            <p className="text-xs text-gray-600 dark:text-slate-400">
+            <p className="text-xs text-secondary-600 dark:text-slate-400">
               Sign in to get a unique share link — track if your referral gets hired.
             </p>
           </div>
@@ -95,21 +95,21 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
   };
 
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+    <section className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
       <div className="flex items-start gap-2 mb-3">
         <Share2 className="h-4 w-4 text-primary-500 mt-0.5" />
         <div>
           <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
             Refer someone
           </h3>
-          <p className="text-xs text-gray-500 dark:text-slate-400">
+          <p className="text-xs text-secondary-500 dark:text-slate-400">
             Share this link — if they apply through it and get hired, you're credited as the referrer.
           </p>
         </div>
       </div>
 
       {loading ? (
-        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+        <Loader2 className="h-4 w-4 animate-spin text-secondary-400" />
       ) : !code ? null : (
         <>
           <div className="flex gap-2 mb-3">
@@ -117,7 +117,7 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
               readOnly
               value={shareUrl}
               onFocus={(e) => e.target.select()}
-              className="flex-1 text-xs font-mono rounded-lg border-gray-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+              className="flex-1 text-xs font-mono rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
             />
             <button
               type="button"
@@ -132,7 +132,7 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
           <div className="flex gap-2">
             <a
               href={`mailto:?subject=${emailSubject}&body=${emailBody}`}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700"
             >
               <Mail className="h-3 w-3" />
               Email
@@ -141,7 +141,7 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
               href={`https://twitter.com/intent/tweet?text=${twitterText}&url=${encodeURIComponent(shareUrl)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700"
             >
               <Twitter className="h-3 w-3" />
               X / Twitter
@@ -150,7 +150,7 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
               href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&summary=${linkedinText}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-secondary-200 dark:border-slate-700 text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700"
             >
               <Linkedin className="h-3 w-3" />
               LinkedIn

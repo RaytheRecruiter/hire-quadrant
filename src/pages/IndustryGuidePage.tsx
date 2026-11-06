@@ -101,7 +101,7 @@ const IndustryGuidePage: React.FC = () => {
         <link rel="canonical" href={pageUrl} />
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
       </Helmet>
-      <div className="min-h-dvh bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <BreadcrumbSchema
             className="mb-4"
@@ -120,7 +120,7 @@ const IndustryGuidePage: React.FC = () => {
               <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-1">
                 {industryName} careers guide
               </h1>
-              <p className="text-gray-600 dark:text-slate-400">{description}</p>
+              <p className="text-secondary-600 dark:text-slate-400">{description}</p>
             </div>
           </header>
 
@@ -128,12 +128,12 @@ const IndustryGuidePage: React.FC = () => {
             <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                 <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
                   <TrendingUp className="h-4 w-4 text-primary-500" />
                   At a glance
                 </h2>
-                <ul className="space-y-2 text-sm text-gray-700 dark:text-slate-300">
+                <ul className="space-y-2 text-sm text-secondary-700 dark:text-slate-300">
                   <li>
                     <span className="font-semibold text-secondary-900 dark:text-white">
                       {companies.length}
@@ -155,13 +155,13 @@ const IndustryGuidePage: React.FC = () => {
                 </HardLink>
               </section>
 
-              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+              <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                 <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
                   <MapPin className="h-4 w-4 text-primary-500" />
                   Top locations hiring
                 </h2>
                 {topLocations.length === 0 ? (
-                  <p className="text-xs text-gray-500 dark:text-slate-400 italic">
+                  <p className="text-xs text-secondary-500 dark:text-slate-400 italic">
                     No location data yet.
                   </p>
                 ) : (
@@ -174,7 +174,7 @@ const IndustryGuidePage: React.FC = () => {
                         >
                           {l.location}
                         </HardLink>
-                        <span className="text-xs text-gray-500 dark:text-slate-400">
+                        <span className="text-xs text-secondary-500 dark:text-slate-400">
                           {l.count} {l.count === 1 ? 'role' : 'roles'}
                         </span>
                       </li>
@@ -184,7 +184,7 @@ const IndustryGuidePage: React.FC = () => {
               </section>
 
               {companies.length > 0 && (
-                <section className="md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-5">
+                <section className="md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                   <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
                     <Building2 className="h-4 w-4 text-primary-500" />
                     Featured {industryName.toLowerCase()} companies
@@ -194,7 +194,7 @@ const IndustryGuidePage: React.FC = () => {
                       <HardLink
                         key={c.slug}
                         to={`/companies/${c.slug}`}
-                        className="p-2 text-sm text-secondary-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700 rounded truncate"
+                        className="p-2 text-sm text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700 rounded truncate"
                       >
                         {c.name}
                       </HardLink>

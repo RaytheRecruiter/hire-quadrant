@@ -193,7 +193,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
       case 'reviewed': return 'bg-blue-100 text-blue-800';
       case 'accepted': return 'bg-green-100 text-green-800';
       case 'rejected': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-200';
+      default: return 'bg-secondary-100 dark:bg-slate-700 text-secondary-800 dark:text-slate-200';
     }
   };
 
@@ -201,79 +201,79 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
     <div className="space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-secondary-200 dark:border-slate-700">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
               <Users className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600 dark:text-slate-400">Total Candidates</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalCandidates}</p>
+              <p className="text-sm text-secondary-600 dark:text-slate-400">Total Candidates</p>
+              <p className="text-2xl font-bold text-secondary-900 dark:text-white">{stats.totalCandidates}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-secondary-200 dark:border-slate-700">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <TrendingUp className="h-6 w-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600 dark:text-slate-400">Active (30 days)</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activeCandidates}</p>
+              <p className="text-sm text-secondary-600 dark:text-slate-400">Active (30 days)</p>
+              <p className="text-2xl font-bold text-secondary-900 dark:text-white">{stats.activeCandidates}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-secondary-200 dark:border-slate-700">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 rounded-lg">
               <Clock className="h-6 w-6 text-yellow-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600 dark:text-slate-400">Pending</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pendingApplications}</p>
+              <p className="text-sm text-secondary-600 dark:text-slate-400">Pending</p>
+              <p className="text-2xl font-bold text-secondary-900 dark:text-white">{stats.pendingApplications}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-secondary-200 dark:border-slate-700">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <UserCheck className="h-6 w-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600 dark:text-slate-400">Accepted</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.acceptedApplications}</p>
+              <p className="text-sm text-secondary-600 dark:text-slate-400">Accepted</p>
+              <p className="text-2xl font-bold text-secondary-900 dark:text-white">{stats.acceptedApplications}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-secondary-200 dark:border-slate-700">
           <div className="flex items-center">
             <div className="p-2 bg-purple-100 rounded-lg">
               <Award className="h-6 w-6 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600 dark:text-slate-400">Success Rate</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.conversionRate}%</p>
+              <p className="text-sm text-secondary-600 dark:text-slate-400">Success Rate</p>
+              <p className="text-2xl font-bold text-secondary-900 dark:text-white">{stats.conversionRate}%</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-secondary-200 dark:border-slate-700">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Search candidates by name or email"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full pl-10 pr-4 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
               />
             </div>
           </div>
@@ -282,7 +282,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+              className="px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             >
               <option value="">All Statuses</option>
               <option value="pending">Pending</option>
@@ -298,7 +298,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                 setSortBy(field as any);
                 setSortOrder(order as any);
               }}
-              className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+              className="px-3 py-2 border border-secondary-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             >
               <option value="lastActivity-desc">Latest Activity</option>
               <option value="lastActivity-asc">Oldest Activity</option>
@@ -314,7 +314,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
         {filteredAndSortedCandidates.map((candidate) => (
           <div
             key={candidate.id}
-            className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow duration-300 cursor-pointer"
+            className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-secondary-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow duration-300 cursor-pointer"
             onClick={() => handleCandidateClick(candidate)}
           >
             <div className="flex items-start justify-between mb-4">
@@ -325,10 +325,10 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-secondary-900 dark:text-white">
                     {candidate.name || candidate.email}
                   </h3>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">{candidate.email}</p>
+                  <p className="text-xs text-secondary-500 dark:text-slate-400">{candidate.email}</p>
                 </div>
               </div>
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(candidate.status)}`}>
@@ -337,18 +337,18 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center text-sm text-gray-600 dark:text-slate-400">
+              <div className="flex items-center text-sm text-secondary-600 dark:text-slate-400">
                 <Briefcase className="h-4 w-4 mr-2" />
                 <span>{candidate.totalApplications} application{candidate.totalApplications !== 1 ? 's' : ''}</span>
               </div>
 
-              <div className="flex items-center text-sm text-gray-600 dark:text-slate-400">
+              <div className="flex items-center text-sm text-secondary-600 dark:text-slate-400">
                 <Calendar className="h-4 w-4 mr-2" />
                 <span>Last active {formatDistanceToNow(new Date(candidate.lastActivity), { addSuffix: true })}</span>
               </div>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-end">
+            <div className="mt-4 pt-4 border-t border-secondary-100 dark:border-slate-700 flex justify-end">
               <button className="text-primary-600 hover:text-primary-700 text-sm font-medium">
                 View skills →
               </button>
@@ -359,16 +359,16 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
 
       {filteredAndSortedCandidates.length === 0 && (
         <div className="text-center py-12">
-          <Users className="h-12 w-12 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No candidates found</h3>
-          <p className="text-gray-500 dark:text-slate-400">Try adjusting your search criteria or filters.</p>
+          <Users className="h-12 w-12 text-secondary-400 dark:text-slate-500 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-secondary-900 dark:text-white mb-2">No candidates found</h3>
+          <p className="text-secondary-500 dark:text-slate-400">Try adjusting your search criteria or filters.</p>
         </div>
       )}
 
       {showCandidateModal && selectedCandidate && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-slate-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200 dark:border-slate-700">
+            <div className="p-6 border-b border-secondary-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="flex-shrink-0 h-16 w-16">
@@ -377,15 +377,15 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                     </div>
                   </div>
                   <div className="ml-6">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <h2 className="text-2xl font-bold text-secondary-900 dark:text-white">
                       {selectedCandidate.name || selectedCandidate.email}
                     </h2>
-                    <p className="text-xs text-gray-500 dark:text-slate-400">
+                    <p className="text-xs text-secondary-500 dark:text-slate-400">
                       {selectedCandidate.email}
                       {profile?.phone_number && <> · {profile.phone_number}</>}
                     </p>
                     {profile?.current_title && (
-                      <p className="text-sm text-gray-700 dark:text-slate-300 mt-2 font-medium">
+                      <p className="text-sm text-secondary-700 dark:text-slate-300 mt-2 font-medium">
                         {profile.current_title}
                         {profile.years_experience != null && ` · ${profile.years_experience} yrs`}
                       </p>
@@ -397,7 +397,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                 </div>
                 <button
                   onClick={() => setShowCandidateModal(false)}
-                  className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400"
+                  className="text-secondary-400 dark:text-slate-500 hover:text-secondary-600 dark:text-slate-400"
                 >
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -416,7 +416,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                   <div className="lg:col-span-2 space-y-6">
                     {/* Top Skills */}
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                      <h3 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2 mb-3">
                         <Star className="h-5 w-5 text-amber-400" />
                         Top Skills
                       </h3>
@@ -430,14 +430,14 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                           ))}
                         </div>
                       ) : (
-                        <p className="text-sm text-gray-500 dark:text-slate-400">No top skills listed.</p>
+                        <p className="text-sm text-secondary-500 dark:text-slate-400">No top skills listed.</p>
                       )}
                     </div>
 
                     {/* Skills */}
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
-                        <Sparkles className="h-5 w-5 text-gray-400 dark:text-slate-500" />
+                      <h3 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2 mb-3">
+                        <Sparkles className="h-5 w-5 text-secondary-400 dark:text-slate-500" />
                         Skills
                       </h3>
                       {profile?.skills.length ? (
@@ -449,13 +449,13 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                           ))}
                         </div>
                       ) : (
-                        <p className="text-sm text-gray-500 dark:text-slate-400">No skills listed.</p>
+                        <p className="text-sm text-secondary-500 dark:text-slate-400">No skills listed.</p>
                       )}
                     </div>
 
                     {/* Certifications */}
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                      <h3 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2 mb-3">
                         <Award className="h-5 w-5 text-violet-500" />
                         Certifications
                       </h3>
@@ -469,31 +469,31 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                           ))}
                         </div>
                       ) : (
-                        <p className="text-sm text-gray-500 dark:text-slate-400">No certifications listed.</p>
+                        <p className="text-sm text-secondary-500 dark:text-slate-400">No certifications listed.</p>
                       )}
                     </div>
                   </div>
 
                   <div className="lg:col-span-1 space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Activity</h3>
-                    <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold text-secondary-900 dark:text-white">Activity</h3>
+                    <div className="bg-secondary-50 dark:bg-slate-900/50 p-4 rounded-lg">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 dark:text-slate-400">Applications</span>
-                        <span className="text-lg font-bold text-gray-900 dark:text-white">{selectedCandidate.totalApplications}</span>
+                        <span className="text-sm text-secondary-600 dark:text-slate-400">Applications</span>
+                        <span className="text-lg font-bold text-secondary-900 dark:text-white">{selectedCandidate.totalApplications}</span>
                       </div>
                     </div>
-                    <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
+                    <div className="bg-secondary-50 dark:bg-slate-900/50 p-4 rounded-lg">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 dark:text-slate-400">Last activity</span>
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        <span className="text-sm text-secondary-600 dark:text-slate-400">Last activity</span>
+                        <span className="text-sm font-medium text-secondary-900 dark:text-white">
                           {format(new Date(selectedCandidate.lastActivity), 'MMM d, yyyy')}
                         </span>
                       </div>
                     </div>
                     {profile?.resume_url && (
-                      <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
+                      <div className="bg-secondary-50 dark:bg-slate-900/50 p-4 rounded-lg">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 dark:text-slate-400 inline-flex items-center gap-1">
+                          <span className="text-sm text-secondary-600 dark:text-slate-400 inline-flex items-center gap-1">
                             <FileText className="h-3.5 w-3.5" /> Resume
                           </span>
                           {resumeSignedUrl ? (
@@ -506,18 +506,18 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                               View <ExternalLink className="h-3 w-3" />
                             </a>
                           ) : (
-                            <span className="text-sm text-gray-400 dark:text-slate-500">Loading…</span>
+                            <span className="text-sm text-secondary-400 dark:text-slate-500">Loading…</span>
                           )}
                         </div>
                       </div>
                     )}
                     {profile?.resume_parsed_at && (
-                      <div className="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg">
+                      <div className="bg-secondary-50 dark:bg-slate-900/50 p-4 rounded-lg">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 dark:text-slate-400 inline-flex items-center gap-1">
+                          <span className="text-sm text-secondary-600 dark:text-slate-400 inline-flex items-center gap-1">
                             <FileText className="h-3.5 w-3.5" /> Resume parsed
                           </span>
-                          <span className="text-sm text-gray-900 dark:text-white">
+                          <span className="text-sm text-secondary-900 dark:text-white">
                             {formatDistanceToNow(new Date(profile.resume_parsed_at), { addSuffix: true })}
                           </span>
                         </div>
@@ -525,8 +525,8 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                     )}
 
                     {selectedCandidate.applications.length > 0 && (
-                      <div className="pt-4 border-t border-gray-200 dark:border-slate-700">
-                        <h4 className="text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2 flex items-center gap-1">
+                      <div className="pt-4 border-t border-secondary-200 dark:border-slate-700">
+                        <h4 className="text-sm font-semibold text-secondary-700 dark:text-slate-300 mb-2 flex items-center gap-1">
                           <Briefcase className="h-4 w-4" />
                           Applications
                         </h4>
@@ -534,8 +534,8 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                           {selectedCandidate.applications.slice(0, 5).map((app) => {
                             const job = jobs.find(j => j.id === app.job_id);
                             return (
-                              <li key={app.id} className="text-xs text-gray-600 dark:text-slate-400">
-                                <div className="font-medium text-gray-800 dark:text-slate-200">{job ? job.title : 'Unknown Job'}</div>
+                              <li key={app.id} className="text-xs text-secondary-600 dark:text-slate-400">
+                                <div className="font-medium text-secondary-800 dark:text-slate-200">{job ? job.title : 'Unknown Job'}</div>
                                 <div className="flex items-center justify-between gap-2">
                                   <span className="truncate">{job ? job.company : ''}</span>
                                   <span className="flex-shrink-0">{format(new Date(app.applied_at), 'MMM d')}</span>
@@ -559,7 +559,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                             );
                           })}
                           {selectedCandidate.applications.length > 5 && (
-                            <li className="text-xs text-gray-500 dark:text-slate-400">
+                            <li className="text-xs text-secondary-500 dark:text-slate-400">
                               +{selectedCandidate.applications.length - 5} more
                             </li>
                           )}
