@@ -22,7 +22,7 @@ concurrency:
 jobs:
   smoke:
     name: Smoke (chromium)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # Playwright has no ubuntu-26.04 (ubuntu-latest) build yet
     timeout-minutes: 15
     defaults:
       run:
@@ -60,7 +60,7 @@ jobs:
 
   full:
     name: Full suite (chromium + webkit)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # Playwright has no ubuntu-26.04 (ubuntu-latest) build yet
     timeout-minutes: 30
     needs: smoke
     if: github.event_name == 'workflow_dispatch'
