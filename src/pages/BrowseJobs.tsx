@@ -1,13 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
-import { MapPin, Search as SearchIcon, Briefcase, Loader2, X } from 'lucide-react';
+import { MapPin, Search as SearchIcon, Briefcase, X } from 'lucide-react';
 import HardLink from '../components/HardLink';
 import JobFilterSidebar, { AdvancedFilters, DEFAULT_ADVANCED_FILTERS } from '../components/JobFilterSidebar';
 import AutocompleteField from '../components/AutocompleteField';
 import { supabase } from '../utils/supabaseClient';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
+import JobCardSkeleton from '../components/JobCardSkeleton';
 
 interface JobRow {
   id: string;
@@ -354,8 +355,8 @@ const BrowseJobs: React.FC = () => {
 
             <div>
               {loading ? (
-                <div className="py-16 text-center">
-                  <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
+                <div className="space-y-3" role="status" aria-label="Loading jobs">
+                  {Array.from({ length: 5 }).map((_, i) => <JobCardSkeleton key={i} />)}
                 </div>
               ) : rows.length === 0 ? (
                 <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-8 text-center text-sm text-secondary-500 dark:text-slate-400">

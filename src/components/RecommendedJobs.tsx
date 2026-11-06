@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import HardLink from './HardLink';
-import { Lightbulb, MapPin, Building2, Clock, Loader2, X } from 'lucide-react';
+import { Lightbulb, MapPin, Building2, Clock, X } from 'lucide-react';
 import { useRecommendedJobs } from '../hooks/useRecommendedJobs';
 import { useSkippedJobs } from '../hooks/useSkippedJobs';
 import { generateSlug } from '../utils/slugGenerator';
@@ -10,13 +10,9 @@ const RecommendedJobs: React.FC<{ excludeIds?: string[] }> = ({ excludeIds = [] 
   const { recommended, loading } = useRecommendedJobs(6, excludeIds);
   const { skipJob } = useSkippedJobs();
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400" />
-      </div>
-    );
-  }
+  // Most signed-in users have no saved/viewed history, so this section never
+  // appears for them; a loading placeholder would flash and disappear.
+  if (loading) return null;
 
   if (recommended.length === 0) {
     return null;

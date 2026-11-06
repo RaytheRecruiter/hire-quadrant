@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useConfirm } from '../components/ConfirmDialog';
 import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Bookmark, Inbox, Briefcase, CalendarClock, Archive, Loader2, X, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
+import { Bookmark, Inbox, Briefcase, CalendarClock, Archive, X, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import HardLink from '../components/HardLink';
 import { useAuth } from '../contexts/AuthContext';
@@ -193,8 +193,17 @@ const MyJobs: React.FC = () => {
 
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
             {loading ? (
-              <div className="text-center py-10">
-                <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
+              <div className="divide-y divide-secondary-100 dark:divide-slate-700" role="status" aria-label="Loading your jobs">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-4 py-4">
+                    <div className="skeleton h-10 w-10 rounded-xl flex-shrink-0" />
+                    <div className="flex-1 space-y-2">
+                      <div className="skeleton h-4 w-2/3" />
+                      <div className="skeleton h-3 w-1/3" />
+                    </div>
+                    <div className="skeleton h-7 w-20 rounded-full" />
+                  </div>
+                ))}
               </div>
             ) : jobs.length === 0 ? (
               <div className="text-center py-12">
