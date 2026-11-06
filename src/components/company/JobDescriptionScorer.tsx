@@ -67,7 +67,7 @@ const JobDescriptionScorer: React.FC<Props> = ({ title, description }) => {
     <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-primary-500" />
+          <Sparkles className="h-4 w-4 text-primary-500 dark:text-primary-400" />
           <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
             Job description quality score
           </h3>

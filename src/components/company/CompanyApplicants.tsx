@@ -239,7 +239,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
             type="checkbox"
             checked={showShortlistedOnly}
             onChange={(e) => setShowShortlistedOnly(e.target.checked)}
-            className="rounded text-primary-500 focus:ring-primary-400"
+            className="rounded text-primary-500 dark:text-primary-400 focus:ring-primary-400"
           />
           <Bookmark className={`h-4 w-4 ${showShortlistedOnly ? 'fill-primary-500 text-primary-500' : 'text-secondary-400 dark:text-slate-500'}`} />
           <span className="text-sm text-secondary-700 dark:text-slate-300">Shortlisted only</span>
@@ -296,7 +296,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       ) : (
                         <span className="text-secondary-300 text-xs">Not rated</span>
                       )}
-                      {app.is_shortlisted && <Bookmark className="h-3.5 w-3.5 fill-primary-500 text-primary-500 ml-1" />}
+                      {app.is_shortlisted && <Bookmark className="h-3.5 w-3.5 fill-primary-500 text-primary-500 dark:text-primary-400 ml-1" />}
                     </div>
                     {app.employer_tags && app.employer_tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
@@ -326,7 +326,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                     {canDownloadResumes ? (
                       <button
                         onClick={() => handleResumeDownload(app.user_id, app.id)}
-                        className="text-primary-500 hover:text-primary-700 transition-colors"
+                        className="text-primary-500 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
                         title="Download Resume"
                       >
                         <Download className="h-4 w-4" />
@@ -341,7 +341,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                         supabase.rpc('record_application_view', { app_id: app.id });
                         setDetailApp(app);
                       }}
-                      className="text-primary-600 hover:text-primary-800 text-sm font-medium flex items-center gap-1"
+                      className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 text-sm font-medium flex items-center gap-1"
                     >
                       <Eye className="h-4 w-4" />
                       Review

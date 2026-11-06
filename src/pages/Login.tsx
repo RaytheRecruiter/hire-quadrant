@@ -121,14 +121,14 @@ const Login: React.FC = () => {
             {isForgotMode ? (
               <>
                 Remembered it?{' '}
-                <HardLink to="/login" className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300">
+                <HardLink to="/login" className="font-semibold text-primary-500 dark:text-primary-400 hover:text-primary-600 transition-colors duration-300">
                   Back to sign in
                 </HardLink>
               </>
             ) : (
               <>
                 Or{' '}
-                <HardLink to={registerHref} className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300">
+                <HardLink to={registerHref} className="font-semibold text-primary-500 dark:text-primary-400 hover:text-primary-600 transition-colors duration-300">
                   create a new account
                 </HardLink>
               </>
@@ -140,12 +140,12 @@ const Login: React.FC = () => {
           {isForgotMode ? (
             forgotSent ? (
               <div className="text-center space-y-4">
-                <Mail className="mx-auto h-12 w-12 text-primary-500" />
+                <Mail className="mx-auto h-12 w-12 text-primary-500 dark:text-primary-400" />
                 <h3 className="text-xl font-semibold text-secondary-900 dark:text-white">Check your email</h3>
                 <p className="text-secondary-600 dark:text-slate-400">
                   We sent a password reset link to <span className="font-semibold">{forgotEmail}</span>. The link expires in 1 hour.
                 </p>
-                <HardLink to="/login" className="inline-block mt-4 font-semibold text-primary-500 hover:text-primary-600">
+                <HardLink to="/login" className="inline-block mt-4 font-semibold text-primary-500 dark:text-primary-400 hover:text-primary-600">
                   Back to sign in
                 </HardLink>
               </div>
@@ -229,7 +229,7 @@ const Login: React.FC = () => {
                 </label>
                 <HardLink
                   to="/login?tab=forgot"
-                  className="text-sm font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
+                  className="text-sm font-semibold text-primary-500 dark:text-primary-400 hover:text-primary-600 transition-colors duration-300"
                 >
                   Forgot?
                 </HardLink>

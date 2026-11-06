@@ -125,12 +125,12 @@ const IndustryGuidePage: React.FC = () => {
           </header>
 
           {loading ? (
-            <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
+            <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                 <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
-                  <TrendingUp className="h-4 w-4 text-primary-500" />
+                  <TrendingUp className="h-4 w-4 text-primary-500 dark:text-primary-400" />
                   At a glance
                 </h2>
                 <ul className="space-y-2 text-sm text-secondary-700 dark:text-slate-300">
@@ -149,7 +149,7 @@ const IndustryGuidePage: React.FC = () => {
                 </ul>
                 <HardLink
                   to={`/companies/industry/${toSeoSlug(industryName)}`}
-                  className="inline-block mt-3 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className="inline-block mt-3 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
                 >
                   Browse all {industryName} companies →
                 </HardLink>
@@ -157,7 +157,7 @@ const IndustryGuidePage: React.FC = () => {
 
               <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                 <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
-                  <MapPin className="h-4 w-4 text-primary-500" />
+                  <MapPin className="h-4 w-4 text-primary-500 dark:text-primary-400" />
                   Top locations hiring
                 </h2>
                 {topLocations.length === 0 ? (
@@ -186,7 +186,7 @@ const IndustryGuidePage: React.FC = () => {
               {companies.length > 0 && (
                 <section className="md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                   <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
-                    <Building2 className="h-4 w-4 text-primary-500" />
+                    <Building2 className="h-4 w-4 text-primary-500 dark:text-primary-400" />
                     Featured {industryName.toLowerCase()} companies
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">

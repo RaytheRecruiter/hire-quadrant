@@ -100,7 +100,7 @@ const CareerTransitionPage: React.FC = () => {
 
           <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-primary-500" />
+              <Sparkles className="h-4 w-4 text-primary-500 dark:text-primary-400" />
               Why this transition works
             </h2>
             <p className="text-sm text-secondary-700 dark:text-slate-300">
@@ -138,11 +138,11 @@ const CareerTransitionPage: React.FC = () => {
 
           <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
-              <Briefcase className="h-4 w-4 text-primary-500" />
+              <Briefcase className="h-4 w-4 text-primary-500 dark:text-primary-400" />
               {toRole} roles hiring now
             </h2>
             {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-primary-500" />
+              <Loader2 className="h-5 w-5 animate-spin text-primary-500 dark:text-primary-400" />
             ) : jobs.length === 0 ? (
               <p className="text-xs text-secondary-500 dark:text-slate-400 italic">
                 No {toRole} roles match right now — check back soon.
@@ -188,7 +188,7 @@ const CareerTransitionPage: React.FC = () => {
           <div className="flex items-center justify-between text-sm">
             <HardLink
               to={`/interview-prep/${toSlug}`}
-              className="text-primary-600 hover:text-primary-700 font-medium"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
             >
               Prep for {toRole} interviews →
             </HardLink>

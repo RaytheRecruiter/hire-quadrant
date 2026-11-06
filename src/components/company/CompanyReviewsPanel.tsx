@@ -164,7 +164,7 @@ const CompanyReviewsPanel: React.FC<Props> = ({ companyId }) => {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <Loader2 className="h-8 w-8 text-primary-500 animate-spin mx-auto" />
+        <Loader2 className="h-8 w-8 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
       </div>
     );
   }

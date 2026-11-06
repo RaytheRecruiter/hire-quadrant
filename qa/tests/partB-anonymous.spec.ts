@@ -13,9 +13,10 @@ test.describe('B.1 Homepage and navigation', () => {
 
   test('top nav links present', async ({ page }) => {
     await page.goto('/');
-    // Real link names (verified against live DOM): Jobs, Career Paths,
-    // Companies, Blog, Pricing, Sign in, Sign up. "Search" is a button, not a link.
-    for (const label of ['Jobs', 'Career Paths', 'Companies', 'Blog', 'Pricing']) {
+    // Real link names (verified against live DOM 2026-11-06): Jobs, Companies,
+    // Blog, Sign in, Sign up. Career Paths and Pricing left the top nav.
+    // "Search" is a button, not a link.
+    for (const label of ['Jobs', 'Companies', 'Blog']) {
       await expect(page.getByRole('link', { name: new RegExp(`^${label}$`, 'i') }).first()).toBeVisible();
     }
     await expect(page.getByRole('link', { name: /^sign in$/i })).toBeVisible();
@@ -24,7 +25,7 @@ test.describe('B.1 Homepage and navigation', () => {
 
   test('logo returns home', async ({ page }) => {
     await page.goto('/jobs');
-    await page.getByRole('link', { name: /hire ?quadrant/i }).first().click();
+    await page.getByRole('banner').getByRole('link', { name: /^nexegin$/i }).first().click();
     await expect(page).toHaveURL(/\/$|\/#/);
   });
 
@@ -168,21 +169,22 @@ test.describe('B.9 Help / Support', () => {
 test.describe('B.10 Auth pages (logged out)', () => {
   test('/login renders email + password fields', async ({ page }) => {
     await page.goto('/login');
-    await expect(page.getByLabel(/email/i)).toBeVisible();
-    await expect(page.getByLabel(/password/i)).toBeVisible();
+    // Scoped to <main>: getByLabel also matches the footer's "Email hello@…" link
+    await expect(page.getByRole('main').getByLabel(/email/i)).toBeVisible();
+    await expect(page.getByRole('main').getByLabel(/password/i)).toBeVisible();
   });
 
   test('/register renders name + email + password', async ({ page }) => {
     await page.goto('/register');
-    await expect(page.getByLabel(/email/i)).toBeVisible();
-    await expect(page.getByLabel(/password/i).first()).toBeVisible();
+    await expect(page.getByRole('main').getByLabel(/email/i)).toBeVisible();
+    await expect(page.getByRole('main').getByLabel(/password/i).first()).toBeVisible();
   });
 
   // Finding #8 closed 2026-04-28: Login's "Forgot?" link now routes to
   // /login?tab=forgot which renders an email-only request form.
   test('/login?tab=forgot renders email input (request flow)', async ({ page }) => {
     await page.goto('/login?tab=forgot');
-    await expect(page.getByLabel(/email/i)).toBeVisible();
+    await expect(page.getByRole('main').getByLabel(/email/i)).toBeVisible();
     await expect(page.getByRole('button', { name: /send reset link/i })).toBeVisible();
   });
 

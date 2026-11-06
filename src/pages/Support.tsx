@@ -118,7 +118,7 @@ const Support: React.FC = () => {
                 to="/contact"
                 className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-secondary-100 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all"
               >
-                <MessageCircle className="h-6 w-6 text-primary-500 mx-auto mb-2" />
+                <MessageCircle className="h-6 w-6 text-primary-500 dark:text-primary-400 mx-auto mb-2" />
                 <h3 className="font-semibold text-secondary-900 dark:text-white mb-1">Contact Us</h3>
                 <p className="text-sm text-secondary-600 dark:text-slate-400">Send us a message</p>
               </HardLink>

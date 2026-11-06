@@ -321,7 +321,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
               <div className="flex items-center">
                 <div className="flex-shrink-0 h-12 w-12">
                   <div className="h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
-                    <UserIcon className="h-5 w-5 text-primary-600" />
+                    <UserIcon className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   </div>
                 </div>
                 <div className="ml-4">
@@ -349,7 +349,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
             </div>
 
             <div className="mt-4 pt-4 border-t border-secondary-100 dark:border-slate-700 flex justify-end">
-              <button className="text-primary-600 hover:text-primary-700 text-sm font-medium">
+              <button className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium">
                 View skills →
               </button>
             </div>
@@ -373,7 +373,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                 <div className="flex items-center">
                   <div className="flex-shrink-0 h-16 w-16">
                     <div className="h-16 w-16 rounded-full bg-primary-100 flex items-center justify-center">
-                      <UserIcon className="h-7 w-7 text-primary-600" />
+                      <UserIcon className="h-7 w-7 text-primary-600 dark:text-primary-400" />
                     </div>
                   </div>
                   <div className="ml-6">
@@ -409,7 +409,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
             <div className="p-6">
               {profileLoading ? (
                 <div className="text-center py-12">
-                  <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+                  <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
                 </div>
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -501,7 +501,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                               href={resumeSignedUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-sm font-medium text-primary-600 hover:text-primary-700 inline-flex items-center gap-1"
+                              className="text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 inline-flex items-center gap-1"
                             >
                               View <ExternalLink className="h-3 w-3" />
                             </a>
@@ -545,7 +545,7 @@ const CandidateHub: React.FC<CandidateHubProps> = ({ candidates, applications, j
                                     type="button"
                                     onClick={() => handleViewApplicationResume(app)}
                                     disabled={appResumeLoadingId === app.id}
-                                    className="mt-1 inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 font-medium disabled:opacity-60"
+                                    className="mt-1 inline-flex items-center gap-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium disabled:opacity-60"
                                   >
                                     {appResumeLoadingId === app.id ? (
                                       <Loader2 className="h-3 w-3 animate-spin" />

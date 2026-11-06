@@ -86,7 +86,7 @@ const BlogPost: React.FC = () => {
     fetchPost();
   }, [slug]);
 
-  if (loading) return <div className="min-h-dvh flex items-center justify-center bg-secondary-50 dark:bg-slate-950"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+  if (loading) return <div className="min-h-dvh flex items-center justify-center bg-secondary-50 dark:bg-slate-950"><Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" /></div>;
 
   if (!post) {
     return (

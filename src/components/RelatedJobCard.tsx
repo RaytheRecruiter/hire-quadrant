@@ -58,7 +58,7 @@ const RelatedJobCard: React.FC<Props> = ({ job, emphasis = 'similarity' }) => {
             </span>
           )}
           {job.salary && (
-            <span className="text-sm font-semibold text-primary-600 flex items-center gap-0.5">
+            <span className="text-sm font-semibold text-primary-600 dark:text-primary-400 flex items-center gap-0.5">
               {emphasis === 'salary' && <DollarSign className="h-3 w-3" />}
               {job.salary}
             </span>

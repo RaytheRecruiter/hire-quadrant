@@ -120,7 +120,7 @@ const InterviewPrepPage: React.FC = () => {
 
           <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
-              <Target className="h-4 w-4 text-primary-500" />
+              <Target className="h-4 w-4 text-primary-500 dark:text-primary-400" />
               Role-specific questions
             </h2>
             <ul className="space-y-2">
@@ -129,7 +129,7 @@ const InterviewPrepPage: React.FC = () => {
                   key={q}
                   className="flex items-start gap-2 text-sm text-secondary-700 dark:text-slate-300"
                 >
-                  <CheckCircle2 className="h-4 w-4 text-primary-500 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0" />
                   {q}
                 </li>
               ))}
@@ -147,7 +147,7 @@ const InterviewPrepPage: React.FC = () => {
                   key={q}
                   className="flex items-start gap-2 text-sm text-secondary-700 dark:text-slate-300"
                 >
-                  <CheckCircle2 className="h-4 w-4 text-primary-500 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0" />
                   {q}
                 </li>
               ))}
@@ -185,7 +185,7 @@ const InterviewPrepPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <HardLink
               to={`/jobs?q=${encodeURIComponent(roleName)}`}
-              className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+              className="inline-flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
             >
               Browse open {roleName} roles →
             </HardLink>

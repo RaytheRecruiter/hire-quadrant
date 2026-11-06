@@ -87,7 +87,7 @@ const DashboardCharts: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-display text-lg font-bold text-secondary-900 dark:text-white flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary-500" />
+                <TrendingUp className="h-5 w-5 text-primary-500 dark:text-primary-400" />
                 Applications — last 30 days
               </h3>
               <p className="text-sm text-secondary-500 dark:text-slate-400 mt-0.5">
@@ -120,7 +120,7 @@ const DashboardCharts: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-display text-lg font-bold text-secondary-900 dark:text-white flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary-500" />
+                <Target className="h-5 w-5 text-primary-500 dark:text-primary-400" />
                 Hiring funnel
               </h3>
               <p className="text-sm text-secondary-500 dark:text-slate-400 mt-0.5">

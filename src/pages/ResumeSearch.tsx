@@ -226,7 +226,7 @@ const ResumeSearch: React.FC = () => {
   };
 
   if (authLoading || permLoading) {
-    return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+    return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" /></div>;
   }
 
   if (!isCompany && !isAdmin) {
@@ -479,7 +479,7 @@ const ResumeSearch: React.FC = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-16"><Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500" /></div>
+          <div className="text-center py-16"><Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500 dark:text-primary-400" /></div>
         ) : candidates.length === 0 ? (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-12 text-center">
             <User className="mx-auto h-12 w-12 text-secondary-300 mb-3" />
@@ -504,7 +504,7 @@ const ResumeSearch: React.FC = () => {
                         {isUnlocked ? (
                           <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                         ) : (
-                          <span className="font-bold text-primary-600">#</span>
+                          <span className="font-bold text-primary-600 dark:text-primary-400">#</span>
                         )}
                       </div>
                       <div>

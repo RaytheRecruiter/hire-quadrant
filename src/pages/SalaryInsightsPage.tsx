@@ -84,7 +84,7 @@ const SalaryInsightsPage: React.FC = () => {
                 <p className="text-sm text-secondary-700 dark:text-slate-300 mb-3">
                   We don't have enough salary samples for this title yet. Try a broader role — or browse open roles below.
                 </p>
-                <HardLink to="/" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                <HardLink to="/" className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                   Browse all jobs →
                 </HardLink>
               </div>
@@ -146,7 +146,7 @@ const SalaryInsightsPage: React.FC = () => {
                     </span>
                   ))}
                 </div>
-                <HardLink to="/" className="inline-block mt-4 text-sm text-primary-600 hover:text-primary-700 font-medium">
+                <HardLink to="/" className="inline-block mt-4 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                   Browse open {titleLike} roles →
                 </HardLink>
               </div>

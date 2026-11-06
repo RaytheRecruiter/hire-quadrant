@@ -52,7 +52,7 @@ export default function CareerPath() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <GraduationCap className="h-8 w-8 text-primary-600" />
+          <GraduationCap className="h-8 w-8 text-primary-600 dark:text-primary-400" />
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-secondary-900 dark:text-white">Build Your Career Path</h1>
             <p className="text-secondary-600 dark:text-slate-400 mt-1">Explore where your current role can lead</p>

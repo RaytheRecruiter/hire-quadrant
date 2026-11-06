@@ -49,7 +49,7 @@ const TrendingSection: React.FC = () => {
       {companies.length > 0 && (
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-6">
           <h3 className="text-lg font-bold text-secondary-900 dark:text-white mb-4 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-primary-500" />
+            <TrendingUp className="h-5 w-5 text-primary-500 dark:text-primary-400" />
             Trending Companies
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -71,7 +71,7 @@ const TrendingSection: React.FC = () => {
       {locations.length > 0 && (
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-6">
           <h3 className="text-lg font-bold text-secondary-900 dark:text-white mb-4 flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-primary-500" />
+            <MapPin className="h-5 w-5 text-primary-500 dark:text-primary-400" />
             Trending Locations
           </h3>
           <div className="flex flex-wrap gap-2">

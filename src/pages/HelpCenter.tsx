@@ -95,7 +95,7 @@ const HelpCenter: React.FC = () => {
           />
 
           <header className="mb-8 flex items-start gap-3">
-            <HelpCircle className="h-7 w-7 text-primary-500 mt-1" />
+            <HelpCircle className="h-7 w-7 text-primary-500 dark:text-primary-400 mt-1" />
             <div>
               <h1 className="text-4xl font-bold text-secondary-900 dark:text-white mb-1">
                 Help Center
@@ -139,7 +139,7 @@ const HelpCenter: React.FC = () => {
           </div>
 
           {loading ? (
-            <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
+            <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
           ) : filtered.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
               <BookOpen className="h-10 w-10 text-secondary-300 dark:text-slate-600 mx-auto mb-3" />

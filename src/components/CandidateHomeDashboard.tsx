@@ -130,7 +130,7 @@ const CandidateHomeDashboard: React.FC = () => {
           {/* Profile strength */}
           <aside className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="h-4 w-4 text-primary-500" />
+              <Sparkles className="h-4 w-4 text-primary-500 dark:text-primary-400" />
               <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
                 Profile strength
               </h3>
@@ -168,7 +168,7 @@ const CandidateHomeDashboard: React.FC = () => {
             )}
             <HardLink
               to="/profile"
-              className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 font-medium"
+              className="inline-flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
             >
               {completenessScore === 100 ? 'View profile' : 'Finish your profile'}
               <ArrowRight className="h-3 w-3" />
@@ -179,14 +179,14 @@ const CandidateHomeDashboard: React.FC = () => {
           <aside className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 lg:col-span-2">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Briefcase className="h-4 w-4 text-primary-500" />
+                <Briefcase className="h-4 w-4 text-primary-500 dark:text-primary-400" />
                 <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
                   Recent applications
                 </h3>
               </div>
               <HardLink
                 to="/my-jobs"
-                className="text-xs text-primary-600 hover:text-primary-700"
+                className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
               >
                 View all →
               </HardLink>
@@ -196,7 +196,7 @@ const CandidateHomeDashboard: React.FC = () => {
             ) : applications.length === 0 ? (
               <p className="text-xs text-secondary-500 dark:text-slate-400">
                 No applications yet.{' '}
-                <HardLink to="/jobs" className="text-primary-600 hover:text-primary-700 font-medium">
+                <HardLink to="/jobs" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                   Browse jobs →
                 </HardLink>
               </p>
@@ -230,7 +230,7 @@ const CandidateHomeDashboard: React.FC = () => {
         <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mt-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary-500" />
+              <Target className="h-4 w-4 text-primary-500 dark:text-primary-400" />
               <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
                 Matched to your skills
               </h3>
@@ -243,7 +243,7 @@ const CandidateHomeDashboard: React.FC = () => {
             </div>
             <HardLink
               to="/jobs"
-              className="text-xs text-primary-600 hover:text-primary-700"
+              className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               Browse all →
             </HardLink>
@@ -253,7 +253,7 @@ const CandidateHomeDashboard: React.FC = () => {
           ) : !hasSignals ? (
             <p className="text-xs text-secondary-500 dark:text-slate-400">
               Add your resume or top skills to your{' '}
-              <HardLink to="/profile" className="text-primary-600 hover:text-primary-700 font-medium">
+              <HardLink to="/profile" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                 profile
               </HardLink>{' '}
               to get jobs matched to you.

@@ -27,7 +27,8 @@ test.describe('C — Candidate flows (logged in as seeded candidate)', () => {
     await page.goto('/profile');
     await expect(page.getByRole('heading', { name: /work experience|experience/i })).toBeVisible();
     await expect(page.getByRole('heading', { name: /education/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /skills/i })).toBeVisible();
+    // "Top Skills" and "Skills" are both headings; target the Skills section
+    await expect(page.getByRole('heading', { name: /^skills$/i })).toBeVisible();
   });
 
   test('C.4 settings — notification preferences are togglable', async ({ page }) => {

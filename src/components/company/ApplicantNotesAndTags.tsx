@@ -106,7 +106,7 @@ const ApplicantNotesAndTags: React.FC<{ applicationId: string }> = ({ applicatio
     <div className="space-y-4">
       <section>
         <div className="flex items-center gap-2 mb-2">
-          <Tag className="h-4 w-4 text-primary-500" />
+          <Tag className="h-4 w-4 text-primary-500 dark:text-primary-400" />
           <h4 className="text-sm font-semibold text-secondary-900 dark:text-white">Tags</h4>
         </div>
         <div className="flex flex-wrap gap-1.5 mb-2">
@@ -154,7 +154,7 @@ const ApplicantNotesAndTags: React.FC<{ applicationId: string }> = ({ applicatio
 
       <section>
         <div className="flex items-center gap-2 mb-2">
-          <MessageSquare className="h-4 w-4 text-primary-500" />
+          <MessageSquare className="h-4 w-4 text-primary-500 dark:text-primary-400" />
           <h4 className="text-sm font-semibold text-secondary-900 dark:text-white">
             Private notes
           </h4>

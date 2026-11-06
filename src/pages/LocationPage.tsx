@@ -106,7 +106,7 @@ const LocationPage: React.FC = () => {
 
           {loading ? (
             <div className="text-center py-16">
-              <Loader2 className="h-10 w-10 text-primary-500 mx-auto animate-spin" />
+              <Loader2 className="h-10 w-10 text-primary-500 dark:text-primary-400 mx-auto animate-spin" />
             </div>
           ) : error ? (
             <div role="alert" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 flex items-start gap-3">
@@ -119,7 +119,7 @@ const LocationPage: React.FC = () => {
               <p className="text-secondary-600 dark:text-slate-400 mb-3">
                 No open roles in {pretty} right now.
               </p>
-              <HardLink to="/" className="text-primary-600 hover:text-primary-700 font-medium">
+              <HardLink to="/" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                 Browse all jobs →
               </HardLink>
             </div>

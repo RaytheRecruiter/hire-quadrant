@@ -113,7 +113,7 @@ const Demographics: React.FC = () => {
 
           {loading ? (
             <div className="text-center py-12">
-              <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+              <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
             </div>
           ) : (
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6 space-y-6">
@@ -143,7 +143,7 @@ const Demographics: React.FC = () => {
                         type="checkbox"
                         checked={form.race.includes(r)}
                         onChange={() => toggleRace(r)}
-                        className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+                        className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
                       />
                       {r}
                     </label>

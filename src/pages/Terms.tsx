@@ -29,7 +29,7 @@ const Terms: React.FC = () => {
                 You're responsible for the accuracy of the information in your account and for keeping your login
                 credentials secure. You must be legally able to work (for candidate accounts) or to represent the
                 company you're creating an employer account for. We may suspend or terminate accounts that violate
-                these terms or our <a href="/content-policy" className="text-primary-500 hover:text-primary-600">Content Policy</a>.
+                these terms or our <a href="/content-policy" className="text-primary-500 dark:text-primary-400 hover:text-primary-600">Content Policy</a>.
               </p>
             </section>
 
@@ -41,7 +41,7 @@ const Terms: React.FC = () => {
                 <li>Misrepresent your identity, a company's identity, or a job posting's terms</li>
                 <li>Use candidate contact information obtained through the Resume Database for any purpose other than legitimate recruiting for the role(s) you've posted</li>
                 <li>Attempt to interfere with, disrupt, or gain unauthorized access to the service or other users' accounts</li>
-                <li>Post content that violates our <a href="/content-policy" className="text-primary-500 hover:text-primary-600">Content Policy</a></li>
+                <li>Post content that violates our <a href="/content-policy" className="text-primary-500 dark:text-primary-400 hover:text-primary-600">Content Policy</a></li>
               </ul>
             </section>
 
@@ -105,7 +105,7 @@ const Terms: React.FC = () => {
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">9. Contact us</h2>
               <p className="text-secondary-700 dark:text-slate-300">
                 Questions about these terms can be sent to{' '}
-                <a href="mailto:support@nexegin.com" className="text-primary-500 hover:text-primary-600">
+                <a href="mailto:support@nexegin.com" className="text-primary-500 dark:text-primary-400 hover:text-primary-600">
                   support@nexegin.com
                 </a>
               </p>

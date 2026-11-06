@@ -17,7 +17,7 @@ const Onboarding: React.FC = () => {
   const [resumeUploaded, setResumeUploaded] = useState(false);
 
   if (authLoading) {
-    return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+    return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" /></div>;
   }
   if (!user) return <Navigate to="/login" replace />;
   if (isCompany || isAdmin) return <Navigate to="/" replace />;

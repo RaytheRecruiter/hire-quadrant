@@ -45,14 +45,14 @@ const EmptyState: React.FC<Props> = ({ illustration, icon, title, description, p
           secondaryAction.to ? (
             <HardLink
               to={secondaryAction.to}
-              className="text-primary-600 hover:text-primary-800 font-semibold px-4 py-2"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-semibold px-4 py-2"
             >
               {secondaryAction.label}
             </HardLink>
           ) : (
             <button
               onClick={secondaryAction.onClick}
-              className="text-primary-600 hover:text-primary-800 font-semibold px-4 py-2"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-semibold px-4 py-2"
             >
               {secondaryAction.label}
             </button>

@@ -68,7 +68,7 @@ const CompanyAnalyticsPanel: React.FC<Props> = ({ companyId }) => {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <Loader2 className="h-8 w-8 text-primary-500 animate-spin mx-auto" />
+        <Loader2 className="h-8 w-8 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
       </div>
     );
   }
@@ -129,7 +129,7 @@ const CompanyAnalyticsPanel: React.FC<Props> = ({ companyId }) => {
           </h3>
           {seriesLoading ? (
             <div className="h-56 flex items-center justify-center">
-              <Loader2 className="h-5 w-5 text-primary-500 animate-spin" />
+              <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin" />
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={220}>
@@ -162,7 +162,7 @@ const CompanyAnalyticsPanel: React.FC<Props> = ({ companyId }) => {
           </h3>
           {seriesLoading ? (
             <div className="h-56 flex items-center justify-center">
-              <Loader2 className="h-5 w-5 text-primary-500 animate-spin" />
+              <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin" />
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={220}>

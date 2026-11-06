@@ -113,7 +113,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Megaphone className="h-5 w-5 text-primary-600" />
+          <Megaphone className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           <h3 className="text-lg font-semibold text-secondary-900 dark:text-white">
             Company Updates
           </h3>
@@ -153,7 +153,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
               type="checkbox"
               checked={form.pinned}
               onChange={(e) => setForm((f) => ({ ...f, pinned: e.target.checked }))}
-              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
             />
             Pin to top of feed
           </label>
@@ -180,7 +180,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
 
       {loading ? (
         <div className="text-center py-8">
-          <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+          <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
         </div>
       ) : updates.length === 0 ? (
         <p className="text-sm text-secondary-500 dark:text-slate-400 py-8 text-center">

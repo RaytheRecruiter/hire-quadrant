@@ -148,7 +148,7 @@ const AdvancedSearch: React.FC = () => {
                 id="remote"
                 checked={filters.remote}
                 onChange={(e) => setFilters({ ...filters, remote: e.target.checked })}
-                className="h-4 w-4 text-primary-600 rounded"
+                className="h-4 w-4 text-primary-600 dark:text-primary-400 rounded"
               />
               <label htmlFor="remote" className="text-sm font-medium text-secondary-700 dark:text-primary-300">
                 Remote only

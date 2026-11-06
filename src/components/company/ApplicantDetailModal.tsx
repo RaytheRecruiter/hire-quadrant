@@ -115,7 +115,7 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
                 type="checkbox"
                 checked={shortlisted}
                 onChange={e => setShortlisted(e.target.checked)}
-                className="rounded text-primary-500 focus:ring-primary-400 h-5 w-5"
+                className="rounded text-primary-500 dark:text-primary-400 focus:ring-primary-400 h-5 w-5"
               />
               <Bookmark className={`h-5 w-5 ${shortlisted ? 'fill-primary-500 text-primary-500' : 'text-secondary-400 dark:text-slate-500'}`} />
               <span className="font-medium text-secondary-800 dark:text-slate-200">Shortlist this candidate</span>
@@ -161,7 +161,7 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
             <div className="border border-primary-200 rounded-2xl p-4 bg-primary-50/30">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary-600" />
+                  <Sparkles className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   <span className="font-semibold text-secondary-800 dark:text-slate-200">AI Candidate Screening</span>
                 </div>
                 <button
@@ -177,7 +177,7 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
               {aiResult && (
                 <div className="mt-4 space-y-3 text-sm">
                   <div className="flex items-center gap-3">
-                    <div className="text-3xl font-bold text-primary-600">{aiResult.fit_score}</div>
+                    <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{aiResult.fit_score}</div>
                     <div className="text-secondary-500 dark:text-slate-400">Fit score /100</div>
                   </div>
                   <p className="text-secondary-800 dark:text-slate-200">{aiResult.summary}</p>

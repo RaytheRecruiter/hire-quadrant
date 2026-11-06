@@ -80,7 +80,7 @@ const JobClassificationReview: React.FC<Props> = ({ jobs }) => {
               {
                 key: 'title', label: 'Job Title',
                 render: (job) => (
-                  <HardLink to={`/jobs/${job.id}`} className="text-sm font-medium text-primary-700 hover:underline">
+                  <HardLink to={`/jobs/${job.id}`} className="text-sm font-medium text-primary-700 dark:text-primary-400 hover:underline">
                     {job.title}
                   </HardLink>
                 ),

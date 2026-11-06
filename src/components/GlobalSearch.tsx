@@ -269,7 +269,7 @@ const GlobalSearch: React.FC<Props> = ({ open, onClose }) => {
                               </p>
                             </div>
                             {isActive && (
-                              <ArrowRight className="h-4 w-4 text-primary-500 flex-shrink-0 self-center" />
+                              <ArrowRight className="h-4 w-4 text-primary-500 dark:text-primary-400 flex-shrink-0 self-center" />
                             )}
                           </button>
                         </li>

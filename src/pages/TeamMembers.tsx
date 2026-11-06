@@ -128,7 +128,7 @@ const TeamMembers: React.FC = () => {
   if (authLoading || permLoading) {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-secondary-50 dark:bg-slate-900">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" />
       </div>
     );
   }
@@ -277,7 +277,7 @@ const TeamMembers: React.FC = () => {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-secondary-900 dark:text-white flex items-center gap-3">
-              <Users className="h-8 w-8 text-primary-500" />
+              <Users className="h-8 w-8 text-primary-500 dark:text-primary-400" />
               Team Members & Permissions
             </h1>
             <p className="text-secondary-600 dark:text-slate-400 mt-2">
@@ -302,7 +302,7 @@ const TeamMembers: React.FC = () => {
           </div>
           {loading ? (
             <div className="p-8 text-center">
-              <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+              <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -340,7 +340,7 @@ const TeamMembers: React.FC = () => {
                         <td className="px-6 py-4 text-right whitespace-nowrap">
                           <button
                             onClick={() => setEditing(m)}
-                            className="inline-flex items-center gap-1 px-2 py-1 text-xs text-primary-600 hover:bg-primary-50 rounded"
+                            className="inline-flex items-center gap-1 px-2 py-1 text-xs text-primary-600 dark:text-primary-400 hover:bg-primary-50 rounded"
                             disabled={m.role === 'owner' && !isOwner}
                           >
                             <SettingsIcon className="h-3 w-3" /> Edit
@@ -430,7 +430,7 @@ const TeamMembers: React.FC = () => {
                           toast.success('Link copied');
                           setTimeout(() => setCopiedToken(null), 2000);
                         }}
-                        className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700"
+                        className="inline-flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
                       >
                         {copiedToken === inv.token ? (
                           <>
@@ -447,7 +447,7 @@ const TeamMembers: React.FC = () => {
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <button
                       onClick={() => handleResendInvite(inv)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-primary-600 hover:bg-primary-50 rounded-lg border border-primary-200"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-primary-600 dark:text-primary-400 hover:bg-primary-50 rounded-lg border border-primary-200"
                     >
                       <Mail className="h-3 w-3" /> Resend
                     </button>

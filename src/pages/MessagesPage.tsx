@@ -146,7 +146,7 @@ const MessagesPage: React.FC = () => {
             <aside className="border-r border-secondary-100 dark:border-slate-700 overflow-y-auto">
               {loading ? (
                 <div className="p-6 text-center">
-                  <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
+                  <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
                 </div>
               ) : conversations.length === 0 ? (
                 <div className="p-6 text-center">
@@ -214,7 +214,7 @@ const MessagesPage: React.FC = () => {
                   <div className="flex-1 overflow-y-auto p-4 space-y-3">
                     {loadingMessages ? (
                       <div className="text-center py-6">
-                        <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
+                        <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
                       </div>
                     ) : messages.length === 0 ? (
                       <p className="text-sm text-secondary-500 dark:text-slate-400 text-center py-6">

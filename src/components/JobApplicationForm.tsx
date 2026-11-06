@@ -321,7 +321,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                 <button
                   type="button"
                   onClick={handleViewExistingResume}
-                  className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex-shrink-0"
+                  className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 flex-shrink-0"
                 >
                   View
                 </button>
@@ -453,7 +453,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                 checked={privacyAccepted}
                 onChange={(e) => setPrivacyAccepted(e.target.checked)}
                 required
-                className="mt-0.5 h-4 w-4 rounded border-secondary-300 text-primary-500 focus:ring-primary-400"
+                className="mt-0.5 h-4 w-4 rounded border-secondary-300 text-primary-500 dark:text-primary-400 focus:ring-primary-400"
               />
               <span>
                 By submitting you agree to our{' '}
@@ -461,7 +461,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                   href="/privacy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-600 hover:underline font-semibold underline"
+                  className="text-primary-600 dark:text-primary-400 hover:underline font-semibold underline"
                 >
                   Privacy Policy
                 </a>{' '}

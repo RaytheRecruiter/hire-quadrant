@@ -65,7 +65,7 @@ const AdminAuditLog: React.FC = () => {
       <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6 flex items-center gap-2">
-            <Shield className="h-6 w-6 text-primary-500" />
+            <Shield className="h-6 w-6 text-primary-500 dark:text-primary-400" />
             <div>
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">Audit log</h1>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
@@ -90,7 +90,7 @@ const AdminAuditLog: React.FC = () => {
             </div>
 
             {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-primary-500 mx-auto" />
+              <Loader2 className="h-5 w-5 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
             ) : rows.length === 0 ? (
               <p className="text-sm text-secondary-500 dark:text-slate-400 italic">
                 No audit entries match this filter.
@@ -102,7 +102,7 @@ const AdminAuditLog: React.FC = () => {
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-secondary-900 dark:text-white">
-                          <span className="text-primary-600">{r.actor_name ?? 'System'}</span>{' '}
+                          <span className="text-primary-600 dark:text-primary-400">{r.actor_name ?? 'System'}</span>{' '}
                           <span className="text-secondary-700 dark:text-slate-300">{r.action.replace(/_/g, ' ')}</span>
                           {r.target_type && (
                             <>

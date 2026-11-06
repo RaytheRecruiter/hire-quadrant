@@ -80,7 +80,7 @@ const CompanyQASection: React.FC<Props> = ({ companyId, companySlug, companyName
     <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
         <h2 className="text-xl font-bold text-secondary-900 dark:text-white flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-primary-600" />
+          <HelpCircle className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           Questions & Answers
         </h2>
         {!asking && (
@@ -109,7 +109,7 @@ const CompanyQASection: React.FC<Props> = ({ companyId, companySlug, companyName
               type="checkbox"
               checked={anon}
               onChange={(e) => setAnon(e.target.checked)}
-              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
             />
             Ask anonymously
           </label>
@@ -127,7 +127,7 @@ const CompanyQASection: React.FC<Props> = ({ companyId, companySlug, companyName
 
       {loading ? (
         <div className="text-center py-6">
-          <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
+          <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
         </div>
       ) : rows.length === 0 ? (
         <p className="text-sm text-secondary-500 dark:text-slate-400">

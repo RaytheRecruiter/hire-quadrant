@@ -50,7 +50,7 @@ const JobAlerts: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  if (authLoading) return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500" /></div>;
+  if (authLoading) return <div className="min-h-dvh flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" /></div>;
   if (!user) return <Navigate to="/login" replace />;
 
   const handleSave = async () => {
@@ -82,7 +82,7 @@ const JobAlerts: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-secondary-900 dark:text-white flex items-center gap-3">
-            <Bell className="h-7 w-7 text-primary-500" />
+            <Bell className="h-7 w-7 text-primary-500 dark:text-primary-400" />
             Job Alerts
           </h1>
           <p className="mt-2 text-secondary-600 dark:text-slate-400">Get emailed when new jobs match your criteria.</p>
@@ -146,7 +146,7 @@ const JobAlerts: React.FC = () => {
         </div>
 
         {loading ? (
-          <div className="text-center"><Loader2 className="mx-auto h-8 w-8 animate-spin text-primary-500" /></div>
+          <div className="text-center"><Loader2 className="mx-auto h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" /></div>
         ) : searches.length === 0 ? (
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-lg border border-white/20 dark:border-slate-700 p-12 text-center">
             <div className="bg-secondary-100 dark:bg-slate-700 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">

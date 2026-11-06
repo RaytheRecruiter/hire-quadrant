@@ -155,7 +155,7 @@ const ScheduleInterviewModal: React.FC<Props> = ({
       >
         <header className="flex items-center justify-between p-4 border-b border-secondary-100 dark:border-slate-700">
           <div className="flex items-center gap-2">
-            <CalendarClock className="h-5 w-5 text-primary-500" />
+            <CalendarClock className="h-5 w-5 text-primary-500 dark:text-primary-400" />
             <h2 className="font-semibold text-secondary-900 dark:text-white">Schedule interview</h2>
           </div>
           <button type="button" onClick={onClose} className="p-1 rounded hover:bg-secondary-100 dark:hover:bg-slate-700">

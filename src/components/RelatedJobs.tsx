@@ -33,19 +33,19 @@ const RelatedJobs: React.FC<Props> = ({
     <div>
       <RelatedJobsSection
         title="Similar Jobs You Might Like"
-        icon={<Sparkles className="h-5 w-5 text-primary-500" />}
+        icon={<Sparkles className="h-5 w-5 text-primary-500 dark:text-primary-400" />}
         jobs={similar}
         emphasis="similarity"
       />
       <RelatedJobsSection
         title="Jobs Near You"
-        icon={<MapPin className="h-5 w-5 text-primary-500" />}
+        icon={<MapPin className="h-5 w-5 text-primary-500 dark:text-primary-400" />}
         jobs={nearYou}
         emphasis="location"
       />
       <RelatedJobsSection
         title="Jobs With Higher Pay"
-        icon={<DollarSign className="h-5 w-5 text-primary-500" />}
+        icon={<DollarSign className="h-5 w-5 text-primary-500 dark:text-primary-400" />}
         jobs={higherPay}
         emphasis="salary"
       />

@@ -60,7 +60,7 @@ const ProfileCompletenessScore: React.FC<{ inputs: ProfileCompletenessInputs }> 
     <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-4 mb-5">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-primary-500" />
+          <Sparkles className="h-4 w-4 text-primary-500 dark:text-primary-400" />
           <span className="text-sm font-semibold text-secondary-900 dark:text-white">
             Profile strength
           </span>

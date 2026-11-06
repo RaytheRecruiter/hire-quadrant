@@ -16,7 +16,7 @@ const NotificationPreferencesPanel: React.FC = () => {
   return (
     <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
       <div className="flex items-center gap-2 mb-4">
-        <Bell className="h-4 w-4 text-primary-500" />
+        <Bell className="h-4 w-4 text-primary-500 dark:text-primary-400" />
         <h2 className="text-sm font-semibold text-secondary-900 dark:text-white">
           Notification preferences
         </h2>
@@ -36,7 +36,7 @@ const NotificationPreferencesPanel: React.FC = () => {
               type="checkbox"
               checked={Boolean(prefs[r.key])}
               onChange={(e) => save({ [r.key]: e.target.checked } as Partial<typeof prefs>)}
-              className="mt-0.5 rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
+              className="mt-0.5 rounded border-secondary-300 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
             />
           </label>
         ))}

@@ -164,7 +164,7 @@ const Pricing: React.FC = () => {
 
       {loading ? (
         <div className="text-center py-16">
-          <Loader2 className="h-8 w-8 animate-spin text-primary-500 mx-auto" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
         </div>
       ) : (
         <>
@@ -194,7 +194,7 @@ const Pricing: React.FC = () => {
                         </span>
                       )}
                       <h3 className="font-bold text-lg text-secondary-900 dark:text-white">{plan.name}</h3>
-                      <p className="text-3xl font-bold text-primary-600 mt-2">
+                      <p className="text-3xl font-bold text-primary-600 dark:text-primary-400 mt-2">
                         {fmtMo(plan.price_cents)}
                         <span className="text-sm font-normal text-secondary-400"> / {plan.duration_days} days</span>
                       </p>
@@ -223,7 +223,7 @@ const Pricing: React.FC = () => {
           {resumePlans.length > 0 && (
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
               <div className="text-center mb-8">
-                <p className="text-xs uppercase tracking-wide text-primary-600 font-semibold mb-1 flex items-center justify-center gap-1.5">
+                <p className="text-xs uppercase tracking-wide text-primary-600 dark:text-primary-400 font-semibold mb-1 flex items-center justify-center gap-1.5">
                   <Search className="h-3.5 w-3.5" /> Source
                 </p>
                 <h2 className="text-2xl sm:text-3xl font-bold text-secondary-900 dark:text-white">Search the resume database</h2>
@@ -260,7 +260,7 @@ const Pricing: React.FC = () => {
                         </span>
                       )}
                       <h3 className="font-bold text-lg text-secondary-900 dark:text-white">{plan.name}</h3>
-                      <p className="text-3xl font-bold text-primary-600 mt-2">
+                      <p className="text-3xl font-bold text-primary-600 dark:text-primary-400 mt-2">
                         {fmtMo(price)}
                         {price > 0 && <span className="text-sm font-normal text-secondary-400">/{billing === 'monthly' ? 'mo' : 'yr'}</span>}
                       </p>
@@ -278,7 +278,7 @@ const Pricing: React.FC = () => {
                         className={`block text-center mt-6 px-4 py-2.5 rounded-xl font-semibold transition ${
                           isPopular
                             ? 'bg-primary-600 text-white hover:bg-primary-700'
-                            : 'border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30'
+                            : 'border border-primary-400 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30'
                         }`}
                       >
                         {plan.requires_manual_upgrade ? 'Contact sales' : 'Get started'}
@@ -312,7 +312,7 @@ const Pricing: React.FC = () => {
                 <details key={i} className="group bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-2xl p-5">
                   <summary className="font-semibold text-secondary-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
                     {item.q}
-                    <span className="text-primary-500 transition-transform group-open:rotate-45 text-2xl leading-none">+</span>
+                    <span className="text-primary-500 dark:text-primary-400 transition-transform group-open:rotate-45 text-2xl leading-none">+</span>
                   </summary>
                   <p className="mt-3 text-secondary-600 dark:text-slate-300 leading-relaxed">{item.a}</p>
                 </details>

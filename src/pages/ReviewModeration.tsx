@@ -76,7 +76,7 @@ const ReviewModeration: React.FC = () => {
       </Helmet>
       <div className="min-h-dvh bg-gradient-to-br from-secondary-50 to-primary-50/30 dark:from-slate-900 dark:to-slate-950">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <HardLink to="/admin" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 mb-6 text-sm">
+          <HardLink to="/admin" className="inline-flex items-center gap-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mb-6 text-sm">
             <ArrowLeft className="h-4 w-4" />
             Back to Admin
           </HardLink>
@@ -95,7 +95,7 @@ const ReviewModeration: React.FC = () => {
 
           {loading ? (
             <div className="text-center py-16">
-              <Loader2 className="h-8 w-8 text-primary-500 animate-spin mx-auto" />
+              <Loader2 className="h-8 w-8 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
             </div>
           ) : reviews.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
@@ -114,7 +114,7 @@ const ReviewModeration: React.FC = () => {
                         {r.company ? (
                           <HardLink
                             to={`/companies/${r.company.slug}`}
-                            className="font-medium text-primary-600 hover:underline"
+                            className="font-medium text-primary-600 dark:text-primary-400 hover:underline"
                           >
                             {r.company.name}
                           </HardLink>

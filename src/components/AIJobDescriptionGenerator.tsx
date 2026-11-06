@@ -57,7 +57,7 @@ const AIJobDescriptionGenerator: React.FC<Props> = ({ title: initialTitle = '', 
     <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl shadow-lg border border-primary-200 dark:border-primary-800 p-6">
       <div className="flex items-center gap-2 mb-4">
         <div className="p-2 bg-primary-100 rounded-lg">
-          <Sparkles className="h-5 w-5 text-primary-600" />
+          <Sparkles className="h-5 w-5 text-primary-600 dark:text-primary-400" />
         </div>
         <h3 className="text-lg font-bold text-secondary-900 dark:text-white">AI Job Description Generator</h3>
       </div>
@@ -98,10 +98,10 @@ Competitive equity + health benefits"
       {description && (
         <div className="mt-6 border border-primary-200 rounded-2xl bg-primary-50/30 p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-semibold text-primary-700">Generated</span>
+            <span className="text-sm font-semibold text-primary-700 dark:text-primary-400">Generated</span>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1 text-xs text-primary-700 hover:text-primary-900"
+              className="flex items-center gap-1 text-xs text-primary-700 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-300"
             >
               {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
               {copied ? 'Copied!' : 'Copy'}

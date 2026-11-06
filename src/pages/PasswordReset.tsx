@@ -64,7 +64,7 @@ const PasswordReset: React.FC = () => {
       <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center py-12">
         <div className="w-full max-w-md">
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-secondary-100 dark:border-slate-700 p-8">
-            <HardLink to="/login" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 text-sm font-medium mb-6">
+            <HardLink to="/login" className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 text-sm font-medium mb-6">
               <ArrowLeft className="h-4 w-4" /> Back to Login
             </HardLink>
 
@@ -167,7 +167,7 @@ const PasswordReset: React.FC = () => {
             </form>
 
             <p className="text-xs text-secondary-500 dark:text-slate-500 text-center mt-6">
-              If the reset link has expired, <HardLink to="/login?tab=forgot" className="text-primary-600 hover:underline">request a new one</HardLink>.
+              If the reset link has expired, <HardLink to="/login?tab=forgot" className="text-primary-600 dark:text-primary-400 hover:underline">request a new one</HardLink>.
             </p>
           </div>
         </div>

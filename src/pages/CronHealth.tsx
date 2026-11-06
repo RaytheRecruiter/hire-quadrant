@@ -78,7 +78,7 @@ const CronHealth: React.FC = () => {
       <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6 flex items-center gap-2">
-            <Activity className="h-6 w-6 text-primary-500" />
+            <Activity className="h-6 w-6 text-primary-500 dark:text-primary-400" />
             <div>
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">Cron health</h1>
               <p className="text-secondary-600 dark:text-slate-400 text-sm">
@@ -89,7 +89,7 @@ const CronHealth: React.FC = () => {
 
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
             {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-primary-500 mx-auto" />
+              <Loader2 className="h-5 w-5 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
             ) : summaries.length === 0 ? (
               <p className="text-sm text-secondary-500 dark:text-slate-400 italic">
                 No cron runs logged in the last 24 hours.

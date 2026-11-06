@@ -21,7 +21,7 @@ const SecurityPolicy: React.FC = () => (
           <section>
             <h2 className="text-xl font-semibold text-secondary-900">How to report</h2>
             <p>
-              Email <a className="text-primary-600 hover:underline" href="mailto:security@nexegin.com">security@nexegin.com</a> with
+              Email <a className="text-primary-600 dark:text-primary-400 hover:underline" href="mailto:security@nexegin.com">security@nexegin.com</a> with
               a description of the issue, the steps to reproduce it, and its potential impact. Include proof-of-concept
               details if you have them — screenshots, request/response examples, or a short video all help us triage faster.
             </p>

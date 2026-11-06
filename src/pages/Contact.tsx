@@ -201,13 +201,13 @@ const Contact: React.FC = () => {
               </p>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-secondary-700 dark:text-slate-300">
-                  <Mail className="h-4 w-4 text-primary-500" />
+                  <Mail className="h-4 w-4 text-primary-500 dark:text-primary-400" />
                   <a href="mailto:hello@nexegin.com" className="hover:text-primary-500 transition">
                     hello@nexegin.com
                   </a>
                 </li>
                 <li className="flex items-center gap-2 text-secondary-700 dark:text-slate-300">
-                  <Mail className="h-4 w-4 text-primary-500" />
+                  <Mail className="h-4 w-4 text-primary-500 dark:text-primary-400" />
                   <a href="mailto:employers@nexegin.com" className="hover:text-primary-500 transition">
                     employers@nexegin.com
                   </a>
