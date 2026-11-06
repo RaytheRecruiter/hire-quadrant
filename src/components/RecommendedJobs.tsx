@@ -6,8 +6,8 @@ import { useRecommendedJobs } from '../hooks/useRecommendedJobs';
 import { useSkippedJobs } from '../hooks/useSkippedJobs';
 import { generateSlug } from '../utils/slugGenerator';
 
-const RecommendedJobs: React.FC = () => {
-  const { recommended, loading } = useRecommendedJobs(6);
+const RecommendedJobs: React.FC<{ excludeIds?: string[] }> = ({ excludeIds = [] }) => {
+  const { recommended, loading } = useRecommendedJobs(6, excludeIds);
   const { skipJob } = useSkippedJobs();
 
   if (loading) {

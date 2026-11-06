@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useJobs } from '../contexts/JobContext';
+import { supabase } from '../utils/supabaseClient';
 import { useSavedJobs } from './useSavedJobs';
 import { useRecentlyViewed } from './useRecentlyViewed';
 import { useSkippedJobs } from './useSkippedJobs';
@@ -15,23 +15,67 @@ export interface RecommendedJob {
   matchScore: number;
 }
 
-export const useRecommendedJobs = (limit = 6) => {
-  const { jobs } = useJobs();
+interface PoolJob {
+  id: string;
+  title: string;
+  company: string | null;
+  location: string | null;
+  type: string | null;
+  description: string | null;
+  posted_date: string | null;
+  postedDate?: string;
+}
+
+// Scored against the 100 newest IT jobs, not the 10 on the current page of the
+// shared job list (which made "Recommended" a re-shuffle of the jobs listed
+// right below it). Fetched once per session, and only for users with history.
+let poolPromise: Promise<PoolJob[]> | null = null;
+const loadPool = (): Promise<PoolJob[]> => {
+  if (!poolPromise) {
+    poolPromise = Promise.resolve(
+      supabase
+        .from('jobs')
+        .select('id, title, company, location, type, description, posted_date')
+        .eq('is_it_role', true)
+        .neq('status', 'closed')
+        .order('posted_date', { ascending: false, nullsFirst: false })
+        .limit(100)
+    ).then(({ data, error }) => {
+      if (error) { poolPromise = null; return []; }
+      return (data ?? []) as PoolJob[];
+    });
+  }
+  return poolPromise;
+};
+
+export const useRecommendedJobs = (limit = 6, excludeIds: string[] = []) => {
+  const [jobs, setJobs] = useState<PoolJob[]>([]);
   const { savedJobIds } = useSavedJobs();
   const { recentJobs } = useRecentlyViewed();
   const { skippedJobIds } = useSkippedJobs();
   const [recommended, setRecommended] = useState<RecommendedJob[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const hasHistory = savedJobIds.size > 0 || recentJobs.length > 0;
+  const excludeKey = excludeIds.join('|');
+
+  useEffect(() => {
+    if (!hasHistory) return;
+    let alive = true;
+    loadPool().then(pool => { if (alive) setJobs(pool); });
+    return () => { alive = false; };
+  }, [hasHistory]);
+
   useEffect(() => {
     setLoading(true);
 
     // If user has no saved or viewed jobs, can't make recommendations
-    if (savedJobIds.size === 0 && recentJobs.length === 0) {
+    if (!hasHistory) {
       setRecommended([]);
       setLoading(false);
       return;
     }
+    const excluded = new Set(excludeKey ? excludeKey.split('|') : []);
 
     // Build preference profiles from saved jobs
     const savedSkills = new Set<string>();
@@ -40,7 +84,7 @@ export const useRecommendedJobs = (limit = 6) => {
 
     jobs.forEach(job => {
       if (savedJobIds.has(job.id)) {
-        const tags = extractTags(job.title, job.description);
+        const tags = extractTags(job.title, job.description ?? undefined);
         tags.forEach(tag => savedSkills.add(tag.toLowerCase()));
         if (job.location) savedLocations.add(job.location.toLowerCase());
         if (job.type) savedTypes.add(job.type.toLowerCase());
@@ -61,12 +105,12 @@ export const useRecommendedJobs = (limit = 6) => {
 
     // Score all jobs that are NOT saved, NOT skipped
     const scored: RecommendedJob[] = jobs
-      .filter(job => !savedJobIds.has(job.id) && !skippedJobIds.has(job.id))
+      .filter(job => !savedJobIds.has(job.id) && !skippedJobIds.has(job.id) && !excluded.has(job.id))
       .map(job => {
         let matchScore = 0;
 
         // === SAVED JOB SIGNALS (highest weight) ===
-        const jobTags = extractTags(job.title, job.description);
+        const jobTags = extractTags(job.title, job.description ?? undefined);
 
         // Saved job skill tags: +15 per matching tag
         const matchingSavedSkills = jobTags.filter(tag =>
@@ -114,7 +158,7 @@ export const useRecommendedJobs = (limit = 6) => {
           company: job.company || 'Unknown',
           location: job.location || 'Remote',
           type: job.type || 'Full Time',
-          description: job.description,
+          description: job.description || '',
           matchScore,
         };
       })
@@ -124,7 +168,7 @@ export const useRecommendedJobs = (limit = 6) => {
 
     setRecommended(scored);
     setLoading(false);
-  }, [jobs, savedJobIds, recentJobs, skippedJobIds, limit]);
+  }, [jobs, savedJobIds, recentJobs, skippedJobIds, limit, hasHistory, excludeKey]);
 
   return { recommended, loading };
 };
