@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useConfirm } from '../ConfirmDialog';
 import { Monitor, Loader2, LogOut } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
@@ -14,6 +15,7 @@ interface SessionRow {
 }
 
 const SessionsPanel: React.FC = () => {
+  const confirmAction = useConfirm();
   const [rows, setRows] = useState<SessionRow[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +34,7 @@ const SessionsPanel: React.FC = () => {
   }, [load]);
 
   const signOutAll = async () => {
-    if (!window.confirm('Sign out of all devices except this one?')) return;
+    if (!(await confirmAction({ title: 'Sign out of all other devices?', message: 'Every other browser and device signed in to this account will be signed out. This one stays signed in.', confirmLabel: 'Sign out others', destructive: true }))) return;
     const { error } = await supabase.auth.signOut({ scope: 'others' });
     if (error) toast.error(error.message);
     else {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useConfirm } from '../ConfirmDialog';
 import toast from 'react-hot-toast';
 import { formatDistanceToNow } from 'date-fns';
 import { Megaphone, Pin, PinOff, Edit2, Trash2, Loader2, Plus } from 'lucide-react';
@@ -13,6 +14,7 @@ interface Props {
 const emptyForm = { title: '', body: '', pinned: false };
 
 const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
+  const confirmAction = useConfirm();
   const { user } = useAuth();
   const { updates, loading, refresh } = useCompanyUpdates(companyId);
   const [editing, setEditing] = useState<CompanyUpdate | null>(null);
@@ -95,7 +97,7 @@ const CompanyUpdatesEditor: React.FC<Props> = ({ companyId }) => {
   };
 
   const remove = async (u: CompanyUpdate) => {
-    if (!window.confirm(`Delete "${u.title}"?`)) return;
+    if (!(await confirmAction({ title: `Delete "${u.title}"?`, message: "This can't be undone.", confirmLabel: 'Delete', destructive: true }))) return;
     setBusyId(u.id);
     const { error } = await supabase.from('company_updates').delete().eq('id', u.id);
     setBusyId(null);

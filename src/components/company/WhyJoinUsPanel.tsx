@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useConfirm } from '../ConfirmDialog';
 import toast from 'react-hot-toast';
 import { Plus, Trash2, Edit2, ArrowUp, ArrowDown, Loader2, Save, X, Sparkles } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
@@ -37,6 +38,7 @@ const KIND_HINTS: Record<Draft['kind'], string> = {
 };
 
 const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
+  const confirmAction = useConfirm();
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<string | null>(null);
@@ -94,7 +96,7 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
   };
 
   const remove = async (id: string) => {
-    if (!window.confirm('Delete this block?')) return;
+    if (!(await confirmAction({ title: 'Delete this block?', message: "It will be removed from your public company page. This can't be undone.", confirmLabel: 'Delete', destructive: true }))) return;
     const { error } = await supabase.from('company_content_blocks').delete().eq('id', id);
     if (error) return toast.error(error.message);
     toast.success('Deleted');

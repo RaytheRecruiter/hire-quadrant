@@ -1,5 +1,6 @@
 // src/pages/ProfilePage.tsx
 import React, { useState, useEffect, useCallback } from 'react';
+import { useConfirm } from '../components/ConfirmDialog';
 import { Link, Navigate } from 'react-router-dom';
 import HardLink from '../components/HardLink';
 import { supabase } from '../utils/supabaseClient';
@@ -52,6 +53,7 @@ interface JobInfo {
 }
 
 const ProfilePage = () => {
+    const confirmAction = useConfirm();
     const { user, isAdmin, isCompany, updateProfile, loading: authLoading } = useAuth();
     // usePermissions() reads company_members role (owner/admin/standard) —
     // unrelated to useAuth().isAdmin (Nexegin super-admin) despite the
@@ -354,7 +356,7 @@ const ProfilePage = () => {
 
     const handleDeleteResume = async () => {
         if (!user || !profile?.resume_url) return;
-        if (!window.confirm('Delete your current resume? You can upload a new one after.')) return;
+        if (!(await confirmAction({ title: 'Delete your current resume?', message: 'You can upload a new one after.', confirmLabel: 'Delete resume', destructive: true }))) return;
 
         setDeletingResume(true);
         setMessage(null);
