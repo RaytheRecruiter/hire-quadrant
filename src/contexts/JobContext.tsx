@@ -216,6 +216,12 @@ export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
                     query = query.gte('min_salary', minSalary);
                 }
 
+                // Newest first; id tie-break keeps pagination stable (without an
+                // order, Postgres returns rows in arbitrary order per request)
+                query = query
+                    .order('posted_date', { ascending: false, nullsFirst: false })
+                    .order('id', { ascending: true });
+
                 // Add pagination
                 const from = (currentPage - 1) * jobsPerPage;
                 const to = from + jobsPerPage - 1;

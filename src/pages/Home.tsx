@@ -18,11 +18,12 @@ import CompanyLogo from '../components/CompanyLogo';
 interface FeaturedCompany {
   name: string;
   logo_url: string | null;
+  jobCount: number;
 }
 
 const STATS_CACHE_KEY = 'hq-home-stats-v1';
 const STATS_TTL_MS = 5 * 60 * 1000;
-const FEATURED_CACHE_KEY = 'hq-home-featured-v1';
+const FEATURED_CACHE_KEY = 'hq-home-featured-v2';
 const FEATURED_TTL_MS = 30 * 60 * 1000;
 
 interface StatsShape {
@@ -73,7 +74,12 @@ const CATEGORIES = [
 const Home: React.FC = () => {
   const { helmet } = useSEO({ canonical: '/' });
   const { user } = useAuth();
-  const { setSearchTerm, setLocationFilter, setTypeFilter, setCategoryFilter, setMinSalary, jobs, loading } = useJobs();
+  const {
+    setSearchTerm, setLocationFilter, setTypeFilter, setCategoryFilter, setMinSalary, jobs, loading,
+    searchTerm, locationFilter, typeFilter, categoryFilter, minSalary,
+  } = useJobs();
+  const isFiltered = Boolean(searchTerm || locationFilter || typeFilter || categoryFilter || minSalary > 0);
+  const listedJobs = jobs.slice(0, 9);
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const [heroSearch, setHeroSearch] = useState('');
@@ -116,7 +122,7 @@ const Home: React.FC = () => {
     // Auto-scroll to jobs section if searching, filtering, or landing via
     // #jobs-section hash (e.g. clicking "Jobs" in the header from another
     // page does a hard nav to /#jobs-section).
-    const wantsScroll = keyword || title || category || window.location.hash === '#jobs-section';
+    const wantsScroll = keyword || title || company || category || window.location.hash === '#jobs-section';
     if (wantsScroll) {
       setTimeout(() => {
         document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -168,24 +174,40 @@ const Home: React.FC = () => {
 
     let cancelled = false;
     const fetchFeaturedCompanies = async () => {
+      // Employers with the most open IT roles. The old version took whichever
+      // companies owned the first 16 rows, which surfaced one-job test/seed
+      // accounts ("Test Business One", "TechCorp") on the live homepage.
       const { data } = await supabase
         .from('jobs')
         .select('company')
         .not('company', 'is', null)
         .eq('is_it_role', true)
-        .limit(16);
+        .neq('status', 'closed')
+        .limit(5000);
 
       if (cancelled || !data) return;
-      const seen = new Set<string>();
-      const unique: FeaturedCompany[] = [];
+      // "Quadrant, Inc." and "Quadrant Inc" are the same employer
+      const keyOf = (name: string) =>
+        name.toLowerCase().replace(/[.,]/g, '').replace(/\s+(inc|llc|ltd|corp|co)$/, '').trim();
+      const groups = new Map<string, { names: Map<string, number>; count: number }>();
       for (const row of data) {
-        if (row.company && !seen.has(row.company) && unique.length < 8) {
-          seen.add(row.company);
-          unique.push({ name: row.company, logo_url: null });
-        }
+        if (!row.company) continue;
+        const g = groups.get(keyOf(row.company)) ?? { names: new Map(), count: 0 };
+        g.count += 1;
+        g.names.set(row.company, (g.names.get(row.company) ?? 0) + 1);
+        groups.set(keyOf(row.company), g);
       }
-      setFeaturedCompanies(unique);
-      writeCache(FEATURED_CACHE_KEY, unique);
+      const ranked: FeaturedCompany[] = [...groups.values()]
+        .filter(g => g.count >= 3)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 8)
+        .map(g => ({
+          name: [...g.names.entries()].sort((a, b) => b[1] - a[1])[0][0],
+          logo_url: null,
+          jobCount: g.count,
+        }));
+      setFeaturedCompanies(ranked);
+      writeCache(FEATURED_CACHE_KEY, ranked);
     };
     fetchFeaturedCompanies();
     return () => {
@@ -416,17 +438,22 @@ const Home: React.FC = () => {
       {featuredCompanies.length > 0 && (
         <section className="py-16 bg-secondary-50 dark:bg-slate-900">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p className="text-center text-sm font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-widest mb-10">
-              Trusted by companies of all sizes
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-center">
+            <h2 className="text-center text-sm font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-widest mb-10">
+              Companies hiring on Nexegin
+            </h2>
+            <div className="flex flex-wrap justify-center gap-4">
               {featuredCompanies.map((company) => (
-                <div
+                <HardLink
                   key={company.name}
-                  className="bg-white dark:bg-slate-800 rounded-2xl p-4 flex items-center justify-center border border-secondary-100 dark:border-slate-700 h-20"
+                  to={`/?company=${encodeURIComponent(company.name)}`}
+                  className="w-40 bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 border border-secondary-100 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-card-hover transition"
                 >
                   <CompanyLogo company={company.name} logoUrl={company.logo_url} size="md" />
-                </div>
+                  <span className="text-sm font-semibold text-secondary-900 dark:text-white text-center line-clamp-1">{company.name}</span>
+                  <span className="text-xs text-secondary-500 dark:text-slate-400">
+                    {company.jobCount} open {company.jobCount === 1 ? 'role' : 'roles'}
+                  </span>
+                </HardLink>
               ))}
             </div>
           </div>
@@ -457,7 +484,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Personalized Recommendations (Phase 2) */}
-      {user && <RecommendedJobs />}
+      {user && <RecommendedJobs excludeIds={listedJobs.map(j => j.id)} />}
 
       {/* Featured Jobs */}
       {/* N06: moved up from the bottom of the page -- actual job listings
@@ -470,7 +497,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white">
-              Trending Now
+              {isFiltered ? 'Jobs matching your search' : 'Latest IT jobs'}
             </h2>
             <HardLink
               to="/"
@@ -489,7 +516,7 @@ const Home: React.FC = () => {
             </div>
           ) : jobs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {jobs.slice(0, 9).map((job) => (
+              {listedJobs.map((job) => (
                 <HardLink
                   key={job.id}
                   to={`/jobs/${job.id}`}
