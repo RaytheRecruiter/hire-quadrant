@@ -8,7 +8,7 @@ test.describe('B.1 Homepage and navigation', () => {
   test('homepage loads with hero headline @smoke', async ({ page }) => {
     const res = await page.goto('/');
     expect(res?.status()).toBeLessThan(400);
-    await expect(page.getByRole('heading', { name: /work for you, not the algorithm/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /find your next/i })).toBeVisible();
   });
 
   test('top nav links present', async ({ page }) => {
