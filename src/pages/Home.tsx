@@ -323,19 +323,6 @@ const Home: React.FC = () => {
               </div>
             </form>
 
-            {/* Dual CTAs */}
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                onClick={() => {
-                  document.getElementById('jobs-section')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3.5 rounded-xl shadow-soft transition-all flex items-center justify-center gap-2"
-              >
-                <Search className="h-5 w-5" />
-                Search Jobs
-              </button>
-            </div>
-
             {/* Real stats */}
             {stats.jobs > 0 && (
               <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-secondary-500 dark:text-slate-400">
