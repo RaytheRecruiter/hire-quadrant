@@ -11,6 +11,7 @@ import RichTextEditor from '../RichTextEditor';
 import SponsorJobModal from './SponsorJobModal';
 import type { ScreeningQuestion } from '../../types/screening';
 import { usePermissions } from '../../hooks/usePermissions';
+import { SortableTable } from '../admin/SortableTable';
 
 const JOB_TYPES = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Temporary'];
 const WORKPLACE_TYPES = ['Remote', 'Hybrid', 'On-site'];
