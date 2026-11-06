@@ -171,13 +171,14 @@ test.describe('B.10 Auth pages (logged out)', () => {
     await page.goto('/login');
     // Scoped to <main>: getByLabel also matches the footer's "Email hello@…" link
     await expect(page.getByRole('main').getByLabel(/email/i)).toBeVisible();
-    await expect(page.getByRole('main').getByLabel(/password/i)).toBeVisible();
+    // Exact: the show/hide toggle is labelled "Show password" too
+    await expect(page.getByRole('main').getByLabel('Password', { exact: true })).toBeVisible();
   });
 
   test('/register renders name + email + password', async ({ page }) => {
     await page.goto('/register');
     await expect(page.getByRole('main').getByLabel(/email/i)).toBeVisible();
-    await expect(page.getByRole('main').getByLabel(/password/i).first()).toBeVisible();
+    await expect(page.getByRole('main').getByLabel('Password', { exact: true })).toBeVisible();
   });
 
   // Finding #8 closed 2026-04-28: Login's "Forgot?" link now routes to
