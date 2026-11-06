@@ -79,8 +79,8 @@ const TeamInvites: React.FC<{ companyId: string }> = ({ companyId }) => {
 
       <div className="flex items-end gap-2 mb-4">
         <div>
-          <label className="block text-xs text-secondary-600 dark:text-slate-400 mb-1">Role</label>
-          <select
+          <label htmlFor="team-invites-role" className="block text-xs text-secondary-600 dark:text-slate-400 mb-1">Role</label>
+          <select id="team-invites-role"
             value={role}
             onChange={(e) => setRole(e.target.value as 'owner' | 'recruiter' | 'viewer')}
             className="text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"

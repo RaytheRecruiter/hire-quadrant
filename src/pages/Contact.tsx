@@ -95,10 +95,10 @@ const Contact: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
+                  <label htmlFor="contact-full-name" className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
                     Full Name *
                   </label>
-                  <input
+                  <input id="contact-full-name"
                     type="text"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -108,10 +108,10 @@ const Contact: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
+                  <label htmlFor="contact-email-address" className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
                     Email Address *
                   </label>
-                  <input
+                  <input id="contact-email-address"
                     type="email"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -124,10 +124,10 @@ const Contact: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
+                  <label htmlFor="contact-category" className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
                     Category *
                   </label>
-                  <select
+                  <select id="contact-category"
                     value={form.category}
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
                     required
@@ -142,10 +142,10 @@ const Contact: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
+                  <label htmlFor="contact-subject" className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
                     Subject *
                   </label>
-                  <input
+                  <input id="contact-subject"
                     type="text"
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
@@ -157,10 +157,10 @@ const Contact: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
+                <label htmlFor="contact-message" className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
                   Message *
                 </label>
-                <textarea
+                <textarea id="contact-message"
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   required

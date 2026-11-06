@@ -207,10 +207,10 @@ const CompareCompanies: React.FC = () => {
 
           {slugs.length < MAX_SLOTS && (
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-4 mb-5 relative">
-              <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1.5">
+              <label htmlFor="compare-companies-add-a-company" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1.5">
                 Add a company
               </label>
-              <input
+              <input id="compare-companies-add-a-company"
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}

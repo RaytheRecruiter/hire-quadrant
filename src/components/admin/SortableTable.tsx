@@ -167,6 +167,8 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
                       {col.filterable !== false && (
                         <button
                           onClick={(e) => { e.stopPropagation(); setActiveFilter(activeFilter === col.key ? null : col.key); }}
+                          aria-label={`Filter by ${col.label}`}
+                          aria-expanded={activeFilter === col.key}
                           className={`ml-1 ${filters[col.key] ? 'text-primary-500' : 'text-secondary-300 hover:text-secondary-500 dark:text-slate-400'}`}
                         >
                           <Search className="h-3 w-3" />

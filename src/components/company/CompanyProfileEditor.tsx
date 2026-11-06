@@ -160,8 +160,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         <p className="text-xs text-secondary-500 dark:text-slate-400 mt-1">PNG or JPG, up to 2 MB. Saves immediately.</p>
       </div>
       <div>
-        <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Display Name</label>
-        <input
+        <label htmlFor="company-profile-editor-display-name" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Display Name</label>
+        <input id="company-profile-editor-display-name"
           type="text"
           name="display_name"
           value={formData.display_name}
@@ -171,8 +171,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Description</label>
-        <textarea
+        <label htmlFor="company-profile-editor-description" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Description</label>
+        <textarea id="company-profile-editor-description"
           name="description"
           value={formData.description}
           onChange={handleChange}
@@ -183,8 +183,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Website</label>
-          <input
+          <label htmlFor="company-profile-editor-website" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Website</label>
+          <input id="company-profile-editor-website"
             type="url"
             name="website"
             value={formData.website}
@@ -194,8 +194,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Industry</label>
-          <input
+          <label htmlFor="company-profile-editor-industry" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Industry</label>
+          <input id="company-profile-editor-industry"
             type="text"
             name="industry"
             value={formData.industry}
@@ -205,8 +205,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Company Size</label>
-          <select
+          <label htmlFor="company-profile-editor-size" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Company Size</label>
+          <select id="company-profile-editor-size"
             name="size"
             value={formData.size}
             onChange={handleChange}
@@ -223,8 +223,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Location</label>
-          <input
+          <label htmlFor="company-profile-editor-location" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Location</label>
+          <input id="company-profile-editor-location"
             type="text"
             name="location"
             value={formData.location}
@@ -234,8 +234,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Founded</label>
-          <input
+          <label htmlFor="company-profile-editor-founded" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Founded</label>
+          <input id="company-profile-editor-founded"
             type="text"
             name="founded"
             value={formData.founded}
@@ -246,8 +246,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Contact Email</label>
-          <input
+          <label htmlFor="company-profile-editor-contact-email" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Contact Email</label>
+          <input id="company-profile-editor-contact-email"
             type="email"
             name="contact_email"
             value={formData.contact_email}
@@ -258,8 +258,8 @@ const CompanyProfileEditor: React.FC<CompanyProfileEditorProps> = ({ company, on
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Culture</label>
-        <textarea
+        <label htmlFor="company-profile-editor-culture" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Culture</label>
+        <textarea id="company-profile-editor-culture"
           name="culture"
           value={formData.culture}
           onChange={handleChange}

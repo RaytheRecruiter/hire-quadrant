@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CalendarClock, X, Download, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supabaseClient';
@@ -147,16 +147,26 @@ const ScheduleInterviewModal: React.FC<Props> = ({
     );
   };
 
+  // Close on Escape, matching the backdrop click
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   return (
     <div className="fixed inset-0 z-40 bg-black/40 grid place-items-center p-4" onClick={onClose}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="schedule-interview-title"
         className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl max-w-lg w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <header className="flex items-center justify-between p-4 border-b border-secondary-100 dark:border-slate-700">
           <div className="flex items-center gap-2">
             <CalendarClock className="h-5 w-5 text-primary-500 dark:text-primary-400" />
-            <h2 className="font-semibold text-secondary-900 dark:text-white">Schedule interview</h2>
+            <h2 id="schedule-interview-title" className="font-semibold text-secondary-900 dark:text-white">Schedule interview</h2>
           </div>
           <button type="button" onClick={onClose} className="p-1 rounded hover:bg-secondary-100 dark:hover:bg-slate-700">
             <X className="h-4 w-4 text-secondary-500" />
@@ -172,8 +182,8 @@ const ScheduleInterviewModal: React.FC<Props> = ({
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Date</label>
-              <input
+              <label htmlFor="schedule-interview-modal-date" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Date</label>
+              <input id="schedule-interview-modal-date"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -181,8 +191,8 @@ const ScheduleInterviewModal: React.FC<Props> = ({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Time</label>
-              <input
+              <label htmlFor="schedule-interview-modal-time" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Time</label>
+              <input id="schedule-interview-modal-time"
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
@@ -192,8 +202,8 @@ const ScheduleInterviewModal: React.FC<Props> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Duration</label>
-            <select
+            <label htmlFor="schedule-interview-modal-duration" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Duration</label>
+            <select id="schedule-interview-modal-duration"
               value={duration}
               onChange={(e) => setDuration(parseInt(e.target.value, 10))}
               className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
@@ -207,8 +217,8 @@ const ScheduleInterviewModal: React.FC<Props> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Where</label>
-            <input
+            <label htmlFor="schedule-interview-modal-where" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Where</label>
+            <input id="schedule-interview-modal-where"
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
@@ -218,8 +228,8 @@ const ScheduleInterviewModal: React.FC<Props> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Meeting link</label>
-            <input
+            <label htmlFor="schedule-interview-modal-meeting-link" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Meeting link</label>
+            <input id="schedule-interview-modal-meeting-link"
               type="url"
               value={meetingUrl}
               onChange={(e) => setMeetingUrl(e.target.value)}
@@ -229,8 +239,8 @@ const ScheduleInterviewModal: React.FC<Props> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Notes</label>
-            <textarea
+            <label htmlFor="schedule-interview-modal-notes" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">Notes</label>
+            <textarea id="schedule-interview-modal-notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={2}

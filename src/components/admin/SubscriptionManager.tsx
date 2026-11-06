@@ -506,7 +506,7 @@ const TransferOwnershipModal: React.FC<TransferModalProps> = ({ company, onClose
             </div>
           )}
           {errorMsg && (
-            <div className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-2">
+            <div role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-2">
               {errorMsg}
             </div>
           )}
@@ -648,10 +648,10 @@ const InviteOwnerModal: React.FC<InviteOwnerModalProps> = ({ company, onClose, o
             below if delivery fails).
           </p>
           <div>
-            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">
+            <label htmlFor="subscription-manager-email" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">
               Email <span className="text-red-500">*</span>
             </label>
-            <input
+            <input id="subscription-manager-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -662,7 +662,7 @@ const InviteOwnerModal: React.FC<InviteOwnerModalProps> = ({ company, onClose, o
             />
           </div>
           {errorMsg && (
-            <div className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-2">{errorMsg}</div>
+            <div role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-2">{errorMsg}</div>
           )}
         </div>
         <div className="p-6 border-t border-secondary-200 dark:border-slate-700 flex justify-end gap-3">

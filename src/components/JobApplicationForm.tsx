@@ -295,10 +295,10 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
           {/* Email */}
           <div>
-            <label className={labelClass}>
+            <label htmlFor="job-application-form-email" className={labelClass}>
               Email <span className="text-red-500">*</span>
             </label>
-            <input
+            <input id="job-application-form-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -371,10 +371,10 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
           {/* Phone */}
           <div>
-            <label className={labelClass}>
+            <label htmlFor="job-application-form-phone" className={labelClass}>
               Phone <span className="text-red-500">*</span>
             </label>
-            <input
+            <input id="job-application-form-phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -389,8 +389,8 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
           {/* Zip */}
           <div>
-            <label className={labelClass}>Current Zip Code</label>
-            <input
+            <label htmlFor="job-application-form-current-zip-code" className={labelClass}>Current Zip Code</label>
+            <input id="job-application-form-current-zip-code"
               type="text"
               inputMode="numeric"
               value={zip}
@@ -402,10 +402,10 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
           {/* Cover letter */}
           <div>
-            <label className={labelClass}>
+            <label htmlFor="job-application-form-cover-letter-optional" className={labelClass}>
               Cover letter <span className="text-secondary-400 font-normal">(optional)</span>
             </label>
-            <textarea
+            <textarea id="job-application-form-cover-letter-optional"
               value={coverLetter}
               onChange={(e) => setCoverLetter(e.target.value)}
               rows={5}

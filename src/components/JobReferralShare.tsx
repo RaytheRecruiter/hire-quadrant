@@ -115,6 +115,7 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
           <div className="flex gap-2 mb-3">
             <input
               readOnly
+              aria-label="Your referral link"
               value={shareUrl}
               onFocus={(e) => e.target.select()}
               className="flex-1 text-xs font-mono rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"

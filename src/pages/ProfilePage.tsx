@@ -578,8 +578,8 @@ const ProfilePage = () => {
                     </h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Location</label>
-                            <input
+                            <label htmlFor="profile-page-location" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Location</label>
+                            <input id="profile-page-location"
                                 type="text"
                                 value={locationValue}
                                 onChange={(e) => setLocationValue(e.target.value)}
@@ -588,8 +588,8 @@ const ProfilePage = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Phone Number</label>
-                            <input
+                            <label htmlFor="profile-page-phone-number" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Phone Number</label>
+                            <input id="profile-page-phone-number"
                                 type="tel"
                                 value={phoneValue}
                                 onChange={(e) => setPhoneValue(e.target.value)}
@@ -600,8 +600,8 @@ const ProfilePage = () => {
                         {!isCompany && (
                         <>
                         <div>
-                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Current Role</label>
-                            <input
+                            <label htmlFor="profile-page-current-role" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Current Role</label>
+                            <input id="profile-page-current-role"
                                 type="text"
                                 value={currentRoleValue}
                                 onChange={(e) => setCurrentRoleValue(e.target.value)}
@@ -610,8 +610,8 @@ const ProfilePage = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Target Role</label>
-                            <input
+                            <label htmlFor="profile-page-target-role" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Target Role</label>
+                            <input id="profile-page-target-role"
                                 type="text"
                                 value={targetRoleValue}
                                 onChange={(e) => setTargetRoleValue(e.target.value)}
@@ -730,10 +730,11 @@ const ProfilePage = () => {
                         <p className="text-secondary-500 dark:text-slate-400 mb-4">No resume uploaded yet.</p>
                     )}
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">
+                        <label htmlFor="profile-page-resume-upload" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-2">
                             {profile?.resume_url ? 'Upload New Resume' : 'Upload Resume'}
                         </label>
                         <input
+                            id="profile-page-resume-upload"
                             type="file"
                             accept=".pdf,.doc,.docx"
                             onChange={handleFileUpload}

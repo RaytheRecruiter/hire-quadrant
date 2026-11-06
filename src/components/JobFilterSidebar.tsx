@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { Filter, X } from 'lucide-react';
 
 export interface AdvancedFilters {
@@ -108,10 +108,10 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
 
       <div className="space-y-5">
         <div>
-          <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1.5">
+          <label htmlFor="job-filter-sidebar-minimum-salary" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1.5">
             Minimum salary
           </label>
-          <input
+          <input id="job-filter-sidebar-minimum-salary"
             type="range"
             min={0}
             max={250000}
@@ -183,12 +183,15 @@ const SelectField: React.FC<{
   value: string;
   options: Array<{ value: string; label: string }>;
   onChange: (v: string) => void;
-}> = ({ label, value, options, onChange }) => (
+}> = ({ label, value, options, onChange }) => {
+  const id = useId();
+  return (
   <div>
-    <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
+    <label htmlFor={id} className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
       {label}
     </label>
     <select
+      id={id}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
@@ -200,6 +203,7 @@ const SelectField: React.FC<{
       ))}
     </select>
   </div>
-);
+  );
+};
 
 export default JobFilterSidebar;

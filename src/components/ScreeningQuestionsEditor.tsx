@@ -73,8 +73,9 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="sm:col-span-1">
-              <label className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1">Type</label>
+              <label htmlFor={`sq-type-${q.id}`} className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1">Type</label>
               <select
+                id={`sq-type-${q.id}`}
                 value={q.type}
                 onChange={e => updateQuestion(q.id, { type: e.target.value as ScreeningQuestionType, expectedAnswer: undefined, choices: undefined })}
                 className="w-full border border-secondary-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
@@ -85,8 +86,9 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
               </select>
             </div>
             <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1">Question</label>
+              <label htmlFor={`sq-question-${q.id}`} className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1">Question</label>
               <input
+                id={`sq-question-${q.id}`}
                 type="text"
                 value={q.question}
                 onChange={e => updateQuestion(q.id, { question: e.target.value })}
@@ -98,8 +100,9 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
 
           {q.type === 'multiple_choice' && (
             <div>
-              <label className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1">Choices (one per line)</label>
+              <label htmlFor={`sq-choices-${q.id}`} className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1">Choices (one per line)</label>
               <textarea
+                id={`sq-choices-${q.id}`}
                 value={(q.choices || []).join('\n')}
                 onChange={e => updateQuestion(q.id, { choices: e.target.value.split('\n').filter(Boolean) })}
                 rows={3}
@@ -133,9 +136,10 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
 
           {q.knockout && (
             <div>
-              <label className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1">Required answer for qualification</label>
+              <label htmlFor={`sq-expected-${q.id}`} className="block text-xs font-medium text-secondary-600 dark:text-slate-400 mb-1">Required answer for qualification</label>
               {q.type === 'yes_no' ? (
                 <select
+                  id={`sq-expected-${q.id}`}
                   value={q.expectedAnswer || 'yes'}
                   onChange={e => updateQuestion(q.id, { expectedAnswer: e.target.value })}
                   className="w-full border border-secondary-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
@@ -145,6 +149,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                 </select>
               ) : q.type === 'multiple_choice' ? (
                 <select
+                  id={`sq-expected-${q.id}`}
                   value={q.expectedAnswer || ''}
                   onChange={e => updateQuestion(q.id, { expectedAnswer: e.target.value })}
                   className="w-full border border-secondary-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
@@ -154,6 +159,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                 </select>
               ) : q.type === 'number' ? (
                 <input
+                  id={`sq-expected-${q.id}`}
                   type="number"
                   placeholder="Minimum value"
                   value={q.expectedAnswer || ''}
@@ -162,6 +168,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                 />
               ) : (
                 <input
+                  id={`sq-expected-${q.id}`}
                   type="text"
                   placeholder="Expected answer (contains)"
                   value={q.expectedAnswer || ''}

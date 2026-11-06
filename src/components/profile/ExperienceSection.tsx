@@ -245,8 +245,8 @@ const ExperienceForm: React.FC<FormProps> = ({ form, setForm, onCancel, onSave, 
         I currently work here
       </label>
       <div>
-        <label className="block text-xs text-secondary-500 dark:text-slate-400 mb-0.5">Start</label>
-        <input
+        <label htmlFor="experience-section-start" className="block text-xs text-secondary-500 dark:text-slate-400 mb-0.5">Start</label>
+        <input id="experience-section-start"
           type="month"
           value={form.start_date}
           onChange={(e) => setForm((f) => ({ ...f, start_date: e.target.value }))}
@@ -254,8 +254,8 @@ const ExperienceForm: React.FC<FormProps> = ({ form, setForm, onCancel, onSave, 
         />
       </div>
       <div>
-        <label className="block text-xs text-secondary-500 dark:text-slate-400 mb-0.5">End</label>
-        <input
+        <label htmlFor="experience-section-end" className="block text-xs text-secondary-500 dark:text-slate-400 mb-0.5">End</label>
+        <input id="experience-section-end"
           type="month"
           value={form.end_date}
           disabled={form.is_current}

@@ -222,6 +222,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
       <div className="flex flex-wrap gap-4 mb-6">
         <div>
           <select
+            aria-label="Filter applicants by job"
             value={jobFilter}
             onChange={(e) => setJobFilter(e.target.value)}
             className="rounded-lg border border-secondary-200 dark:border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
@@ -313,6 +314,7 @@ const CompanyApplicants: React.FC<CompanyApplicantsProps> = ({
                       switch. */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
+                      aria-label={`Application status for ${app.user_name || candidate?.name || 'applicant'}`}
                       value={app.status}
                       onChange={(e) => onStatusUpdate(app.id, e.target.value)}
                       className={`text-xs font-medium rounded-full px-2.5 py-1 border-0 focus:outline-none focus:ring-2 focus:ring-primary-400 ${statusColors[app.status] || 'bg-secondary-100 text-secondary-800'}`}
