@@ -113,7 +113,7 @@ const CompanySourceManager: React.FC = () => {
       )}
 
       {error && (
-        <div className="mb-6 bg-rose-50 border border-rose-200 text-rose-900 px-4 py-3 rounded-xl text-sm">
+        <div role="alert" className="mb-6 bg-rose-50 border border-rose-200 text-rose-900 px-4 py-3 rounded-xl text-sm">
           Could not load sources: {error}
         </div>
       )}

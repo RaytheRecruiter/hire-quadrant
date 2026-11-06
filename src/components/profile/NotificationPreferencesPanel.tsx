@@ -42,10 +42,10 @@ const NotificationPreferencesPanel: React.FC = () => {
         ))}
 
         <div className="pt-3 border-t border-secondary-100 dark:border-slate-700">
-          <label className="block text-sm text-secondary-900 dark:text-white mb-1">
+          <label htmlFor="notification-preferences-panel-digest-frequency" className="block text-sm text-secondary-900 dark:text-white mb-1">
             Digest frequency
           </label>
-          <select
+          <select id="notification-preferences-panel-digest-frequency"
             value={prefs.digest_frequency}
             onChange={(e) => save({ digest_frequency: e.target.value as 'off' | 'daily' | 'weekly' })}
             className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"

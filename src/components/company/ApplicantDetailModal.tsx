@@ -124,11 +124,11 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
 
           {/* Tags */}
           <div>
-            <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2 flex items-center gap-2">
+            <label htmlFor="applicant-detail-modal-tags-comma-separated" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2 flex items-center gap-2">
               <Tag className="h-4 w-4" />
               Tags <span className="text-secondary-400 dark:text-slate-500 font-normal text-xs">(comma-separated)</span>
             </label>
-            <input
+            <input id="applicant-detail-modal-tags-comma-separated"
               type="text"
               value={tagsInput}
               onChange={e => setTagsInput(e.target.value)}
@@ -139,8 +139,8 @@ const ApplicantDetailModal: React.FC<Props> = ({ open, application, candidate, j
 
           {/* Notes */}
           <div>
-            <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Private Notes</label>
-            <textarea
+            <label htmlFor="applicant-detail-modal-private-notes" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Private Notes</label>
+            <textarea id="applicant-detail-modal-private-notes"
               value={notes}
               onChange={e => setNotes(e.target.value)}
               rows={6}

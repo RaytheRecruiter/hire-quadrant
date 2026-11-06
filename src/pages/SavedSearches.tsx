@@ -143,6 +143,7 @@ const SavedSearches: React.FC = () => {
               </div>
               <div className="flex items-center justify-between gap-2">
                 <select
+                  aria-label="Alert frequency"
                   value={frequency}
                   onChange={(e) => setFrequency(e.target.value as 'never' | 'daily' | 'weekly')}
                   className="text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"

@@ -443,10 +443,10 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
             <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
+                  <label htmlFor="company-jobs-list-title" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
                     Title <span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <input id="company-jobs-list-title"
                     type="text"
                     value={jobForm.title}
                     onChange={(e) => setJobForm((f) => ({ ...f, title: e.target.value }))}
@@ -455,10 +455,10 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
+                    <label htmlFor="company-jobs-list-location" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">
                       Location <span className="text-red-500">*</span>
                     </label>
-                    <input
+                    <input id="company-jobs-list-location"
                       type="text"
                       value={jobForm.location}
                       onChange={(e) => setJobForm((f) => ({ ...f, location: e.target.value }))}
@@ -466,8 +466,8 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Salary range</label>
-                    <input
+                    <label htmlFor="company-jobs-list-salary-range" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Salary range</label>
+                    <input id="company-jobs-list-salary-range"
                       type="text"
                       value={jobForm.salary}
                       onChange={(e) => setJobForm((f) => ({ ...f, salary: e.target.value }))}
@@ -478,8 +478,8 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Type</label>
-                    <select
+                    <label htmlFor="company-jobs-list-type" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Type</label>
+                    <select id="company-jobs-list-type"
                       value={jobForm.type}
                       onChange={(e) => setJobForm((f) => ({ ...f, type: e.target.value }))}
                       className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
@@ -488,8 +488,8 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Workplace</label>
-                    <select
+                    <label htmlFor="company-jobs-list-workplace" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Workplace</label>
+                    <select id="company-jobs-list-workplace"
                       value={jobForm.workplaceType}
                       onChange={(e) => setJobForm((f) => ({ ...f, workplaceType: e.target.value }))}
                       className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
@@ -498,8 +498,8 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Experience</label>
-                    <select
+                    <label htmlFor="company-jobs-list-experience" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-1">Experience</label>
+                    <select id="company-jobs-list-experience"
                       value={jobForm.experienceLevel}
                       onChange={(e) => setJobForm((f) => ({ ...f, experienceLevel: e.target.value }))}
                       className="w-full px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-secondary-900 dark:text-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400"

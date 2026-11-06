@@ -196,6 +196,8 @@ const Blog: React.FC = () => {
                   <img
                     src={p.cover_image_url}
                     alt={p.title}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-48 object-cover"
                     width={400}
                     height={225}

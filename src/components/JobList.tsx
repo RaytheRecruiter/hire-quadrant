@@ -109,7 +109,7 @@ const JobList: React.FC = () => {
 
       {mobileFiltersOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setMobileFiltersOpen(false)} />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-800 rounded-t-3xl p-6 max-h-[85vh] overflow-y-auto pb-safe animate-slide-up">
             <div className="w-12 h-1.5 bg-secondary-200 dark:bg-slate-700 rounded-full mx-auto mb-5" />
             <h3 className="font-display text-xl font-bold text-secondary-900 dark:text-white mb-4">Filters</h3>

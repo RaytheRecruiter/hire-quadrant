@@ -166,6 +166,7 @@ const Companies: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
+                    aria-label="Previous page"
                     disabled={currentPage === 0}
                     className="px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-secondary-50 dark:hover:bg-slate-700"
                   >
@@ -177,6 +178,7 @@ const Companies: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+                    aria-label="Next page"
                     disabled={currentPage >= pageCount - 1}
                     className="px-3 py-2 rounded-lg border border-secondary-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-secondary-900 dark:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-secondary-50 dark:hover:bg-slate-700"
                   >

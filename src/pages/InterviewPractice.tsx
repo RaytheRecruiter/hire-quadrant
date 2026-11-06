@@ -187,10 +187,10 @@ const InterviewPractice: React.FC = () => {
           <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
               <div>
-                <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
+                <label htmlFor="interview-practice-role-you-are-interviewing" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
                   Role you are interviewing for
                 </label>
-                <select
+                <select id="interview-practice-role-you-are-interviewing"
                   value={roleTarget}
                   onChange={(e) => setRoleTarget(e.target.value)}
                   className="w-full text-sm rounded-lg border-secondary-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 focus:ring-primary-500 focus:border-primary-500"
@@ -201,10 +201,10 @@ const InterviewPractice: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
+                <label htmlFor="interview-practice-question-type" className="block text-xs font-medium text-secondary-700 dark:text-slate-300 mb-1">
                   Question type
                 </label>
-                <select
+                <select id="interview-practice-question-type"
                   value={questionType}
                   onChange={(e) => {
                     const t = e.target.value as Session['question_type'];

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { MessageSquare, Send, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supabaseClient';
@@ -113,16 +113,26 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }
     void bulkRow;
   };
 
+  // Close on Escape, matching the backdrop click
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose?.(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   return (
     <div className="fixed inset-0 z-40 bg-black/40 grid place-items-center p-4" onClick={onClose}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="bulk-message-title"
         className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <header className="flex items-center justify-between p-4 border-b border-secondary-100 dark:border-slate-700">
           <div className="flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-primary-500 dark:text-primary-400" />
-            <h2 className="font-semibold text-secondary-900 dark:text-white">Bulk message</h2>
+            <h2 id="bulk-message-title" className="font-semibold text-secondary-900 dark:text-white">Bulk message</h2>
             <span className="text-xs text-secondary-500 dark:text-slate-400">
               {selected.size} of {applicants.length} selected
             </span>

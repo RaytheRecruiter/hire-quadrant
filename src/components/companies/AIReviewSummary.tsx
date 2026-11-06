@@ -172,7 +172,7 @@ const AIReviewSummary: React.FC<Props> = ({ companyId, companyName, minReviews =
         Synthesized from {summary.based_on_count} approved reviews · regenerated every 30 days
       </p>
       {error && (
-        <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">{error}</p>
+        <p role="alert" className="text-xs text-rose-600 dark:text-rose-400 mt-1">{error}</p>
       )}
     </section>
   );

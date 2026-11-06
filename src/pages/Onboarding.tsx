@@ -75,8 +75,8 @@ const Onboarding: React.FC = () => {
               <p className="text-secondary-600 mb-8">Let's personalize your experience in 3 quick steps.</p>
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Where are you based?</label>
-                  <input
+                  <label htmlFor="onboarding-where-are-you-based" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Where are you based?</label>
+                  <input id="onboarding-where-are-you-based"
                     type="text"
                     value={location}
                     onChange={e => setLocation(e.target.value)}
@@ -111,8 +111,8 @@ const Onboarding: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Top skills (comma-separated)</label>
-                  <input
+                  <label htmlFor="onboarding-top-skills-comma-separated" className="block text-sm font-semibold text-secondary-800 dark:text-slate-200 mb-2">Top skills (comma-separated)</label>
+                  <input id="onboarding-top-skills-comma-separated"
                     type="text"
                     value={skills}
                     onChange={e => setSkills(e.target.value)}

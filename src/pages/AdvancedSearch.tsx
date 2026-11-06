@@ -129,10 +129,10 @@ const AdvancedSearch: React.FC = () => {
 
             {/* Keywords */}
             <div>
-              <label className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
+              <label htmlFor="advanced-search-keywords-e-g-skills" className="block text-sm font-semibold text-secondary-800 dark:text-white mb-2">
                 Keywords (e.g., skills, company)
               </label>
-              <input
+              <input id="advanced-search-keywords-e-g-skills"
                 type="text"
                 value={filters.keyword}
                 onChange={(e) => setFilters({ ...filters, keyword: e.target.value })}

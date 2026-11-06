@@ -696,8 +696,8 @@ const InviteModal: React.FC<{
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">First Name</label>
-              <input
+              <label htmlFor="team-members-first-name" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">First Name</label>
+              <input id="team-members-first-name"
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -706,8 +706,8 @@ const InviteModal: React.FC<{
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Last Name</label>
-              <input
+              <label htmlFor="team-members-last-name" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Last Name</label>
+              <input id="team-members-last-name"
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -717,8 +717,8 @@ const InviteModal: React.FC<{
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Email <span className="text-red-500">*</span></label>
-            <input
+            <label htmlFor="team-members-email" className="block text-sm font-medium text-secondary-700 dark:text-slate-300 mb-1">Email <span className="text-red-500">*</span></label>
+            <input id="team-members-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
