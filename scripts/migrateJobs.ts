@@ -185,14 +185,20 @@ async function processSource(
         };
     }));
 
-    const { error: upsertError } = await supabase
-        .from('jobs')
-        .upsert(rows, { onConflict: 'id' });
+    // Batched: one 750+ row upsert can hit Postgres' statement timeout on a
+    // busy run (Equinox, 2026-11-06, code 57014). If a batch fails, skip
+    // the stale-delete below so a partial save never deletes live jobs.
+    const UPSERT_BATCH = 250;
+    for (let i = 0; i < rows.length; i += UPSERT_BATCH) {
+        const { error: upsertError } = await supabase
+            .from('jobs')
+            .upsert(rows.slice(i, i + UPSERT_BATCH), { onConflict: 'id' });
 
-    if (upsertError) {
-        console.error(`[${adapter.id}] Supabase upsert error:`, upsertError);
-        failedSources.push(adapter.id);
-        return;
+        if (upsertError) {
+            console.error(`[${adapter.id}] Supabase upsert error (rows ${i}-${i + UPSERT_BATCH - 1}):`, upsertError);
+            failedSources.push(adapter.id);
+            return;
+        }
     }
     console.log(`[${adapter.id}] Successfully upserted ${rows.length} jobs.`);
 
