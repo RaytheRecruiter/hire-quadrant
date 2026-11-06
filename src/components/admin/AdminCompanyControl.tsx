@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useConfirm } from '../ConfirmDialog';
 import toast from 'react-hot-toast';
 import {
   Building2,
@@ -46,6 +47,7 @@ interface CompanyMemberRow {
 }
 
 const AdminCompanyControl: React.FC = () => {
+  const confirmAction = useConfirm();
   const [companies, setCompanies] = useState<CompanyRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -154,7 +156,7 @@ const AdminCompanyControl: React.FC = () => {
 
   const removeMember = async (companyId: string, member: CompanyMemberRow) => {
     const label = member.profile?.name || member.profile?.email || 'this user';
-    if (!window.confirm(`Remove ${label} from this company? This deletes the membership entirely — they'll lose access immediately.`)) {
+    if (!(await confirmAction({ title: `Remove ${label}?`, message: "This deletes the membership entirely. They'll lose access to the company immediately.", confirmLabel: 'Remove', destructive: true }))) {
       return;
     }
     setMemberBusyId(member.id);

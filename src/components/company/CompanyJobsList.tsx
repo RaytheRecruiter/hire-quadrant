@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useConfirm } from '../ConfirmDialog';
 import { Link } from 'react-router-dom';
 import HardLink from '../HardLink';
 import toast from 'react-hot-toast';
@@ -11,6 +12,7 @@ import RichTextEditor from '../RichTextEditor';
 import SponsorJobModal from './SponsorJobModal';
 import type { ScreeningQuestion } from '../../types/screening';
 import { usePermissions } from '../../hooks/usePermissions';
+import { SortableTable } from '../admin/SortableTable';
 
 const JOB_TYPES = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Temporary'];
 const WORKPLACE_TYPES = ['Remote', 'Hybrid', 'On-site'];
@@ -44,6 +46,7 @@ interface CompanyJobsListProps {
 }
 
 const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = [], onJobCreated, companyName }) => {
+  const confirmAction = useConfirm();
   const { isOwner, isAdmin, can, member, loading: permLoading } = usePermissions();
   // Owner/Admin can always post; Standard users need the explicit toggle.
   // If a user has no membership row at all (legacy single-tenant company),
@@ -146,9 +149,12 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
   };
 
   const deleteJob = async (job: { id: string; title: string }) => {
-    const confirmed = window.confirm(
-      `Delete "${job.title}"? This removes the job posting and stops accepting new applications. Existing applications stay in the dashboard for your records.`
-    );
+    const confirmed = await confirmAction({
+      title: `Delete "${job.title}"?`,
+      message: 'This removes the job posting and stops accepting new applications. Existing applications stay in the dashboard for your records.',
+      confirmLabel: 'Delete job',
+      destructive: true,
+    });
     if (!confirmed) return;
     setDeletingJobId(job.id);
     const { error: deleteError } = await supabase

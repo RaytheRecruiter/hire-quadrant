@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useConfirm } from '../ConfirmDialog';
 import { Shield, ShieldCheck, Loader2, Copy, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import QRCode from 'qrcode';
@@ -19,6 +20,7 @@ interface Factor {
 }
 
 const TwoFactorPanel: React.FC = () => {
+  const confirmAction = useConfirm();
   const { user } = useAuth();
   const [factor, setFactor] = useState<Factor | null>(null);
   const [loading, setLoading] = useState(true);
@@ -112,7 +114,7 @@ const TwoFactorPanel: React.FC = () => {
 
   const disable = async () => {
     if (!user?.id) return;
-    if (!window.confirm('Disable two-factor authentication? Your account will be less secure.')) return;
+    if (!(await confirmAction({ title: 'Disable two-factor authentication?', message: 'Your account will be less secure. You can turn it back on any time.', confirmLabel: 'Disable 2FA', destructive: true }))) return;
     await supabase.from('user_mfa_factors').delete().eq('user_id', user.id);
     setFactor(null);
     toast.success('Two-factor disabled');

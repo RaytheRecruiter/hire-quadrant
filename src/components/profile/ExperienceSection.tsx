@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useConfirm } from '../ConfirmDialog';
 import toast from 'react-hot-toast';
 import { Briefcase, Plus, Edit2, Trash2, Loader2, Check, X } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
@@ -33,6 +34,7 @@ const fmtMonth = (d: string | null) => {
 };
 
 const ExperienceSection: React.FC = () => {
+  const confirmAction = useConfirm();
   const { user } = useAuth();
   const [rows, setRows] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,7 +127,7 @@ const ExperienceSection: React.FC = () => {
   };
 
   const remove = async (id: string) => {
-    if (!window.confirm('Delete this experience?')) return;
+    if (!(await confirmAction({ title: 'Delete this experience?', message: "This can't be undone.", confirmLabel: 'Delete', destructive: true }))) return;
     const { error } = await supabase.from('user_experience').delete().eq('id', id);
     if (error) return toast.error(error.message);
     toast.success('Deleted');

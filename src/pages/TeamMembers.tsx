@@ -6,6 +6,7 @@
 // shares the link manually. Phase 1.5 will wire SendGrid for direct email.
 
 import React, { useEffect, useState } from 'react';
+import { useConfirm } from '../components/ConfirmDialog';
 import { Navigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {
@@ -64,6 +65,7 @@ interface CompanyInfo {
 }
 
 const TeamMembers: React.FC = () => {
+  const confirmAction = useConfirm();
   const { user, loading: authLoading } = useAuth();
   const { member, loading: permLoading, can, isOwner, isAdmin } = usePermissions();
   const [members, setMembers] = useState<MemberWithProfile[]>([]);
@@ -156,7 +158,7 @@ const TeamMembers: React.FC = () => {
       toast.error('You cannot remove yourself.');
       return;
     }
-    if (!confirm(`Remove ${m.profile?.name || m.profile?.email || 'this user'} from the company? This deletes the membership entirely.`)) {
+    if (!(await confirmAction({ title: `Remove ${m.profile?.name || m.profile?.email || 'this user'}?`, message: "This deletes the membership entirely. They'll lose access to the company immediately.", confirmLabel: 'Remove', destructive: true }))) {
       return;
     }
     const { error } = await supabase.from('company_members').delete().eq('id', m.id);

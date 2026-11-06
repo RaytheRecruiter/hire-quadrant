@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useJobs } from '../contexts/JobContext';
 import { XMLJobFeeder, xmlFeederUtils } from '../utils/xmlGenerator';
 import { Job } from '../contexts/JobContext';
@@ -78,10 +79,10 @@ const XMLFeederAdmin: React.FC = () => {
     
     try {
       await navigator.clipboard.writeText(xmlPreview);
-      alert('XML copied to clipboard!');
+      toast.success('XML copied to clipboard');
     } catch (err) {
       console.error('Failed to copy XML:', err);
-      alert('Failed to copy XML to clipboard');
+      toast.error('Failed to copy XML to clipboard');
     }
   };
 
@@ -89,7 +90,7 @@ const XMLFeederAdmin: React.FC = () => {
     if (!xmlPreview) return;
     
     localStorage.setItem('generated-jobs-xml', xmlPreview);
-    alert('XML saved to localStorage!');
+    toast.success('XML saved to localStorage');
   };
 
   const updateNewJobField = (field: keyof Job, value: any) => {
@@ -116,7 +117,7 @@ const XMLFeederAdmin: React.FC = () => {
 
   const addCustomJob = () => {
     if (!newJob.title || !newJob.company || !newJob.location) {
-      alert('Please fill in at least title, company, and location');
+      toast.error('Please fill in at least title, company, and location');
       return;
     }
 

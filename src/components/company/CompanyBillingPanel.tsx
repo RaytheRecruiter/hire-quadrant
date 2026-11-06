@@ -14,6 +14,8 @@
 // plan change while Owners get a working contact path.
 
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useConfirm } from '../ConfirmDialog';
 import {
   CreditCard,
   CheckCircle2,
@@ -73,6 +75,7 @@ const fmtPrice = (cents: number, suffix: string) => {
 };
 
 const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
+  const confirmAction = useConfirm();
   const { isOwner, isAdmin, can, member } = usePermissions();
   const noMember = !member;
   const canManageBilling = noMember || isOwner || isAdmin || can('manage_billing');
@@ -136,7 +139,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
         if (result.success) {
           await refetch();
         } else if (result.error) {
-          alert(result.error);
+          toast.error(result.error);
         }
       } else {
         const url = await createCheckoutSession(priceId, planId, billingFrequency);
@@ -148,12 +151,12 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
   };
 
   const handleCancel = async () => {
-    if (!window.confirm('Cancel your subscription? You\'ll keep access until the end of the current billing period.')) return;
+    if (!(await confirmAction({ title: 'Cancel your subscription?', message: "You'll keep access until the end of the current billing period, and you can resume any time before then.", confirmLabel: 'Cancel subscription', cancelLabel: 'Keep subscription', destructive: true }))) return;
     setCancelBusy(true);
     const result = await cancelSubscription();
     setCancelBusy(false);
     if (result.success) await refetch();
-    else if (result.error) alert(result.error);
+    else if (result.error) toast.error(result.error);
   };
 
   const handleResume = async () => {
@@ -161,7 +164,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
     const result = await resumeSubscription();
     setCancelBusy(false);
     if (result.success) await refetch();
-    else if (result.error) alert(result.error);
+    else if (result.error) toast.error(result.error);
   };
 
   const handleBuyCredits = async (pack: ContactCreditPack) => {

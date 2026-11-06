@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useConfirm } from '../ConfirmDialog';
 import toast from 'react-hot-toast';
 import { GraduationCap, Plus, Edit2, Trash2, Loader2, Check, X } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
@@ -17,6 +18,7 @@ interface Education {
 const empty = { school: '', degree: '', field_of_study: '', start_year: '', end_year: '', description: '' };
 
 const EducationSection: React.FC = () => {
+  const confirmAction = useConfirm();
   const { user } = useAuth();
   const [rows, setRows] = useState<Education[]>([]);
   const [loading, setLoading] = useState(true);
@@ -87,7 +89,7 @@ const EducationSection: React.FC = () => {
   };
 
   const remove = async (id: string) => {
-    if (!window.confirm('Delete this entry?')) return;
+    if (!(await confirmAction({ title: 'Delete this education entry?', message: "This can't be undone.", confirmLabel: 'Delete', destructive: true }))) return;
     const { error } = await supabase.from('user_education').delete().eq('id', id);
     if (error) return toast.error(error.message);
     toast.success('Deleted');

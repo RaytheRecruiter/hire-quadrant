@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useConfirm } from '../components/ConfirmDialog';
 import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Bookmark, Inbox, Briefcase, CalendarClock, Archive, Loader2, X, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
@@ -32,6 +33,7 @@ const TABS: Array<{ id: Tab; label: string; icon: React.ComponentType<{ classNam
 ];
 
 const MyJobs: React.FC = () => {
+  const confirmAction = useConfirm();
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const [active, setActive] = useState<Tab>('saved');
   const [jobs, setJobs] = useState<JobRow[]>([]);
@@ -132,7 +134,7 @@ const MyJobs: React.FC = () => {
   }, [load]);
 
   const withdraw = async (applicationId: string) => {
-    if (!window.confirm('Withdraw this application?')) return;
+    if (!(await confirmAction({ title: 'Withdraw this application?', message: "The employer will no longer see it. You can apply again later if the job is still open.", confirmLabel: 'Withdraw', destructive: true }))) return;
     const { error } = await supabase.from('job_applications').delete().eq('id', applicationId);
     if (error) { toast.error(error.message); return; }
     toast.success('Application withdrawn');

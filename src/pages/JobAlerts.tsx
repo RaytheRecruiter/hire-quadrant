@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useConfirm } from '../components/ConfirmDialog';
 import { Navigate } from 'react-router-dom';
 import { Bell, Plus, Trash2, Loader2, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -18,6 +19,7 @@ interface SavedSearch {
 }
 
 const JobAlerts: React.FC = () => {
+  const confirmAction = useConfirm();
   const { user, loading: authLoading } = useAuth();
   const [searches, setSearches] = useState<SavedSearch[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,7 +72,7 @@ const JobAlerts: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this alert?')) return;
+    if (!(await confirmAction({ title: 'Delete this job alert?', message: "You'll stop getting emails for it.", confirmLabel: 'Delete', destructive: true }))) return;
     await supabase.from('saved_searches').delete().eq('id', id);
     fetchSearches();
   };

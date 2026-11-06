@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import { CompanyProvider } from './contexts/CompanyContext';
 import { JobProvider } from './contexts/JobContext';
+import { ConfirmProvider } from './components/ConfirmDialog';
 import { useGoogleAnalytics } from './hooks/useGoogleAnalytics';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Header from './components/Header';
@@ -88,6 +89,7 @@ function App() {
       <AuthProvider>
         <CompanyProvider>
           <JobProvider>
+          <ConfirmProvider>
             <ErrorBoundary>
               <Router>
                 <ScrollToTop />
@@ -172,6 +174,7 @@ function App() {
                 </PageTracker>
               </Router>
             </ErrorBoundary>
+          </ConfirmProvider>
           </JobProvider>
         </CompanyProvider>
       </AuthProvider>
