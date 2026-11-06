@@ -439,7 +439,7 @@ const Home: React.FC = () => {
         <section className="py-16 bg-secondary-50 dark:bg-slate-900">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-center text-sm font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-widest mb-10">
-              Companies hiring on Nexegin
+              Open IT roles at
             </h2>
             <div className="flex flex-wrap justify-center gap-4">
               {featuredCompanies.map((company) => (

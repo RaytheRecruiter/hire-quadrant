@@ -132,6 +132,11 @@ function buildJobId(adapter: JobSourceAdapter, job: NormalizedJob): string {
     return adapter.platform === 'jobdiva' ? job.externalJobId : `${adapter.id}:${job.externalJobId}`;
 }
 
+// Sources that hit an error this run. A non-empty list fails the GitHub
+// Action: Stripe's upsert failed every run from 2026-10-09 to 2026-11-06
+// while the workflow kept reporting success.
+const failedSources: string[] = [];
+
 async function processSource(
     supabase: SupabaseClient,
     adapter: JobSourceAdapter,
@@ -168,7 +173,9 @@ async function processSource(
             source_xml_file: job.sourceXmlFile,
             company: job.company,
             company_id,
-            location: job.location,
+            // jobs.location is NOT NULL; one missing value fails the whole
+            // source's batch (Stripe's placeholder locations did exactly that)
+            location: job.location?.trim() || 'Location not specified',
             lat,
             lng,
             type: job.type,
@@ -184,6 +191,7 @@ async function processSource(
 
     if (upsertError) {
         console.error(`[${adapter.id}] Supabase upsert error:`, upsertError);
+        failedSources.push(adapter.id);
         return;
     }
     console.log(`[${adapter.id}] Successfully upserted ${rows.length} jobs.`);
@@ -198,6 +206,7 @@ async function processSource(
 
     if (fetchError) {
         console.error(`[${adapter.id}] Error fetching existing jobs for stale-delete:`, fetchError);
+        failedSources.push(adapter.id);
         return;
     }
 
@@ -218,6 +227,7 @@ async function processSource(
 
     if (deleteError) {
         console.error(`[${adapter.id}] Supabase delete error:`, deleteError);
+        failedSources.push(adapter.id);
     } else {
         console.log(`[${adapter.id}] Deleted ${staleIds.length} stale jobs.`);
     }
@@ -252,11 +262,17 @@ async function migrateJobs() {
             await processSource(supabase, adapter, existingGeoById, companyIdCache);
         } catch (error) {
             console.error(`[${adapter.id}] Unexpected error, skipping this source:`, error);
+            failedSources.push(adapter.id);
         }
     }
 
     console.log(`--- Geocoded ${geocodeCache.size} unique locations this run ---`);
     console.log('--- Migration script finished ---');
+
+    if (failedSources.length > 0) {
+        console.error(`--- ${failedSources.length} source(s) failed: ${failedSources.join(', ')} ---`);
+        process.exitCode = 1;
+    }
 }
 
 migrateJobs();
