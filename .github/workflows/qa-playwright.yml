@@ -15,6 +15,11 @@ on:
         required: false
         default: 'https://nexegin.com'
 
+# statuses: read lets the PR job find this PR's Netlify deploy preview
+permissions:
+  contents: read
+  statuses: read
+
 concurrency:
   group: qa-${{ github.ref }}
   cancel-in-progress: true
@@ -42,9 +47,29 @@ jobs:
       - name: Install Playwright (chromium only)
         run: npx playwright install --with-deps chromium
 
+      # On PRs, test the PR's own Netlify preview instead of production.
+      - name: Wait for Netlify deploy preview
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          ctx="netlify/remarkable-dragon-d38959/deploy-preview"
+          for i in $(seq 1 40); do
+            line=$(gh api "repos/${{ github.repository }}/commits/$SHA/statuses" \
+              --jq "[.[] | select(.context==\"$ctx\")][0] | \"\(.state) \(.target_url)\"" 2>/dev/null || true)
+            state=${line%% *}; url=${line#* }
+            case "$state" in
+              success) echo "PREVIEW_URL=$url" >> "$GITHUB_ENV"; echo "Testing deploy preview: $url"; exit 0 ;;
+              failure|error) echo "::error::Netlify deploy preview failed to build"; exit 1 ;;
+            esac
+            sleep 15
+          done
+          echo "::warning::Deploy preview not ready after 10 minutes; testing production instead"
+
       - name: Run smoke
         env:
-          QA_BASE_URL: ${{ inputs.base_url || 'https://nexegin.com' }}
+          QA_BASE_URL: ${{ inputs.base_url || env.PREVIEW_URL || 'https://nexegin.com' }}
           # Admin tests skip when these are absent (configured intentionally).
           QA_ADMIN_EMAIL: ${{ secrets.QA_ADMIN_EMAIL }}
           QA_ADMIN_PASSWORD: ${{ secrets.QA_ADMIN_PASSWORD }}
