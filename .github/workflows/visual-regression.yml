@@ -11,7 +11,7 @@ on:
 
 jobs:
   screenshot:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # Playwright has no ubuntu-26.04 (ubuntu-latest) build yet
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
