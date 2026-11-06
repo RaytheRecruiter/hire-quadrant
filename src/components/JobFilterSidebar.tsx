@@ -86,7 +86,7 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-primary-500" />
+          <Filter className="h-4 w-4 text-primary-500 dark:text-primary-400" />
           <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">Filters</h3>
           {activeCount > 0 && (
             <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded-full">
@@ -159,7 +159,7 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
             type="checkbox"
             checked={value.visaSponsor}
             onChange={(e) => onChange({ visaSponsor: e.target.checked })}
-            className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
+            className="rounded border-secondary-300 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
           />
           <span className="text-sm text-secondary-700 dark:text-slate-300">Visa sponsorship</span>
         </label>
@@ -169,7 +169,7 @@ const JobFilterSidebar: React.FC<Props> = ({ value, onChange, onReset, className
             type="checkbox"
             checked={value.includeOconus}
             onChange={(e) => onChange({ includeOconus: e.target.checked })}
-            className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
+            className="rounded border-secondary-300 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
           />
           <span className="text-sm text-secondary-700 dark:text-slate-300">Include international (OCONUS)</span>
         </label>

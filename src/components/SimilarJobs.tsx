@@ -55,7 +55,7 @@ const SimilarJobs: React.FC<Props> = ({ jobId }) => {
   return (
     <div className="mt-8 bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-6">
       <h3 className="text-lg font-bold text-secondary-900 dark:text-white mb-4 flex items-center gap-2">
-        <Sparkles className="h-5 w-5 text-primary-500" />
+        <Sparkles className="h-5 w-5 text-primary-500 dark:text-primary-400" />
         Similar Jobs You Might Like
       </h3>
       <div className="space-y-3">

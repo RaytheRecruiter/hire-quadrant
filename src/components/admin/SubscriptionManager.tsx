@@ -276,7 +276,7 @@ const SubscriptionManager: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => setTransferTarget(company)}
-                              className="text-xs text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 ml-1"
+                              className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 inline-flex items-center gap-1 ml-1"
                               title="Transfer ownership to another team member"
                             >
                               <ArrowRightLeft className="w-3 h-3" />
@@ -289,7 +289,7 @@ const SubscriptionManager: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => setInviteTarget(company)}
-                              className="text-xs text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 ml-1"
+                              className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 inline-flex items-center gap-1 ml-1"
                               title="Invite an owner by email"
                             >
                               <UserPlus className="w-3 h-3" />
@@ -464,7 +464,7 @@ const TransferOwnershipModal: React.FC<TransferModalProps> = ({ company, onClose
           </p>
           {loading ? (
             <div className="text-center py-6">
-              <Loader2 className="h-5 w-5 animate-spin text-primary-500 mx-auto" />
+              <Loader2 className="h-5 w-5 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
             </div>
           ) : members.length <= 1 ? (
             <div className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-3">

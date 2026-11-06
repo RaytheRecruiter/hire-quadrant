@@ -105,7 +105,7 @@ const EducationSection: React.FC = () => {
           Education
         </h2>
         {!editing && (
-          <button type="button" onClick={openNew} className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium">
+          <button type="button" onClick={openNew} className="inline-flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
             <Plus className="h-4 w-4" /> Add
           </button>
         )}
@@ -176,7 +176,7 @@ const EducationSection: React.FC = () => {
 
       {loading ? (
         <div className="text-center py-6">
-          <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
+          <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
         </div>
       ) : rows.length === 0 && !editing ? (
         <p className="text-sm text-secondary-500 dark:text-slate-400">No education added yet.</p>

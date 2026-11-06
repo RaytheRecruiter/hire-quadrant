@@ -95,7 +95,7 @@ const Companies: React.FC = () => {
 
           {loading ? (
             <div className="text-center py-16">
-              <Building2 className="h-10 w-10 text-primary-500 mx-auto animate-pulse" />
+              <Building2 className="h-10 w-10 text-primary-500 dark:text-primary-400 mx-auto animate-pulse" />
             </div>
           ) : error ? (
             <div role="alert" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">

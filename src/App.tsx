@@ -74,7 +74,7 @@ const AcceptInvite = lazy(() => import('./pages/AcceptInvite'));
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
-    <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+    <Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" />
   </div>
 );
 

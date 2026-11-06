@@ -62,8 +62,8 @@ const ContentPolicy: React.FC = () => (
           <section>
             <h2 className="text-xl font-semibold text-secondary-900">Takedown requests</h2>
             <p>
-              Reviewers can edit or delete their own reviews at any time from the review card or <a className="text-primary-600 hover:underline" href="/my-reviews">My Reviews</a>.
-              Companies concerned about content on their page can file a takedown via <a className="text-primary-600 hover:underline" href="/support">Support</a>.
+              Reviewers can edit or delete their own reviews at any time from the review card or <a className="text-primary-600 dark:text-primary-400 hover:underline" href="/my-reviews">My Reviews</a>.
+              Companies concerned about content on their page can file a takedown via <a className="text-primary-600 dark:text-primary-400 hover:underline" href="/support">Support</a>.
             </p>
           </section>
 

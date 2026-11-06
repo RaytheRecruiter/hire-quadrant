@@ -35,7 +35,7 @@ const NotificationsPage: React.FC = () => {
               </p>
             </div>
             {unreadCount > 0 && (
-              <button type="button" onClick={markAllRead} className="inline-flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 font-medium">
+              <button type="button" onClick={markAllRead} className="inline-flex items-center gap-1.5 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                 <CheckCheck className="h-4 w-4" /> Mark all read
               </button>
             )}
@@ -43,13 +43,13 @@ const NotificationsPage: React.FC = () => {
 
           {loading ? (
             <div className="text-center py-16">
-              <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+              <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
             </div>
           ) : items.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
               <Bell className="h-12 w-12 text-secondary-300 dark:text-slate-600 mx-auto mb-4" />
               <p className="text-secondary-600 dark:text-slate-400 mb-3">No notifications yet.</p>
-              <HardLink to="/alerts" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+              <HardLink to="/alerts" className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                 Manage job alert preferences →
               </HardLink>
             </div>

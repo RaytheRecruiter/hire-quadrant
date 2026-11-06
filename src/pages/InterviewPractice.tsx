@@ -173,7 +173,7 @@ const InterviewPractice: React.FC = () => {
           />
 
           <header className="mb-8 flex items-start gap-3">
-            <Target className="h-7 w-7 text-primary-500 mt-1" />
+            <Target className="h-7 w-7 text-primary-500 dark:text-primary-400 mt-1" />
             <div>
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">
                 Interview Practice
@@ -317,7 +317,7 @@ const InterviewPractice: React.FC = () => {
           {history.length > 0 && (
             <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
               <div className="flex items-center gap-2 mb-3">
-                <Clock className="h-4 w-4 text-primary-500" />
+                <Clock className="h-4 w-4 text-primary-500 dark:text-primary-400" />
                 <h2 className="text-sm font-semibold text-secondary-900 dark:text-white">
                   Your recent sessions
                 </h2>
@@ -341,7 +341,7 @@ const InterviewPractice: React.FC = () => {
               </ul>
               <HardLink
                 to="/interview-prep/software-engineer"
-                className="inline-block mt-4 text-xs text-primary-600 hover:text-primary-700 font-medium"
+                className="inline-block mt-4 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
               >
                 Study more interview questions →
               </HardLink>

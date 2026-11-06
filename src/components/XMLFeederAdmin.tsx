@@ -193,7 +193,7 @@ const XMLFeederAdmin: React.FC = () => {
               <h2 className="text-xl font-semibold text-secondary-900 dark:text-white">Select Jobs</h2>
               <button
                 onClick={handleSelectAll}
-                className="text-primary-500 hover:text-primary-600 font-medium"
+                className="text-primary-500 dark:text-primary-400 hover:text-primary-600 font-medium"
               >
                 {selectedJobs.length === jobs.length ? 'Deselect All' : 'Select All'}
               </button>
@@ -206,7 +206,7 @@ const XMLFeederAdmin: React.FC = () => {
                     type="checkbox"
                     checked={selectedJobs.includes(job.id)}
                     onChange={(e) => handleJobSelection(job.id, e.target.checked)}
-                    className="mr-3 h-4 w-4 text-primary-500 focus:ring-primary-400 border-secondary-300 dark:border-slate-600 rounded"
+                    className="mr-3 h-4 w-4 text-primary-500 dark:text-primary-400 focus:ring-primary-400 border-secondary-300 dark:border-slate-600 rounded"
                   />
                   <div className="flex-1">
                     <div className="font-medium text-secondary-900 dark:text-white">{job.title}</div>
@@ -307,7 +307,7 @@ const XMLFeederAdmin: React.FC = () => {
                 ))}
                 <button
                   onClick={() => addArrayItem('requirements')}
-                  className="text-primary-500 hover:text-primary-600 text-sm font-medium"
+                  className="text-primary-500 dark:text-primary-400 hover:text-primary-600 text-sm font-medium"
                 >
                   + Add Requirement
                 </button>
@@ -335,7 +335,7 @@ const XMLFeederAdmin: React.FC = () => {
                 ))}
                 <button
                   onClick={() => addArrayItem('benefits')}
-                  className="text-primary-500 hover:text-primary-600 text-sm font-medium"
+                  className="text-primary-500 dark:text-primary-400 hover:text-primary-600 text-sm font-medium"
                 >
                   + Add Benefit
                 </button>

@@ -29,7 +29,7 @@ const ProfileNudge: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg flex-shrink-0 shadow-soft">
-            <Sparkles className="h-4 w-4 text-primary-600" />
+            <Sparkles className="h-4 w-4 text-primary-600 dark:text-primary-400" />
           </div>
           <div className="min-w-0">
             <span className="text-sm font-semibold text-primary-900 dark:text-primary-100">

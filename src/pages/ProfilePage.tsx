@@ -660,7 +660,7 @@ const ProfilePage = () => {
                                     <div className="mt-3">
                                         <HardLink
                                             to="/company-dashboard"
-                                            className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                                            className="inline-flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
                                         >
                                             Go to Company Dashboard
                                             <ExternalLink className="h-3 w-3" />
@@ -699,7 +699,7 @@ const ProfilePage = () => {
                     {profile?.resume_url ? (
                         <div className="mb-4 p-3 bg-secondary-50 dark:bg-slate-900/50 rounded-lg flex items-center justify-between">
                             <div className="flex items-center gap-2 min-w-0">
-                                <FileText className="h-4 w-4 text-primary-500 flex-shrink-0" />
+                                <FileText className="h-4 w-4 text-primary-500 dark:text-primary-400 flex-shrink-0" />
                                 <span className="text-sm text-secondary-700 dark:text-slate-300 truncate">
                                     {profile.resume_url.split('/').pop()?.replace(/^\d+_/, '') || 'Resume uploaded'}
                                 </span>
@@ -707,7 +707,7 @@ const ProfilePage = () => {
                             <div className="flex items-center gap-3 ml-4">
                                 <button
                                     onClick={handleViewResume}
-                                    className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
+                                    className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium flex items-center gap-1"
                                 >
                                     <ExternalLink className="h-3 w-3" />
                                     View
@@ -796,7 +796,7 @@ const ProfilePage = () => {
                                                 href={resumeViewUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                                                className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
                                             >
                                                 Download
                                             </a>
@@ -858,7 +858,7 @@ const ProfilePage = () => {
                                   if (locationValue.trim()) params.set('loc', locationValue.trim());
                                   return params.toString() ? `/jobs?${params}` : '/jobs';
                                 })()}
-                                className="text-primary-600 hover:text-primary-700 font-medium text-sm"
+                                className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm"
                             >
                                 Browse Jobs
                             </HardLink>

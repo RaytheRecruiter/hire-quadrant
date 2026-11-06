@@ -782,7 +782,7 @@ const Admin: React.FC = () => {
                           <div className="text-xs text-secondary-500 dark:text-slate-400">{job.company}</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-primary-600">{getAppCount(job)}</div>
+                          <div className="font-bold text-primary-600 dark:text-primary-400">{getAppCount(job)}</div>
                           <div className="text-xs text-secondary-500 dark:text-slate-400">applications</div>
                         </div>
                       </div>
@@ -818,7 +818,7 @@ const Admin: React.FC = () => {
                   {
                     key: 'title', label: 'Job Title',
                     render: (job) => (
-                      <HardLink to={`/jobs/${job.id}`} className="text-sm font-medium text-primary-700 hover:underline">
+                      <HardLink to={`/jobs/${job.id}`} className="text-sm font-medium text-primary-700 dark:text-primary-400 hover:underline">
                         {job.title}
                       </HardLink>
                     ),
@@ -902,7 +902,7 @@ const Admin: React.FC = () => {
                     render: (row) => (
                       <div className="flex items-center">
                         <div className="p-2 bg-primary-100 rounded-lg mr-3">
-                          <Building2 className="h-4 w-4 text-primary-600" />
+                          <Building2 className="h-4 w-4 text-primary-600 dark:text-primary-400" />
                         </div>
                         <span className="text-sm font-medium text-secondary-900 dark:text-white">{row.source}</span>
                       </div>

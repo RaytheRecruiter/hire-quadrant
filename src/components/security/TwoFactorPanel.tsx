@@ -169,7 +169,7 @@ const TwoFactorPanel: React.FC = () => {
                 <button
                   type="button"
                   onClick={copyRecovery}
-                  className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700"
+                  className="inline-flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
                 >
                   {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                   {copied ? 'Copied' : 'Copy all'}

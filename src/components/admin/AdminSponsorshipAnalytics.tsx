@@ -166,7 +166,7 @@ const AdminSponsorshipAnalytics: React.FC = () => {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
+        <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
       </div>
     );
   }
@@ -191,7 +191,7 @@ const AdminSponsorshipAnalytics: React.FC = () => {
     <div className="space-y-8">
       <div>
         <h2 className="text-lg font-semibold text-secondary-900 dark:text-white mb-4 flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-primary-600" />
+          <TrendingUp className="h-4 w-4 text-primary-600 dark:text-primary-400" />
           Sponsorship performance
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -311,7 +311,7 @@ const AdminSponsorshipAnalytics: React.FC = () => {
 
       <div>
         <h2 className="text-lg font-semibold text-secondary-900 dark:text-white mb-1 flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-primary-600" />
+          <Sparkles className="h-4 w-4 text-primary-600 dark:text-primary-400" />
           Comp a job sponsorship
         </h2>
         <p className="text-xs text-secondary-500 dark:text-slate-400 mb-4">

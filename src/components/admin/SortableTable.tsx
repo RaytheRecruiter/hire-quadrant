@@ -126,7 +126,7 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
           <span>Showing {processedData.length} of {data.length} rows</span>
           <button
             onClick={() => setFilters({})}
-            className="text-primary-600 hover:text-primary-800 font-medium"
+            className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium"
           >
             Clear filters
           </button>
@@ -156,9 +156,9 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = 'No dat
                       {col.sortable !== false && (
                         <span className="inline-flex">
                           {sortKey === col.key && sortDir === 'asc' ? (
-                            <ChevronUp className="h-3.5 w-3.5 text-primary-500" />
+                            <ChevronUp className="h-3.5 w-3.5 text-primary-500 dark:text-primary-400" />
                           ) : sortKey === col.key && sortDir === 'desc' ? (
-                            <ChevronDown className="h-3.5 w-3.5 text-primary-500" />
+                            <ChevronDown className="h-3.5 w-3.5 text-primary-500 dark:text-primary-400" />
                           ) : (
                             <ChevronsUpDown className="h-3.5 w-3.5 text-secondary-300" />
                           )}

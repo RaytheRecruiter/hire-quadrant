@@ -392,7 +392,7 @@ const ReviewForm: React.FC<Props> = ({ companyId, companySlug, existing, onSaved
           type="checkbox"
           checked={form.is_anonymous}
           onChange={(e) => setForm((f) => ({ ...f, is_anonymous: e.target.checked }))}
-          className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+          className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
         />
         Post anonymously
       </label>

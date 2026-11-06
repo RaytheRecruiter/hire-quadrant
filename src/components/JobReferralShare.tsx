@@ -60,7 +60,7 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
     return (
       <section className="bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-900/40 rounded-xl p-4">
         <div className="flex items-start gap-2 mb-2">
-          <Share2 className="h-4 w-4 text-primary-500 mt-0.5" />
+          <Share2 className="h-4 w-4 text-primary-500 dark:text-primary-400 mt-0.5" />
           <div>
             <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
               Refer someone, earn a reward
@@ -97,7 +97,7 @@ const JobReferralShare: React.FC<Props> = ({ jobId, jobTitle, companyName }) => 
   return (
     <section className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4">
       <div className="flex items-start gap-2 mb-3">
-        <Share2 className="h-4 w-4 text-primary-500 mt-0.5" />
+        <Share2 className="h-4 w-4 text-primary-500 dark:text-primary-400 mt-0.5" />
         <div>
           <h3 className="text-sm font-semibold text-secondary-900 dark:text-white">
             Refer someone

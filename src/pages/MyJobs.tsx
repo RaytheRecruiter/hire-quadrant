@@ -179,7 +179,7 @@ const MyJobs: React.FC = () => {
                     onClick={() => setActive(t.id)}
                     className={`flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
                       isActive
-                        ? 'border-primary-500 text-primary-600'
+                        ? 'border-primary-500 text-primary-600 dark:text-primary-400'
                         : 'border-transparent text-secondary-500 hover:text-secondary-700 hover:border-secondary-300'
                     }`}
                   >
@@ -194,7 +194,7 @@ const MyJobs: React.FC = () => {
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
             {loading ? (
               <div className="text-center py-10">
-                <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+                <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
               </div>
             ) : jobs.length === 0 ? (
               <div className="text-center py-12">
@@ -204,7 +204,7 @@ const MyJobs: React.FC = () => {
                 {(active === 'saved' || active === 'applied') && (
                   <HardLink
                     to="/"
-                    className="inline-block mt-3 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                    className="inline-block mt-3 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
                   >
                     Browse jobs →
                   </HardLink>
@@ -225,7 +225,7 @@ const MyJobs: React.FC = () => {
                             {j.location ? ` · ${j.location}` : ''}
                           </p>
                           {active === 'interviews' && j.interview_at && (
-                            <p className="text-xs text-primary-600 mt-0.5">
+                            <p className="text-xs text-primary-600 dark:text-primary-400 mt-0.5">
                               {new Date(j.interview_at).toLocaleString()}
                               {j.interview_location ? ` · ${j.interview_location}` : ''}
                               {j.interview_meeting_url ? (
@@ -271,7 +271,7 @@ const MyJobs: React.FC = () => {
                           {active === 'saved' && (
                             <HardLink
                               to={`/jobs/${j.id}#apply-form`}
-                              className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20"
+                              className="inline-flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 px-2 py-1 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20"
                             >
                               Apply
                             </HardLink>
@@ -279,7 +279,7 @@ const MyJobs: React.FC = () => {
                           {active === 'archived' && (
                             <HardLink
                               to={`/jobs/${j.id}#apply-form`}
-                              className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20"
+                              className="inline-flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 px-2 py-1 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20"
                             >
                               <RotateCcw className="h-3.5 w-3.5" />
                               Apply again

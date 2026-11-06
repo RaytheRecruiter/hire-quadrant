@@ -75,7 +75,7 @@ const CompanyQAPanel: React.FC<Props> = ({ companyId }) => {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+        <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
       </div>
     );
   }

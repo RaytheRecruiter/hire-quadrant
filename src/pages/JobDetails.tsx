@@ -429,7 +429,7 @@ const JobDetails: React.FC = () => {
                         <div className="flex-1">
                             <h3 className="font-display text-lg font-bold text-secondary-900">Application sent!</h3>
                             <p className="text-sm text-secondary-700 mt-1">
-                                We've notified <strong>{job.company}</strong>. Track the status on your <HardLink to="/profile" className="text-primary-600 hover:underline font-semibold">profile page</HardLink>.
+                                We've notified <strong>{job.company}</strong>. Track the status on your <HardLink to="/profile" className="text-primary-600 dark:text-primary-400 hover:underline font-semibold">profile page</HardLink>.
                             </p>
                         </div>
                     </div>
@@ -450,7 +450,7 @@ const JobDetails: React.FC = () => {
                                 </h1>
                                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-secondary-600 dark:text-slate-400">
                                     {companyProfile ? (
-                                        <HardLink to={`/companies/${companyProfile.id}`} className="font-semibold text-primary-700 hover:underline">
+                                        <HardLink to={`/companies/${companyProfile.id}`} className="font-semibold text-primary-700 dark:text-primary-400 hover:underline">
                                             {job.company}
                                         </HardLink>
                                     ) : (

@@ -14,7 +14,7 @@ const NotFound: React.FC = () => {
       <div className="min-h-dvh bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full text-center">
           <div className="mb-8">
-            <h1 className="text-9xl font-bold text-primary-500 mb-4">404</h1>
+            <h1 className="text-9xl font-bold text-primary-500 dark:text-primary-400 mb-4">404</h1>
             <h2 className="text-3xl font-bold text-secondary-900 dark:text-white mb-2">Page Not Found</h2>
             <p className="text-secondary-600 dark:text-slate-400 mb-8">
               The page you're looking for doesn't exist or has been moved.

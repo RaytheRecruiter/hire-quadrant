@@ -149,7 +149,7 @@ const CompanySourceManager: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="p-2 bg-primary-100 rounded-lg mr-3">
-                          <Building2 className="h-5 w-5 text-primary-600" />
+                          <Building2 className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                         </div>
                         <div className="text-sm font-medium text-secondary-900 dark:text-white">
                           {r.source_company || '(unknown)'}

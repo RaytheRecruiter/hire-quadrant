@@ -13,7 +13,7 @@ const RecommendedJobs: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-primary-500" />
+        <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400" />
       </div>
     );
   }
@@ -25,7 +25,7 @@ const RecommendedJobs: React.FC = () => {
   return (
     <div className="mt-12 bg-gradient-to-br from-primary-50 to-primary-50/50 dark:from-primary-900/20 dark:to-slate-900/20 rounded-3xl shadow-lg border border-primary-100/20 dark:border-primary-900/20 p-8">
       <h3 className="text-2xl font-bold text-secondary-900 dark:text-white mb-6 flex items-center gap-2">
-        <Lightbulb className="h-6 w-6 text-primary-500" />
+        <Lightbulb className="h-6 w-6 text-primary-500 dark:text-primary-400" />
         Recommended For You
       </h3>
       <p className="text-secondary-600 dark:text-slate-400 mb-6">

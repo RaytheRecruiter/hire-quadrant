@@ -54,7 +54,7 @@ export const CareerGrowthPaths: React.FC<CareerGrowthPathsProps> = ({
   return (
     <div className="mt-12">
       <div className="flex items-center gap-3 mb-2">
-        <GraduationCap className="h-6 w-6 text-primary-600" />
+        <GraduationCap className="h-6 w-6 text-primary-600 dark:text-primary-400" />
         <div>
           <h3 className="text-2xl font-bold text-secondary-900 dark:text-white">Career Growth Paths</h3>
           <p className="text-sm text-secondary-600 dark:text-slate-400 mt-1">Where this role can take you next</p>

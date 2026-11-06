@@ -130,7 +130,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                             }`}
                         >
                             {saved ? (
-                                <BookmarkCheck className="h-5 w-5 fill-primary-500 text-primary-500" />
+                                <BookmarkCheck className="h-5 w-5 fill-primary-500 text-primary-500 dark:text-primary-400" />
                             ) : (
                                 <Bookmark className="h-5 w-5" />
                             )}

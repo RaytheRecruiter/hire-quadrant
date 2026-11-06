@@ -358,21 +358,21 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Job Seeker Card */}
             <div className="group relative bg-gradient-to-br from-primary-50 to-primary-100/40 dark:from-primary-900/20 dark:to-slate-900 rounded-3xl p-8 border border-primary-100 dark:border-primary-900/30 hover:shadow-card-hover transition-all">
-              <Users className="h-10 w-10 text-primary-500 mb-4" />
+              <Users className="h-10 w-10 text-primary-500 dark:text-primary-400 mb-4" />
               <h2 className="font-display text-2xl font-bold text-secondary-900 dark:text-white mb-4">
                 Find Your Next Role
               </h2>
               <ul className="space-y-2 mb-6">
                 <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
-                  <CheckCircle2 className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0" />
                   <span>Search thousands of positions</span>
                 </li>
                 <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
-                  <CheckCircle2 className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0" />
                   <span>Track every application</span>
                 </li>
                 <li className="flex items-start gap-2 text-secondary-600 dark:text-slate-300">
-                  <CheckCircle2 className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0" />
                   <span>Get real feedback</span>
                 </li>
               </ul>
@@ -484,7 +484,7 @@ const Home: React.FC = () => {
           {loading ? (
             <div className="text-center py-12">
               <div className="inline-block animate-spin">
-                <Briefcase className="h-8 w-8 text-primary-500" />
+                <Briefcase className="h-8 w-8 text-primary-500 dark:text-primary-400" />
               </div>
             </div>
           ) : jobs.length > 0 ? (
@@ -698,15 +698,15 @@ const Home: React.FC = () => {
           </div>
 
           <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm">
-            <HardLink to="/privacy" className="text-primary-600 hover:text-primary-800 font-semibold">
+            <HardLink to="/privacy" className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-semibold">
               Privacy Policy
             </HardLink>
             <span className="text-secondary-300">•</span>
-            <HardLink to="/terms" className="text-primary-600 hover:text-primary-800 font-semibold">
+            <HardLink to="/terms" className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-semibold">
               Terms of Service
             </HardLink>
             <span className="text-secondary-300">•</span>
-            <HardLink to="/support" className="text-primary-600 hover:text-primary-800 font-semibold">
+            <HardLink to="/support" className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-semibold">
               Security & Support
             </HardLink>
           </div>

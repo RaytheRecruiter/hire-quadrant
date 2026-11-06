@@ -101,7 +101,7 @@ const BlockRenderer: React.FC<{ block: Block }> = ({ block }) => {
   if (block.kind === 'stat' && block.body) {
     return (
       <div className="bg-secondary-50 dark:bg-slate-900/50 rounded-xl p-4 flex items-start gap-3">
-        <TrendingUp className="h-5 w-5 text-primary-600 flex-shrink-0 mt-0.5" />
+        <TrendingUp className="h-5 w-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
         <div>
           <p className="text-2xl font-bold text-secondary-900 dark:text-white">{block.body}</p>
           {block.heading && <p className="text-sm text-secondary-600 dark:text-slate-400">{block.heading}</p>}

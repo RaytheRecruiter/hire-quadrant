@@ -73,7 +73,7 @@ const CertificationsSection: React.FC = () => {
 
       {loading ? (
         <div className="text-center py-4">
-          <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
+          <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
         </div>
       ) : (
         <>

@@ -96,7 +96,7 @@ const Privacy: React.FC = () => {
               <p className="text-secondary-700 dark:text-slate-300">
                 Data is transmitted over HTTPS and stored with access controls that restrict who can read it. No
                 method of transmission or storage is 100% secure, and we can't guarantee absolute security. If you
-                believe you've found a security issue, see our <a href="/security-policy" className="text-primary-500 hover:text-primary-600">Vulnerability Disclosure Policy</a>.
+                believe you've found a security issue, see our <a href="/security-policy" className="text-primary-500 dark:text-primary-400 hover:text-primary-600">Vulnerability Disclosure Policy</a>.
               </p>
             </section>
 
@@ -115,7 +115,7 @@ const Privacy: React.FC = () => {
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">9. Contact us</h2>
               <p className="text-secondary-700 dark:text-slate-300">
                 If you have any questions about this Privacy Policy, please contact us at{' '}
-                <a href="mailto:privacy@nexegin.com" className="text-primary-500 hover:text-primary-600">
+                <a href="mailto:privacy@nexegin.com" className="text-primary-500 dark:text-primary-400 hover:text-primary-600">
                   privacy@nexegin.com
                 </a>
               </p>

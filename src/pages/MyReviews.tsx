@@ -96,13 +96,13 @@ const MyReviews: React.FC = () => {
 
           {loading ? (
             <div className="text-center py-12">
-              <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+              <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
             </div>
           ) : rows.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
               <Star className="h-12 w-12 text-secondary-300 dark:text-slate-600 mx-auto mb-4" />
               <p className="text-secondary-600 dark:text-slate-400 mb-3">You haven't written any reviews yet.</p>
-              <HardLink to="/companies" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+              <HardLink to="/companies" className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                 Browse companies →
               </HardLink>
             </div>
@@ -121,7 +121,7 @@ const MyReviews: React.FC = () => {
                             {s.label}
                           </span>
                           {r.company && (
-                            <HardLink to={`/companies/${r.company.slug}`} className="text-xs font-medium text-primary-600 hover:underline">
+                            <HardLink to={`/companies/${r.company.slug}`} className="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline">
                               {r.company.name}
                             </HardLink>
                           )}

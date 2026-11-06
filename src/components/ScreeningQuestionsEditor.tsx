@@ -114,7 +114,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                 type="checkbox"
                 checked={q.required}
                 onChange={e => updateQuestion(q.id, { required: e.target.checked })}
-                className="rounded text-primary-500 focus:ring-primary-400"
+                className="rounded text-primary-500 dark:text-primary-400 focus:ring-primary-400"
               />
               <span className="text-secondary-700 dark:text-slate-300">Required</span>
             </label>
@@ -123,7 +123,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
                 type="checkbox"
                 checked={q.knockout}
                 onChange={e => updateQuestion(q.id, { knockout: e.target.checked })}
-                className="rounded text-primary-500 focus:ring-primary-400"
+                className="rounded text-primary-500 dark:text-primary-400 focus:ring-primary-400"
               />
               <span className="text-secondary-700 dark:text-slate-300 flex items-center gap-1">
                 Knockout <HelpCircle className="h-3 w-3 text-secondary-400 dark:text-slate-500" />
@@ -178,7 +178,7 @@ const ScreeningQuestionsEditor: React.FC<Props> = ({ value, onChange, maxQuestio
         type="button"
         onClick={addQuestion}
         disabled={value.length >= maxQuestions}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-primary-200 text-primary-600 font-medium text-sm hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-primary-200 text-primary-600 dark:text-primary-400 font-medium text-sm hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         <Plus className="h-4 w-4" /> Add Question
       </button>

@@ -181,7 +181,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
+        <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
       </div>
     );
   }
@@ -201,7 +201,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-secondary-900 dark:text-white flex items-center gap-2">
-          <CreditCard className="h-5 w-5 text-primary-600" />
+          <CreditCard className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           Resume Database Subscription
         </h2>
         {canManageBilling ? (
@@ -294,7 +294,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                   <button
                     onClick={handleResume}
                     disabled={cancelBusy}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-primary-600 hover:text-primary-800 disabled:opacity-60"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 disabled:opacity-60"
                   >
                     {cancelBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />}
                     Resume subscription
@@ -328,7 +328,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
         <div>
           <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
             <h3 className="text-lg font-semibold text-secondary-900 dark:text-white flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary-600" />
+              <Sparkles className="h-4 w-4 text-primary-600 dark:text-primary-400" />
               Resume Database plans
             </h3>
             <div className="inline-flex rounded-lg border border-secondary-200 dark:border-slate-700 p-0.5 bg-secondary-50 dark:bg-slate-900/50">
@@ -339,7 +339,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                   onClick={() => setBillingFrequency(freq)}
                   className={`px-3 py-1 text-xs font-medium rounded-md transition ${
                     billingFrequency === freq
-                      ? 'bg-white dark:bg-slate-800 shadow text-primary-600'
+                      ? 'bg-white dark:bg-slate-800 shadow text-primary-600 dark:text-primary-400'
                       : 'text-secondary-500 dark:text-slate-400'
                   }`}
                 >
@@ -374,7 +374,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                         </span>
                       )}
                     </div>
-                    <p className="text-2xl font-bold text-primary-600 mb-2">
+                    <p className="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-2">
                       {fmtPrice(priceCents, billingFrequency === 'monthly' ? '/mo' : '/yr')}
                     </p>
                     {plan.monthly_unlock_credits != null && (
@@ -408,7 +408,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                     {!isCurrent && canManageBilling && !canCheckout && (
                       <a
                         href={`mailto:billing@nexegin.com?subject=${plan.requires_manual_upgrade ? 'Switch%20to' : 'Upgrade%20to'}%20${encodeURIComponent(plan.name)}`}
-                        className="block text-center text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
+                        className="block text-center text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
                       >
                         {plan.requires_manual_upgrade ? 'Contact sales' : 'Request upgrade'}
                       </a>
@@ -424,7 +424,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
           </div>
           <div className="mt-3 rounded-xl border border-dashed border-secondary-300 dark:border-slate-700 p-4 text-center text-xs text-secondary-500 dark:text-slate-400">
             Need more than 200 unlocks/month or multiple team seats?{' '}
-            <a href="mailto:billing@nexegin.com?subject=Enterprise%20Resume%20Database" className="text-primary-600 font-medium">
+            <a href="mailto:billing@nexegin.com?subject=Enterprise%20Resume%20Database" className="text-primary-600 dark:text-primary-400 font-medium">
               Contact sales for Enterprise
             </a>
             .
@@ -436,7 +436,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
       {currentSubscription && creditPacks.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-2">
-            <Plus className="h-4 w-4 text-primary-600" />
+            <Plus className="h-4 w-4 text-primary-600 dark:text-primary-400" />
             Buy more contacts
           </h3>
           <p className="text-xs text-secondary-500 dark:text-slate-400 mb-3">
@@ -452,7 +452,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                 >
                   <p className="text-2xl font-bold text-secondary-900 dark:text-white">{pack.credits}</p>
                   <p className="text-xs text-secondary-500 dark:text-slate-400 mb-2">contacts</p>
-                  <p className="text-lg font-semibold text-primary-600 mb-3">{fmtPrice(pack.price_cents, '')}</p>
+                  <p className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-3">{fmtPrice(pack.price_cents, '')}</p>
                   {canManageBilling && canCheckout && (
                     <button
                       type="button"
@@ -466,7 +466,7 @@ const CompanyBillingPanel: React.FC<Props> = ({ companyId }) => {
                   {canManageBilling && !canCheckout && (
                     <a
                       href={`mailto:billing@nexegin.com?subject=Buy%20${pack.credits}%20contacts`}
-                      className="block text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
+                      className="block text-xs px-3 py-1.5 rounded-lg border border-primary-400 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30 font-medium"
                     >
                       Request
                     </a>

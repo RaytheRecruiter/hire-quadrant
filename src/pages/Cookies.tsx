@@ -54,7 +54,7 @@ const Cookies: React.FC = () => (
           <section>
             <h2 className="text-xl font-semibold text-secondary-900">Contact</h2>
             <p>
-              Questions about cookies? Reach us via <a className="text-primary-600 hover:underline" href="/support">Support</a>.
+              Questions about cookies? Reach us via <a className="text-primary-600 dark:text-primary-400 hover:underline" href="/support">Support</a>.
             </p>
           </section>
         </div>

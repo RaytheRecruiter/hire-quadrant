@@ -58,7 +58,7 @@ const About: React.FC = () => {
             <section>
               <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">Get in Touch</h2>
               <p className="text-lg text-secondary-700 dark:text-slate-300">
-                Questions? Ideas? <a href="mailto:hello@nexegin.com" className="text-primary-500 hover:text-primary-600 font-semibold">Email us</a> — we read every message.
+                Questions? Ideas? <a href="mailto:hello@nexegin.com" className="text-primary-500 dark:text-primary-400 hover:text-primary-600 font-semibold">Email us</a> — we read every message.
               </p>
             </section>
           </div>

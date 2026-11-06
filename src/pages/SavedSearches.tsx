@@ -98,7 +98,7 @@ const SavedSearches: React.FC = () => {
       <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-6 flex items-center gap-2">
-            <Bell className="h-6 w-6 text-primary-500" />
+            <Bell className="h-6 w-6 text-primary-500 dark:text-primary-400" />
             <div>
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">
                 Saved searches
@@ -111,7 +111,7 @@ const SavedSearches: React.FC = () => {
 
           <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5 mb-5">
             <h2 className="text-sm font-semibold text-secondary-900 dark:text-white mb-3 flex items-center gap-1.5">
-              <Plus className="h-4 w-4 text-primary-500" />
+              <Plus className="h-4 w-4 text-primary-500 dark:text-primary-400" />
               Create a saved search
             </h2>
             <div className="grid grid-cols-1 gap-2">

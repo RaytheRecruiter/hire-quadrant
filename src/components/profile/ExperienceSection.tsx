@@ -146,7 +146,7 @@ const ExperienceSection: React.FC = () => {
           <button
             type="button"
             onClick={openNew}
-            className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+            className="inline-flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
           >
             <Plus className="h-4 w-4" /> Add
           </button>
@@ -166,7 +166,7 @@ const ExperienceSection: React.FC = () => {
 
       {loading ? (
         <div className="text-center py-6">
-          <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
+          <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
         </div>
       ) : rows.length === 0 && !editing ? (
         <p className="text-sm text-secondary-500 dark:text-slate-400">No experience added yet. Click <strong>Add</strong> to create your first entry.</p>
@@ -240,7 +240,7 @@ const ExperienceForm: React.FC<FormProps> = ({ form, setForm, onCancel, onSave, 
           type="checkbox"
           checked={form.is_current}
           onChange={(e) => setForm((f) => ({ ...f, is_current: e.target.checked }))}
-          className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+          className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
         />
         I currently work here
       </label>

@@ -179,7 +179,7 @@ const JobPreferencesSection: React.FC = () => {
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 mb-6 text-center py-10">
-        <Loader2 className="h-5 w-5 text-primary-500 animate-spin mx-auto" />
+        <Loader2 className="h-5 w-5 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
       </div>
     );
   }
@@ -308,7 +308,7 @@ const JobPreferencesSection: React.FC = () => {
               type="checkbox"
               checked={prefs.open_to_relocation}
               onChange={(e) => setPrefs((p) => ({ ...p, open_to_relocation: e.target.checked }))}
-              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
             />
             Open to relocation
           </label>
@@ -317,7 +317,7 @@ const JobPreferencesSection: React.FC = () => {
               type="checkbox"
               checked={prefs.ready_to_interview}
               onChange={(e) => setPrefs((p) => ({ ...p, ready_to_interview: e.target.checked }))}
-              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-secondary-300 dark:border-slate-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
             />
             Ready to interview (signals employers you're actively looking)
           </label>

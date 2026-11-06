@@ -44,7 +44,7 @@ const SavedJobs: React.FC = () => {
   if (authLoading) {
     return (
       <div className="min-h-dvh flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" />
       </div>
     );
   }
@@ -69,7 +69,7 @@ const SavedJobs: React.FC = () => {
 
         {jobsLoading || savedLoading ? (
           <div className="text-center py-20">
-            <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500" />
+            <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500 dark:text-primary-400" />
           </div>
         ) : jobs.length === 0 ? (
           <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-12 text-center">

@@ -355,7 +355,7 @@ const BrowseJobs: React.FC = () => {
             <div>
               {loading ? (
                 <div className="py-16 text-center">
-                  <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
+                  <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
                 </div>
               ) : rows.length === 0 ? (
                 <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-8 text-center text-sm text-secondary-500 dark:text-slate-400">
@@ -366,7 +366,7 @@ const BrowseJobs: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => updateFilters({ securityClearance: 'not_specified' })}
-                        className="font-medium text-primary-600 hover:underline"
+                        className="font-medium text-primary-600 dark:text-primary-400 hover:underline"
                       >
                         &ldquo;Not specified&rdquo;
                       </button>{' '}

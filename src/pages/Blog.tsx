@@ -103,7 +103,7 @@ const Blog: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent flex items-center gap-3">
-            <BookOpen className="h-8 w-8 text-primary-500" />
+            <BookOpen className="h-8 w-8 text-primary-500 dark:text-primary-400" />
             Career Resources
           </h1>
           <p className="mt-2 text-secondary-600 dark:text-slate-400 text-lg">Expert advice on resumes, interviews, and job hunting.</p>
@@ -168,7 +168,7 @@ const Blog: React.FC = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-20"><Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500" /></div>
+          <div className="text-center py-20"><Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-500 dark:text-primary-400" /></div>
         ) : error ? (
           <div role="alert" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
             <div className="flex items-start gap-3">
@@ -203,7 +203,7 @@ const Blog: React.FC = () => {
                   />
                 ) : (
                   <div className="w-full h-48 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30 flex items-center justify-center">
-                    <BookOpen className="h-16 w-16 text-primary-500/50" />
+                    <BookOpen className="h-16 w-16 text-primary-500 dark:text-primary-400/50" />
                   </div>
                 )}
                 <div className="p-6">

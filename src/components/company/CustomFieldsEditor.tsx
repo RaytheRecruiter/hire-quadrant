@@ -100,7 +100,7 @@ const CustomFieldsEditor: React.FC<{ jobId: string }> = ({ jobId }) => {
   };
 
   if (loading) {
-    return <Loader2 className="h-5 w-5 animate-spin text-primary-500 mx-auto my-4" />;
+    return <Loader2 className="h-5 w-5 animate-spin text-primary-500 dark:text-primary-400 mx-auto my-4" />;
   }
 
   return (
@@ -181,7 +181,7 @@ const CustomFieldsEditor: React.FC<{ jobId: string }> = ({ jobId }) => {
                       type="checkbox"
                       checked={f.required}
                       onChange={(e) => update(i, { required: e.target.checked })}
-                      className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
+                      className="rounded border-secondary-300 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
                     />
                     Required
                   </label>

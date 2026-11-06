@@ -121,7 +121,7 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }
       >
         <header className="flex items-center justify-between p-4 border-b border-secondary-100 dark:border-slate-700">
           <div className="flex items-center gap-2">
-            <MessageSquare className="h-5 w-5 text-primary-500" />
+            <MessageSquare className="h-5 w-5 text-primary-500 dark:text-primary-400" />
             <h2 className="font-semibold text-secondary-900 dark:text-white">Bulk message</h2>
             <span className="text-xs text-secondary-500 dark:text-slate-400">
               {selected.size} of {applicants.length} selected
@@ -141,7 +141,7 @@ const BulkMessageComposer: React.FC<Props> = ({ applicants, companyId, onClose }
                     type="checkbox"
                     checked={selected.has(a.user_id)}
                     onChange={() => toggle(a.user_id)}
-                    className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
+                    className="rounded border-secondary-300 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
                   />
                   <div className="min-w-0">
                     <p className="text-sm text-secondary-900 dark:text-white truncate">

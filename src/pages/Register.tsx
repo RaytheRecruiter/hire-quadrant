@@ -97,7 +97,7 @@ const Register: React.FC = () => {
         <div className="max-w-md w-full">
           <div className="bg-white/90 backdrop-blur-sm p-10 rounded-3xl shadow-2xl border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 text-center">
             <div className="flex justify-center mb-6">
-              <CheckCircle className="h-16 w-16 text-primary-500" />
+              <CheckCircle className="h-16 w-16 text-primary-500 dark:text-primary-400" />
             </div>
             <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-4">
               Check Your Email
@@ -131,7 +131,7 @@ const Register: React.FC = () => {
             Or{' '}
             <HardLink
               to={loginHref}
-              className="font-semibold text-primary-500 hover:text-primary-600 transition-colors duration-300"
+              className="font-semibold text-primary-500 dark:text-primary-400 hover:text-primary-600 transition-colors duration-300"
             >
               sign in to your existing account
             </HardLink>

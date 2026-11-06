@@ -57,7 +57,7 @@ const CompanyProfile: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-dvh bg-secondary-50 dark:bg-slate-950 flex items-center justify-center">
-        <Building2 className="h-10 w-10 text-primary-500 animate-pulse" />
+        <Building2 className="h-10 w-10 text-primary-500 dark:text-primary-400 animate-pulse" />
       </div>
     );
   }
@@ -70,7 +70,7 @@ const CompanyProfile: React.FC = () => {
           {error && <p className="text-sm text-secondary-500 dark:text-slate-400 mb-4">{error}</p>}
           <button
             onClick={() => navigate('/companies')}
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
           >
             ← Back to Companies
           </button>
@@ -113,7 +113,7 @@ const CompanyProfile: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <button
           onClick={() => navigate('/companies')}
-          className="flex items-center text-primary-600 hover:text-primary-700 mb-6 font-medium"
+          className="flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mb-6 font-medium"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Companies
@@ -185,7 +185,7 @@ const CompanyProfile: React.FC = () => {
                       href={company.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-primary-600 hover:text-primary-700"
+                      className="flex items-center gap-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
                     >
                       <Globe className="h-4 w-4" />
                       Website
@@ -243,7 +243,7 @@ const CompanyProfile: React.FC = () => {
             {company.culture && (
               <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <Heart className="h-5 w-5 text-primary-600" />
+                  <Heart className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   <h2 className="text-xl font-bold text-secondary-900 dark:text-white">Our Culture</h2>
                 </div>
                 <p className="text-secondary-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
@@ -288,7 +288,7 @@ const CompanyProfile: React.FC = () => {
 
             <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Briefcase className="h-5 w-5 text-primary-600" />
+                <Briefcase className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                 <h2 className="text-xl font-bold text-secondary-900 dark:text-white">
                   Open Positions ({companyJobs.length})
                 </h2>
@@ -311,7 +311,7 @@ const CompanyProfile: React.FC = () => {
             {Array.isArray(company.specialties) && company.specialties.length > 0 && (
               <section className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <Award className="h-5 w-5 text-primary-600" />
+                  <Award className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   <h3 className="font-semibold text-secondary-900 dark:text-white">Specialties</h3>
                 </div>
                 <div className="flex flex-wrap gap-2">

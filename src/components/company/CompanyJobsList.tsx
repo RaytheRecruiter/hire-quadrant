@@ -268,7 +268,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                 <div>
                   <HardLink
                     to={`/jobs/${job.id}`}
-                    className="text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline"
+                    className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hover:underline"
                   >
                     {job.title}
                   </HardLink>
@@ -383,7 +383,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                   <>
                     <button
                       onClick={() => openEditor(job)}
-                      className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium text-sm"
+                      className="inline-flex items-center gap-1 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium text-sm"
                     >
                       <Settings className="h-4 w-4" />
                       Manage
@@ -392,7 +392,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                       onClick={() => deleteJob(job)}
                       disabled={deletingJobId === job.id}
                       aria-label={`Delete ${job.title}`}
-                      className="inline-flex items-center gap-1 text-rose-600 hover:text-rose-800 font-medium text-sm disabled:opacity-50"
+                      className="inline-flex items-center gap-1 text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 font-medium text-sm disabled:opacity-50"
                     >
                       {deletingJobId === job.id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -420,7 +420,7 @@ const CompanyJobsList: React.FC<CompanyJobsListProps> = ({ jobs, applications = 
                 {canSponsorJobs && (
                   <button
                     onClick={() => setSponsorModalJob({ id: job.id, title: job.title })}
-                    className="inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:text-primary-800"
+                    className="inline-flex items-center gap-1 text-xs font-medium text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
                   >
                     {getTier(job) > 0 ? 'Boost more' : 'Promote'}
                   </button>

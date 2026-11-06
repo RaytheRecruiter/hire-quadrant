@@ -52,7 +52,7 @@ const CompanyDashboard: React.FC = () => {
   if (authLoading) {
     return (
       <div className="min-h-dvh flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" />
       </div>
     );
   }
@@ -138,7 +138,7 @@ const CompanyDashboard: React.FC = () => {
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:bg-slate-800/90 dark:border-slate-700 p-6">
           {loading ? (
             <div className="flex items-center justify-center py-16">
-              <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+              <Loader2 className="h-8 w-8 animate-spin text-primary-500 dark:text-primary-400" />
               <span className="ml-3 text-secondary-600 dark:text-slate-400">Loading dashboard data...</span>
             </div>
           ) : error ? (

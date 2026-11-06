@@ -86,7 +86,7 @@ const AuthCallback: React.FC = () => {
   return (
     <div className="min-h-dvh flex items-center justify-center">
       <div className="text-center">
-        <Loader2 className="h-12 w-12 animate-spin text-primary-500 mx-auto mb-4" />
+        <Loader2 className="h-12 w-12 animate-spin text-primary-500 dark:text-primary-400 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-secondary-900 mb-2">Completing sign-in...</h2>
         {error && <p className="text-red-600 text-sm">{error}</p>}
       </div>

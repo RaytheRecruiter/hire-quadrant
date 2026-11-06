@@ -83,7 +83,7 @@ const IndustryPage: React.FC = () => {
 
           {loading ? (
             <div className="text-center py-16">
-              <Building2 className="h-10 w-10 text-primary-500 mx-auto animate-pulse" />
+              <Building2 className="h-10 w-10 text-primary-500 dark:text-primary-400 mx-auto animate-pulse" />
             </div>
           ) : error ? (
             <div role="alert" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 flex items-start gap-3">
@@ -96,7 +96,7 @@ const IndustryPage: React.FC = () => {
               <p className="text-secondary-600 dark:text-slate-400">
                 No companies listed in {pretty} yet.
               </p>
-              <HardLink to="/companies" className="text-primary-600 hover:text-primary-700 font-medium mt-3 inline-block">
+              <HardLink to="/companies" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium mt-3 inline-block">
                 Browse all industries →
               </HardLink>
             </div>
@@ -114,7 +114,7 @@ const IndustryPage: React.FC = () => {
                         to={`/companies/${c.slug}`}
                         className="bg-white dark:bg-slate-800 rounded-xl border border-secondary-100 dark:border-slate-700 p-4 hover:shadow-card-hover transition-all"
                       >
-                        <div className="text-xs font-semibold text-primary-600 mb-2">#{i + 1}</div>
+                        <div className="text-xs font-semibold text-primary-600 dark:text-primary-400 mb-2">#{i + 1}</div>
                         <div className="font-semibold text-secondary-900 dark:text-white mb-1 truncate">
                           {c.display_name || c.name}
                         </div>

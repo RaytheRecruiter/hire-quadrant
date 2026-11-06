@@ -115,7 +115,7 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
         <div className="p-5">
           {loading ? (
             <div className="text-center py-10">
-              <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
+              <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
             </div>
           ) : (
             <>
@@ -132,7 +132,7 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
                     }`}
                   >
                     <p className="font-bold text-secondary-900 dark:text-white">{plan.name}</p>
-                    <p className="text-xl font-bold text-primary-600 mt-1">{fmt(plan.price_cents)}</p>
+                    <p className="text-xl font-bold text-primary-600 dark:text-primary-400 mt-1">{fmt(plan.price_cents)}</p>
                     <p className="text-xs text-secondary-500 dark:text-slate-400">{plan.duration_days} days</p>
                     {Array.isArray(plan.features) && plan.features.length > 0 && (
                       <ul className="mt-2 space-y-1">
@@ -184,7 +184,7 @@ const SponsorJobModal: React.FC<Props> = ({ jobId, jobTitle, onClose }) => {
                 ) : (
                   <a
                     href={`mailto:billing@nexegin.com?subject=Sponsor%20job:%20${encodeURIComponent(jobTitle)}`}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary-400 text-primary-600 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary-400 text-primary-600 dark:text-primary-400 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30"
                   >
                     <Mail className="h-4 w-4" />
                     Request sponsorship

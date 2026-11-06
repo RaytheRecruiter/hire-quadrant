@@ -129,7 +129,7 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-2">
-          <Activity className="h-5 w-5 text-primary-600" />
+          <Activity className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           <h2 className="text-lg font-semibold text-secondary-900 dark:text-white">Recruiter Activity</h2>
         </div>
         <div className="inline-flex rounded-lg border border-secondary-200 dark:border-slate-700 p-0.5">
@@ -168,7 +168,7 @@ const RecruiterActivityPanel: React.FC<Props> = ({ companyId }) => {
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 overflow-hidden">
         {loading ? (
           <div className="text-center py-12">
-            <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+            <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
           </div>
         ) : rows.length === 0 ? (
           <div className="text-center py-12 text-sm text-secondary-500 dark:text-slate-400">

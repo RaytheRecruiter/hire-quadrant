@@ -194,7 +194,7 @@ const CompareCompanies: React.FC = () => {
           />
 
           <header className="mb-6 flex items-start gap-3">
-            <Scale className="h-7 w-7 text-primary-500 mt-1" />
+            <Scale className="h-7 w-7 text-primary-500 dark:text-primary-400 mt-1" />
             <div>
               <h1 className="text-3xl font-bold text-secondary-900 dark:text-white">
                 Compare companies
@@ -227,7 +227,7 @@ const CompareCompanies: React.FC = () => {
                         disabled={slugs.includes(s.slug)}
                         className="w-full text-left px-3 py-2 text-sm text-secondary-900 dark:text-white hover:bg-secondary-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
                       >
-                        <Plus className="h-3.5 w-3.5 text-primary-500" />
+                        <Plus className="h-3.5 w-3.5 text-primary-500 dark:text-primary-400" />
                         {s.name}
                       </button>
                     </li>
@@ -239,7 +239,7 @@ const CompareCompanies: React.FC = () => {
 
           {loading ? (
             <div className="py-16 text-center">
-              <Loader2 className="h-6 w-6 animate-spin text-primary-500 mx-auto" />
+              <Loader2 className="h-6 w-6 animate-spin text-primary-500 dark:text-primary-400 mx-auto" />
             </div>
           ) : companies.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-secondary-100 dark:border-slate-700 p-10 text-center">
@@ -249,7 +249,7 @@ const CompareCompanies: React.FC = () => {
               </p>
               <HardLink
                 to="/companies"
-                className="inline-block mt-3 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                className="inline-block mt-3 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
               >
                 Browse all companies →
               </HardLink>
@@ -302,7 +302,7 @@ const CompareCompanies: React.FC = () => {
                       }
                     />
                     <Row
-                      icon={<Briefcase className="h-3.5 w-3.5 text-primary-500" />}
+                      icon={<Briefcase className="h-3.5 w-3.5 text-primary-500 dark:text-primary-400" />}
                       label="Open roles"
                       value={c.job_count > 0 ? `${c.job_count}` : '0'}
                     />
@@ -331,7 +331,7 @@ const CompareCompanies: React.FC = () => {
 
                   <HardLink
                     to={`/companies/${c.slug}`}
-                    className="mt-4 inline-block text-xs text-primary-600 hover:text-primary-700 font-medium"
+                    className="mt-4 inline-block text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
                   >
                     See full profile →
                   </HardLink>

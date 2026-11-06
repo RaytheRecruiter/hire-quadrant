@@ -118,7 +118,7 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary-600" />
+          <Sparkles className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           <h3 className="text-lg font-semibold text-secondary-900 dark:text-white">Why Join Us</h3>
         </div>
         {!editing && (
@@ -216,7 +216,7 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
 
       {loading ? (
         <div className="text-center py-10">
-          <Loader2 className="h-6 w-6 text-primary-500 animate-spin mx-auto" />
+          <Loader2 className="h-6 w-6 text-primary-500 dark:text-primary-400 animate-spin mx-auto" />
         </div>
       ) : blocks.length === 0 && !editing ? (
         <p className="text-sm text-secondary-500 dark:text-slate-400 py-8 text-center">
@@ -228,7 +228,7 @@ const WhyJoinUsPanel: React.FC<Props> = ({ companyId }) => {
             <li key={b.id} className="bg-white dark:bg-slate-800 border border-secondary-200 dark:border-slate-700 rounded-xl p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-primary-600 mb-1">{b.kind}</div>
+                  <div className="text-xs font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400 mb-1">{b.kind}</div>
                   {b.heading && <div className="font-medium text-secondary-900 dark:text-white">{b.heading}</div>}
                   {b.body && (
                     <div className="text-sm text-secondary-700 dark:text-slate-300 whitespace-pre-line line-clamp-4">{b.body}</div>
