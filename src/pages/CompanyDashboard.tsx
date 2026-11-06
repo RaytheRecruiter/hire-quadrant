@@ -67,12 +67,12 @@ const CompanyDashboard: React.FC = () => {
   const isApproved = user?.isApproved !== false;
 
   return (
-    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
+    <div className="min-h-dvh bg-gradient-to-br from-gray-50 via-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 to-primary-50/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary-900 to-secondary-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
               Company Dashboard
             </h1>
             <p className="mt-2 text-gray-600 dark:text-slate-400">
@@ -120,10 +120,10 @@ const CompanyDashboard: React.FC = () => {
                   aria-selected={activeTab === tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   disabled={!isApproved && tab.id !== 'profile'}
-                  className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-all ${
+                  className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all ${
                     activeTab === tab.id
-                      ? 'border-primary-500 text-primary-600'
-                      : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-300 hover:border-gray-300 dark:border-slate-600'
+                      ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                      : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600'
                   } ${!isApproved && tab.id !== 'profile' ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <Icon className="h-4 w-4" />
